@@ -1,18 +1,18 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDroneDockingStation;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
 public class DummySlot extends Slot {
 
-    private static final IInventory emptyInventory = new Inventory(0);
+    private static final Container emptyInventory = new SimpleContainer(0);
     private final ItemStackHandler inventory = new ItemStackHandler(1);
     private final ContainerDroneDockingStation screen;
     public DummySlot(ContainerDroneDockingStation screen, int x, int y) {
@@ -21,7 +21,7 @@ public class DummySlot extends Slot {
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity playerIn) {
+    public boolean mayPickup(Player playerIn) {
         return false;
     }
 

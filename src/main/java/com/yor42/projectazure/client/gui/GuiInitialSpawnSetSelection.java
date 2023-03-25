@@ -1,20 +1,20 @@
 package com.yor42.projectazure.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.SelectInitialSpawnSetPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.UUID;
 
@@ -25,11 +25,11 @@ public class GuiInitialSpawnSetSelection extends Screen {
     private final int backgroundWidth = 256;
     private final int backgroundHeight = 173;
     private boolean ispopulated = false;
-    private final Hand hand;
+    private final InteractionHand hand;
     private int x, y;
 
-    public GuiInitialSpawnSetSelection(Hand hand) {
-        super(new TranslationTextComponent("gui.initialspawnsetselect"));
+    public GuiInitialSpawnSetSelection(InteractionHand hand) {
+        super(new TranslatableComponent("gui.initialspawnsetselect"));
         this.hand = hand;
     }
 
@@ -54,27 +54,27 @@ public class GuiInitialSpawnSetSelection extends Screen {
     private void selectSpawnSet(byte id){
         Main.NETWORK.sendToServer(new SelectInitialSpawnSetPacket(id, this.hand));
         if(this.minecraft != null && this.minecraft.player != null) {
-            Vector3d vector3d = this.minecraft.player.position();
+            Vec3 vector3d = this.minecraft.player.position();
             for (int i = 0; i < 40; ++i) {
                 double d0 = MathUtil.getRand().nextGaussian() * 0.2D;
                 double d1 = MathUtil.getRand().nextGaussian() * 0.2D;
                 double d2 = MathUtil.getRand().nextGaussian() * 0.2D;
                 ClientUtils.getClientWorld().addParticle(ParticleTypes.END_ROD, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
             }
-            this.minecraft.player.sendMessage(new TranslationTextComponent("message.glitchedphone.selected_"+id), UUID.randomUUID());
+            this.minecraft.player.sendMessage(new TranslatableComponent("message.glitchedphone.selected_"+id), UUID.randomUUID());
         }
         this.onClose();
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.drawBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 
-    private void drawBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         this.minecraft.getTextureManager().bind(TEXTURE);
-        ITextComponent text = new TranslationTextComponent("gui.initialspawnsetselect.selectpath");
+        Component text = new TranslatableComponent("gui.initialspawnsetselect.selectpath");
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         float width = (float) this.font.width(text)/2;
         this.font.draw(matrixStack, text, this.x+128-width, this.y+40, 0xffee90);

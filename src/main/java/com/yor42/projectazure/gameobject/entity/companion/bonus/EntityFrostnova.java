@@ -10,16 +10,16 @@ import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerPotionEffects;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.item.TieredItem;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -30,7 +30,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import javax.annotation.Nonnull;
 
 public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUser {
-    public EntityFrostnova(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityFrostnova(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -68,10 +68,10 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
@@ -207,8 +207,8 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
     }
 
     @Override
-    public Hand getSpellUsingHand() {
-        return Hand.MAIN_HAND;
+    public InteractionHand getSpellUsingHand() {
+        return InteractionHand.MAIN_HAND;
     }
 
     @Override
@@ -217,13 +217,13 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
     }
 
     @Override
-    public void ShootProjectile(World world, @Nonnull LivingEntity target) {
+    public void ShootProjectile(Level world, @Nonnull LivingEntity target) {
         if(target.isAlive()){
             double x = target.getX() - (this.getX());
             double y = target.getY(0.5) - (this.getY(0.7));
             double z = target.getZ() - (this.getZ());
 
-            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this, 8F, new EffectInstance(registerPotionEffects.FROSTBITE_REGISTRY.get(), 100, 1));
+            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this, 8F, new MobEffectInstance(registerPotionEffects.FROSTBITE_REGISTRY.get(), 100, 1));
             projectile.shoot(x,y,z, 1.1F, 0.05F);
             projectile.setPos(this.getX(), this.getY()+1, this.getZ());
             this.getCommandSenderWorld().addFreshEntity(projectile);
@@ -235,9 +235,9 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
         }
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.FrostnovaMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.FrostnovaSwimSpeed.get())

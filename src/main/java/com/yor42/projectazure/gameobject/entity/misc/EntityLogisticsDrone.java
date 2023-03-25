@@ -2,22 +2,22 @@ package com.yor42.projectazure.gameobject.entity.misc;
 
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -34,26 +34,26 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
-public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable {
+public class EntityLogisticsDrone extends PathfinderMob implements IAnimatable {
 
     protected final CustomEnergyStorage battery;
     protected final ItemStackHandler inventory;
-    protected static final DataParameter<Integer> CURRENTDESTINATIONINDEX = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> NEXTDESTINATIONINDEX = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.INT);
-    protected static final DataParameter<Boolean> ISLOADING = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Integer> CURRENTDESTINATIONINDEX = SynchedEntityData.defineId(EntityLogisticsDrone.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> NEXTDESTINATIONINDEX = SynchedEntityData.defineId(EntityLogisticsDrone.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> ISLOADING = SynchedEntityData.defineId(EntityLogisticsDrone.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Optional<UUID>> OWNER = SynchedEntityData.defineId(EntityLogisticsDrone.class, EntityDataSerializers.OPTIONAL_UUID);
 
     protected final ArrayList<BlockPos> DestinationList = new ArrayList<>();
 
 
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    protected EntityLogisticsDrone(EntityType<? extends CreatureEntity> p_i48575_1_, World p_i48575_2_) {
+    protected EntityLogisticsDrone(EntityType<? extends PathfinderMob> p_i48575_1_, Level p_i48575_2_) {
         super(p_i48575_1_, p_i48575_2_);
         this.battery = new CustomEnergyStorage(2500, 100, 100);
         this.inventory = new ItemStackHandler(9);
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("currentdestinationindex", this.getEntityData().get(CURRENTDESTINATIONINDEX));
         compound.putInt("nextdestinationindex", this.getEntityData().get(NEXTDESTINATIONINDEX));
@@ -135,7 +135,7 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.getEntityData().set(CURRENTDESTINATIONINDEX, compound.getInt("currentdestinationindex"));
         this.getEntityData().set(NEXTDESTINATIONINDEX, compound.getInt("nextdestinationindex"));
@@ -150,15 +150,15 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
     }
 
     @Override
-    public ActionResultType interactAt(PlayerEntity p_184199_1_, Vector3d p_184199_2_, Hand p_184199_3_) {
+    public InteractionResult interactAt(Player p_184199_1_, Vec3 p_184199_2_, InteractionHand p_184199_3_) {
 
         if(this.getEntityData().get(OWNER).isPresent() && this.getEntityData().get(OWNER).get() != p_184199_1_.getUUID()){
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
 
         if(this.entityData.get(CURRENTDESTINATIONINDEX) == -1 && !this.getEntityData().get(ISLOADING)){
             this.StartMovetoNextDestination();
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         return super.interactAt(p_184199_1_, p_184199_2_, p_184199_3_);
@@ -206,9 +206,9 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
         return true;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, 0.5F)
                 .add(ForgeMod.SWIM_SPEED.get(), 0.0F)

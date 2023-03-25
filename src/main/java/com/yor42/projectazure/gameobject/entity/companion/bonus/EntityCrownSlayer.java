@@ -6,24 +6,24 @@ import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.Abstract
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.TieredItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -40,9 +40,9 @@ import java.util.Collections;
 
 public class EntityCrownSlayer extends AbstractSwordUserBase {
 
-    protected static final DataParameter<Boolean> WEARING_HOOD = EntityDataManager.defineId(EntityCrownSlayer.class, DataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> WEARING_HOOD = SynchedEntityData.defineId(EntityCrownSlayer.class, EntityDataSerializers.BOOLEAN);
 
-    public EntityCrownSlayer(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityCrownSlayer(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -121,10 +121,10 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
@@ -242,13 +242,13 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
     }
 
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setWearingHood(compound.getBoolean("wearinghood"));
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("wearinghood", this.isWearingHood());
     }
@@ -305,27 +305,27 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
 
     @Nonnull
     @Override
-    public ActionResultType interactAt(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand) {
+    public InteractionResult interactAt(@Nonnull Player player, @Nonnull Vec3 vec, @Nonnull InteractionHand hand) {
 
         if(this.isOwnedBy(player)&&!this.getCommandSenderWorld().isClientSide() && player.getItemInHand(hand).isEmpty() && player.isCrouching()&&this.distanceTo(player)<=2){
-            Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
+            Vec3 PlayerLook = player.getViewVector(1.0F).normalize();
             float eyeHeight = (float) this.getEyeY();
 
 
-            Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
+            Vec3 EyeDelta = new Vec3(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
             EyeDelta = EyeDelta.normalize();
             double EyeCheckFinal = PlayerLook.dot(EyeDelta);
 
             if (EyeCheckFinal > 0.998 && this.entityData.get(ECCI_ANIMATION_TIME)==0) {
                 this.setWearingHood(!this.isWearingHood());
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         return super.interactAt(player, vec, hand);
     }
 
     @Override
-    public void beingpatted(@Nullable PlayerEntity player) {
+    public void beingpatted(@Nullable Player player) {
         if(player != null && player.isCrouching()){
             this.setWearingHood(!this.isWearingHood());
         }
@@ -334,9 +334,9 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
         }
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.CrownslayerMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.CrownslayerSwimSpeed.get())

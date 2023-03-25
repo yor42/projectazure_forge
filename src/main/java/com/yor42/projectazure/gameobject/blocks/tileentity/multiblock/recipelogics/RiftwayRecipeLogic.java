@@ -5,10 +5,12 @@ import com.lowdragmc.multiblocked.api.recipe.Recipe;
 import com.lowdragmc.multiblocked.api.recipe.RecipeLogic;
 import com.lowdragmc.multiblocked.api.tile.ControllerTileEntity;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.RiftwayRecipes;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
+
+import com.lowdragmc.multiblocked.api.recipe.RecipeLogic.Status;
 
 public class RiftwayRecipeLogic extends RecipeLogic {
 
@@ -66,7 +68,7 @@ public class RiftwayRecipeLogic extends RecipeLogic {
     }
 
     @Override
-    public void readFromNBT(CompoundNBT compound) {
+    public void readFromNBT(CompoundTag compound) {
         if(compound.contains("userid")) {
             this.userID = compound.getUUID("userid");
         }
@@ -75,7 +77,7 @@ public class RiftwayRecipeLogic extends RecipeLogic {
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
+    public CompoundTag writeToNBT(CompoundTag compound) {
         if(this.userID != null) {
             compound.putUUID("userid", this.userID);
         }

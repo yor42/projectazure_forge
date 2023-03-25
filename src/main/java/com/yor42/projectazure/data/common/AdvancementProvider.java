@@ -7,9 +7,9 @@ import com.google.gson.GsonBuilder;
 import com.yor42.projectazure.gameobject.advencements.Achievements;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class AdvancementProvider extends net.minecraft.data.AdvancementProvider{
+public class AdvancementProvider extends net.minecraft.data.advancements.AdvancementProvider{
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private final DataGenerator generator;
@@ -30,7 +30,7 @@ public class AdvancementProvider extends net.minecraft.data.AdvancementProvider{
         this.generator = generatorIn;
     }
 
-    public void run(DirectoryCache cache) throws IOException {
+    public void run(HashCache cache) throws IOException {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = Sets.newHashSet();
         Consumer<Advancement> consumer = (advancement) -> {
@@ -40,7 +40,7 @@ public class AdvancementProvider extends net.minecraft.data.AdvancementProvider{
                 Path path1 = getPath(path, advancement);
 
                 try {
-                    IDataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path1);
+                    DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path1);
                 } catch (IOException ioexception) {
                     LOGGER.error("Couldn't save advancement {}", path1, ioexception);
                 }

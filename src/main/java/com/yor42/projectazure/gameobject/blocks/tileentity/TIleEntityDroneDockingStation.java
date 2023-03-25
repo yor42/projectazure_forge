@@ -3,19 +3,19 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 import com.yor42.projectazure.gameobject.entity.misc.EntityLogisticsDrone;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.libs.ItemFilterEntry;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TIleEntityDroneDockingStation extends LockableTileEntity implements ITickableTileEntity {
+public class TIleEntityDroneDockingStation extends BaseContainerBlockEntity implements TickableBlockEntity {
 
     protected boolean isDestination = false;
     protected final CustomEnergyStorage energyStorage;
@@ -36,28 +36,28 @@ public class TIleEntityDroneDockingStation extends LockableTileEntity implements
     private int inventoryscanindex = 0;
 
 
-    protected TIleEntityDroneDockingStation(TileEntityType<?> typeIn) {
+    protected TIleEntityDroneDockingStation(BlockEntityType<?> typeIn) {
         super(typeIn);
         this.energyStorage = new CustomEnergyStorage(25000,2500,2000);
         this.inventory = new ItemStackHandler(18);
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("tileentity.dronedockingstation.name");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("tileentity.dronedockingstation.name");
     }
 
     @Override
-    protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
+    protected AbstractContainerMenu createMenu(int p_213906_1_, Inventory p_213906_2_) {
         return null;
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
 
         compound.put("energy",this.energyStorage.serializeNBT());
         compound.put("inventory", this.inventory.serializeNBT());
-        CompoundNBT compound2 = new CompoundNBT();
+        CompoundTag compound2 = new CompoundTag();
         int listsize = this.ItemtoLoad.size();
         for(int i=0; i<listsize;i++){
             compound2.put("filter"+i, this.ItemtoLoad.get(i).serializeNBT());
@@ -66,7 +66,7 @@ public class TIleEntityDroneDockingStation extends LockableTileEntity implements
         compound2.putBoolean("inverted", this.invertloaditem);
         compound.put("ItemtoLoad", compound2);
 
-        compound2 = new CompoundNBT();
+        compound2 = new CompoundTag();
         listsize = this.ItemtounLoad.size();
         for(int i=0; i<listsize;i++){
             compound2.put("filter"+i, this.ItemtounLoad.get(i).serializeNBT());
@@ -80,12 +80,12 @@ public class TIleEntityDroneDockingStation extends LockableTileEntity implements
     }
 
     @Override
-    public void load(BlockState p_230337_1_, CompoundNBT compound) {
+    public void load(BlockState p_230337_1_, CompoundTag compound) {
 
         this.energyStorage.deserializeNBT(compound.getCompound("energy"));
         this.inventory.deserializeNBT(compound.getCompound("inventory"));
 
-        CompoundNBT compound2 = compound.getCompound("ItemtoLoad");
+        CompoundTag compound2 = compound.getCompound("ItemtoLoad");
         int filtersize = compound2.getInt("size");
         for(int i=0; i<filtersize; i++){
             this.ItemtoLoad.add(ItemFilterEntry.deserializeNBT(compound2.getCompound("filter"+i)));
@@ -151,7 +151,7 @@ public class TIleEntityDroneDockingStation extends LockableTileEntity implements
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull Player player) {
         if (Objects.requireNonNull(this.level).getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
@@ -168,7 +168,7 @@ public class TIleEntityDroneDockingStation extends LockableTileEntity implements
 
     @Override
     public void tick() {
-        World world = this.getLevel();
+        Level world = this.getLevel();
         if(world == null){
             return;
         }
@@ -182,7 +182,7 @@ public class TIleEntityDroneDockingStation extends LockableTileEntity implements
         }
 
 
-        List<EntityLogisticsDrone> Dronelist = world.getEntitiesOfClass(EntityLogisticsDrone.class, new AxisAlignedBB(this.worldPosition.above()));
+        List<EntityLogisticsDrone> Dronelist = world.getEntitiesOfClass(EntityLogisticsDrone.class, new AABB(this.worldPosition.above()));
 
         if(Dronelist.isEmpty()){
             return;

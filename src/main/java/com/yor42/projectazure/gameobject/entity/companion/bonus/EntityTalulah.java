@@ -10,28 +10,28 @@ import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.mixin.FurnaceAccessors;
-import net.minecraft.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.TieredItem;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -48,7 +48,7 @@ import java.util.Optional;
 import static com.yor42.projectazure.libs.enums.EntityType.REUNION;
 
 public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IMeleeAttacker, ISpellUser, IWorldSkillUseable {
-    public EntityTalulah(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityTalulah(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -90,10 +90,10 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
@@ -266,12 +266,12 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public boolean canUseWorldSkill(ServerWorld world, BlockPos pos, AbstractEntityCompanion companion) {
-        TileEntity te = world.getBlockEntity(pos);
-        if(te instanceof AbstractFurnaceTileEntity){
-            AbstractFurnaceTileEntity furnace = (AbstractFurnaceTileEntity)te;
-            IRecipeType<? extends AbstractCookingRecipe> recipe = ((FurnaceAccessors) furnace).getRecipeType();
-            Optional<? extends AbstractCookingRecipe> output = this.getCommandSenderWorld().getRecipeManager().getRecipeFor((IRecipeType)recipe, furnace, this.getCommandSenderWorld());
+    public boolean canUseWorldSkill(ServerLevel world, BlockPos pos, AbstractEntityCompanion companion) {
+        BlockEntity te = world.getBlockEntity(pos);
+        if(te instanceof AbstractFurnaceBlockEntity){
+            AbstractFurnaceBlockEntity furnace = (AbstractFurnaceBlockEntity)te;
+            RecipeType<? extends AbstractCookingRecipe> recipe = ((FurnaceAccessors) furnace).getRecipeType();
+            Optional<? extends AbstractCookingRecipe> output = this.getCommandSenderWorld().getRecipeManager().getRecipeFor((RecipeType)recipe, furnace, this.getCommandSenderWorld());
             if(!output.isPresent())
                 return false;
             ItemStack fuelstack = furnace.getItem(1);
@@ -291,7 +291,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public boolean executeWorldSkill(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity) {
+    public boolean executeWorldSkill(ServerLevel world, BlockPos pos, AbstractEntityCompanion entity) {
         return false;
     }
 
@@ -301,10 +301,10 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public boolean executeWorldSkillTick(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity) {
-        TileEntity te = world.getBlockEntity(pos);
-        if(te instanceof AbstractFurnaceTileEntity){
-            AbstractFurnaceTileEntity furnace = (AbstractFurnaceTileEntity)te;
+    public boolean executeWorldSkillTick(ServerLevel world, BlockPos pos, AbstractEntityCompanion entity) {
+        BlockEntity te = world.getBlockEntity(pos);
+        if(te instanceof AbstractFurnaceBlockEntity){
+            AbstractFurnaceBlockEntity furnace = (AbstractFurnaceBlockEntity)te;
             ((FurnaceAccessors) furnace).getDataAccess().set(0, 10);
             this.level.setBlock(pos, this.level.getBlockState(pos).setValue(AbstractFurnaceBlock.LIT, true), 3);
             furnace.setChanged();
@@ -324,8 +324,8 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public Hand getSpellUsingHand() {
-        return Hand.OFF_HAND;
+    public InteractionHand getSpellUsingHand() {
+        return InteractionHand.OFF_HAND;
     }
 
     @Override
@@ -340,7 +340,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public void ShootProjectile(World world, @Nonnull LivingEntity target) {
+    public void ShootProjectile(Level world, @Nonnull LivingEntity target) {
         if(target.isAlive()){
             target.hurt(DamageSources.causeArtsFireDamage(this), 6);
             target.setSecondsOnFire(5);
@@ -380,9 +380,9 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         return null;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.TalulahMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.TalulahSwimSpeed.get())

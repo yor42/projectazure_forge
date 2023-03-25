@@ -2,17 +2,17 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.item.BoatItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.item.BoatItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
@@ -23,11 +23,11 @@ import java.util.function.Predicate;
 import static com.yor42.projectazure.setup.register.RegisterAI.FALL_BREAK_ITEM_INDEX;
 import static net.minecraft.fluid.Fluids.WATER;
 import static net.minecraft.item.Items.COBWEB;
-import static net.minecraft.util.Hand.OFF_HAND;
+import staticnet.minecraft.world.item.Items.OFF_HAND;
 
-public class CompanionFallClutchTask extends Task<AbstractEntityCompanion> {
+public class CompanionFallClutchTask extends Behavior<AbstractEntityCompanion> {
     @Nullable
-    private Hand hand;
+    private InteractionHand hand;
     int ItemSwitchCooldown = 0;
     boolean success = false;
     //DREAM CLUTCH
@@ -38,18 +38,18 @@ public class CompanionFallClutchTask extends Task<AbstractEntityCompanion> {
     };
 
     public CompanionFallClutchTask() {
-        super(ImmutableMap.of(FALL_BREAK_ITEM_INDEX.get(), MemoryModuleStatus.REGISTERED));
+        super(ImmutableMap.of(FALL_BREAK_ITEM_INDEX.get(), MemoryStatus.REGISTERED));
     }
 
     @Override
-    protected boolean checkExtraStartConditions(@Nonnull ServerWorld world, @Nonnull AbstractEntityCompanion entity) {
+    protected boolean checkExtraStartConditions(@Nonnull ServerLevel world, @Nonnull AbstractEntityCompanion entity) {
 
         if(this.ItemSwitchCooldown>0){
             this.ItemSwitchCooldown--;
             return false;
         }
 
-        Optional<Hand> hand = getFallBreakerHand(entity);
+        Optional<InteractionHand> hand = getFallBreakerHand(entity);
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
         if(hand.isPresent() && entity.fallDistance>=6){
             this.hand = hand.get();
@@ -67,21 +67,21 @@ public class CompanionFallClutchTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void tick(ServerWorld world, AbstractEntityCompanion entity, long timestamp) {
+    protected void tick(ServerLevel world, AbstractEntityCompanion entity, long timestamp) {
         if(entity.fallDistance<4){
             doStop(world, entity, timestamp);
         }
-        RayTraceContext ctx = new RayTraceContext(entity.position(), entity.position().add(0, -4, 0), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, entity);
-        BlockRayTraceResult result = world.clip(ctx);
-        RayTraceResult.Type type = result.getType();
-        if(type == RayTraceResult.Type.BLOCK){
+        ClipContext ctx = new ClipContext(entity.position(), entity.position().add(0, -4, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, entity);
+        BlockHitResult result = world.clip(ctx);
+        HitResult.Type type = result.getType();
+        if(type == HitResult.Type.BLOCK){
             BlockPos pos = result.getBlockPos();
             //if(!this.success && world.getBlockState(pos).getFluidState())
         }
     }
 
     @Override
-    protected void stop(ServerWorld p_212835_1_, AbstractEntityCompanion entity, long p_212835_3_) {
+    protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion entity, long p_212835_3_) {
         if(entity.getItemSwapIndexOffHand()>-1) {
             ItemStack buffer = entity.getOffhandItem();
             entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
@@ -93,14 +93,14 @@ public class CompanionFallClutchTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected boolean canStillUse(ServerWorld p_212834_1_, AbstractEntityCompanion entity, long p_212834_3_) {
+    protected boolean canStillUse(ServerLevel p_212834_1_, AbstractEntityCompanion entity, long p_212834_3_) {
         return true;
     }
 
 
 
-    private static Optional<Hand> getFallBreakerHand(@Nonnull AbstractEntityCompanion entity){
-        for(Hand hand : Hand.values()){
+    private static Optional<InteractionHand> getFallBreakerHand(@Nonnull AbstractEntityCompanion entity){
+        for(InteractionHand hand : InteractionHand.values()){
             if(IS_FALL_BREAKER.test(entity.getItemInHand(hand))){
                 return Optional.of(hand);
             }

@@ -6,23 +6,23 @@ import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.intermod.curios.client.ICurioRenderer;
 import com.yor42.projectazure.intermod.curios.client.RenderDefib;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -62,11 +62,11 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return CuriosCompat.addEnergyCapability(stack, this.batterysize);
     }
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, Player player, @Nonnull InteractionHand hand) {
 
         ItemStack stack= player.getItemInHand(hand);
         if(stack.getItem() instanceof ItemDefibCharger){
@@ -75,11 +75,11 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
 
                 if(nextstate && stack.getCapability(CapabilityEnergy.ENERGY).map((e)-> e.extractEnergy(1, true)<=0).orElse(true)){
                     player.playSound(DEFIB_NOBATTERY, 1.0F, 1.0F);
-                    return ActionResult.fail(stack);
+                    return InteractionResultHolder.fail(stack);
                 }
 
                 if(!world.isClientSide()){
-                    final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+                    final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
 
                     int state = nextstate?ANIM_ON:ANIM_OFF;
 
@@ -94,7 +94,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
 
                 player.playSound(nextstate?DEFIB_POWERON:DEFIB_POWEROFF, 1.0F, 1.0F);
                 setOn(stack, nextstate);
-                return ActionResult.pass(stack);
+                return InteractionResultHolder.pass(stack);
             }
         }
         return super.use(world, player, hand);
@@ -106,12 +106,12 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
     }
 
     @Override
-    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
+    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
         super.inventoryTick(stack, world, p_77663_3_, p_77663_4_, p_77663_5_);
         this.handleCharge(stack, p_77663_3_, world);
     }
 
-    public void handleCharge(ItemStack stack, Entity entity, World world){
+    public void handleCharge(ItemStack stack, Entity entity, Level world){
         if(isOn(stack)){
             int chargeprogress = getChargeProgress(stack);
             if(ShouldCharging(stack)){
@@ -127,9 +127,9 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
                     int charge = Math.max(0, getChargeProgress(stack)-4);
                     if (charge == 0) {
                         setCharging(stack, false);
-                        if(entity instanceof PlayerEntity) {
-                            PlayerEntity player = (PlayerEntity) entity;
-                            player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargefailed_nobattery").withStyle(TextFormatting.RED), true);
+                        if(entity instanceof Player) {
+                            Player player = (Player) entity;
+                            player.displayClientMessage(new TranslatableComponent("item.tooltip.chargefailed_nobattery").withStyle(ChatFormatting.RED), true);
                         }
                     }
                     setChargeProgress(stack, charge);
@@ -145,7 +145,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
                         setChargeProgress(stack, 0);
                         setCharging(stack, false);
                         if(!world.isClientSide()){
-                            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+                            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
                             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity);
                             GeckoLibNetwork.syncAnimation(target, this, id, ANIM_OFF);
                         }
@@ -155,18 +155,18 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
                 }
             }
         }
-        if(entity instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entity;
+        if(entity instanceof Player) {
+            Player player = (Player) entity;
             if (ShouldCharging(stack)) {
                 int charge = (int) (((float) getChargeProgress(stack) / 100) * 100);
-                player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargeprogress", charge + "%").withStyle(TextFormatting.AQUA), true);
+                player.displayClientMessage(new TranslatableComponent("item.tooltip.chargeprogress", charge + "%").withStyle(ChatFormatting.AQUA), true);
             } else if (getChargeProgress(stack) == 100) {
-                player.displayClientMessage(new TranslationTextComponent("item.tooltip.ready").withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("item.tooltip.ready").withStyle(ChatFormatting.GREEN), true);
             }
         }
 
         if(!world.isClientSide()) {
-            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
             final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
             if (controller.getAnimationState() == AnimationState.Stopped) {
                 controller.markNeedsReload();
@@ -220,7 +220,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
     }
 
     @Override
-    public void fillItemCategory(ItemGroup p_150895_1_, NonNullList<ItemStack> p_150895_2_) {
+    public void fillItemCategory(CreativeModeTab p_150895_1_, NonNullList<ItemStack> p_150895_2_) {
         if (this.allowdedIn(p_150895_1_)) {
             ItemStack stack = new ItemStack(this);
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((battery)->battery.receiveEnergy(battery.getMaxEnergyStored(), false));
@@ -244,38 +244,38 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldin, @Nonnull List<ITextComponent> tooltips, @Nonnull ITooltipFlag tooltipadvanced) {
-        tooltips.add(new TranslationTextComponent(this.getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldin, @Nonnull List<Component> tooltips, @Nonnull TooltipFlag tooltipadvanced) {
+        tooltips.add(new TranslatableComponent(this.getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
 
         int remainingBattery = stack.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
         float percentage = (float) remainingBattery/this.batterysize;
 
-        TextFormatting color;
+        ChatFormatting color;
         if(percentage>=0.6){
-            color = TextFormatting.GREEN;
+            color = ChatFormatting.GREEN;
         }
         else if(percentage>=0.3){
-            color = TextFormatting.YELLOW;
+            color = ChatFormatting.YELLOW;
         }
         else{
-            color = TextFormatting.DARK_RED;
+            color = ChatFormatting.DARK_RED;
         }
         percentage*=100;
-        tooltips.add(new TranslationTextComponent("item.tooltip.energystored", new StringTextComponent(MathUtil.formatValueMatric(remainingBattery)+" FE / "+MathUtil.formatValueMatric(this.batterysize)+String.format(" FE (%.2f", percentage)+"%)").withStyle(color)));
+        tooltips.add(new TranslatableComponent("item.tooltip.energystored", new TextComponent(MathUtil.formatValueMatric(remainingBattery)+" FE / "+MathUtil.formatValueMatric(this.batterysize)+String.format(" FE (%.2f", percentage)+"%)").withStyle(color)));
 
         if(ShouldCharging(stack)){
             int charge = (int) (((float)getChargeProgress(stack)/100)*100);
-            tooltips.add(new TranslationTextComponent("item.tooltip.energystored", charge+"%").withStyle(TextFormatting.AQUA));
+            tooltips.add(new TranslatableComponent("item.tooltip.energystored", charge+"%").withStyle(ChatFormatting.AQUA));
         }
         else if(getChargeProgress(stack) == 100){
-            tooltips.add(new TranslationTextComponent("item.tooltip.ready").withStyle(TextFormatting.GREEN));
+            tooltips.add(new TranslatableComponent("item.tooltip.ready").withStyle(ChatFormatting.GREEN));
         }
         super.appendHoverText(stack, worldin, tooltips, tooltipadvanced);
     }
 
     @Nullable
     @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
+    public CompoundTag getShareTag(ItemStack stack) {
         return super.getShareTag(stack);
     }
 

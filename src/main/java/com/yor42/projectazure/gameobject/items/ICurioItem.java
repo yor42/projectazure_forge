@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.intermod.curios.client.ICurioRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

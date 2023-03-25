@@ -4,11 +4,11 @@ import com.google.gson.JsonObject;
 import com.yor42.projectazure.gameobject.crafting.recipes.BasicChemicalReactionRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -28,23 +28,23 @@ public class ChemicalReactorRecipeBuilder {
         this.processtime = processtime;
     }
 
-    public static void add(Fluid result, int resultamount, Ingredient input, int processtime, Consumer<IFinishedRecipe> consumerIn){
+    public static void add(Fluid result, int resultamount, Ingredient input, int processtime, Consumer<FinishedRecipe> consumerIn){
         new ChemicalReactorRecipeBuilder(result, resultamount, input, processtime).build(consumerIn);
     }
 
-    public static void add(Fluid result, int resultamount, Ingredient input, Consumer<IFinishedRecipe> consumerIn){
+    public static void add(Fluid result, int resultamount, Ingredient input, Consumer<FinishedRecipe> consumerIn){
         new ChemicalReactorRecipeBuilder(result, resultamount, input, 200).build(consumerIn);
     }
 
-    public static void add(Fluid result, int resultamount, Ingredient input, int processtime, String id, Consumer<IFinishedRecipe> consumerIn){
+    public static void add(Fluid result, int resultamount, Ingredient input, int processtime, String id, Consumer<FinishedRecipe> consumerIn){
         new ChemicalReactorRecipeBuilder(result, resultamount, input, processtime).build(consumerIn, id);
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn) {
+    public void build(Consumer<FinishedRecipe> consumerIn) {
         this.build(consumerIn, this.result.getRegistryName());
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
+    public void build(Consumer<FinishedRecipe> consumerIn, String save) {
         ResourceLocation resourcelocation = this.result.getRegistryName();
         ResourceLocation resourcelocation1 = ResourceUtils.ModResourceLocation(save);
         if (resourcelocation1.equals(resourcelocation)) {
@@ -54,19 +54,19 @@ public class ChemicalReactorRecipeBuilder {
         }
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
+    public void build(Consumer<FinishedRecipe> consumerIn, ResourceLocation id) {
         consumerIn.accept(new Result(id, this.result,this.resultamount, this.input, this.processtime, registerRecipes.Serializers.BASICCHEMICALREACTION.get()));
     }
 
 
-    public static class Result implements IFinishedRecipe{
+    public static class Result implements FinishedRecipe{
 
         private final Fluid result;
         private final Ingredient input;
         private final int processtime, resultamount;
         private final ResourceLocation id;
-        private final IRecipeSerializer<BasicChemicalReactionRecipe> serializer;
-        public Result(ResourceLocation id, Fluid result, int resultamount, Ingredient input, int processtime, IRecipeSerializer<BasicChemicalReactionRecipe> serializer) {
+        private final RecipeSerializer<BasicChemicalReactionRecipe> serializer;
+        public Result(ResourceLocation id, Fluid result, int resultamount, Ingredient input, int processtime, RecipeSerializer<BasicChemicalReactionRecipe> serializer) {
             this.id = id;
             this.result = result;
             this.resultamount = resultamount;
@@ -93,7 +93,7 @@ public class ChemicalReactorRecipeBuilder {
 
         @Nonnull
         @Override
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return this.serializer;
         }
 

@@ -1,34 +1,36 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityThrownKnifeProjectile;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import static com.yor42.projectazure.setup.register.registerEntity.PROJECTILE_THROWN_KNIFE;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemThrowableKnife extends SwordItem {
-    public ItemThrowableKnife(IItemTier p_i48460_1_, int p_i48460_2_, float p_i48460_3_, Properties p_i48460_4_) {
+    public ItemThrowableKnife(Tier p_i48460_1_, int p_i48460_2_, float p_i48460_3_, Properties p_i48460_4_) {
         super(p_i48460_1_, p_i48460_2_, p_i48460_3_, p_i48460_4_);
     }
 
-    public boolean canAttackBlock(BlockState p_195938_1_, World p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
+    public boolean canAttackBlock(BlockState p_195938_1_, Level p_195938_2_, BlockPos p_195938_3_, Player p_195938_4_) {
         return !p_195938_4_.isCreative();
     }
 
-    public void releaseUsing(ItemStack p_77615_1_, World p_77615_2_, LivingEntity p_77615_3_, int p_77615_4_) {
-        if (p_77615_3_ instanceof PlayerEntity) {
-            PlayerEntity playerentity = (PlayerEntity)p_77615_3_;
+    public void releaseUsing(ItemStack p_77615_1_, Level p_77615_2_, LivingEntity p_77615_3_, int p_77615_4_) {
+        if (p_77615_3_ instanceof Player) {
+            Player playerentity = (Player)p_77615_3_;
             int i = this.getUseDuration(p_77615_1_) - p_77615_4_;
             if (i >= 10) {
                 int j = EnchantmentHelper.getRiptide(p_77615_1_);
@@ -41,7 +43,7 @@ public class ItemThrowableKnife extends SwordItem {
                             EntityThrownKnifeProjectile tridententity = new EntityThrownKnifeProjectile(PROJECTILE_THROWN_KNIFE.get(), playerentity, p_77615_2_, p_77615_1_);
                             tridententity.shootFromRotation(playerentity, playerentity.xRot, playerentity.yRot, 0.0F, 2.5F + (float)j * 0.5F, 1.0F);
                             if (playerentity.abilities.instabuild) {
-                                tridententity.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                                tridententity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                             }
 
                             p_77615_2_.addFreshEntity(tridententity);
@@ -56,21 +58,21 @@ public class ItemThrowableKnife extends SwordItem {
         }
     }
 
-    public UseAction getUseAnimation(ItemStack p_77661_1_) {
-        return UseAction.SPEAR;
+    public UseAnim getUseAnimation(ItemStack p_77661_1_) {
+        return UseAnim.SPEAR;
     }
 
     public int getUseDuration(ItemStack p_77626_1_) {
         return 72000;
     }
 
-    public ActionResult<ItemStack> use(World p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
+    public InteractionResultHolder<ItemStack> use(Level p_77659_1_, Player p_77659_2_, InteractionHand p_77659_3_) {
         ItemStack itemstack = p_77659_2_.getItemInHand(p_77659_3_);
         if (itemstack.getDamageValue() >= itemstack.getMaxDamage() - 1) {
-            return ActionResult.fail(itemstack);
+            return InteractionResultHolder.fail(itemstack);
         }else {
             p_77659_2_.startUsingItem(p_77659_3_);
-            return ActionResult.consume(itemstack);
+            return InteractionResultHolder.consume(itemstack);
         }
     }
 

@@ -1,12 +1,12 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -16,22 +16,22 @@ public class StartRecruitPacket {
         this.pos = pos;
     }
 
-    public static StartRecruitPacket decode (final PacketBuffer buffer){
+    public static StartRecruitPacket decode (final FriendlyByteBuf buffer){
         final BlockPos pos = buffer.readBlockPos();
         return new StartRecruitPacket(pos);
     }
 
-    public static void encode(final StartRecruitPacket msg, final PacketBuffer buffer){
+    public static void encode(final StartRecruitPacket msg, final FriendlyByteBuf buffer){
         buffer.writeBlockPos(msg.pos);
     }
 
     public static void handle(final StartRecruitPacket msg, final Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() -> {
-            ServerPlayerEntity sender = ctx.get().getSender();
+            ServerPlayer sender = ctx.get().getSender();
             if(sender != null){
-                World world = sender.getLevel();
-                TileEntity TE = world.getBlockEntity(msg.pos);
+                Level world = sender.getLevel();
+                BlockEntity TE = world.getBlockEntity(msg.pos);
                 if(TE instanceof AbstractTileEntityGacha){
                     ((AbstractTileEntityGacha) TE).StartMachine(sender);
                 }

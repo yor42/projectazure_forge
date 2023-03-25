@@ -1,15 +1,15 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -18,12 +18,12 @@ import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.setup.register.RegisterContainer.RECRUIT_BEACON_CONTAINER;
 
-public class ContainerRecruitBeacon extends Container {
+public class ContainerRecruitBeacon extends AbstractContainerMenu {
 
-    private final IIntArray field;
+    private final ContainerData field;
 
-    public ContainerRecruitBeacon(int id, PlayerInventory inventory, PacketBuffer buffer) {
-this(id, inventory, new ItemStackHandler(5), new IIntArray() {
+    public ContainerRecruitBeacon(int id, Inventory inventory, FriendlyByteBuf buffer) {
+this(id, inventory, new ItemStackHandler(5), new ContainerData() {
 
     final int[] values = buffer.readVarIntArray();
 
@@ -44,7 +44,7 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
 });
     }
 
-    public ContainerRecruitBeacon(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
+    public ContainerRecruitBeacon(int id, Inventory inventory, ItemStackHandler Inventory, ContainerData field) {
         super(RECRUIT_BEACON_CONTAINER.get(), id);
         this.field = field;
         addDataSlots(this.field);
@@ -90,7 +90,7 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
         return new BlockPos(this.field.get(4),this.field.get(5),this.field.get(6));
     }
 
-    public IIntArray getField() {
+    public ContainerData getField() {
         return this.field;
     }
 
@@ -102,7 +102,7 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -149,7 +149,7 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 }

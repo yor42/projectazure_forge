@@ -5,18 +5,18 @@ import com.yor42.projectazure.gameobject.entity.ai.sensor.EntitySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.WorldSensor;
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.schedule.Activity;
-import net.minecraft.entity.ai.brain.schedule.Schedule;
-import net.minecraft.entity.ai.brain.schedule.ScheduleBuilder;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.entity.schedule.Schedule;
+import net.minecraft.world.entity.schedule.ScheduleBuilder;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -34,7 +34,7 @@ public class RegisterAI {
     public static final DeferredRegister<Activity> ACTIVITIES = DeferredRegister.create(ForgeRegistries.ACTIVITIES, Constants.MODID);
     public static final DeferredRegister<MemoryModuleType<?>> MEMORYMODULES = DeferredRegister.create(ForgeRegistries.MEMORY_MODULE_TYPES, Constants.MODID);
     public static final DeferredRegister<Schedule> SCHEDULES = DeferredRegister.create(ForgeRegistries.SCHEDULES, Constants.MODID);
-    public static final DeferredRegister<PointOfInterestType> POI = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MODID);
+    public static final DeferredRegister<PoiType> POI = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MODID);
     //Activities
     public static final RegistryObject<Activity> FOLLOWING_OWNER = registerActivity("following_ownner");
     public static final RegistryObject<Activity> SITTING = registerActivity("sitting");
@@ -50,7 +50,7 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_HOSTILES = registerMemoryModuleType("nearby_hostiles");
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_HOSTILES = registerMemoryModuleType("visible_hostiles");
     public static final RegistryObject<MemoryModuleType<Integer>> VISIBLE_HOSTILE_COUNT = registerMemoryModuleType("visible_hostile_count");
-    public static final RegistryObject<MemoryModuleType<BoatEntity>> NEAREST_BOAT = registerMemoryModuleType("nearest_boat");
+    public static final RegistryObject<MemoryModuleType<Boat>> NEAREST_BOAT = registerMemoryModuleType("nearest_boat");
     public static final RegistryObject<MemoryModuleType<LivingEntity>> HEAL_TARGET = registerMemoryModuleType("heal_target");
     public static final RegistryObject<MemoryModuleType<Boolean>> RESTING = registerMemoryModuleType("resting");
     public static final RegistryObject<MemoryModuleType<Boolean>> MEMORY_SITTING = registerMemoryModuleType("sitting");
@@ -86,12 +86,12 @@ public class RegisterAI {
         return SCHEDULES.register(ID, ()->schedule);
     }
 
-    public static RegistryObject<PointOfInterestType> registerPOI(String ID, Set<BlockState> state, @Nullable Predicate<PointOfInterestType> predicate, int maxticket, int validrange){
+    public static RegistryObject<PoiType> registerPOI(String ID, Set<BlockState> state, @Nullable Predicate<PoiType> predicate, int maxticket, int validrange){
         if(predicate == null){
-            return POI.register(ID, ()->new PointOfInterestType(ID, state, maxticket, validrange));
+            return POI.register(ID, ()->new PoiType(ID, state, maxticket, validrange));
         }
         else{
-            return POI.register(ID, ()->new PointOfInterestType(ID, state, maxticket, predicate, validrange));
+            return POI.register(ID, ()->new PoiType(ID, state, maxticket, predicate, validrange));
         }
     }
 

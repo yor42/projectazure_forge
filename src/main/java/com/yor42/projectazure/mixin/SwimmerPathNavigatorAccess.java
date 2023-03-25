@@ -1,10 +1,10 @@
 package com.yor42.projectazure.mixin;
 
-import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(SwimmerPathNavigator.class)
+@Mixin(WaterBoundPathNavigation.class)
 public interface SwimmerPathNavigatorAccess {
 
     @Accessor

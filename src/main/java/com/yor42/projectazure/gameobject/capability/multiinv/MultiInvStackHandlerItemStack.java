@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.core.NonNullList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -18,11 +18,11 @@ public class MultiInvStackHandlerItemStack extends MultiInvStackHandler {
         this.container = container;
         this.stacks = Lazy.of(() -> {
             NonNullList<ItemStack> stacks = NonNullList.withSize(size, ItemStack.EMPTY);
-            CompoundNBT nbt = container.getOrCreateTag();
+            CompoundTag nbt = container.getOrCreateTag();
             if (nbt.contains("Inventory_" + id)) {
-                ListNBT items = nbt.getCompound("Inventory_" + id).getList("Items", Constants.NBT.TAG_COMPOUND);
+                ListTag items = nbt.getCompound("Inventory_" + id).getList("Items", Constants.NBT.TAG_COMPOUND);
                 for (int i = 0; i < items.size(); i++) {
-                    CompoundNBT item = items.getCompound(i);
+                    CompoundTag item = items.getCompound(i);
                     int slot = item.getInt("Slot");
                     if (slot >= 0 && slot < stacks.size()) {
                         stacks.set(slot, ItemStack.of(item));

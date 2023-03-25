@@ -2,16 +2,16 @@ package com.yor42.projectazure.gameobject.capability.playercapability;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -27,7 +27,7 @@ public class ProjectAzurePlayerCapability {
     //looks Kinda Unoptimal if you ask me...
     public ArrayList<AbstractEntityCompanion> companionList = new ArrayList<>();
 
-    public PlayerEntity player;
+    public Player player;
 
     public UUID lastGUIOpenedEntityID;
 
@@ -36,7 +36,7 @@ public class ProjectAzurePlayerCapability {
     @CapabilityInject(ProjectAzurePlayerCapability.class)
     public static final Capability<ProjectAzurePlayerCapability> PA_PLAYER_CAPABILITY = null;
 
-    public ProjectAzurePlayerCapability(PlayerEntity player){
+    public ProjectAzurePlayerCapability(Player player){
         this.player = player;
     }
 
@@ -69,11 +69,11 @@ public class ProjectAzurePlayerCapability {
         return false;
     }
 
-    public static ProjectAzurePlayerCapability getCapability(@Nonnull PlayerEntity player){
+    public static ProjectAzurePlayerCapability getCapability(@Nonnull Player player){
         return player.getCapability(PA_PLAYER_CAPABILITY).orElseThrow(() -> new IllegalStateException("Failed to get PA Player Capability for player " + player));
     }
 
-    public static LazyOptional<ProjectAzurePlayerCapability> getOptional(@Nonnull PlayerEntity entity){
+    public static LazyOptional<ProjectAzurePlayerCapability> getOptional(@Nonnull Player entity){
         LazyOptional<ProjectAzurePlayerCapability> optional = entity.getCapability(PA_PLAYER_CAPABILITY, null).cast();
         if(!optional.isPresent()){
             Main.LOGGER.warn("Failed to get Player Capability!", new Throwable().fillInStackTrace());
@@ -81,14 +81,14 @@ public class ProjectAzurePlayerCapability {
         return optional;
     }
 
-    public static ICapabilityProvider createNewCapability(final PlayerEntity player) {
-        return new ICapabilitySerializable<CompoundNBT>() {
+    public static ICapabilityProvider createNewCapability(final Player player) {
+        return new ICapabilitySerializable<CompoundTag>() {
 
             final ProjectAzurePlayerCapability inst = new ProjectAzurePlayerCapability(player);
             final LazyOptional<ProjectAzurePlayerCapability> opt = LazyOptional.of(() -> inst);
 
             @Override
-            public void deserializeNBT(CompoundNBT nbt) {
+            public void deserializeNBT(CompoundTag nbt) {
                 PA_PLAYER_CAPABILITY.getStorage().readNBT(PA_PLAYER_CAPABILITY, inst, null, nbt);
             }
 
@@ -99,15 +99,15 @@ public class ProjectAzurePlayerCapability {
             }
 
             @Override
-            public CompoundNBT serializeNBT() {
-                return (CompoundNBT) PA_PLAYER_CAPABILITY.getStorage().writeNBT(PA_PLAYER_CAPABILITY, inst, null);
+            public CompoundTag serializeNBT() {
+                return (CompoundTag) PA_PLAYER_CAPABILITY.getStorage().writeNBT(PA_PLAYER_CAPABILITY, inst, null);
             }
         };
     }
 
-    public CompoundNBT serializeNBT(){
-        CompoundNBT nbt = new CompoundNBT();
-        ListNBT entityList = new ListNBT();
+    public CompoundTag serializeNBT(){
+        CompoundTag nbt = new CompoundTag();
+        ListTag entityList = new ListTag();
         for(AbstractEntityCompanion companion: this.companionList){
             entityList.add(companion.serializeNBT());
         }
@@ -115,13 +115,13 @@ public class ProjectAzurePlayerCapability {
         return nbt;
     }
 
-    public void deserializeNBT(CompoundNBT compound){
-        ListNBT entities = compound.getList("companions", Constants.NBT.TAG_COMPOUND);
+    public void deserializeNBT(CompoundTag compound){
+        ListTag entities = compound.getList("companions", Constants.NBT.TAG_COMPOUND);
         for(int i=0; i<entities.size(); i++){
-            CompoundNBT nbt = entities.getCompound(i);
-            World world = this.player.getCommandSenderWorld();
+            CompoundTag nbt = entities.getCompound(i);
+            Level world = this.player.getCommandSenderWorld();
             if(!world.isClientSide()){
-                ServerWorld server = (ServerWorld) world;
+                ServerLevel server = (ServerLevel) world;
                 Entity entity = server.getEntity(nbt.getUUID("UUID"));
                 if(entity instanceof AbstractEntityCompanion && ((AbstractEntityCompanion)entity).getOwner() == this.player){
                     this.companionList.add((AbstractEntityCompanion) entity);
@@ -138,14 +138,14 @@ public class ProjectAzurePlayerCapability {
 
         @Nullable
         @Override
-        public INBT writeNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side) {
+        public Tag writeNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side) {
             return instance.serializeNBT();
 
         }
 
         @Override
-        public void readNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side, INBT nbt) {
-            instance.deserializeNBT((CompoundNBT) nbt);
+        public void readNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side, Tag nbt) {
+            instance.deserializeNBT((CompoundTag) nbt);
         }
     }
 

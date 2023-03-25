@@ -7,9 +7,9 @@ import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -310,8 +310,8 @@ public class enums {
         CLOSER("cls_closer", (openContainerId, inventory, player, companion)->new ContainerCLSInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion));
 
         private final String name;
-        private final Function4<Integer, PlayerInventory, PlayerEntity, AbstractEntityCompanion, AbstractContainerInventory> createmenu;
-        EntityType(String name, Function4<Integer, PlayerInventory, PlayerEntity, AbstractEntityCompanion, AbstractContainerInventory> inventory) {
+        private final Function4<Integer, Inventory, Player, AbstractEntityCompanion, AbstractContainerInventory> createmenu;
+        EntityType(String name, Function4<Integer, Inventory, Player, AbstractEntityCompanion, AbstractContainerInventory> inventory) {
             this.name = name;
             this.createmenu = inventory;
         }
@@ -321,7 +321,7 @@ public class enums {
         }
 
         @Nullable
-        public AbstractContainerInventory createmenu(int openContainerId, PlayerInventory inventory, PlayerEntity player, AbstractEntityCompanion companion) {
+        public AbstractContainerInventory createmenu(int openContainerId, Inventory inventory, Player player, AbstractEntityCompanion companion) {
             return createmenu.apply(openContainerId, inventory, player, companion);
         }
     }

@@ -26,33 +26,33 @@ import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.*;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BlockModelDefinition;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.PotionItem;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.state.properties.BedPart;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.Tags;
@@ -86,7 +86,11 @@ import java.util.stream.Collectors;
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
 import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded;
 import static net.minecraft.util.Hand.MAIN_HAND;
-import static net.minecraft.util.Hand.OFF_HAND;
+import staticnet.minecraft.world.InteractionHandd.OFF_HAND;
+
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeBusEventHandler {
@@ -110,12 +114,12 @@ public class ForgeBusEventHandler {
         LivingEntity entity = event.getEntityLiving();
         DamageSource damageSource = event.getSource();
 
-        ItemStack headstack = entity.getItemBySlot(EquipmentSlotType.HEAD);
+        ItemStack headstack = entity.getItemBySlot(EquipmentSlot.HEAD);
         Item headItem = headstack.getItem();
 
         if(headItem instanceof GasMaskItem){
-            CompoundNBT compoundNBT = headstack.getOrCreateTag();
-            ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+            CompoundTag compoundNBT = headstack.getOrCreateTag();
+            ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
             for(int i = 0; i<filters.size(); i++){
                 ItemStack filterstack = ItemStack.of(filters.getCompound(i));
                 if(ItemStackUtils.isDestroyed(filterstack)){
@@ -133,16 +137,16 @@ public class ForgeBusEventHandler {
 
     @SubscribeEvent
     public static void onEXPEvent(@Nonnull PlayerXpEvent.XpChange event){
-        PlayerEntity player1 = event.getPlayer();
+        Player player1 = event.getPlayer();
 
         if(player1.getCommandSenderWorld().isClientSide()){
             return;
         }
 
-        ServerPlayerEntity player = (ServerPlayerEntity) player1;
+        ServerPlayer player = (ServerPlayer) player1;
         IMixinPlayerEntity mixinplayer = ((IMixinPlayerEntity)player);
 
-        CompoundNBT entityonBack = mixinplayer.getEntityonBack();
+        CompoundTag entityonBack = mixinplayer.getEntityonBack();
         if(entityonBack.isEmpty()){
             return;
         }
@@ -180,7 +184,7 @@ public class ForgeBusEventHandler {
 
         LivingEntity entity = event.getEntityLiving();
 
-        ItemStack headstack = entity.getItemBySlot(EquipmentSlotType.HEAD);
+        ItemStack headstack = entity.getItemBySlot(EquipmentSlot.HEAD);
         if(headstack.isEmpty() && CompatibilityUtils.isCurioLoaded()){
             headstack = getCurioItemStack(entity, (stack-> stack.getItem() == RegisterItems.GASMASK.get()));
         }
@@ -188,8 +192,8 @@ public class ForgeBusEventHandler {
         Item headItem = headstack.getItem();
 
         if(headItem == RegisterItems.GASMASK.get()){
-            CompoundNBT compoundNBT = headstack.getOrCreateTag();
-            ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+            CompoundTag compoundNBT = headstack.getOrCreateTag();
+            ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
             for(int i = 0; i<filters.size(); i++){
                 ItemStack filterstack = ItemStack.of(filters.getCompound(i));
                 if(ItemStackUtils.isDestroyed(filterstack)){
@@ -444,7 +448,7 @@ public class ForgeBusEventHandler {
     private static void registerRecipeFromJSON(ResourceLocation location) throws IOException {
         InputStream stream = Minecraft.getInstance().getResourceManager().getResource(location).getInputStream();
         InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-        RecipeMap map = JSONUtils.fromJson(Multiblocked.GSON, reader, RecipeMap.class);
+        RecipeMap map = GsonHelper.fromJson(Multiblocked.GSON, reader, RecipeMap.class);
         if (map != null) {
             RecipeMap.register(map);
         }
@@ -452,8 +456,8 @@ public class ForgeBusEventHandler {
 
     @SubscribeEvent
     public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event) {
-        World world = event.getWorld();
-        PlayerEntity player = event.getPlayer();
+        Level world = event.getWorld();
+        Player player = event.getPlayer();
         if (player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
 
             ((IMixinPlayerEntity) player).removeEntityOnBack().ifPresent((entity) -> {
@@ -470,7 +474,7 @@ public class ForgeBusEventHandler {
                         event.setCanceled(true);
                     }
                 } else if (((AbstractEntityCompanion) entity).isDeadOrDying()) {
-                    player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
+                    player.displayClientMessage(new TranslatableComponent("item.tooltip.not_revived"), true);
                 }
                 player.swing(MAIN_HAND);
             });
@@ -479,13 +483,13 @@ public class ForgeBusEventHandler {
 
     @SubscribeEvent
     public static void OnplayerRightClickedEntity(PlayerInteractEvent.EntityInteract event){
-        PlayerEntity player = event.getPlayer();
-        Hand hand = event.getHand();
+        Player player = event.getPlayer();
+        InteractionHand hand = event.getHand();
         ItemStack stack = player.getItemInHand(hand);
-        Hand OtherHand = hand == MAIN_HAND?Hand.OFF_HAND:MAIN_HAND;
+        InteractionHand OtherHand = hand == MAIN_HAND?InteractionHand.OFF_HAND:MAIN_HAND;
         ItemStack otherHandStack = player.getItemInHand(OtherHand);
         Entity target = event.getTarget();
-        World world = event.getWorld();
+        Level world = event.getWorld();
 
         if(target instanceof LivingEntity){
             if(stack.getItem() instanceof ItemDefibPaddle && otherHandStack.getItem() instanceof ItemDefibPaddle){
@@ -517,7 +521,7 @@ public class ForgeBusEventHandler {
                     if(!world.isClientSide()){
                         for(ItemStack itemstack : new ItemStack[]{stack, otherHandStack}) {
                             ItemDefibPaddle item = (ItemDefibPaddle) itemstack.getItem();
-                            final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) world);
+                            final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerLevel) world);
                             final AnimationController controller = GeckoLibUtil.getControllerForID(item.factory, id, ItemDefibPaddle.controllerName);
                             controller.markNeedsReload();
                             controller.setAnimation(new AnimationBuilder().addAnimation("shock"));
@@ -558,7 +562,7 @@ public class ForgeBusEventHandler {
         }
     }
 
-    private static <R extends IRecipe<?>> List<R> filterRecipes(Collection<IRecipe<?>> recipes, Class<R> recipeClass, IRecipeType<R> recipeType) {
+    private static <R extends Recipe<?>> List<R> filterRecipes(Collection<Recipe<?>> recipes, Class<R> recipeClass, RecipeType<R> recipeType) {
         return recipes.stream()
                 .filter(iRecipe -> iRecipe.getType() == recipeType)
                 .map(recipeClass::cast)
@@ -566,7 +570,7 @@ public class ForgeBusEventHandler {
     }
 
     private static void loadcrushingRecipes(RecipeManager manager) {
-        Collection<IRecipe<?>> recipes = manager.getRecipes();
+        Collection<Recipe<?>> recipes = manager.getRecipes();
         if (recipes.isEmpty()) {
             return;
         }

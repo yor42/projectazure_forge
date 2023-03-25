@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrystalizingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -23,22 +23,22 @@ public class CrystalizingRecipeBuilder {
     private final Fluid solution;
     private final int growthTime;
 
-    public CrystalizingRecipeBuilder(IItemProvider result, Ingredient seed, Fluid solution, int growthTime){
+    public CrystalizingRecipeBuilder(ItemLike result, Ingredient seed, Fluid solution, int growthTime){
         this.result = result.asItem();
         this.seed = seed;
         this.solution = solution;
         this.growthTime = growthTime;
     }
 
-    public static CrystalizingRecipeBuilder addRecipe(IItemProvider result, Ingredient seed, Fluid solution, int growthTime){
+    public static CrystalizingRecipeBuilder addRecipe(ItemLike result, Ingredient seed, Fluid solution, int growthTime){
         return new CrystalizingRecipeBuilder(result, seed, solution, growthTime);
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn) {
+    public void build(Consumer<FinishedRecipe> consumerIn) {
         this.build(consumerIn, ForgeRegistries.ITEMS.getKey(this.result));
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
+    public void build(Consumer<FinishedRecipe> consumerIn, String save) {
         ResourceLocation resourcelocation = ForgeRegistries.ITEMS.getKey(this.result);
         ResourceLocation resourcelocation1 = ResourceUtils.ModResourceLocation(save);
         if (resourcelocation1.equals(resourcelocation)) {
@@ -48,20 +48,20 @@ public class CrystalizingRecipeBuilder {
         }
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
+    public void build(Consumer<FinishedRecipe> consumerIn, ResourceLocation id) {
         consumerIn.accept(new CrystalizingRecipeBuilder.Result(id, "", this.seed, this.result, this.growthTime, this.solution, registerRecipes.Serializers.CRYSTALIZING.get()));
     }
 
-    public static class Result implements IFinishedRecipe {
+    public static class Result implements FinishedRecipe {
         private final ResourceLocation id;
         private final Ingredient seed;
         private final Fluid solution;
         private final String group;
         private final Item result;
         private final int GrowthTime;
-        private final IRecipeSerializer<CrystalizingRecipe> serializer;
+        private final RecipeSerializer<CrystalizingRecipe> serializer;
 
-        public Result(ResourceLocation idIn, String groupIn, Ingredient seedIn, Item resultIn, int growthTimeIn, Fluid fluidIn, IRecipeSerializer<CrystalizingRecipe> serializerIn){
+        public Result(ResourceLocation idIn, String groupIn, Ingredient seedIn, Item resultIn, int growthTimeIn, Fluid fluidIn, RecipeSerializer<CrystalizingRecipe> serializerIn){
             this.id = idIn;
             this.group = groupIn;
             this.seed = seedIn;
@@ -89,7 +89,7 @@ public class CrystalizingRecipeBuilder {
         }
 
         @Override
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return this.serializer;
         }
 

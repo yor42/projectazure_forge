@@ -3,12 +3,12 @@ package com.yor42.projectazure.gameobject.crafting.recipes;
 import com.google.common.collect.Lists;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.addAmmo;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.RELOADING;
 
-public class ReloadRecipes extends SpecialRecipe {
+public class ReloadRecipes extends CustomRecipe {
 
     private final List<ItemStack> AmmoList = Lists.newArrayList();
     private ItemStack ReloadTarget;
@@ -26,7 +26,7 @@ public class ReloadRecipes extends SpecialRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         this.ReloadTarget = ItemStack.EMPTY;
         ICraftingTableReloadable ReloadTargetItem = null;
         for(int i = 0; i < inv.getContainerSize(); ++i) {
@@ -61,7 +61,7 @@ public class ReloadRecipes extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack stackToReturn = this.ReloadTarget.copy();
         int AmmoToAdd = 0;
         for (ItemStack stack : this.AmmoList) {
@@ -78,7 +78,7 @@ public class ReloadRecipes extends SpecialRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return RELOADING.get();
     }
 }

@@ -2,12 +2,12 @@ package com.yor42.projectazure.gameobject.containers.entity;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterContainer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -16,11 +16,11 @@ import javax.annotation.Nonnull;
 
 public class ContainerFGOInventory extends AbstractContainerInventory {
 
-    public ContainerFGOInventory(int id, PlayerInventory inventory, PacketBuffer data) {
+    public ContainerFGOInventory(int id, Inventory inventory, FriendlyByteBuf data) {
         this(id, inventory, new ItemStackHandler(30), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 
-    public ContainerFGOInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
+    public ContainerFGOInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(RegisterContainer.FGO_CONTAINER.get(), id, companion);
 
         //mainhand
@@ -47,7 +47,7 @@ public class ContainerFGOInventory extends AbstractContainerInventory {
     }
 
     @Nonnull
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -61,7 +61,7 @@ public class ContainerFGOInventory extends AbstractContainerInventory {
                 if (!this.moveItemStackTo(from, equipments, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (from.getItem() instanceof ToolItem) {
+            } else if (from.getItem() instanceof DiggerItem) {
                 if (!this.moveItemStackTo(from, 0, 2, false)) {
                     return ItemStack.EMPTY;
                 } else {

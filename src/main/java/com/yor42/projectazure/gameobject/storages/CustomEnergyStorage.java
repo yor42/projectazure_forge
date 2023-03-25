@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.storages;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class CustomEnergyStorage extends EnergyStorage {
@@ -22,8 +22,8 @@ public class CustomEnergyStorage extends EnergyStorage {
     /*
     Why This is not a default thing in a forge?
      */
-    public CompoundNBT serializeNBT(){
-        CompoundNBT compound = new CompoundNBT();
+    public CompoundTag serializeNBT(){
+        CompoundTag compound = new CompoundTag();
         compound.putInt("energystorage_energy", this.energy);
         compound.putInt("energystorage_capacity", this.capacity);
         compound.putInt("energystorage_maxReceive", this.maxReceive);
@@ -31,7 +31,7 @@ public class CustomEnergyStorage extends EnergyStorage {
         return compound;
     }
 
-    public void deserializeNBT(CompoundNBT compound){
+    public void deserializeNBT(CompoundTag compound){
         this.energy = compound.getInt("energystorage_energy");
         this.capacity = compound.getInt("energystorage_capacity");
         this.maxReceive = compound.getInt("energystorage_maxReceive");

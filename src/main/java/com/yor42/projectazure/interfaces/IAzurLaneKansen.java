@@ -2,7 +2,7 @@ package com.yor42.projectazure.interfaces;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
 
 public interface IAzurLaneKansen {
     default enums.ALAffection affectionValuetoEnum(){

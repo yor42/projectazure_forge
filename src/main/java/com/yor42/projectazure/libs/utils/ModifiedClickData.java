@@ -1,9 +1,9 @@
 package com.yor42.projectazure.libs.utils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MouseHelper;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.MouseHandler;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.glfw.GLFW;
@@ -28,24 +28,24 @@ public class ModifiedClickData {
 
     @OnlyIn(Dist.CLIENT)
     public ModifiedClickData() {
-        MouseHelper mouseHelper = Minecraft.getInstance().mouseHandler;
+        MouseHandler mouseHelper = Minecraft.getInstance().mouseHandler;
         long id = Minecraft.getInstance().getWindow().getWindow();
         this.button = mouseHelper.isLeftPressed() ? 0 : mouseHelper.isRightPressed() ? 1 : 2;
-        this.isShiftClick = InputMappings.isKeyDown(id, GLFW.GLFW_KEY_LEFT_SHIFT) || InputMappings.isKeyDown(id, GLFW.GLFW_KEY_LEFT_SHIFT);
-        this.isCtrlClick = InputMappings.isKeyDown(id, GLFW.GLFW_KEY_LEFT_CONTROL) || InputMappings.isKeyDown(id, GLFW.GLFW_KEY_RIGHT_CONTROL);
+        this.isShiftClick = InputConstants.isKeyDown(id, GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(id, GLFW.GLFW_KEY_LEFT_SHIFT);
+        this.isCtrlClick = InputConstants.isKeyDown(id, GLFW.GLFW_KEY_LEFT_CONTROL) || InputConstants.isKeyDown(id, GLFW.GLFW_KEY_RIGHT_CONTROL);
         this.isRemote = true;
         this.clickedUserUUID = Minecraft.getInstance().player.getUUID();
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void writeToBuf(PacketBuffer buf) {
+    public void writeToBuf(FriendlyByteBuf buf) {
         buf.writeVarInt(button);
         buf.writeBoolean(isShiftClick);
         buf.writeBoolean(isCtrlClick);
         buf.writeUUID(clickedUserUUID);
     }
 
-    public static ModifiedClickData readFromBuf(PacketBuffer buf) {
+    public static ModifiedClickData readFromBuf(FriendlyByteBuf buf) {
         int button = buf.readVarInt();
         boolean shiftClick = buf.readBoolean();
         boolean ctrlClick = buf.readBoolean();

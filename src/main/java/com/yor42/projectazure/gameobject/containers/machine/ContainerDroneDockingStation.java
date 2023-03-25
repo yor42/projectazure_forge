@@ -3,30 +3,30 @@ package com.yor42.projectazure.gameobject.containers.machine;
 import com.yor42.projectazure.gameobject.containers.slots.DroneDockingStationInvSlot;
 import com.yor42.projectazure.gameobject.containers.slots.DummySlot;
 import com.yor42.projectazure.libs.ItemFilterEntry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerDroneDockingStation extends Container {
+public class ContainerDroneDockingStation extends AbstractContainerMenu {
 
     private ScreenMode screenMode;
     private String Filter_ID = "";
     private ItemFilterEntry.ItemTypes FilterType = ItemFilterEntry.ItemTypes.ITEM;
 
-    protected ContainerDroneDockingStation(@Nullable ContainerType<?> p_i50105_1_, PlayerInventory inventory, int p_i50105_2_) {
+    protected ContainerDroneDockingStation(@Nullable MenuType<?> p_i50105_1_, Inventory inventory, int p_i50105_2_) {
         this(p_i50105_1_, inventory, new ItemStackHandler(18), p_i50105_2_);
     }
 
-    public ContainerDroneDockingStation(@Nullable ContainerType<?> p_i50105_1_, PlayerInventory inventory, ItemStackHandler dockingstationInventory, int p_i50105_2_) {
+    public ContainerDroneDockingStation(@Nullable MenuType<?> p_i50105_1_, Inventory inventory, ItemStackHandler dockingstationInventory, int p_i50105_2_) {
         super(p_i50105_1_, p_i50105_2_);
         this.screenMode = ScreenMode.NORMAL;
         this.populateDockingStationInv(dockingstationInventory);
@@ -53,7 +53,7 @@ public class ContainerDroneDockingStation extends Container {
 
 
 
-    private void populatePlayerInv(PlayerInventory inventory){
+    private void populatePlayerInv(Inventory inventory){
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -95,7 +95,7 @@ public class ContainerDroneDockingStation extends Container {
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity p_75145_1_) {
+    public boolean stillValid(@Nonnull Player p_75145_1_) {
         return true;
     }
 

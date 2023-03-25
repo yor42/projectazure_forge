@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.ImageWidget;
 import com.lowdragmc.multiblocked.api.recipe.RecipeLogic;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import javax.annotation.Nonnull;
 
@@ -20,7 +20,7 @@ public class WorkingStatusWidget extends ImageWidget {
     }
 
     @Override
-    public void drawInBackground(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void drawInBackground(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 
         this.setBackground(textures.get(this.logic==null? RecipeLogic.Status.IDLE:logic.getStatus()));
 

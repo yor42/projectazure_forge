@@ -1,10 +1,10 @@
 package com.yor42.projectazure.interfaces;
 
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 
 public interface IAttributeable {
 
-    static AttributeModifierMap.MutableAttribute MutableAttribute() {
+    static AttributeSupplier.Builder MutableAttribute() {
         return null;
     }
 

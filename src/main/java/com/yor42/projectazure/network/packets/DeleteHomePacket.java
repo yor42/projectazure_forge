@@ -1,43 +1,42 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.HOME;
+public class DeleteHomePacket{
 
-public class DeleteHomePacket {
     private final int entityID;
 
     public DeleteHomePacket(int entityID){
         this.entityID = entityID;
     }
 
-    public static DeleteHomePacket decode (final PacketBuffer buffer){
+    public static DeleteHomePacket decode (final FriendlyByteBuf buffer){
         final int id = buffer.readInt();
         return new DeleteHomePacket(id);
     }
 
-    public static void encode(final DeleteHomePacket msg, final PacketBuffer buffer){
+    public static void encode(final DeleteHomePacket msg, final FriendlyByteBuf buffer){
         buffer.writeInt(msg.entityID);
     }
 
     public static void handle(final DeleteHomePacket msg, final Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() -> {
-            final ServerPlayerEntity playerEntity = ctx.get().getSender();
+            final ServerPlayer playerEntity = ctx.get().getSender();
             if(playerEntity!= null) {
-                final ServerWorld world = playerEntity.getLevel();
+                final ServerLevel world = playerEntity.getLevel();
                 Entity ety = world.getEntity(msg.entityID);
                 if(ety instanceof AbstractEntityCompanion){
                     ((AbstractEntityCompanion) ety).releasePoi(MemoryModuleType.HOME);
-                    ((AbstractEntityCompanion) ety).getBrain().eraseMemory(HOME);
+                    ((AbstractEntityCompanion) ety).getBrain().eraseMemory(MemoryModuleType.HOME);
                 }
             }
         });

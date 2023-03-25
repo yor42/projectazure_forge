@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.gun;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.items.ModelSupernova_geo;
 import com.yor42.projectazure.gameobject.items.GeoGunItem;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -14,7 +14,7 @@ public class SupernovaGeoRenderer extends GeoItemRenderer<GeoGunItem> {
     }
 
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 
         if(bone.getName().contains("emissive")){
             GeoGunItem energygun = (GeoGunItem) this.currentItemStack.getItem();

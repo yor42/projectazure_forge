@@ -1,19 +1,19 @@
 package com.yor42.projectazure.interfaces;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
 public interface IWorldSkillUseable {
 
-    boolean canUseWorldSkill(ServerWorld world, BlockPos pos, AbstractEntityCompanion companion);
+    boolean canUseWorldSkill(ServerLevel world, BlockPos pos, AbstractEntityCompanion companion);
 
-    boolean executeWorldSkill(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity);
+    boolean executeWorldSkill(ServerLevel world, BlockPos pos, AbstractEntityCompanion entity);
 
     float getWorldSkillRange();
 
-    boolean executeWorldSkillTick(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity);
+    boolean executeWorldSkillTick(ServerLevel world, BlockPos pos, AbstractEntityCompanion entity);
 
-    default void endWorldSkill(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity){}
+    default void endWorldSkill(ServerLevel world, BlockPos pos, AbstractEntityCompanion entity){}
 
 }

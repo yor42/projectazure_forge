@@ -1,12 +1,12 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.google.common.base.Preconditions;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector4f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,39 +20,39 @@ import java.util.function.Consumer;
  *  Details can be found in the license file in the root folder of this project
  */
 
-public class TransformingVertexBuilder implements IVertexBuilder
+public class TransformingVertexBuilder implements VertexConsumer
 {
-    private final IVertexBuilder base;
-    private final MatrixStack transform;
-    ObjectWithGlobal<Vector2f> uv = new ObjectWithGlobal<>();
-    ObjectWithGlobal<Vector3d> pos = new ObjectWithGlobal<>();
+    private final VertexConsumer base;
+    private final PoseStack transform;
+    ObjectWithGlobal<Vec2> uv = new ObjectWithGlobal<>();
+    ObjectWithGlobal<Vec3> pos = new ObjectWithGlobal<>();
     ObjectWithGlobal<Vec2i> overlay = new ObjectWithGlobal<>();
     ObjectWithGlobal<Vec2i> lightmap = new ObjectWithGlobal<>();
     ObjectWithGlobal<Vector3f> normal = new ObjectWithGlobal<>();
     ObjectWithGlobal<Vector4f> color = new ObjectWithGlobal<>();
 
-    public TransformingVertexBuilder(IVertexBuilder base, MatrixStack transform)
+    public TransformingVertexBuilder(VertexConsumer base, PoseStack transform)
     {
         this.base = base;
         this.transform = transform;
     }
 
-    public TransformingVertexBuilder(IVertexBuilder base)
+    public TransformingVertexBuilder(VertexConsumer base)
     {
-        this(base, new MatrixStack());
+        this(base, new PoseStack());
     }
 
     @Nonnull
     @Override
-    public IVertexBuilder vertex(double x, double y, double z)
+    public VertexConsumer vertex(double x, double y, double z)
     {
-        pos.putData(new Vector3d(x, y, z));
+        pos.putData(new Vec3(x, y, z));
         return this;
     }
 
     @Nonnull
     @Override
-    public IVertexBuilder color(int red, int green, int blue, int alpha)
+    public VertexConsumer color(int red, int green, int blue, int alpha)
     {
         color.putData(new Vector4f(red/255f, green/255f, blue/255f, alpha/255f));
         return this;
@@ -60,15 +60,15 @@ public class TransformingVertexBuilder implements IVertexBuilder
 
     @Nonnull
     @Override
-    public IVertexBuilder uv(float u, float v)
+    public VertexConsumer uv(float u, float v)
     {
-        uv.putData(new Vector2f(u, v));
+        uv.putData(new Vec2(u, v));
         return this;
     }
 
     @Nonnull
     @Override
-    public IVertexBuilder overlayCoords(int u, int v)
+    public VertexConsumer overlayCoords(int u, int v)
     {
         overlay.putData(new Vec2i(u, v));
         return this;
@@ -76,7 +76,7 @@ public class TransformingVertexBuilder implements IVertexBuilder
 
     @Nonnull
     @Override
-    public IVertexBuilder uv2(int u, int v)
+    public VertexConsumer uv2(int u, int v)
     {
         lightmap.putData(new Vec2i(u, v));
         return this;
@@ -84,7 +84,7 @@ public class TransformingVertexBuilder implements IVertexBuilder
 
     @Nonnull
     @Override
-    public IVertexBuilder normal(float x, float y, float z)
+    public VertexConsumer normal(float x, float y, float z)
     {
         normal.putData(new Vector3f(x, y, z));
         return this;

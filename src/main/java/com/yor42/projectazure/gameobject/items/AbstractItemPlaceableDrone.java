@@ -4,18 +4,18 @@ import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDron
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.NonNullList;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nullable;
@@ -24,6 +24,13 @@ import java.util.UUID;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item.Properties;
 
 public abstract class AbstractItemPlaceableDrone extends ItemDestroyable implements IAnimatable, ICraftingTableReloadable {
     private final int AmmoCount;
@@ -35,7 +42,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Override
-    public void onCraftedBy(ItemStack stack, World worldIn, PlayerEntity playerIn) {
+    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
         stack.getOrCreateTag().putString("planeUUID", UUID.randomUUID().toString());
     }
@@ -60,14 +67,14 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     public void AddInfotoDrone(ItemStack droneItem, AbstractEntityFollowingDrone drone){
-        CompoundNBT stackCompound = droneItem.getOrCreateTag();
+        CompoundTag stackCompound = droneItem.getOrCreateTag();
         if(stackCompound.contains("planedata")) {
             drone.readAdditionalSaveData(stackCompound.getCompound("planedata"));
         }
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if(group == this.getItemCategory()) {
             ItemStack stack = new ItemStack(this);
             ItemStackUtils.setCurrentHP(stack, this.getMaxHP());
@@ -78,24 +85,24 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         int currentFuel = stack.getOrCreateTag().getInt("fuel");
         float fuelPercent = (float) currentFuel/this.getFuelCapacity();
-        TextFormatting color = TextFormatting.DARK_GREEN;
+        ChatFormatting color = ChatFormatting.DARK_GREEN;
         if(fuelPercent<0.6){
-            color = TextFormatting.GOLD;
+            color = ChatFormatting.GOLD;
         }
         else if(fuelPercent<0.3){
-            color = TextFormatting.DARK_RED;
+            color = ChatFormatting.DARK_RED;
         }
-        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(currentFuel+"/"+this.getFuelCapacity()).withStyle(color)));
+        tooltip.add(new TextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingfuel").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(currentFuel+"/"+this.getFuelCapacity()).withStyle(color)));
 
     }
 
     @Nullable
-    public AbstractEntityFollowingDrone CreateDrone(World world, ItemStack stack, LivingEntity owner){
+    public AbstractEntityFollowingDrone CreateDrone(Level world, ItemStack stack, LivingEntity owner){
         AbstractEntityFollowingDrone DroneEntity = this.getEntityType().create(world);
         if(DroneEntity != null) {
             this.AddInfotoDrone(stack, DroneEntity);
@@ -110,7 +117,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
 
         if(!context.getLevel().isClientSide() && context.getPlayer() != null && context.getPlayer().isShiftKeyDown()){
             AbstractEntityFollowingDrone DroneEntity = this.CreateDrone(context.getLevel(), context.getItemInHand(), context.getPlayer());
@@ -121,7 +128,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
                     stack.shrink(1);
                 }
             }
-            return ActionResultType.CONSUME;
+            return InteractionResult.CONSUME;
         }
 
         return super.useOn(context);

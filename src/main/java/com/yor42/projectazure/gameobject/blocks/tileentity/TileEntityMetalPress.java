@@ -6,16 +6,16 @@ import com.yor42.projectazure.gameobject.crafting.recipes.PressingRecipe;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -30,7 +30,7 @@ import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTI
 
 public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
 
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -79,7 +79,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         this.energyStorage.setMaxEnergy(15000);
     }
 
-    public void encodeExtraData(PacketBuffer buffer){
+    public void encodeExtraData(FriendlyByteBuf buffer){
     }
 
     @Override
@@ -109,17 +109,17 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("tileentity.metal_press.name");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("tileentity.metal_press.name");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new ContainerMetalPress(id, player, this.inventory, this.fields);
     }
 
     @Override
-    protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+    protected <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
         event.getController().transitionLengthTicks = 0;
         boolean flag = this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).getValue(ACTIVE);
@@ -136,7 +136,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     }
 
     @Override
-    protected int getTargetProcessTime(IRecipe<?> iRecipe) {
+    protected int getTargetProcessTime(Recipe<?> iRecipe) {
 
         if(iRecipe instanceof PressingRecipe){
             return ((PressingRecipe) iRecipe).getProcessTick();
@@ -145,7 +145,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         return 200;
     }
 
-    protected void process(IRecipe<?> irecipe) {
+    protected void process(Recipe<?> irecipe) {
 
         if(irecipe != null && this.canProcess(irecipe)){
             ItemStack ingredient = this.inventory.getStackInSlot(0);
@@ -184,7 +184,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         }
     }
 
-    protected boolean canProcess(@Nullable IRecipe<?> recipeIn) {
+    protected boolean canProcess(@Nullable Recipe<?> recipeIn) {
         if (!this.inventory.getStackInSlot(0).isEmpty() && !this.inventory.getStackInSlot(1).isEmpty() && recipeIn != null) {
             ItemStack itemstack = recipeIn.getResultItem();
             if (itemstack.isEmpty()) {

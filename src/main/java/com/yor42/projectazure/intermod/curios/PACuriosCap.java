@@ -1,16 +1,16 @@
 package com.yor42.projectazure.intermod.curios;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.gameobject.items.ICurioItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import top.theillusivec4.curios.api.SlotContext;
@@ -46,14 +46,14 @@ public class PACuriosCap implements ICurio {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(String identifier, int index, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, LivingEntity livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(String identifier, int index, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light, LivingEntity livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         EntityRenderer<?> renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(livingEntity);
         Item item = this.stack.getItem();
-        if (!(renderer instanceof IEntityRenderer<?, ?>)) {
+        if (!(renderer instanceof RenderLayerParent<?, ?>)) {
             return;
         }
-        EntityModel<?> model = ((IEntityRenderer<?, ?>) renderer).getModel();
-        if (!(model instanceof BipedModel<?>)) {
+        EntityModel<?> model = ((RenderLayerParent<?, ?>) renderer).getModel();
+        if (!(model instanceof HumanoidModel<?>)) {
             return;
         }
 

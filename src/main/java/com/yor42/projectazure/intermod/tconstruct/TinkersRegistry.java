@@ -6,17 +6,17 @@ import com.yor42.projectazure.intermod.tconstruct.modifiers.AbsorptionModifier;
 import com.yor42.projectazure.intermod.tconstruct.modifiers.AssimilartingModifier;
 import com.yor42.projectazure.intermod.tconstruct.modifiers.MysteryModifier;
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.tags.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -55,9 +55,9 @@ public class TinkersRegistry {
         public final ResourceLocation TEXTURE_STILL;
         public final ResourceLocation TEXTURE_FLOW;
 
-        public final ITag.INamedTag<Fluid> FluidTag;
+        public final Tag.Named<Fluid> FluidTag;
 
-        public final RegistryObject<FlowingFluidBlock> FLUID_BLOCK;
+        public final RegistryObject<LiquidBlock> FLUID_BLOCK;
 
         public final RegistryObject<BucketItem> FLUID_BUCKET;
 
@@ -81,9 +81,9 @@ public class TinkersRegistry {
             TEXTURE_FLOW = new ResourceLocation(Constants.MODID, "block/" + name + "_flow");
             PROPERTIES = new ForgeFlowingFluid.Properties(FLUID, FLUID_FLOW, FluidAttributes.builder(TEXTURE_STILL, TEXTURE_FLOW).overlay(TEXTURE_STILL).luminosity(light).density(density).viscosity(6000).temperature(temperature).sound(SoundEvents.BUCKET_FILL_LAVA, SoundEvents.BUCKET_EMPTY_LAVA));
 
-            FLUID_BLOCK = BLOCKS.register(name + "_block", () -> new FlowingFluidBlock(FLUID, Block.Properties.of(Material.LAVA).lightLevel((state) -> { return light; }).randomTicks().strength(100.0F).noDrops()));
+            FLUID_BLOCK = BLOCKS.register(name + "_block", () -> new LiquidBlock(FLUID, Block.Properties.of(Material.LAVA).lightLevel((state) -> { return light; }).randomTicks().strength(100.0F).noDrops()));
             OBJECT = new FluidObject<>(new ResourceLocation(Constants.MODID, name), name, FLUID, FLUID_FLOW, FLUID_BLOCK);
-            FLUID_BUCKET = ITEMS.register(name + "_bucket", () -> new BucketItem(FLUID, new BucketItem.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
+            FLUID_BUCKET = ITEMS.register(name + "_bucket", () -> new BucketItem(FLUID, new BucketItem.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
             itemModelProvider.ITEMENTRY.add(new Pair<>(name + "_bucket", name + "_bucket"));
             PROPERTIES.bucket(FLUID_BUCKET).block(FLUID_BLOCK).explosionResistance(1000F).tickRate(9);
             this.FluidTag = forge(name);
@@ -95,7 +95,7 @@ public class TinkersRegistry {
             return PROPERTIES;
         }
 
-        private static ITag.INamedTag<Fluid> forge(String path) {
+        private static Tag.Named<Fluid> forge(String path) {
             return FluidTags.bind(new ResourceLocation("forge", path).toString());
         }
     }

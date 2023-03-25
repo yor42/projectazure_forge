@@ -1,11 +1,11 @@
 package com.yor42.projectazure.client.renderer.items;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import com.mojang.math.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -18,7 +18,7 @@ public abstract class AbstractRiggingRenderer<T extends ItemRiggingBase> extends
     }
 
     @Override
-    public void render(T animatable, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, ItemStack itemStack) {
+    public void render(T animatable, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn, ItemStack itemStack) {
         super.render(animatable, stack, bufferIn, packedLightIn, itemStack);
         Item item = itemStack.getItem();
 
@@ -39,7 +39,7 @@ public abstract class AbstractRiggingRenderer<T extends ItemRiggingBase> extends
         stack.popPose();
     }
 
-    protected void moveAndRotateMatrixToMatchBone(MatrixStack stack, GeoBone bone) {
+    protected void moveAndRotateMatrixToMatchBone(PoseStack stack, GeoBone bone) {
         double x = bone.getModelPosition().x;
         double y = bone.getModelPosition().y;
         double z = bone.getModelPosition().z;

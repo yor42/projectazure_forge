@@ -1,20 +1,20 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.IRecipeHolder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
@@ -23,14 +23,14 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.POWERED;
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 
-public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimateableEnergyTickTE implements IRecipeHolder, IRecipeHelperPopulator {
+public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimateableEnergyTickTE implements RecipeHolder, StackedContentsCompatible {
 
     protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
-    protected IRecipeType<? extends IRecipe<IInventory>> recipeType;
+    protected RecipeType<? extends Recipe<Container>> recipeType;
 
-    protected AbstractAnimatedTileEntityMachines(TileEntityType<?> typeIn) {
+    protected AbstractAnimatedTileEntityMachines(BlockEntityType<?> typeIn) {
         super(typeIn);
     }
 
@@ -49,7 +49,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
 
         if (this.level != null && !this.level.isClientSide) {
 
-                IRecipe<?> irecipe = this.level.getRecipeManager().getRecipeFor((IRecipeType<? extends IRecipe<IInventory>>) this.recipeType, this, this.level).orElse(null);
+                Recipe<?> irecipe = this.level.getRecipeManager().getRecipeFor((RecipeType<? extends Recipe<Container>>) this.recipeType, this, this.level).orElse(null);
 
                 boolean flag1 = this.energyStorage.getEnergyStored() >= this.powerConsumption;
                 boolean flag2 = this.canProcess(irecipe);
@@ -94,21 +94,21 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         }
     }
 
-    protected abstract int getTargetProcessTime(IRecipe<?> iRecipe);
+    protected abstract int getTargetProcessTime(Recipe<?> iRecipe);
 
-    protected abstract void process(IRecipe<?> irecipe);
+    protected abstract void process(Recipe<?> irecipe);
 
-    protected abstract boolean canProcess(IRecipe<?> irecipe);
+    protected abstract boolean canProcess(Recipe<?> irecipe);
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         this.ProcessTime = nbt.getInt("processtime");
         this.totalProcessTime = nbt.getInt("totalprocesstime");
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putInt("processtime", this.ProcessTime);
         compound.putInt("totalprocesstime", this.totalProcessTime);
@@ -117,17 +117,17 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT syncTag = super.getUpdateTag();
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        CompoundTag syncTag = super.getUpdateTag();
         syncTag.putInt("progress", this.ProcessTime);
         syncTag.putInt("totalprogress", this.totalProcessTime);
-        return new SUpdateTileEntityPacket(worldPosition, 1, syncTag);
+        return new ClientboundBlockEntityDataPacket(worldPosition, 1, syncTag);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         super.onDataPacket(net, pkt);
-        CompoundNBT syncTag = pkt.getTag();
+        CompoundTag syncTag = pkt.getTag();
         this.totalProcessTime = syncTag.getInt("totalprogress");
         this.ProcessTime = syncTag.getInt("progress");
     }
@@ -144,7 +144,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         }
     }
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
@@ -156,14 +156,14 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     }
 
     @Override
-    public void fillStackedContents(RecipeItemHelper helper) {
+    public void fillStackedContents(StackedContents helper) {
         for(int i=0; i<this.inventory.getSlots(); i++) {
             helper.accountStack(this.inventory.getStackInSlot(i));
         }
     }
 
     @Override
-    public void setRecipeUsed(@Nullable IRecipe<?> recipe) {
+    public void setRecipeUsed(@Nullable Recipe<?> recipe) {
         if (recipe != null) {
             ResourceLocation resourcelocation = recipe.getId();
             this.recipes.addTo(resourcelocation, 1);
@@ -172,7 +172,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
 
     @Nullable
     @Override
-    public IRecipe<?> getRecipeUsed() {
+    public Recipe<?> getRecipeUsed() {
         return null;
     }
 

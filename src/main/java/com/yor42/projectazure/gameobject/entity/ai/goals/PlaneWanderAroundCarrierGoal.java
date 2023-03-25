@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
@@ -28,7 +28,7 @@ public class PlaneWanderAroundCarrierGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        MovementController movehelper = this.plane.getMoveControl();
+        MoveControl movehelper = this.plane.getMoveControl();
         if(this.plane.distanceToSqr(movehelper.getWantedX(), movehelper.getWantedY(), movehelper.getWantedZ())<2.0F) {
         }
     }

@@ -3,19 +3,19 @@ package com.yor42.projectazure.mixin;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,12 +29,12 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-@Mixin(value = PlayerEntity.class, priority = 1500)
+@Mixin(value = Player.class, priority = 1500)
 public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPlayerEntity {
     @Shadow public abstract void playSound(SoundEvent p_184185_1_, float p_184185_2_, float p_184185_3_);
 
     @Unique
-    private static final DataParameter<CompoundNBT> DATA_BACK = EntityDataManager.defineId(PlayerEntity.class, DataSerializers.COMPOUND_TAG);
+    private static final EntityDataAccessor<CompoundTag> DATA_BACK = SynchedEntityData.defineId(Player.class, EntityDataSerializers.COMPOUND_TAG);
 
     @Unique
     @Nullable
@@ -45,16 +45,16 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
 
     @Inject(method = "defineSynchedData", at=@At("TAIL"))
     private void onDefineSynchedData(CallbackInfo ci){
-        this.entityData.define(DATA_BACK, new CompoundNBT());
+        this.entityData.define(DATA_BACK, new CompoundTag());
     }
 
     @Inject(method = "addAdditionalSaveData", at=@At("TAIL"))
-    private void onSave(CompoundNBT compound, CallbackInfo ci){
+    private void onSave(CompoundTag compound, CallbackInfo ci){
         compound.put("entityonback", this.getEntityData().get(DATA_BACK));
     }
 
     @Inject(method = "readAdditionalSaveData", at=@At("TAIL"))
-    private void onLoad(CompoundNBT compound, CallbackInfo ci){
+    private void onLoad(CompoundTag compound, CallbackInfo ci){
         this.getEntityData().set(DATA_BACK, compound.getCompound("entityonback"));
     }
 
@@ -72,7 +72,7 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
             return;
         }
 
-        CompoundNBT entityonBack = this.getEntityonBack();
+        CompoundTag entityonBack = this.getEntityonBack();
 
         if(entityonBack.isEmpty()){
             return;
@@ -112,12 +112,12 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
     }
 
     @Override
-    public CompoundNBT getEntityonBack() {
+    public CompoundTag getEntityonBack() {
         return this.getEntityData().get(DATA_BACK);
     }
 
     @Override
-    public boolean setEntityonBack(CompoundNBT compound) {
+    public boolean setEntityonBack(CompoundTag compound) {
 
         if (!this.onGround || this.isInWater()) {
             return false;
@@ -132,7 +132,7 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
     }
 
     @Override
-    public void forcesetEntityonBack(CompoundNBT compound) {
+    public void forcesetEntityonBack(CompoundTag compound) {
         if(!compound.isEmpty()) {
             Optional<Entity> ety = EntityType.create(compound, this.level);
             if (ety.isPresent() && ety.get() instanceof AbstractEntityCompanion) {
@@ -156,21 +156,21 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
     public Optional<Entity> forceremoveEntityOnBack() {
         Optional<Entity> val;
         val = this.respawnEntityOnBack(this.getEntityonBack());
-        this.forcesetEntityonBack(new CompoundNBT());
+        this.forcesetEntityonBack(new CompoundTag());
         return val;
     }
 
     @Override
-    public Optional<Entity> respawnEntityOnBack(CompoundNBT compound) {
+    public Optional<Entity> respawnEntityOnBack(CompoundTag compound) {
         AtomicReference<Optional<Entity>> val = new AtomicReference<>(Optional.empty());
         if (!this.level.isClientSide && !compound.isEmpty()) {
             EntityType.create(compound, this.level).ifPresent((entity) -> {
                 if (entity instanceof AbstractEntityCompanion) {
-                    ((TameableEntity) entity).setOwnerUUID(this.uuid);
+                    ((TamableAnimal) entity).setOwnerUUID(this.uuid);
                 }
 
                 entity.setPos(this.getX(), this.getY() + (double) 0.7F, this.getZ());
-                ((ServerWorld) this.level).addWithUUID(entity);
+                ((ServerLevel) this.level).addWithUUID(entity);
                 val.set(Optional.of(entity));
 
             });
@@ -178,7 +178,7 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
         return val.get();
     }
 
-    protected MixinPlayerEntity(EntityType<? extends LivingEntity> p_i48577_1_, World p_i48577_2_) {
+    protected MixinPlayerEntity(EntityType<? extends LivingEntity> p_i48577_1_, Level p_i48577_2_) {
         super(p_i48577_1_, p_i48577_2_);
     }
 }

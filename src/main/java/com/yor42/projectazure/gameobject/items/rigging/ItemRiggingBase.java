@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.capability.multiinv.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
@@ -12,23 +12,23 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneB
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Matrix4f;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -61,6 +61,14 @@ import java.util.List;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item.Properties;
+
 public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable, ISyncable, IGeoRenderer {
 
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -80,18 +88,18 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     protected boolean isShipRigging = true;
     protected Matrix4f dispatchedMat = new Matrix4f();
     protected Matrix4f renderEarlyMat = new Matrix4f();
-    protected IRenderTypeBuffer rtb;
+    protected MultiBufferSource rtb;
 
     public static String CONTROLLER_NAME = "rigging_controller";
 
 
     @Override
-    public IRenderTypeBuffer getCurrentRTB() {
+    public MultiBufferSource getCurrentRTB() {
         return this.rtb;
     }
 
     @Override
-    public void setCurrentRTB(IRenderTypeBuffer rtb) {
+    public void setCurrentRTB(MultiBufferSource rtb) {
         this.rtb = rtb;
     }
 
@@ -122,7 +130,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (worldIn == null) return; // thanks JEI very cool
 
@@ -130,47 +138,47 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         int fluidAmount = tank.getFluidInTank(0).getAmount();
         int fluidCapacity = tank.getTankCapacity(0);
         float fillRatio = (float) fluidAmount / fluidCapacity;
-        TextFormatting color;
+        ChatFormatting color;
         if (fillRatio < 0.3F) {
-            color = TextFormatting.RED;
+            color = ChatFormatting.RED;
         } else if (fillRatio < 0.6F) {
-            color = TextFormatting.YELLOW;
+            color = ChatFormatting.YELLOW;
         } else {
-            color = TextFormatting.GREEN;
+            color = ChatFormatting.GREEN;
         }
-        tooltip.add(new StringTextComponent("HP: " + getCurrentHP(stack) + "/" + this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(fluidAmount + "/" + fluidCapacity).append("mb").withStyle(color)));
-        tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").append(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.withColor(Color.fromRgb(8900331))));
+        tooltip.add(new TextComponent("HP: " + getCurrentHP(stack) + "/" + this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingfuel").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(fluidAmount + "/" + fluidCapacity).append("mb").withStyle(color)));
+        tooltip.add(new TranslatableComponent("rigging_valid_on.tooltip").append(" ").append(new TranslatableComponent(this.validclass.getName())).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(8900331))));
         if (worldIn.isClientSide) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, MultiInvUtil.getCap(stack), worldIn, tooltip, flagIn));
         }
 
         if (flagIn.isAdvanced()) {
-            tooltip.add(new StringTextComponent(stack.getOrCreateTag().toString()));
+            tooltip.add(new TextComponent(stack.getOrCreateTag().toString()));
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addInformationAfterShift(ItemStack stack, IMultiInventory inventories, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
-        Color CategoryColor = Color.parseColor("#6bb82d");
+    public void addInformationAfterShift(ItemStack stack, IMultiInventory inventories, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
+        TextColor CategoryColor = TextColor.parseColor("#6bb82d");
         for(int i = 0; i< inventories.getInventoryCount(); i++){
             IItemHandler Equipments = inventories.getInventory(i);
             enums.SLOTTYPE slottype = enums.SLOTTYPE.values()[i];
             //not really needed but its here to make mc to not add header of equipment that isnt supported by rigging
             if(Equipments.getSlots()>0) {
                 if(slottype != enums.SLOTTYPE.PLANE) {
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.withColor(CategoryColor))));
+                    tooltip.add((new TextComponent("===").append(new TranslatableComponent(slottype.getName()).append(new TextComponent("==="))).setStyle(Style.EMPTY.withColor(CategoryColor))));
                     for (int j = 0; j < Equipments.getSlots(); j++) {
                         ItemStack currentstack = Equipments.getStackInSlot(j);
                         if (currentstack.getItem() instanceof ItemEquipmentBase)
                             tooltip.add(currentstack.getHoverName().plainCopy().append(" (" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.withColor(getHPColor(currentstack))));
                         else {
-                            tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).append("-")).setStyle(Style.EMPTY.withItalic(true).withColor(Color.fromRgb(7829367))));
+                            tooltip.add((new TextComponent("-").append(new TranslatableComponent("equiment.empty")).append("-")).setStyle(Style.EMPTY.withItalic(true).withColor(TextColor.fromRgb(7829367))));
                         }
                     }
                 }
                 else{
-                    tooltip.add(new TranslationTextComponent("item.tooltip.hanger_slot_usage").append(": " + getPlaneCount(stack) + "/" + getHangerSlots()));
+                    tooltip.add(new TranslatableComponent("item.tooltip.hanger_slot_usage").append(": " + getPlaneCount(stack) + "/" + getHangerSlots()));
                 }
             }
         }
@@ -178,14 +186,14 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, @Nonnull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if(!world.isClientSide()) {
             if (player.isShiftKeyDown()) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, new RiggingContainer.Provider(stack, null), (buf) -> {
+                NetworkHooks.openGui((ServerPlayer) player, new RiggingContainer.Provider(stack, null), (buf) -> {
                     buf.writeItem(stack);
                 });
-                return ActionResult.success(stack);
+                return InteractionResultHolder.success(stack);
             }
         }
         return super.use(world, player, hand);
@@ -231,7 +239,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new RiggingItemCapabilityProvider(stack, null, this.getFuelTankCapacity(), this.createInventories(stack));
     }
 
@@ -250,20 +258,20 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @Override
-    public void renderEarly(Object animatable, MatrixStack stackIn, float partialTicks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderEarly(Object animatable, PoseStack stackIn, float partialTicks, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         renderEarlyMat = stackIn.last().pose().copy();
         IGeoRenderer.super.renderEarly(animatable, stackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
-    public Vector3d getRenderOffset(Object animatable, float partialtick) {
-        return Vector3d.ZERO;
+    public Vec3 getRenderOffset(Object animatable, float partialtick) {
+        return Vec3.ZERO;
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if (bone.isTrackingXform()) {
-            MatrixStack.Entry entry = stack.last();
+            PoseStack.Pose entry = stack.last();
             Matrix4f boneMat = entry.pose().copy();
 
             // Model space
@@ -280,7 +288,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
             localPosBoneMat.multiplyBackward(dispatchedMatInvert);
             // (Offset is the only transform we may want to preserve from the dispatched
             // mat)
-            Vector3d renderOffset = this.getRenderOffset(this, 1.0F);
+            Vec3 renderOffset = this.getRenderOffset(this, 1.0F);
             localPosBoneMat.translate(
                     new Vector3f((float) renderOffset.x(), (float) renderOffset.y(), (float) renderOffset.z()));
             bone.setLocalSpaceXform(localPosBoneMat);
@@ -316,7 +324,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
+    public void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
         matrixStackIn.pushPose();
         this.dispatchedMat = matrixStackIn.last().pose().copy();
         AnimatedGeoModel modelRiggingProvider = this.getModel();
@@ -374,7 +382,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void RenderEquipments(ItemStack Rigging, GeoModel riggingModel, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
+    public void RenderEquipments(ItemStack Rigging, GeoModel riggingModel, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
         IMultiInventory inventories = MultiInvUtil.getCap(Rigging);
         for(enums.SLOTTYPE slottype : enums.SLOTTYPE.values()){
             IItemHandler inventory = inventories.getInventory(slottype.ordinal());

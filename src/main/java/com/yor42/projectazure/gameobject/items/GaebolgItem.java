@@ -2,17 +2,19 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class GaebolgItem extends Item {
 
@@ -26,16 +28,16 @@ public class GaebolgItem extends Item {
         this.defaultModifiers = builder.build();
     }
 
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType p_111205_1_, ItemStack stack) {
-        return p_111205_1_ == EquipmentSlotType.MAINHAND || p_111205_1_ == EquipmentSlotType.OFFHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(p_111205_1_);
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot p_111205_1_, ItemStack stack) {
+        return p_111205_1_ == EquipmentSlot.MAINHAND || p_111205_1_ == EquipmentSlot.OFFHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(p_111205_1_);
     }
 
-    public boolean canAttackBlock(BlockState p_195938_1_, World p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
+    public boolean canAttackBlock(BlockState p_195938_1_, Level p_195938_2_, BlockPos p_195938_3_, Player p_195938_4_) {
         return !p_195938_4_.isCreative();
     }
 
-    public UseAction getUseAnimation(ItemStack p_77661_1_) {
-        return UseAction.SPEAR;
+    public UseAnim getUseAnimation(ItemStack p_77661_1_) {
+        return UseAnim.SPEAR;
     }
 
     public int getUseDuration(ItemStack p_77626_1_) {

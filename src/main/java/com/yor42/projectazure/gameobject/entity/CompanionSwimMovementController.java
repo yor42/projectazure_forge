@@ -1,19 +1,21 @@
 package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 
 import static net.minecraft.tags.FluidTags.WATER;
 
-public class CompanionSwimMovementController extends MovementController {
+import net.minecraft.world.entity.ai.control.MoveControl.Operation;
+
+public class CompanionSwimMovementController extends MoveControl {
 
     AbstractEntityCompanion companion;
 
@@ -46,14 +48,14 @@ public class CompanionSwimMovementController extends MovementController {
             }else {
                 shouldswim = waterheight > f;
             }
-            boolean isJumping = this.operation == Action.JUMPING;
+            boolean isJumping = this.operation == Operation.JUMPING;
             if((shouldswim || this.companion.isInLava()) || isTargetHigher || obstructed || isOwnerHigherinWater || isJumping || this.companion.horizontalCollision && !this.companion.canUseRigging()){
-                Vector3d vec3d = this.companion.getDeltaMovement();
+                Vec3 vec3d = this.companion.getDeltaMovement();
                 this.companion.setDeltaMovement(vec3d.x, vec3d.y + (double)(0.0175F), vec3d.z);
             }
         }
 
-        boolean isMoving = this.operation == MovementController.Action.MOVE_TO;
+        boolean isMoving = this.operation == MoveControl.Operation.MOVE_TO;
         boolean haspath = !this.companion.getNavigation().isDone();
 
         if(isMoving && haspath)
@@ -68,7 +70,7 @@ public class CompanionSwimMovementController extends MovementController {
             }
             else
             {
-                float f = (float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
+                float f = (float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
                 this.companion.yRot = this.rotlerp(this.companion.yRot, f, 10.0F);
                 this.companion.yBodyRot = this.companion.yRot;
                 this.companion.yHeadRot = this.companion.yRot;
@@ -76,11 +78,11 @@ public class CompanionSwimMovementController extends MovementController {
                 if(this.companion.isInWater() || this.companion.isInLava())
                 {
                     this.companion.setSpeed(f1);
-                    float f2 = -((float)(MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
-                    f2 = MathHelper.clamp(MathHelper.wrapDegrees(f2), -85.0F, 85.0F);
+                    float f2 = -((float)(Mth.atan2(d1, Mth.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
+                    f2 = Mth.clamp(Mth.wrapDegrees(f2), -85.0F, 85.0F);
                     this.companion.xRot = this.rotlerp(this.companion.xRot, f2, 5.0F);
-                    float f3 = MathHelper.cos(this.companion.xRot * ((float)Math.PI / 180F));
-                    float f4 = MathHelper.sin(this.companion.xRot * ((float)Math.PI / 180F));
+                    float f3 = Mth.cos(this.companion.xRot * ((float)Math.PI / 180F));
+                    float f4 = Mth.sin(this.companion.xRot * ((float)Math.PI / 180F));
                     this.companion.zza = f3 * f1;
                     //this.companion.moveVertical = -f4 * f1;
                 }

@@ -6,18 +6,18 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.BrainUtil;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.util.RangedInteger;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.util.IntRange;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -25,25 +25,25 @@ import java.util.Random;
 import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_ORE;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
 
-public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
+public class FollowOwnerTask extends Behavior<AbstractEntityCompanion> {
     public FollowOwnerTask() {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
     }
 
-    private static final RangedInteger followrange = new RangedInteger(1,2);
+    private static final IntRange followrange = new IntRange(1,2);
 
     @Override
-    protected boolean checkExtraStartConditions(@Nonnull ServerWorld world, AbstractEntityCompanion entity) {
+    protected boolean checkExtraStartConditions(@Nonnull ServerLevel world, AbstractEntityCompanion entity) {
         LivingEntity owner = entity.getOwner();
         return owner!=null && !owner.onClimbable() && entity.distanceTo(owner)>=(entity.getBrain().hasMemoryValue(NEAREST_ORE.get()) || entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET)|| entity.getBrain().hasMemoryValue(RegisterAI.NEAREST_WORLDSKILLABLE.get())? 16:6);
     }
 
-    protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion entity, long p_212831_3_) {
+    protected void start(@Nonnull ServerLevel p_212831_1_, @Nonnull AbstractEntityCompanion entity, long p_212831_3_) {
         if (entity.getOwner()!=null) {
             if(entity.distanceTo(entity.getOwner())>32){
                 this.tryToTeleportNearEntity(entity, entity.getOwner());
             }
-            BrainUtil.setWalkAndLookTargetMemories(entity, entity.getOwner(), 1, followrange.randomValue(new Random()));
+            BehaviorUtils.setWalkAndLookTargetMemories(entity, entity.getOwner(), 1, followrange.randomValue(new Random()));
         }
     }
 
@@ -80,8 +80,8 @@ public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
     }
 
     private boolean isTeleportFriendlyBlock(AbstractEntityCompanion ety, BlockPos pos) {
-        PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(ety.getCommandSenderWorld(), pos.mutable());
-        if (pathnodetype != PathNodeType.WALKABLE) {
+        BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(ety.getCommandSenderWorld(), pos.mutable());
+        if (pathnodetype != BlockPathTypes.WALKABLE) {
             return false;
         } else {
             BlockState blockstate = ety.getCommandSenderWorld().getBlockState(pos.below());

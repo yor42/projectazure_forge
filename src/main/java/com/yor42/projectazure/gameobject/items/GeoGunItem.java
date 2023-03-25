@@ -1,10 +1,10 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.tac.guns.util.Process;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -30,7 +30,7 @@ public class GeoGunItem extends ItemEnergyGun implements IAnimatable, ISyncable 
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> stacks) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> stacks) {
         super.fillItemCategory(group, stacks);
     }
 

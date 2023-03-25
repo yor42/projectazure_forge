@@ -3,28 +3,28 @@ package com.yor42.projectazure.gameobject.entity.projectiles;
 import com.tac.guns.common.Gun;
 import com.tac.guns.entity.ProjectileEntity;
 import com.tac.guns.item.GunItem;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public class EntityRailgunProjectile extends ProjectileEntity {
     private float power;
-    public EntityRailgunProjectile(EntityType<? extends ProjectileEntity> entityType, World worldIn) {
+    public EntityRailgunProjectile(EntityType<? extends ProjectileEntity> entityType, Level worldIn) {
         super(entityType, worldIn);
     }
 
-    public EntityRailgunProjectile(EntityType<? extends ProjectileEntity> entityType, World worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun, float power, float randx, float randy) {
+    public EntityRailgunProjectile(EntityType<? extends ProjectileEntity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun, float power, float randx, float randy) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun, randx, randy);
         this.power = power;
     }
 
-    protected void onHitEntity(Entity entity, Vector3d hitVec, Vector3d startVec, Vector3d endVec, boolean headshot) {
+    protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         if(entity!=this.shooter) {
             createExplosion(this, this.power, false);
 

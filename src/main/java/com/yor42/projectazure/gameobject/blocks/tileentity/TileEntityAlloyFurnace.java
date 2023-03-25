@@ -6,27 +6,27 @@ import com.yor42.projectazure.gameobject.crafting.recipes.AlloyingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.IRecipeHolder;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -34,14 +34,14 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityAlloyFurnace extends LockableTileEntity implements INamedContainerProvider, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements MenuProvider, RecipeHolder, StackedContentsCompatible, TickableBlockEntity {
 
     ItemStackHandler inventory = new ItemStackHandler(4);
     private int burnTime;
     private int totalBurntime;
     private int cookTime;
     private int cookTimeTotal;
-    protected final IIntArray machineInfo = new IIntArray() {
+    protected final ContainerData machineInfo = new ContainerData() {
         public int get(int index) {
             switch(index) {
                 case 0:
@@ -80,7 +80,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     };
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
-    protected final IRecipeType<AlloyingRecipe> recipeType = registerRecipes.Types.ALLOYING;
+    protected final RecipeType<AlloyingRecipe> recipeType = registerRecipes.Types.ALLOYING;
 
     public TileEntityAlloyFurnace() {
         super(registerTE.ALLOY_FURNACE.get());
@@ -90,7 +90,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
         return this.burnTime > 0;
     }
 
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
         this.burnTime = nbt.getInt("BurnTime");
@@ -99,7 +99,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
 
         //This is where forge kicks in
         this.totalBurntime = ForgeHooks.getBurnTime(this.inventory.getStackInSlot(2));
-        CompoundNBT compoundnbt = nbt.getCompound("RecipesUsed");
+        CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
 
         for(String s : compoundnbt.getAllKeys()) {
             this.recipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
@@ -107,13 +107,13 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
 
     }
 
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("CookTime", this.cookTime);
         compound.putInt("CookTimeTotal", this.cookTimeTotal);
         compound.put("inventory", this.inventory.serializeNBT());
-        CompoundNBT compoundnbt = new CompoundNBT();
+        CompoundTag compoundnbt = new CompoundTag();
         this.recipes.forEach((recipeId, craftedAmount) -> {
             compoundnbt.putInt(recipeId.toString(), craftedAmount);
         });
@@ -122,12 +122,12 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("tileentity.alloy_furnace.name");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("tileentity.alloy_furnace.name");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new ContainerAlloyFurnace(id, player, this.inventory, this.machineInfo);
     }
     private final LazyOptional<ItemStackHandler> INVENTORY = LazyOptional.of(()->this.inventory);
@@ -182,7 +182,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
@@ -194,14 +194,14 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     @Override
-    public void fillStackedContents(RecipeItemHelper helper) {
+    public void fillStackedContents(StackedContents helper) {
         for(int i=0;i<this.inventory.getSlots();i++) {
             helper.accountStack(this.inventory.getStackInSlot(i));
         }
     }
 
     @Override
-    public void setRecipeUsed(@Nullable IRecipe<?> recipe) {
+    public void setRecipeUsed(@Nullable Recipe<?> recipe) {
         if (recipe != null) {
             ResourceLocation resourcelocation = recipe.getId();
             this.recipes.addTo(resourcelocation, 1);
@@ -210,7 +210,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
 
     @Nullable
     @Override
-    public IRecipe<?> getRecipeUsed() {
+    public Recipe<?> getRecipeUsed() {
         return null;
     }
 
@@ -225,14 +225,14 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
         if (!(this.level != null && this.level.isClientSide)) {
             ItemStack FuelStack = this.inventory.getStackInSlot(2);
             if (this.isBurning() || !FuelStack.isEmpty() && !this.inventory.getStackInSlot(0).isEmpty()&& !this.inventory.getStackInSlot(1).isEmpty()) {
-                IRecipe<?> irecipe = this.level.getRecipeManager().getRecipeFor(this.recipeType, this, this.level).orElse(null);
+                Recipe<?> irecipe = this.level.getRecipeManager().getRecipeFor(this.recipeType, this, this.level).orElse(null);
 
                 if(irecipe != null){
                     this.cookTimeTotal = this.getCookTime();
                 }
 
                 if (!this.isBurning() && this.canSmelt(irecipe)) {
-                    this.burnTime = ForgeHooks.getBurnTime(FuelStack, IRecipeType.BLASTING);
+                    this.burnTime = ForgeHooks.getBurnTime(FuelStack, RecipeType.BLASTING);
                     this.totalBurntime = this.burnTime;
                     if (this.isBurning()) {
                         flag1 = true;
@@ -259,7 +259,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
                     this.cookTime = 0;
                 }
             } else if (!this.isBurning() && this.cookTime > 0) {
-                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
+                this.cookTime = Mth.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
             }
 
             if (flag != this.isBurning()) {
@@ -273,7 +273,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
         }
 
     }
-    protected boolean canSmelt(@Nullable IRecipe<?> recipeIn) {
+    protected boolean canSmelt(@Nullable Recipe<?> recipeIn) {
         if (!this.inventory.getStackInSlot(0).isEmpty()&&!this.inventory.getStackInSlot(1).isEmpty() && recipeIn != null) {
             ItemStack itemstack = recipeIn.getResultItem();
             if (itemstack.isEmpty()) {
@@ -295,7 +295,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
         }
     }
 
-    private void smelt(@Nullable IRecipe<?> recipe) {
+    private void smelt(@Nullable Recipe<?> recipe) {
         if (recipe instanceof AlloyingRecipe && this.canSmelt(recipe)) {
             ItemStack recipeOutput = recipe.getResultItem();
             ItemStack outputslot = this.inventory.getStackInSlot(3);
@@ -320,6 +320,6 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
         return this.level.getRecipeManager().getRecipeFor(this.recipeType, this, this.level).map(AlloyingRecipe::getProcessTick).orElse(200);
     }
 
-    public void encodeExtraData(PacketBuffer buffer) {
+    public void encodeExtraData(FriendlyByteBuf buffer) {
     }
 }

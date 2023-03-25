@@ -1,11 +1,11 @@
 package com.yor42.projectazure.gameobject.misc;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IndirectEntityDamageSource;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,12 +24,12 @@ public class IndirectDamageSourcewithRandomMessages extends IndirectEntityDamage
 
     @Nonnull
     @Override
-    public ITextComponent getLocalizedDeathMessage(@Nonnull LivingEntity entityLivingBaseIn) {
+    public Component getLocalizedDeathMessage(@Nonnull LivingEntity entityLivingBaseIn) {
         int randomMessage = new Random().nextInt(MessageCounts-1);
-        ITextComponent itextcomponent = this.indirectEntity == null ? this.entity.getDisplayName() : this.indirectEntity.getDisplayName();
+        Component itextcomponent = this.indirectEntity == null ? this.entity.getDisplayName() : this.indirectEntity.getDisplayName();
         ItemStack itemstack = this.indirectEntity instanceof LivingEntity ? ((LivingEntity)this.indirectEntity).getMainHandItem() : ItemStack.EMPTY;
         String s = "death.attack." + this.msgId+"_"+randomMessage;
         String s1 = s + ".item";
-        return !itemstack.isEmpty() && itemstack.hasCustomHoverName() ? new TranslationTextComponent(s1, entityLivingBaseIn.getDisplayName(), itextcomponent, itemstack.getDisplayName()) : new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName(), itextcomponent);
+        return !itemstack.isEmpty() && itemstack.hasCustomHoverName() ? new TranslatableComponent(s1, entityLivingBaseIn.getDisplayName(), itextcomponent, itemstack.getDisplayName()) : new TranslatableComponent(s, entityLivingBaseIn.getDisplayName(), itextcomponent);
     }
 }

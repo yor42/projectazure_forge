@@ -5,12 +5,12 @@ import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityLaffey;
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 
 public class EntityLaffeyRenderer extends GeoCompanionRenderer<EntityLaffey> {
 
-    public EntityLaffeyRenderer(EntityRendererManager renderManager) {
+    public EntityLaffeyRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new laffeyModel());
         this.addLayer(new CompanionRiggingLayer<>(this));
     }

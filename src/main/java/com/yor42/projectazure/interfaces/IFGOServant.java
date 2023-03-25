@@ -2,15 +2,14 @@ package com.yor42.projectazure.interfaces;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.sounds.SoundEvent;
 
 import javax.annotation.Nonnull;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public interface IFGOServant {
-    enums.SERVANT_CLASSES getServantClass();
+public intenet.minecraft.world.InteractionHand  enums.SERVANT_CLASSES getServantClass();
 
     default boolean SwitchItem(){
         if(this instanceof AbstractEntityCompanion) {

@@ -3,27 +3,27 @@ package com.yor42.projectazure.gameobject.containers.machine;
 import com.yor42.projectazure.gameobject.containers.slots.FuelSlotItemhandler;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
 import com.yor42.projectazure.setup.register.RegisterContainer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class ContainerAlloyFurnace extends Container {
+public class ContainerAlloyFurnace extends AbstractContainerMenu {
 
-    private final IIntArray field;
+    private final ContainerData field;
 
-    public ContainerAlloyFurnace(int id, PlayerInventory inventory, PacketBuffer buffer) {
-        this(id, inventory, new ItemStackHandler(4), new IntArray(4));
+    public ContainerAlloyFurnace(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, new ItemStackHandler(4), new SimpleContainerData(4));
     }
 
-    public ContainerAlloyFurnace(int id, PlayerInventory inventory, ItemStackHandler machineInventory, IIntArray machineInfo){
+    public ContainerAlloyFurnace(int id, Inventory inventory, ItemStackHandler machineInventory, ContainerData machineInfo){
         super(RegisterContainer.ALLOY_FURNACE_CONTAINER.get(), id);
         this.field = machineInfo;
         addDataSlots(this.field);
@@ -62,7 +62,7 @@ public class ContainerAlloyFurnace extends Container {
         return this.field.get(0) * pixel / i;
     }
 
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -112,7 +112,7 @@ public class ContainerAlloyFurnace extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 }

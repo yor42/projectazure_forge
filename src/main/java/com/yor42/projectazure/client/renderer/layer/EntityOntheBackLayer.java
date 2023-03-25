@@ -1,45 +1,45 @@
 package com.yor42.projectazure.client.renderer.layer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ReportedException;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 
 @OnlyIn(Dist.CLIENT)
-public class EntityOntheBackLayer<T extends PlayerEntity> extends LayerRenderer<T, PlayerModel<T>> {
+public class EntityOntheBackLayer<T extends Player> extends RenderLayer<T, PlayerModel<T>> {
 
     private AbstractEntityCompanion companion = null;
-    private final EntityRendererManager dispatcher;
+    private final EntityRenderDispatcher dispatcher;
 
-    public EntityOntheBackLayer(LivingRenderer<T, PlayerModel<T>> p_i50926_1_) {
+    public EntityOntheBackLayer(LivingEntityRenderer<T, PlayerModel<T>> p_i50926_1_) {
         super(p_i50926_1_);
         this.dispatcher = p_i50926_1_.getDispatcher();
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        CompoundNBT compoundnbt = ((IMixinPlayerEntity)player).getEntityonBack();
+    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        CompoundTag compoundnbt = ((IMixinPlayerEntity)player).getEntityonBack();
 
         if(compoundnbt.isEmpty() || Minecraft.getInstance().level == null){
             this.companion = null;
@@ -77,7 +77,7 @@ public class EntityOntheBackLayer<T extends PlayerEntity> extends LayerRenderer<
 
     }
 
-    public <E extends AbstractEntityCompanion & IAnimatable> void render(E p_229084_1_,T player, double p_229084_2_, double p_229084_4_, double p_229084_6_, float p_229084_8_, float p_229084_9_, MatrixStack p_229084_10_, IRenderTypeBuffer p_229084_11_, int p_229084_12_) {
+    public <E extends AbstractEntityCompanion & IAnimatable> void render(E p_229084_1_,T player, double p_229084_2_, double p_229084_4_, double p_229084_6_, float p_229084_8_, float p_229084_9_, PoseStack p_229084_10_, MultiBufferSource p_229084_11_, int p_229084_12_) {
         EntityRenderer<? super E> entityrenderer1 = this.dispatcher.getRenderer(p_229084_1_);
 
         if(!(entityrenderer1 instanceof GeoCompanionRenderer)){
@@ -87,7 +87,7 @@ public class EntityOntheBackLayer<T extends PlayerEntity> extends LayerRenderer<
         GeoCompanionRenderer<? super E> entityrenderer = (GeoCompanionRenderer<? super E>) entityrenderer1;
 
         try {
-            Vector3d vector3d = new Vector3d(0,-p_229084_1_.getEyeHeight()+0.2, 0.25);
+            Vec3 vector3d = new Vec3(0,-p_229084_1_.getEyeHeight()+0.2, 0.25);
 
             double d2 = p_229084_2_ + vector3d.x();
             double d3 = p_229084_4_ + vector3d.y();
@@ -95,7 +95,7 @@ public class EntityOntheBackLayer<T extends PlayerEntity> extends LayerRenderer<
             p_229084_10_.pushPose();
             p_229084_10_.translate(d2, d3, d0);
 
-            MatrixStack nametagStack = new MatrixStack();
+            PoseStack nametagStack = new PoseStack();
             nametagStack.translate(player.getX(), player.getY(), player.getZ());
             entityrenderer.renderonLayer(p_229084_1_, p_229084_8_, p_229084_9_, p_229084_10_, p_229084_11_, p_229084_12_);
             p_229084_10_.translate(-vector3d.x(), -vector3d.y(), -vector3d.z());
@@ -114,11 +114,11 @@ public class EntityOntheBackLayer<T extends PlayerEntity> extends LayerRenderer<
     }
 
     protected static void clampRotation(Entity source, Entity target) {
-        target.setYBodyRot(source.yRot);
-        float f = MathHelper.wrapDegrees(target.yRot - source.yRot);
-        float f1 = MathHelper.clamp(f, -105.0F, 105.0F);
+        target.setYBodyRot(source.getYRot());
+        float f = Mth.wrapDegrees(target.getYRot() - source.getYRot());
+        float f1 = Mth.clamp(f, -105.0F, 105.0F);
         target.yRotO += f1 - f;
-        target.yRot += f1 - f;
-        target.setYHeadRot(target.yRot);
+        target.setYRot(target.getYRot()+ f1 - f);
+        target.setYHeadRot(target.getYRot());
     }
 }

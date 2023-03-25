@@ -1,14 +1,14 @@
 package com.yor42.projectazure.interfaces;
 
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
 
 public interface IAknOp {
     @Nullable
-    default ITextComponent getRealname(){
+    default Component getRealname(){
         return null;
     }
     enums.OperatorClass getOperatorClass();

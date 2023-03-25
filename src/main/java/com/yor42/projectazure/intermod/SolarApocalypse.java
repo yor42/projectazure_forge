@@ -1,7 +1,7 @@
 package com.yor42.projectazure.intermod;
 
 import com.yor42.solarapocalypse.utils.MathUtils;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.fml.ModList;
 
 public class SolarApocalypse {
@@ -12,7 +12,7 @@ public class SolarApocalypse {
 
 
     //Compatibility layer for Solar Apocalypse
-    public static boolean isSunlightDangerous(ServerWorld world){
+    public static boolean isSunlightDangerous(ServerLevel world){
         if(isSolarApocalypseLoaded()){
             return shouldEntityBurnInDaylight(world);
         }
@@ -20,7 +20,7 @@ public class SolarApocalypse {
     }
 
     //Make another method to prevent NoSuchMethod Exception
-    private static boolean shouldEntityBurnInDaylight(ServerWorld world){
+    private static boolean shouldEntityBurnInDaylight(ServerLevel world){
         return MathUtils.shouldExcuteStage(world, MathUtils.STAGE.STAGE_3);
     }
 

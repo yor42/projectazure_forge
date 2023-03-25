@@ -14,7 +14,7 @@ import com.lowdragmc.multiblocked.api.recipe.RecipeCondition;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.*;
 
@@ -41,7 +41,7 @@ public class WeightedRandomRecipe extends Recipe {
                   ImmutableMap<MultiblockCapability<?>, ImmutableList<Content>> tickOutputs,
                   ImmutableList<RecipeCondition> conditions,
                   ImmutableMap<String, Object> data,
-                  ITextComponent text,
+                  Component text,
                   int duration) {
         super(uid, inputs, outputs, tickInputs, tickOutputs, conditions,data, text, duration);
         for(Content content:outputs.get(CompanionMultiblockCapability.CAP)){

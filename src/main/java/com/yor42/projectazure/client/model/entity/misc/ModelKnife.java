@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.model.entity.misc;
 
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityThrownKnifeProjectile;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

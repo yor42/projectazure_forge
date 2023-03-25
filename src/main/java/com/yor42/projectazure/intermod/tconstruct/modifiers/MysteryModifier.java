@@ -2,13 +2,13 @@ package com.yor42.projectazure.intermod.tconstruct.modifiers;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
 //import javafx.scene.paint.Color;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.Item;
 import net.minecraft.tags.ITag;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import slimeknights.tconstruct.library.modifiers.IncrementalModifier;
 import slimeknights.tconstruct.library.modifiers.SingleLevelModifier;
 import slimeknights.tconstruct.library.tools.nbt.IModifierToolStack;
@@ -35,8 +35,8 @@ public class MysteryModifier extends IncrementalModifier {
     }
 
     @Override
-    public void addInformation(IModifierToolStack tool, int level, @Nullable PlayerEntity player, List<ITextComponent> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
+    public void addInformation(IModifierToolStack tool, int level, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
         super.addInformation(tool, level, player, tooltip, tooltipKey, tooltipFlag);
-        tooltip.add(new TranslationTextComponent("modifier.projectazure.mystery.tooltip", String.format("%.2f", level/11F*100)+"%").withStyle(TextFormatting.AQUA));
+        tooltip.add(new TranslatableComponent("modifier.projectazure.mystery.tooltip", String.format("%.2f", level/11F*100)+"%").withStyle(ChatFormatting.AQUA));
     }
 }

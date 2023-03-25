@@ -1,12 +1,12 @@
 package com.yor42.projectazure.libs;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -19,7 +19,7 @@ public class ItemFilterEntry implements Predicate<ItemStack> {
     @Nonnull
     private final FilterType item;
     @Nullable
-    private final CompoundNBT tag;
+    private final CompoundTag tag;
     private int min, max;
 
     @Nonnull
@@ -36,7 +36,7 @@ public class ItemFilterEntry implements Predicate<ItemStack> {
     }
 
 
-    private ItemFilterEntry(@Nonnull FilterType item, @Nullable CompoundNBT tag, int min, int max) {
+    private ItemFilterEntry(@Nonnull FilterType item, @Nullable CompoundTag tag, int min, int max) {
         this.item = item;
         this.tag = tag;
         this.min = min;
@@ -66,8 +66,8 @@ public class ItemFilterEntry implements Predicate<ItemStack> {
         return this.tag == null || itemStack.getOrCreateTag() == this.tag;
     }
 
-    public CompoundNBT serializeNBT(){
-        CompoundNBT compound = new CompoundNBT();
+    public CompoundTag serializeNBT(){
+        CompoundTag compound = new CompoundTag();
         compound.put("item", this.item.serializeNBT());
         compound.putInt("max", this.max);
         compound.putInt("min", this.min);
@@ -77,11 +77,11 @@ public class ItemFilterEntry implements Predicate<ItemStack> {
         return compound;
     }
 
-    public static ItemFilterEntry deserializeNBT(CompoundNBT compound){
+    public static ItemFilterEntry deserializeNBT(CompoundTag compound){
         FilterType type = FilterType.DeserializeNBT(compound.getCompound("item"));
         int max = compound.getInt("max");
         int min = compound.getInt("min");
-        CompoundNBT tag = null;
+        CompoundTag tag = null;
         if(compound.contains("tag")){
             compound.getCompound("tag");
         }
@@ -102,14 +102,14 @@ public class ItemFilterEntry implements Predicate<ItemStack> {
             return this.type.ID2Ingredient(this.ID);
         }
 
-        public CompoundNBT serializeNBT(){
-            CompoundNBT compound = new CompoundNBT();
+        public CompoundTag serializeNBT(){
+            CompoundTag compound = new CompoundTag();
             compound.putString("Type", this.type.name());
             compound.putString("id", this.ID);
             return compound;
         }
 
-        public static FilterType DeserializeNBT(CompoundNBT compound){
+        public static FilterType DeserializeNBT(CompoundTag compound){
             ItemTypes type = ItemTypes.valueOf(compound.getString("Type"));
             String ID = compound.getString("id");
             return new FilterType(type, ID);
@@ -125,7 +125,7 @@ public class ItemFilterEntry implements Predicate<ItemStack> {
 
         ITEM((id)-> Ingredient.of(ForgeRegistries.ITEMS.getValue(new ResourceLocation(id)))),
         TAG((id)->{
-            ITag<Item> tag = ItemTags.getAllTags().getTag(new ResourceLocation(id));
+            Tag<Item> tag = ItemTags.getAllTags().getTag(new ResourceLocation(id));
             if(tag == null){
                 return Ingredient.EMPTY;
             }

@@ -1,15 +1,15 @@
 package com.yor42.projectazure.gameobject.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
-public class CompanionSwimPathNavigator extends SwimmerPathNavigator {
-    public CompanionSwimPathNavigator(MobEntity entitylivingIn, World worldIn) {
+public class CompanionSwimPathNavigator extends WaterBoundPathNavigation {
+    public CompanionSwimPathNavigator(Mob entitylivingIn, Level worldIn) {
         super(entitylivingIn, worldIn);
     }
 

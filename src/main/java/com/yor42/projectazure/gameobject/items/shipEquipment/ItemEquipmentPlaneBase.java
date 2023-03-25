@@ -4,23 +4,25 @@ import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+
+import net.minecraft.world.item.Item.Properties;
 
 public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
 
@@ -34,7 +36,7 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
 
     @Override
     public void onUpdate(ItemStack EquipmentStack, ItemStack RiggingStack) {
-        CompoundNBT compound = EquipmentStack.getOrCreateTag();
+        CompoundTag compound = EquipmentStack.getOrCreateTag();
         int currentFuel = compound.getInt("fuel");
         currentFuel = Math.min(currentFuel+FuelPerTick(), this.getMaxOperativeTime());
 
@@ -51,7 +53,7 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     }
 
     @Override
-    public void onCraftedBy(ItemStack stack, World worldIn, PlayerEntity playerIn) {
+    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
         stack.getOrCreateTag().putString("planeUUID", UUID.randomUUID().toString());
     }
@@ -67,7 +69,7 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         ItemStack stack = new ItemStack(this);
         if (this.allowdedIn(group)) {
             items.add(stack.copy());
@@ -79,21 +81,21 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         int currentFuel = stack.getOrCreateTag().getInt("fuel");
         boolean isArmed = stack.getOrCreateTag().getBoolean("isArmed");
         float fuelPercent = (float) currentFuel/this.getMaxOperativeTime();
-        TextFormatting color = TextFormatting.DARK_GREEN;
+        ChatFormatting color = ChatFormatting.DARK_GREEN;
         if(fuelPercent<0.6){
-            color = TextFormatting.GOLD;
+            color = ChatFormatting.GOLD;
         }
         else if(fuelPercent<0.3){
-            color = TextFormatting.DARK_RED;
+            color = ChatFormatting.DARK_RED;
         }
-        tooltip.add(isArmed? new TranslationTextComponent("item.tooltip.plane_armed").withStyle(TextFormatting.DARK_GREEN):new TranslationTextComponent("item.tooltip.plane_not_armed").withStyle(TextFormatting.DARK_RED));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(currentFuel+"/"+this.getMaxOperativeTime()).withStyle(color)));
-        tooltip.add(new TranslationTextComponent("item.tooltip.plane_type").append(": ").withStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.getType().getName()).withStyle(TextFormatting.GOLD)));
+        tooltip.add(isArmed? new TranslatableComponent("item.tooltip.plane_armed").withStyle(ChatFormatting.DARK_GREEN):new TranslatableComponent("item.tooltip.plane_not_armed").withStyle(ChatFormatting.DARK_RED));
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingfuel").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(currentFuel+"/"+this.getMaxOperativeTime()).withStyle(color)));
+        tooltip.add(new TranslatableComponent("item.tooltip.plane_type").append(": ").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent(this.getType().getName()).withStyle(ChatFormatting.GOLD)));
     }
 
     public abstract int getreloadTime();

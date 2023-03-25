@@ -8,11 +8,11 @@ import com.lowdragmc.multiblocked.api.gui.recipe.ContentWidget;
 import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.yor42.projectazure.gameobject.items.ItemCompanionSpawnEgg;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class CompanionContentWidget extends ContentWidget<EntityIngredient> {
@@ -23,10 +23,10 @@ public class CompanionContentWidget extends ContentWidget<EntityIngredient> {
             itemHandler = new ItemStackHandler();
             addWidget(new SlotWidget(itemHandler, 0, 1, 1, false, false).setDrawOverlay(false).setOnAddedTooltips((s, l) -> {
                 if (chance < 1) {
-                    l.add(chance == 0 ? new TranslationTextComponent("multiblocked.gui.content.chance_0") : new TranslationTextComponent("multiblocked.gui.content.chance_1", String.format("%.1f", chance * 100)));
+                    l.add(chance == 0 ? new TranslatableComponent("multiblocked.gui.content.chance_0") : new TranslatableComponent("multiblocked.gui.content.chance_1", String.format("%.1f", chance * 100)));
                 }
                 if (perTick) {
-                    l.add(new TranslationTextComponent("multiblocked.gui.content.per_tick"));
+                    l.add(new TranslatableComponent("multiblocked.gui.content.per_tick"));
                 }
             }));
         }
@@ -47,10 +47,10 @@ public class CompanionContentWidget extends ContentWidget<EntityIngredient> {
                 ingredient.type = ((ItemCompanionSpawnEgg<?>) itemStack.getItem()).getType(null);
             } else {
                 ingredient.type = EntityType.ITEM;
-                ingredient.tag = new CompoundNBT();
-                CompoundNBT entityTag = new CompoundNBT();
+                ingredient.tag = new CompoundTag();
+                CompoundTag entityTag = new CompoundTag();
                 ingredient.tag.put("EntityTag", entityTag);
-                entityTag.put("Item", itemStack.save(new CompoundNBT()));
+                entityTag.put("Item", itemStack.save(new CompoundTag()));
             }
         }
         return ingredient;
@@ -74,7 +74,7 @@ public class CompanionContentWidget extends ContentWidget<EntityIngredient> {
         dialog.addWidget(new LabelWidget(5, y + 23, "multiblocked.gui.label.entity_tag"));
         dialog.addWidget(tag = new TextFieldWidget(125 - 60, y + 20, 60, 15,  null, string -> {
             try {
-                content.tag = JsonToNBT.parseTag(string);
+                content.tag = TagParser.parseTag(string);
                 onContentUpdate();
             } catch (CommandSyntaxException ignored) {
             }

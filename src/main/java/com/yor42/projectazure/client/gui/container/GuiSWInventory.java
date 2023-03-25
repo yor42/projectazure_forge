@@ -1,14 +1,14 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerSWInventory;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -16,7 +16,7 @@ public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/sw_inventory.png");
 
-    public GuiSWInventory(ContainerSWInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
+    public GuiSWInventory(ContainerSWInventory p_i51105_1_, Inventory p_i51105_2_, Component p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
         this.imageWidth = 225;
         this.imageHeight = 240;
@@ -28,7 +28,7 @@ public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
         this.inventoryLabelY = 147;
     }
 
-    protected void renderLabels(MatrixStack pMatrixStack, int pX, int pY) {
+    protected void renderLabels(PoseStack pMatrixStack, int pX, int pY) {
         this.font.draw(pMatrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 0xf5ba5f);
         this.font.draw(pMatrixStack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY, 4210752);
         this.minecraft.getTextureManager().bind(TEXTURE);
@@ -40,13 +40,13 @@ public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
         pMatrixStack.pushPose();
         float scale = 0.5F;
         pMatrixStack.scale(scale,scale,scale);
-        ITextComponent text = new StringTextComponent(this.host.getHealth()+"/"+this.host.getMaxHealth());
+        Component text = new TextComponent(this.host.getHealth()+"/"+this.host.getMaxHealth());
         float width = this.font.width(text)*scale;
         this.font.draw(pMatrixStack, String.format("EXP: %.02f", this.host.getExp()/this.host.getMaxExp()*100)+"%", 9/scale, 125/scale, 0xf5ba5f);
-        this.font.draw(pMatrixStack, new StringTextComponent("LV."+this.host.getLevel()+" ").append(this.host.getDisplayName()), 16/scale, 8/scale, 0xffffff);
+        this.font.draw(pMatrixStack, new TextComponent("LV."+this.host.getLevel()+" ").append(this.host.getDisplayName()), 16/scale, 8/scale, 0xffffff);
         this.font.draw(pMatrixStack, text, (84-width)/scale, 18/scale, 4210752);
 
-        text = new StringTextComponent(String.format("Morale: %.02f", this.host.getMorale()/this.host.getMaxMorale()*100)+"%");
+        text = new TextComponent(String.format("Morale: %.02f", this.host.getMorale()/this.host.getMaxMorale()*100)+"%");
         width = this.font.width(text)*scale;
         this.font.draw(pMatrixStack, text, (216-width)/scale, 125/scale, 0xf5ba5f);
 
@@ -67,7 +67,7 @@ public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         matrixStack.pushPose();
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bind(TEXTURE);

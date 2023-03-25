@@ -1,13 +1,13 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.network.ClientEvents;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -33,7 +33,7 @@ public class spawnParticlePacket {
         this.PosY = entity.getY();
         this.PosZ = entity.getZ();
         this.stack = particleStack;
-        Vector3d vector3d = entity.getViewVector(1.0F);
+        Vec3 vector3d = entity.getViewVector(1.0F);
         this.NormalizedLookX = vector3d.x();
         this.NormalizedLookY = vector3d.y();
         this.NormalizedLookZ = vector3d.z();
@@ -46,7 +46,7 @@ public class spawnParticlePacket {
         this.PosY = entity.getY();
         this.PosZ = entity.getZ();
         this.stack = null;
-        Vector3d vector3d = entity.getViewVector(1.0F);
+        Vec3 vector3d = entity.getViewVector(1.0F);
         this.NormalizedLookX = vector3d.x();
         this.NormalizedLookY = vector3d.y();
         this.NormalizedLookZ = vector3d.z();
@@ -99,7 +99,7 @@ public class spawnParticlePacket {
         this.NormalizedLookZ = NormalizedLookZ;
     }
 
-    public static spawnParticlePacket decode(PacketBuffer buffer){
+    public static spawnParticlePacket decode(FriendlyByteBuf buffer){
         final int EntityID = buffer.readInt();
         final Particles ParticleID = buffer.readEnum(Particles.class);
         final double posX = buffer.readDouble();
@@ -113,7 +113,7 @@ public class spawnParticlePacket {
         return new spawnParticlePacket(EntityID, ParticleID, posX, posY, posZ, itemStack, NormalizedLookX, NormalizedLookY, NormalizedLookZ);
     }
 
-    public static void encode(final spawnParticlePacket message, final PacketBuffer buffer){
+    public static void encode(final spawnParticlePacket message, final FriendlyByteBuf buffer){
         buffer.writeInt(message.EntityID);
         buffer.writeEnum(message.particleID);
         buffer.writeDouble(message.PosX);

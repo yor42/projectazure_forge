@@ -13,13 +13,13 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneB
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.interfaces.IItemDestroyable;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.Color;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.TextColor;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -63,13 +63,13 @@ public class ItemStackUtils {
 
     public static int getHPColorInt(ItemStack stack){
         if(stack.getItem() instanceof IItemDestroyable) {
-            return MathHelper.hsvToRgb(Math.max(0.0F, 1.0F - (getCurrentDamage(stack) /((IItemDestroyable) stack.getItem()).getMaxHP())) / 3.0F, 1.0F, 1.0F);
+            return Mth.hsvToRgb(Math.max(0.0F, 1.0F - (getCurrentDamage(stack) /((IItemDestroyable) stack.getItem()).getMaxHP())) / 3.0F, 1.0F, 1.0F);
         }
         return 0xFFFFFF;
     }
 
-    public static Color getHPColor(ItemStack stack){
-        return Color.fromRgb(getHPColorInt(stack));
+    public static TextColor getHPColor(ItemStack stack){
+        return TextColor.fromRgb(getHPColorInt(stack));
     }
 
     public static boolean isDestroyed(ItemStack stack){
@@ -142,7 +142,7 @@ public class ItemStackUtils {
     public static ItemStack serializePlane(AbstractEntityPlanes plane) {
         ItemStack planeStack = new ItemStack(plane.getPlaneItem());
         setCurrentDamage(planeStack, (int) (plane.getMaxHealth()-plane.getHealth()));
-        CompoundNBT nbt = planeStack.getOrCreateTag();
+        CompoundTag nbt = planeStack.getOrCreateTag();
 
         if(!plane.hasPayload()){
             nbt.putInt("armDelay", plane.getPlaneItem().getreloadTime());
@@ -152,7 +152,7 @@ public class ItemStackUtils {
         return planeStack;
     }
 
-    public static boolean isPlaneReady(ItemStack stack, MobEntity shooter) {
+    public static boolean isPlaneReady(ItemStack stack, Mob shooter) {
         if (isDestroyed(stack)) {
             return false;
         }
@@ -216,7 +216,7 @@ public class ItemStackUtils {
                             for (int i = 0; i < equipments.getSlots(); i++) {
 
                                 ItemStack stack = equipments.getStackInSlot(i);
-                                if(isplane && !isPlaneReady(stack, (MobEntity) shooter)){
+                                if(isplane && !isPlaneReady(stack, (Mob) shooter)){
                                     continue;
                                 }
                                 if (!slot.testPredicate(stack) || isDestroyed(stack) || getDelayofEquipment(equipments.getStackInSlot(i)) > 0) {
@@ -235,7 +235,7 @@ public class ItemStackUtils {
         return Optional.ofNullable(returnvalue.get());
     }
 
-    public static boolean isPlaneFuelReady(MobEntity entity, ItemStack planeStack){
+    public static boolean isPlaneFuelReady(Mob entity, ItemStack planeStack){
         if(planeStack.getItem() instanceof ItemEquipmentPlaneBase) {
             return planeStack.getOrCreateTag().getInt("fuel") >= getRequiredMinimumFuel(entity, (ItemEquipmentPlaneBase) planeStack.getItem());
         }
@@ -249,7 +249,7 @@ public class ItemStackUtils {
         return 0;
     }
 
-    public static float getRequiredMinimumFuel(MobEntity Shooter, ItemEquipmentPlaneBase planeItem){
+    public static float getRequiredMinimumFuel(Mob Shooter, ItemEquipmentPlaneBase planeItem){
         //Movement speed 0.1 = roughly 0.2 block/tick
         if(Shooter.getTarget() != null && Shooter.getTarget().isAlive()) {
             double distance = Shooter.distanceTo(Shooter.getTarget())*2.5;//2 way trip+ another 0.5X of fuel because minecraft entity are stupid
@@ -307,7 +307,7 @@ public class ItemStackUtils {
     }
 
     public static boolean isOutOfAmmo(ItemStack equipment){
-        CompoundNBT compoundNBT = equipment.getOrCreateTag();
+        CompoundTag compoundNBT = equipment.getOrCreateTag();
         if(equipment.getItem() instanceof ICraftingTableReloadable){
             return compoundNBT.getInt("Ammo")<= 0;
         }
@@ -315,7 +315,7 @@ public class ItemStackUtils {
     }
 
     public static void useAmmo(ItemStack stack){
-        CompoundNBT compoundNBT = stack.getOrCreateTag();
+        CompoundTag compoundNBT = stack.getOrCreateTag();
         int prevammo =  compoundNBT.getInt("Ammo");
         compoundNBT.putInt("Ammo", prevammo-1);
     }
@@ -325,7 +325,7 @@ public class ItemStackUtils {
     }
 
     public static void setAmmo(ItemStack stack, int count){
-        CompoundNBT compoundNBT = stack.getOrCreateTag();
+        CompoundTag compoundNBT = stack.getOrCreateTag();
         if(stack.getItem() instanceof ICraftingTableReloadable){
             compoundNBT.putInt("Ammo", count);
         }
@@ -333,7 +333,7 @@ public class ItemStackUtils {
 
     public static void setAmmoFull(ItemStack stack){
         if(stack.getItem() instanceof ICraftingTableReloadable) {
-            CompoundNBT compoundNBT = stack.getOrCreateTag();
+            CompoundTag compoundNBT = stack.getOrCreateTag();
             compoundNBT.putInt("Ammo", ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo());
         }
     }
@@ -347,7 +347,7 @@ public class ItemStackUtils {
     }
 
     public static int getRemainingAmmo(ItemStack equipment){
-        CompoundNBT compoundNBT = equipment.getOrCreateTag();
+        CompoundTag compoundNBT = equipment.getOrCreateTag();
         if(equipment.getItem() instanceof ICraftingTableReloadable){
             return compoundNBT.getInt("Ammo");
         }
@@ -356,13 +356,13 @@ public class ItemStackUtils {
 
 
     public static int getDelayofEquipment(ItemStack Equipment){
-        CompoundNBT tags = Equipment.getOrCreateTag();
+        CompoundTag tags = Equipment.getOrCreateTag();
         return tags.getInt("delay");
     }
 
     public static void setEquipmentDelay (ItemStack equipment){
         if(equipment.getItem() instanceof ItemEquipmentBase){
-            CompoundNBT tags = equipment.getOrCreateTag();
+            CompoundTag tags = equipment.getOrCreateTag();
             ItemEquipmentBase equipmentItem = (ItemEquipmentBase)(equipment.getItem());
             tags.putInt("delay", equipmentItem.getFiredelay());
         }

@@ -22,8 +22,8 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipelogi
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
 
 public class RiftwayControllerTE extends ControllerTileEntity {
 
@@ -55,7 +55,7 @@ public class RiftwayControllerTE extends ControllerTileEntity {
     }
 
     @Override
-    public ModularUI createComponentUI(PlayerEntity entityPlayer) {
+    public ModularUI createComponentUI(Player entityPlayer) {
         TabContainer tabContainer = new TabContainer(0, 0, 200, 166);
         if (isFormed()) {
             new RiftwayRecipePage(this, tabContainer);

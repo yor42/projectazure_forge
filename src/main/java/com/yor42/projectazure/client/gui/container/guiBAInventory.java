@@ -1,20 +1,27 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
 
@@ -24,7 +31,7 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
     private final double affection, morale;
     
 
-    public guiBAInventory(ContainerBAInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public guiBAInventory(ContainerBAInventory screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.affection = this.host.getAffection();
         this.affectionLevel = this.affectionValuetoLevel();
@@ -85,13 +92,13 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
-    private void renderAffection(MatrixStack matrixStack, int mousex, int mousey) {
+    private void renderAffection(PoseStack matrixStack, int mousex, int mousey) {
         matrixStack.pushPose();
         this.minecraft.getTextureManager().bind(TEXTURE);
         int textureY = 1;
@@ -134,10 +141,10 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
         }
         this.blit(matrixStack, x, y, textureX, textureY, 12, 12);
         if (isHovering(x, y, 12,12,mousex,mousey)){
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            List<MutableComponent> tooltips = new ArrayList<>();
             double AffectionLimit = this.host.isOathed()? 200:100;
-            tooltips.add(new TranslationTextComponent("gui.current_affection_level").append(": ").append(new TranslationTextComponent(this.affectionLevel.getName())).setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
-            tooltips.add(new TranslationTextComponent("gui.current_affection_value").append(": ").append(String.format("%.2f",this.affection)+"/"+AffectionLimit).setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
+            tooltips.add(new TranslatableComponent("gui.current_affection_level").append(": ").append(new TranslatableComponent(this.affectionLevel.getName())).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color))));
+            tooltips.add(new TranslatableComponent("gui.current_affection_value").append(": ").append(String.format("%.2f",this.affection)+"/"+AffectionLimit).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color))));
             this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.leftPos, mousey-this.topPos, this.font);
         }
         matrixStack.popPose();
@@ -161,7 +168,7 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
         }
     }
 
-    private void renderMorale(MatrixStack matrixStack, int mousex, int mousey) {
+    private void renderMorale(PoseStack matrixStack, int mousex, int mousey) {
         matrixStack.pushPose();
         this.minecraft.getTextureManager().bind(TEXTURE);
         int textureY = 13;
@@ -202,9 +209,9 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
         }
         this.blit(matrixStack, x, y, textureX, textureY, 12, 12);
         if (isHovering(x, y, 12,12,mousex,mousey)){
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            tooltips.add(new TranslationTextComponent("gui.current_morale_level").append(": ").append(new TranslationTextComponent(moraleValuetoLevel().getName())).setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
-            tooltips.add(new TranslationTextComponent("gui.current_morale_value").append(": ").append(String.format("%.2f",this.morale)+"/150").setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
+            List<MutableComponent> tooltips = new ArrayList<>();
+            tooltips.add(new TranslatableComponent("gui.current_morale_level").append(": ").append(new TranslatableComponent(moraleValuetoLevel().getName())).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color))));
+            tooltips.add(new TranslatableComponent("gui.current_morale_value").append(": ").append(String.format("%.2f",this.morale)+"/150").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color))));
             this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.leftPos, mousey-this.topPos, this.font);
         }
         matrixStack.popPose();
@@ -222,31 +229,31 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
         this.addButton(ItemPickupButton);
     }
 
-    protected void renderLabels(MatrixStack matrixStack, int mousex, int mousey) {
+    protected void renderLabels(PoseStack matrixStack, int mousex, int mousey) {
 
         matrixStack.pushPose();
 
-        int InventoryTextCenter = this.font.width(new TranslationTextComponent("gui.companioninventory").getString())/2;
-        IFormattableTextComponent leveltext = new StringTextComponent("Lv.").append(Integer.toString(this.host.getLevel()));
-        this.font.draw(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), imageWidth+6, 5, 16777215);
+        int InventoryTextCenter = this.font.width(new TranslatableComponent("gui.companioninventory").getString())/2;
+        MutableComponent leveltext = new TextComponent("Lv.").append(Integer.toString(this.host.getLevel()));
+        this.font.draw(matrixStack, new TranslatableComponent("gui.ammostorage.title"), imageWidth+6, 5, 16777215);
         this.font.draw(matrixStack, this.inventory.getDisplayName(), 9, 101, 0x38393b);
         //this.playerInventory.getDisplayName()
         matrixStack.pushPose();
         float drawscale = 0.8F;
         matrixStack.scale(drawscale,drawscale,drawscale);
-        this.font.draw(matrixStack, new TranslationTextComponent("gui.companioninventory"), (140-(InventoryTextCenter*drawscale)) /drawscale, (float)this.titleLabelY/drawscale, 16777215);
+        this.font.draw(matrixStack, new TranslatableComponent("gui.companioninventory"), (140-(InventoryTextCenter*drawscale)) /drawscale, (float)this.titleLabelY/drawscale, 16777215);
 
         this.font.draw(matrixStack, this.host.getDisplayName(), (float)16/drawscale, (float)78/drawscale, 16777215);
         matrixStack.popPose();
 
-        StringTextComponent ExpText = new StringTextComponent((int)this.host.getExp()+"/"+(int)this.host.getMaxExp());
+        TextComponent ExpText = new TextComponent((int)this.host.getExp()+"/"+(int)this.host.getMaxExp());
         float ExptextwidthHalf = this.font.width(ExpText.getString())/2.0F;
 
         matrixStack.pushPose();
         drawscale = 0.5F;
         matrixStack.scale(drawscale,drawscale,drawscale);
-        this.font.draw(matrixStack, ExpText.setStyle(Style.EMPTY.withColor(Color.fromRgb(0xfdfdfd))), (50.5F-(ExptextwidthHalf*drawscale))/drawscale, 86F/drawscale, 16777215);
-        this.font.draw(matrixStack, leveltext.setStyle(Style.EMPTY.withItalic(true).withColor(Color.fromRgb(0xdbe4e9))), 12/drawscale, 86.5F/drawscale, 16777215);
+        this.font.draw(matrixStack, ExpText.setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xfdfdfd))), (50.5F-(ExptextwidthHalf*drawscale))/drawscale, 86F/drawscale, 16777215);
+        this.font.draw(matrixStack, leveltext.setStyle(Style.EMPTY.withItalic(true).withColor(TextColor.fromRgb(0xdbe4e9))), 12/drawscale, 86.5F/drawscale, 16777215);
         matrixStack.popPose();
 
 
@@ -257,7 +264,7 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
 
         matrixStack.pushPose();
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);

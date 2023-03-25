@@ -5,31 +5,31 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.util.math.EntityPosWrapper;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.util.Mth;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 
-public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion> {
+public class CompanionShipRangedAttackTask extends Behavior<AbstractEntityCompanion> {
 
     private int CannonAttackDelay;
     int torpedoAttackDelay;
 
     public CompanionShipRangedAttackTask() {
-        super(ImmutableMap.of(ATTACK_TARGET, MemoryModuleStatus.VALUE_PRESENT), 1200);
+        super(ImmutableMap.of(ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion entityHost) {
+    protected boolean checkExtraStartConditions(ServerLevel p_212832_1_, AbstractEntityCompanion entityHost) {
         LivingEntity target = getAttackTarget(entityHost);
         if(!entityHost.closerThan(target, entityHost.getCannonRange())){
             return false;
@@ -51,7 +51,7 @@ public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion>
     }
 
     @Override
-    protected boolean canStillUse(@Nonnull ServerWorld p_212834_1_, @Nonnull AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
+    protected boolean canStillUse(@Nonnull ServerLevel p_212834_1_, @Nonnull AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
         if(!p_212834_2_.getBrain().getMemory(ATTACK_TARGET).isPresent()){
             return false;
         }
@@ -60,21 +60,21 @@ public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion>
     }
 
     @Override
-    protected void stop(ServerWorld p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
+    protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
         this.CannonAttackDelay = -1;
         this.torpedoAttackDelay = -1;
     }
 
     @Override
-    protected void tick(ServerWorld p_212833_1_, AbstractEntityCompanion entity, long p_212833_3_) {
+    protected void tick(ServerLevel p_212833_1_, AbstractEntityCompanion entity, long p_212833_3_) {
         if(entity instanceof EntityKansenBase) {
             entity.getBrain().setMemory(ATTACK_TARGET, getAttackTarget(entity));
             entity.lookAt(getAttackTarget(entity), 30, 30);
             if (--this.CannonAttackDelay == 0) {
                 ((EntityKansenBase) entity).AttackUsingCannon(getAttackTarget(entity));
-                this.CannonAttackDelay = 20+MathHelper.floor(MathUtil.getRand().nextFloat()*20);
+                this.CannonAttackDelay = 20+Mth.floor(MathUtil.getRand().nextFloat()*20);
             } else if (this.CannonAttackDelay < 0) {
-                this.CannonAttackDelay = 80+MathHelper.floor(MathUtil.getRand().nextFloat()*20);
+                this.CannonAttackDelay = 80+Mth.floor(MathUtil.getRand().nextFloat()*20);
             }
 
 
@@ -82,7 +82,7 @@ public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion>
                 ((EntityKansenBase) entity).AttackUsingTorpedo(getAttackTarget(entity));
                 this.torpedoAttackDelay = (int) (300 + (getRand().nextFloat() * 140));
             } else if (this.torpedoAttackDelay < 0) {
-                this.torpedoAttackDelay = 80+MathHelper.floor(MathUtil.getRand().nextFloat()*20);
+                this.torpedoAttackDelay = 80+Mth.floor(MathUtil.getRand().nextFloat()*20);
             }
         }
 
@@ -91,8 +91,8 @@ public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion>
         }
     }
 
-    private void lookAtTarget(MobEntity p_233889_1_, LivingEntity p_233889_2_) {
-        p_233889_1_.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityPosWrapper(p_233889_2_, true));
+    private void lookAtTarget(Mob p_233889_1_, LivingEntity p_233889_2_) {
+        p_233889_1_.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(p_233889_2_, true));
     }
 
     private void clearWalkTarget(LivingEntity p_233967_1_) {

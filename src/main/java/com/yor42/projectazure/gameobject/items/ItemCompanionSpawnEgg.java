@@ -5,16 +5,16 @@ import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
@@ -26,7 +26,15 @@ import java.util.Objects;
 
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
 
-public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends Item {
+publicimport net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item.Properties;
+
+ clasnet.minecraft.world.entity.ai.attributes.AttributesityCompanion> extends Item {
 
     private final RegistryObject<EntityType<T>> Entity;
 
@@ -52,14 +60,14 @@ public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends It
     @Nonnull
     @Override
     @MethodsReturnNonnullByDefault
-    public ActionResultType useOn(ItemUseContext context) {
-        World world = context.getLevel();
+    public InteractionResult useOn(UseOnContext context) {
+        Level world = context.getLevel();
 
         if(context.getPlayer() == null)
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
 
-        if (!(world instanceof ServerWorld)) {
-            return ActionResultType.SUCCESS;
+        if (!(world instanceof ServerLevel)) {
+            return InteractionResult.SUCCESS;
         }
         ItemStack itemstack = context.getItemInHand();
         context.getClickedPos();
@@ -75,47 +83,47 @@ public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends It
             if (!context.getPlayer().isCreative())
                 itemstack.shrink(1);
 
-            return ActionResultType.CONSUME;
+            return InteractionResult.CONSUME;
         }
 
-        return ActionResultType.CONSUME;
+        return InteractionResult.CONSUME;
 
     }
 
-    public EntityType<?> getType(@Nullable CompoundNBT tag)
+    public EntityType<?> getType(@Nullable CompoundTag tag)
     {
         return this.Entity.get();
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public ITextComponent getName(ItemStack stack) {
-        return new TranslationTextComponent("item.projectazure.spawnegg.spawn").append(this.Entity.get().getDescription());
+    public Component getName(ItemStack stack) {
+        return new TranslatableComponent("item.projectazure.spawnegg.spawn").append(this.Entity.get().getDescription());
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if(worldIn != null) {
             AbstractEntityCompanion entity = this.Entity.get().create(worldIn);
             if (entity!= null) {
 
                 enums.CompanionRarity rarity = entity.getRarity();
-                tooltip.add(new TranslationTextComponent("tooltip.companion.rarity").append(": ").append(new TranslationTextComponent(entity.getRarity().getTranslationkey()).setStyle(Style.EMPTY.withColor(Color.fromRgb(rarity.getColor())))).withStyle(TextFormatting.GRAY));
-                tooltip.add(new TranslationTextComponent("tooltip.companion.type").append(": ").append(new TranslationTextComponent(entity.getEntityType().getName())).withStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslatableComponent("tooltip.companion.rarity").append(": ").append(new TranslatableComponent(entity.getRarity().getTranslationkey()).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(rarity.getColor())))).withStyle(ChatFormatting.GRAY));
+                tooltip.add(new TranslatableComponent("tooltip.companion.type").append(": ").append(new TranslatableComponent(entity.getEntityType().getName())).withStyle(ChatFormatting.GRAY));
                 if(entity instanceof EntityKansenBase){
-                    tooltip.add(new TranslationTextComponent("tooltip.companion.shipgirl_class").append(": ").append(new TranslationTextComponent(((EntityKansenBase) entity).getShipClass().getName()).withStyle(TextFormatting.YELLOW)).withStyle(TextFormatting.GRAY));
+                    tooltip.add(new TranslatableComponent("tooltip.companion.shipgirl_class").append(": ").append(new TranslatableComponent(((EntityKansenBase) entity).getShipClass().getName()).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GRAY));
                 }
                 else if(entity instanceof IAknOp){
-                    tooltip.add(new TranslationTextComponent("tooltip.companion.operator_class").append(": ").withStyle(TextFormatting.GRAY).append(new TranslationTextComponent(((IAknOp) entity).getOperatorClass().getName()).withStyle(TextFormatting.YELLOW)));
+                    tooltip.add(new TranslatableComponent("tooltip.companion.operator_class").append(": ").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent(((IAknOp) entity).getOperatorClass().getName()).withStyle(ChatFormatting.YELLOW)));
                 }
 
                 if(entity.getGunSpecialty() != enums.GunClass.NONE){
-                    tooltip.add(new TranslationTextComponent("tooltip.companion.gun_speciality").append(": ").append(new TranslationTextComponent(entity.getGunSpecialty().getName()).withStyle(TextFormatting.YELLOW)).withStyle(TextFormatting.GRAY));
+                    tooltip.add(new TranslatableComponent("tooltip.companion.gun_speciality").append(": ").append(new TranslatableComponent(entity.getGunSpecialty().getName()).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GRAY));
                 }
                 if(entity.getAttribute(MAX_HEALTH) != null) {
-                    tooltip.add(new TranslationTextComponent("tooltip.companion.maxhealth").append(": ").append(new StringTextComponent(String.format("%,.2f", entity.getAttribute(MAX_HEALTH).getBaseValue())).withStyle(Style.EMPTY.withColor(Color.fromRgb(0xFFC0CB)))).withStyle(TextFormatting.GRAY));
+                    tooltip.add(new TranslatableComponent("tooltip.companion.maxhealth").append(": ").append(new TextComponent(String.format("%,.2f", entity.getAttribute(MAX_HEALTH).getBaseValue())).withStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFC0CB)))).withStyle(ChatFormatting.GRAY));
                 }
             }
         }

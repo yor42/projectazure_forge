@@ -1,20 +1,20 @@
 package com.yor42.projectazure.gameobject.advencements.triggers;
 
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.criterion.AbstractCriterionTrigger;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.loot.ConditionArraySerializer;
-import net.minecraft.loot.LootContext;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.SerializationContext;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.resources.ResourceLocation;
 
-public class NameEntityCriterion  extends AbstractCriterionTrigger<NameEntityCriterion.Instance> {
+public class NameEntityCriterion  extends SimpleCriterionTrigger<NameEntityCriterion.Instance> {
     private static final ResourceLocation ID = new ResourceLocation("name_animal");
 
     @Override
-    protected NameEntityCriterion.Instance createInstance(JsonObject json, EntityPredicate.AndPredicate entityPredicate, ConditionArrayParser conditionsParser) {
-        EntityPredicate.AndPredicate entitypredicate$andpredicate = EntityPredicate.AndPredicate.fromJson(json, "entity", conditionsParser);
+    protected NameEntityCriterion.Instance createInstance(JsonObject json, EntityPredicate.Composite entityPredicate, DeserializationContext conditionsParser) {
+        EntityPredicate.Composite entitypredicate$andpredicate = EntityPredicate.Composite.fromJson(json, "entity", conditionsParser);
         return new NameEntityCriterion.Instance(entityPredicate, entitypredicate$andpredicate);
     }
 
@@ -23,27 +23,27 @@ public class NameEntityCriterion  extends AbstractCriterionTrigger<NameEntityCri
         return ID;
     }
 
-    public static class Instance extends CriterionInstance {
-        private final EntityPredicate.AndPredicate entity;
+    public static class Instance extends AbstractCriterionTriggerInstance {
+        private final EntityPredicate.Composite entity;
 
-        public Instance(EntityPredicate.AndPredicate player, EntityPredicate.AndPredicate entity) {
+        public Instance(EntityPredicate.Composite player, EntityPredicate.Composite entity) {
             super(NameEntityCriterion.ID, player);
             this.entity = entity;
         }
 
         public static NameEntityCriterion.Instance any() {
-            return new NameEntityCriterion.Instance(EntityPredicate.AndPredicate.ANY, EntityPredicate.AndPredicate.ANY);
+            return new NameEntityCriterion.Instance(EntityPredicate.Composite.ANY, EntityPredicate.Composite.ANY);
         }
 
         public static NameEntityCriterion.Instance create(EntityPredicate entityCondition) {
-            return new NameEntityCriterion.Instance(EntityPredicate.AndPredicate.ANY, EntityPredicate.AndPredicate.wrap(entityCondition));
+            return new NameEntityCriterion.Instance(EntityPredicate.Composite.ANY, EntityPredicate.Composite.wrap(entityCondition));
         }
 
         public boolean test(LootContext context) {
             return this.entity.matches(context);
         }
 
-        public JsonObject serializeToJson(ConditionArraySerializer conditions) {
+        public JsonObject serializeToJson(SerializationContext conditions) {
             JsonObject jsonobject = super.serializeToJson(conditions);
             jsonobject.add("entity", this.entity.toJson(conditions));
             return jsonobject;

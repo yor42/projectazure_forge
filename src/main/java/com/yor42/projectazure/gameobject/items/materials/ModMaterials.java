@@ -1,14 +1,14 @@
 package com.yor42.projectazure.gameobject.items.materials;
 
 import com.yor42.projectazure.data.ModTags;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Supplier;
 
-public enum ModMaterials implements IItemTier {
+public enum ModMaterials implements Tier {
 
     CHIXIAO(3, 2500, 7.5F, 7, 8, () -> Ingredient.of(ModTags.Items.INGOT_TIN)),
 
@@ -53,7 +53,7 @@ public enum ModMaterials implements IItemTier {
     private final float efficiency;
     private final float attackDamage;
     private final int enchantability;
-    private final LazyValue<Ingredient> repairMaterial;
+    private final LazyLoadedValue<Ingredient> repairMaterial;
 
     ModMaterials(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
         this.harvestLevel = harvestLevelIn;
@@ -61,7 +61,7 @@ public enum ModMaterials implements IItemTier {
         this.efficiency = efficiencyIn;
         this.attackDamage = attackDamageIn;
         this.enchantability = enchantabilityIn;
-        this.repairMaterial = new LazyValue<>(repairMaterialIn);
+        this.repairMaterial = new LazyLoadedValue<>(repairMaterialIn);
     }
 
     public int getUses() {

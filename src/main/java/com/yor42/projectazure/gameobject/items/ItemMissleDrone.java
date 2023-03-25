@@ -5,14 +5,14 @@ import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerEntity;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -22,6 +22,8 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraftingTableReloadable {
 
@@ -62,12 +64,12 @@ public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraf
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         int ammo = ItemStackUtils.getRemainingAmmo(stack);
         float ammopercent = (float) ammo/this.getMaxAmmo();
-        TextFormatting color = ammopercent>=0.33? ammopercent>= 0.66? TextFormatting.DARK_GREEN:TextFormatting.GOLD:TextFormatting.DARK_RED;
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(ammo+"/"+this.getMaxAmmo()).withStyle(color)));
+        ChatFormatting color = ammopercent>=0.33? ammopercent>= 0.66? ChatFormatting.DARK_GREEN:ChatFormatting.GOLD:ChatFormatting.DARK_RED;
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingammo").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(ammo+"/"+this.getMaxAmmo()).withStyle(color)));
     }
 
     @Override

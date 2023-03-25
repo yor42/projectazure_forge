@@ -2,15 +2,15 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.setup.register.RegisterFluids;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -23,14 +23,14 @@ import javax.annotation.Nonnull;
 import static com.yor42.projectazure.setup.register.RegisterContainer.BASIC_REFINERY_CONTAINER;
 
 
-public class ContainerBasicRefinery extends Container {
+public class ContainerBasicRefinery extends AbstractContainerMenu {
 
-    private final IIntArray field;
+    private final ContainerData field;
 
     public final FluidStack crudeoilstack, gasolinestack, dieselstack, fueloilstack;
 
-    public ContainerBasicRefinery(int id, PlayerInventory inventory, PacketBuffer buffer) {
-        this(id, inventory, new ItemStackHandler(10), new IIntArray() {
+    public ContainerBasicRefinery(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, new ItemStackHandler(10), new ContainerData() {
 
             final int[] values = buffer.readVarIntArray();
 
@@ -51,7 +51,7 @@ public class ContainerBasicRefinery extends Container {
         }, buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack());
     }
 
-    public ContainerBasicRefinery(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {
+    public ContainerBasicRefinery(int id, Inventory inventory, ItemStackHandler Inventory, ContainerData field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {
         super(BASIC_REFINERY_CONTAINER.get(), id);
         this.field = field;
         this.crudeoilstack = CrudeOilStack;
@@ -91,7 +91,7 @@ public class ContainerBasicRefinery extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
@@ -116,7 +116,7 @@ public class ContainerBasicRefinery extends Container {
 
         @Override
         public boolean mayPlace(ItemStack stack) {
-            return ForgeHooks.getBurnTime(stack, IRecipeType.SMELTING)>0;
+            return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING)>0;
         }
     }
 
@@ -160,7 +160,7 @@ public class ContainerBasicRefinery extends Container {
     }
 
     @Nonnull
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack CopyofStackinSlot = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

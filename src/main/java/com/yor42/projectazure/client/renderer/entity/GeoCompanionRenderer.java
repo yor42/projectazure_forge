@@ -1,8 +1,8 @@
 package com.yor42.projectazure.client.renderer.entity;
 
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.tac.guns.client.render.IHeldAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
@@ -13,28 +13,28 @@ import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.mixin.WeaponPoseAccessor;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Pose;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import net.minecraft.network.chat.Component;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -93,7 +93,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorModel) {
+    protected ModelPart getArmorPartForBone(String name, HumanoidModel<?> armorModel) {
         switch (name) {
             case "armor_leftfoot":
             case "armor_leftleg":
@@ -118,25 +118,25 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, T currentEntity) {
+    protected EquipmentSlot getEquipmentSlotForArmorBone(String boneName, T currentEntity) {
         switch (boneName) {
             case "armor_leftfoot":
             case "armor_rightfoot":
-                return EquipmentSlotType.FEET;
+                return EquipmentSlot.FEET;
             case "armor_leftleg":
             case "armor_rightleg":
             case "armor_leftleg2":
             case "armor_rightleg2":
-                return EquipmentSlotType.LEGS;
+                return EquipmentSlot.LEGS;
             case "armor_rightarm":
-                return !currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+                return !currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
             case "armor_leftarm":
-                return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+                return currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
             case "armor_body":
             case "armor_chest":
-                return EquipmentSlotType.CHEST;
+                return EquipmentSlot.CHEST;
             case "armor_head":
-                return EquipmentSlotType.HEAD;
+                return EquipmentSlot.HEAD;
             default:
                 return null;
         }
@@ -154,25 +154,25 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    protected ItemCameraTransforms.TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+    protected ItemTransforms.TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
         switch (boneName) {
             case "itemOffHand":
             case "itemMainHand":
-                return ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
+                return ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
             default:
-                return ItemCameraTransforms.TransformType.NONE;
+                return ItemTransforms.TransformType.NONE;
         }
     }
 
     @Override
-    protected void handleItemAndBlockBoneRendering(MatrixStack stack, GeoBone bone, @Nullable ItemStack boneItem, @Nullable BlockState boneBlock, int packedLightIn) {
+    protected void handleItemAndBlockBoneRendering(PoseStack stack, GeoBone bone, @Nullable ItemStack boneItem, @Nullable BlockState boneBlock, int packedLightIn) {
         if(!this.currentEntityBeingRendered.isPassenger() && !this.currentEntityBeingRendered.isBeingPatted() && !this.currentEntityBeingRendered.islewded()) {
             super.handleItemAndBlockBoneRendering(stack, bone, boneItem, boneBlock, packedLightIn);
         }
     }
 
     @Override
-    protected void renderItemStack(MatrixStack stack, IRenderTypeBuffer rtb, int packedLightIn, ItemStack boneItem, String boneName) {
+    protected void renderItemStack(PoseStack stack, MultiBufferSource rtb, int packedLightIn, ItemStack boneItem, String boneName) {
 
         IOverrideModel model = ModelOverrides.getModel(boneItem);
         if(model != null)
@@ -185,7 +185,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
+    protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
 
         if (item != this.mainHand && item != this.offHand) {
             return;
@@ -215,7 +215,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
 
                 float leftHanded = currentEntity.isLeftHanded() ? -1.0F : 1.0F;
                 matrixStack.translate(0.0, 0.0, 0.05);
-                float angle = (float) (MathHelper.lerp(Minecraft.getInstance().getFrameTime(), currentEntity.xRotO, currentEntity.xRot) / 90.0);
+                float angle = (float) (Mth.lerp(Minecraft.getInstance().getFrameTime(), currentEntity.xRotO, currentEntity.xRot) / 90.0);
                 float angleAbs = Math.abs(angle);
                 float zoom = 1F;
                 AimPose targetPose = (double)angle > 0.0 ? ((WeaponPoseAccessor)pose).ongetDownPose() : ((WeaponPoseAccessor)pose).ongetUpPose();
@@ -233,7 +233,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             }
             else{
                 matrixStack.translate(0, 0.08, 0);
-                this.performCustomRotationtoStack(item, matrixStack, Hand.MAIN_HAND);
+                this.performCustomRotationtoStack(item, matrixStack, InteractionHand.MAIN_HAND);
             }
         } else {
             if (shieldFlag) {
@@ -241,7 +241,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
                 matrixStack.mulPose(Vector3f.YP.rotationDegrees(180));
             } else {
                 matrixStack.translate(0, 0.08, 0);
-                this.performCustomRotationtoStack(item, matrixStack, Hand.OFF_HAND);
+                this.performCustomRotationtoStack(item, matrixStack, InteractionHand.OFF_HAND);
             }
 
         }
@@ -253,11 +253,11 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     private float getValue(@Nullable Float t1, @Nullable Float t2, Float s1, Float s2, Float def, float partial, float zoom, float leftHanded) {
         float start = t1 != null && s1 != null ? (s1 + (t1 - s1) * partial) * leftHanded : (s1 != null ? s1 * leftHanded : def);
         float end = t2 != null && s2 != null ? (s2 + (t2 - s2) * partial) * leftHanded : (s2 != null ? s2 * leftHanded : def);
-        return MathHelper.lerp(zoom, start, end);
+        return Mth.lerp(zoom, start, end);
     }
 
     @Override
-    protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
+    protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
 
     }
 
@@ -267,27 +267,27 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, T currentEntity) {
+    protected void preRenderBlock(PoseStack matrixStack, BlockState block, String boneName, T currentEntity) {
 
     }
 
     @Override
-    protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, T currentEntity) {
+    protected void postRenderBlock(PoseStack matrixStack, BlockState block, String boneName, T currentEntity) {
 
     }
 
-    protected GeoCompanionRenderer(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
+    protected GeoCompanionRenderer(EntityRendererProvider.Context renderManager, AnimatedGeoModel<T> modelProvider) {
         super(renderManager, modelProvider, 0.4F, 0.4F, 0.4F);
         //this.addLayer(new ArrowLayer<>(this));
     }
 
     @Override
-    public void renderEarly(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+    public void renderEarly(T animatable, PoseStack stackIn, float ticks, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
     }
 
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 
         if(isBoneCosmetic(bone)) {
             bone.setHidden(this.shouldHideBone(bone.getName()));
@@ -356,7 +356,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    protected void applyRotations(T entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+    protected void applyRotations(T entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
         Pose pose = entityLiving.getPose();
         if (pose != Pose.SLEEPING) {
             matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F - rotationYaw));
@@ -377,7 +377,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
         if(Minecraft.getInstance().player != null && entity.isOwnedBy(Minecraft.getInstance().player)) {
             this.renderStatus(entity, stack, bufferIn, packedLightIn);
             this.renderNameTag(entity, entity.getDisplayName(), stack, bufferIn, packedLightIn);
@@ -385,18 +385,18 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
     }
 
-    public void renderonLayer(T entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void renderonLayer(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
 
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
     }
 
     @Override
-    public void render(GeoModel model, T animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void render(GeoModel model, T animatable, float partialTicks, RenderType type, PoseStack matrixStackIn, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         super.render(model, animatable, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
     @Override
-    protected void renderNameTag(@Nonnull T entity, ITextComponent text, MatrixStack stack, IRenderTypeBuffer iRenderTypeBuffer, int light) {
+    protected void renderNameTag(@Nonnull T entity, Component text, PoseStack stack, MultiBufferSource iRenderTypeBuffer, int light) {
         double d0 = entityRenderDispatcher.distanceToSqr(entity);
         if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(entity, d0)) {
             boolean flag = !entity.isDiscrete();
@@ -410,7 +410,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             Matrix4f matrix4f = stack.last().pose();
             float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
             int j = (int) (f1 * 255.0F) << 24;
-            FontRenderer fontrenderer = this.getFont();
+            Font fontrenderer = this.getFont();
             float f2 = (float) (-fontrenderer.width(text) / 2);
             fontrenderer.drawInBatch(text, f2, (float) 0, 553648127, false, matrix4f, iRenderTypeBuffer, flag, j, light);
             if (flag) {
@@ -421,17 +421,17 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         }
     }
 
-    protected void performCustomRotationtoStack(ItemStack stack, MatrixStack matrix, Hand hand){}
+    protected void performCustomRotationtoStack(ItemStack stack, PoseStack matrix, InteractionHand hand){}
 
-    protected void renderStatus(T entity, MatrixStack stack, IRenderTypeBuffer iRenderTypeBuffer, int p_225629_5_) {
-        ITextComponent text = entity.getMoveStatus().getDIsplayname();
+    protected void renderStatus(T entity, PoseStack stack, MultiBufferSource iRenderTypeBuffer, int p_225629_5_) {
+        Component text = entity.getMoveStatus().getDIsplayname();
         double d0 = this.entityRenderDispatcher.distanceToSqr(entity);
         if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(entity, d0)) {
             boolean flag = !entity.isDiscrete();
             float renderscale = 0.3F;
             float f = (entity.getBbHeight() + 0.1F) / renderscale;
             stack.pushPose();
-            FontRenderer fontrenderer = this.getFont();
+            Font fontrenderer = this.getFont();
             float f2 = (float) (-fontrenderer.width(text) / 2);
             stack.scale(renderscale, renderscale, renderscale);
             stack.translate(0.0D, f, 0.0D);

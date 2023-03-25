@@ -4,13 +4,13 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.SyncTeamListPacket;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class ProjectAzureWorldSavedData extends WorldSavedData {
+public class ProjectAzureWorldSavedData extends SavedData {
 
     public static final String ID = Constants.MODID+"_worldsaveddata";
 
@@ -39,7 +39,7 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void DeserializeandUpdateClientList(CompoundNBT compound){
+    public static void DeserializeandUpdateClientList(CompoundTag compound){
         CompanionTeam team = CompanionTeam.deserializeNBT(compound);
         boolean processed = false;
         for(int i = 0; i<TeamListCLIENT.size();i++){
@@ -57,7 +57,7 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void RemoveEntryFromClientList(CompoundNBT compound){
+    public static void RemoveEntryFromClientList(CompoundTag compound){
         CompanionTeam team = CompanionTeam.deserializeNBT(compound);
         for(CompanionTeam listentry:TeamListCLIENT){
             if(listentry.getTeamUUID().equals(team.getTeamUUID())){
@@ -68,17 +68,17 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void DeserializeandUpdateEntireClientList(CompoundNBT compound){
-        ListNBT teams = compound.getList("teams", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+    public static void DeserializeandUpdateEntireClientList(CompoundTag compound){
+        ListTag teams = compound.getList("teams", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
         TeamListCLIENT.clear();
         for(int i=0; i<teams.size(); i++){
-            CompoundNBT nbt = teams.getCompound(i);
+            CompoundTag nbt = teams.getCompound(i);
             TeamListCLIENT.add(CompanionTeam.deserializeNBT(nbt));
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static List<CompanionTeam> getPlayersTeamClient(PlayerEntity player){
+    public static List<CompanionTeam> getPlayersTeamClient(Player player){
         return TeamListCLIENT.stream().filter((team)->team.getOwnerUUID().equals(player.getUUID())).collect(Collectors.toList());
     }
 
@@ -98,10 +98,10 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
     }
 
     @Override
-    public void load(CompoundNBT p_76184_1_) {
-        ListNBT teams = p_76184_1_.getList("teams", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+    public void load(CompoundTag p_76184_1_) {
+        ListTag teams = p_76184_1_.getList("teams", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
         for(int i=0; i<teams.size(); i++){
-            CompoundNBT nbt = teams.getCompound(i);
+            CompoundTag nbt = teams.getCompound(i);
             this.TeamList.add(CompanionTeam.deserializeNBT(nbt));
         }
         //this.SyncEntireTeamListClient();
@@ -109,8 +109,8 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
 
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
-        ListNBT TeamList = new ListNBT();
+    public CompoundTag save(@Nonnull CompoundTag nbt) {
+        ListTag TeamList = new ListTag();
         for(CompanionTeam team: this.TeamList){
             TeamList.add(team.serializeNBT());
         }
@@ -161,19 +161,19 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
         return Optional.empty();
     }
 
-    public void createteam(ServerPlayerEntity owner){
+    public void createteam(ServerPlayer owner){
         CompanionTeam newteam = new CompanionTeam(owner.getUUID(), owner.getDisplayName().getString());
         this.addorModifyTeam(newteam);
     }
 
     public void ChangeTeamName(UUID teamUUID, String name) {
         this.getTeambyUUID(teamUUID).ifPresent((team)->{
-            team.setCustomName(new StringTextComponent(name));
+            team.setCustomName(new TextComponent(name));
             this.addorModifyTeam(team);
         });
     }
 
-    public List<CompanionTeam> getPlayersTeam(PlayerEntity player){
+    public List<CompanionTeam> getPlayersTeam(Player player){
         return this.TeamList.stream().filter((team)->team.getOwnerUUID().equals(player.getUUID())).collect(Collectors.toList());
     }
 
@@ -202,8 +202,8 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
     }
 
     private void SyncEntireTeamListClient(){
-        CompoundNBT compound = new CompoundNBT();
-        ListNBT TeamList = new ListNBT();
+        CompoundTag compound = new CompoundTag();
+        ListTag TeamList = new ListTag();
         for(CompanionTeam team: this.TeamList){
             TeamList.add(team.serializeNBT());
         }
@@ -212,9 +212,9 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
         this.setDirty();
     }
 
-    public void SyncEntireTeamListtoPlayer(ServerPlayerEntity player){
-        CompoundNBT compound = new CompoundNBT();
-        ListNBT TeamList = new ListNBT();
+    public void SyncEntireTeamListtoPlayer(ServerPlayer player){
+        CompoundTag compound = new CompoundTag();
+        ListTag TeamList = new ListTag();
         for(CompanionTeam team: this.TeamList){
             TeamList.add(team.serializeNBT());
         }
@@ -223,7 +223,7 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
         this.setDirty();
     }
 
-    public static ProjectAzureWorldSavedData getSaveddata(ServerWorld world){
+    public static ProjectAzureWorldSavedData getSaveddata(ServerLevel world){
         ProjectAzureWorldSavedData storage = world.getDataStorage().get(ProjectAzureWorldSavedData::new, ID);
         if(storage == null){
             storage = new ProjectAzureWorldSavedData();

@@ -1,11 +1,11 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.ai.brain.task.FindWalkTargetTask;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.behavior.VillageBoundRandomStroll;
+import net.minecraft.server.level.ServerLevel;
 
-public class FindWalktargetbyChanceTask extends FindWalkTargetTask {
+public class FindWalktargetbyChanceTask extends VillageBoundRandomStroll {
 
     private final float chance;
     int tickcount = 0;
@@ -16,7 +16,7 @@ public class FindWalktargetbyChanceTask extends FindWalkTargetTask {
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, CreatureEntity p_212832_2_) {
+    protected boolean checkExtraStartConditions(ServerLevel p_212832_1_, PathfinderMob p_212832_2_) {
         if (this.tickcount >= 100) {
             this.tickcount = 0;
             return MathUtil.getRand().nextFloat() <= this.chance;

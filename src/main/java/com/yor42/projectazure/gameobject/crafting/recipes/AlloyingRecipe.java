@@ -6,17 +6,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AlloyingRecipe implements IRecipe<IInventory> {
+public class AlloyingRecipe implements Recipe<Container> {
 
 
     public final List<Pair<Ingredient, Byte>> ingredients;
@@ -43,7 +43,7 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
 
         for(Pair<Ingredient, Byte> ingrediententry:this.ingredients){
             boolean found = false;
@@ -64,7 +64,7 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public ItemStack assemble(IInventory inv) {
+    public ItemStack assemble(Container inv) {
         return this.result.copy();
     }
 
@@ -110,13 +110,13 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
 
     @Nonnull
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return registerRecipes.Serializers.ALLOYING.get();
     }
 
     @Nonnull
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return registerRecipes.Types.ALLOYING;
     }
 
@@ -124,14 +124,14 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
         return this.processTick;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<AlloyingRecipe>{
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AlloyingRecipe>{
 
 
         @Override
         public AlloyingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
             ImmutableList.Builder<Pair<Ingredient, Byte>> builder = ImmutableList.builder();
-            JsonArray input = JSONUtils.getAsJsonArray(json, "materials");
+            JsonArray input = GsonHelper.getAsJsonArray(json, "materials");
             for(int i = 0; i < input.size(); i++)
             {
                 JsonObject itemObject = input.get(i).getAsJsonObject();
@@ -139,7 +139,7 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
 
                 byte count;
                 try {
-                    count = JSONUtils.getAsByte(itemObject, "count", (byte) 1);
+                    count = GsonHelper.getAsByte(itemObject, "count", (byte) 1);
                 }
                 catch (JsonSyntaxException e){
                     count = 1;
@@ -147,9 +147,9 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
                 builder.add(new Pair<>(ingredient, count));
             }
 
-            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getAsString(json, "result"));
-            int processtime = JSONUtils.getAsInt(json, "processtime", 200);
-            int resultcount = JSONUtils.getAsByte(json, "resultcount", (byte) 1);
+            ResourceLocation ItemID = new ResourceLocation(GsonHelper.getAsString(json, "result"));
+            int processtime = GsonHelper.getAsInt(json, "processtime", 200);
+            int resultcount = GsonHelper.getAsByte(json, "resultcount", (byte) 1);
 
             ItemStack result = new ItemStack(ForgeRegistries.ITEMS.getValue(ItemID), resultcount);
 
@@ -158,7 +158,7 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
 
         @Nullable
         @Override
-        public AlloyingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public AlloyingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 
             int processtick = buffer.readInt();
             ItemStack resultStack = buffer.readItem();
@@ -172,7 +172,7 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, AlloyingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, AlloyingRecipe recipe) {
             buffer.writeInt(recipe.processTick);
             buffer.writeItem(recipe.result);
             buffer.writeInt(recipe.ingredients.size());

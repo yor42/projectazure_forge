@@ -3,11 +3,13 @@ package com.yor42.projectazure.gameobject.items.rigging;
 import com.yor42.projectazure.client.model.rigging.modelCVRiggingDefault;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemRiggingCVDefault extends ItemRiggingBase{
 

@@ -2,18 +2,18 @@ package com.yor42.projectazure.gameobject.crafting.recipes;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.BASICCHEMICALREACTION;
 import static com.yor42.projectazure.setup.register.registerRecipes.Types.BASIC_CHEMICAL_REACTION;
 
-public class BasicChemicalReactionRecipe implements IRecipe<IInventory>, Predicate<ItemStack> {
+public class BasicChemicalReactionRecipe implements Recipe<Container>, Predicate<ItemStack> {
 
     private final Ingredient itemInput;
     private final FluidStack output;
@@ -45,12 +45,12 @@ public class BasicChemicalReactionRecipe implements IRecipe<IInventory>, Predica
     }
 
     @Override
-    public boolean matches(IInventory p_77569_1_, World p_77569_2_) {
+    public boolean matches(Container p_77569_1_, Level p_77569_2_) {
         return true;
     }
 
     @Override
-    public ItemStack assemble(IInventory p_77572_1_) {
+    public ItemStack assemble(Container p_77572_1_) {
         return ItemStack.EMPTY;
     }
 
@@ -84,30 +84,30 @@ public class BasicChemicalReactionRecipe implements IRecipe<IInventory>, Predica
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return BASICCHEMICALREACTION.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return BASIC_CHEMICAL_REACTION;
     }
 
     @Nonnull
     @Override
     public NonNullList<Ingredient> getIngredients() {
-        NonNullList<Ingredient> list = IRecipe.super.getIngredients();
+        NonNullList<Ingredient> list = Recipe.super.getIngredients();
         list.add(this.itemInput);
         return list;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<BasicChemicalReactionRecipe>{
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<BasicChemicalReactionRecipe>{
         @Override
         public BasicChemicalReactionRecipe fromJson(@Nonnull ResourceLocation recipeId, JsonObject json) {
 
 
             JsonObject output = json.get("output").getAsJsonObject();
-            ResourceLocation id = new ResourceLocation(JSONUtils.getAsString(output, "fluid"));
+            ResourceLocation id = new ResourceLocation(GsonHelper.getAsString(output, "fluid"));
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(id);
             int amount = output.get("amount").getAsInt();
             FluidStack result = new FluidStack(Objects.requireNonNull(fluid, "Result fluid can not be null"), amount);
@@ -122,7 +122,7 @@ public class BasicChemicalReactionRecipe implements IRecipe<IInventory>, Predica
 
         @Nullable
         @Override
-        public BasicChemicalReactionRecipe fromNetwork(@Nonnull ResourceLocation recipeId, PacketBuffer buffer) {
+        public BasicChemicalReactionRecipe fromNetwork(@Nonnull ResourceLocation recipeId, FriendlyByteBuf buffer) {
             FluidStack output =buffer.readFluidStack();
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             int time = buffer.readInt();
@@ -130,7 +130,7 @@ public class BasicChemicalReactionRecipe implements IRecipe<IInventory>, Predica
         }
 
         @Override
-        public void toNetwork(@Nonnull PacketBuffer buffer, BasicChemicalReactionRecipe recipe) {
+        public void toNetwork(@Nonnull FriendlyByteBuf buffer, BasicChemicalReactionRecipe recipe) {
             recipe.output.writeToPacket(buffer);
             recipe.itemInput.toNetwork(buffer);
             buffer.writeInt(recipe.getProcesstime());

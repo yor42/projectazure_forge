@@ -10,19 +10,19 @@ import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 
 public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknOp {
 
-    public EntityRosmontis(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityRosmontis(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -72,10 +72,10 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
@@ -222,12 +222,12 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     }
 
     @Override
-    public Hand getSpellUsingHand() {
-        return Hand.OFF_HAND;
+    public InteractionHand getSpellUsingHand() {
+        return InteractionHand.OFF_HAND;
     }
 
     @Override
-    public void ShootProjectile(World world, @Nonnull LivingEntity target) {
+    public void ShootProjectile(Level world, @Nonnull LivingEntity target) {
         EntityClaymore claymore = new EntityClaymore(registerEntity.CLAYMORE.get(), world);
         claymore.setPos(target.getX(), target.getY(), target.getZ());
         claymore.setOwnerId(this.getUUID());
@@ -246,9 +246,9 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
         return registerSounds.ROSMONTIS_TALK_NORMAL;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.RosmontisMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.RosmontisSwimSpeed.get())
                 .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.RosmontisHealth.get())

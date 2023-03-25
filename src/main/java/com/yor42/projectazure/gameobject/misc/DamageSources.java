@@ -4,10 +4,10 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 
 import javax.annotation.Nullable;
 
@@ -33,7 +33,7 @@ public class DamageSources {
         return (new IndirectEntityDamageSource("knife", p_203096_0_, p_203096_1_)).setProjectile();
     }
 
-    public static DamageSource causeDefibDamage(PlayerEntity player) {
+    public static DamageSource causeDefibDamage(Player player) {
         return (new PACompanionAttackDamage("revenge", player, 5).bypassArmor().bypassInvul());
     }
 

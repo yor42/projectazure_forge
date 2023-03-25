@@ -2,22 +2,28 @@ package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.pathfinding.CompanionWalkerNodeProcessor;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.network.DebugPacketSender;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.pathfinding.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 
-public class CompanionGroundPathNavigator extends GroundPathNavigator {
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+
+public class CompanionGroundPathNavigator extends GroundPathNavigation {
 
     protected boolean shouldAvoidSun;
     private final AbstractEntityCompanion companion;
 
-    public CompanionGroundPathNavigator(AbstractEntityCompanion entity, World world) {
+    public CompanionGroundPathNavigator(AbstractEntityCompanion entity, Level world) {
         super(entity, world);
         this.companion = entity;
     }
@@ -34,27 +40,27 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
             if (this.canUpdatePath()) {
                 this.followThePath();
             } else if (path != null && !path.isDone()) {
-                Vector3d vector3d = this.getTempMobPos();
-                Vector3d vector3d1 = path.getNextEntityPos(this.mob);
-                if (((this.mob.onClimbable() && Math.abs(vector3d.y - vector3d1.y)<0.3) || vector3d.y > vector3d1.y) && !this.mob.isOnGround() && MathHelper.floor(vector3d.x) == MathHelper.floor(vector3d1.x) && MathHelper.floor(vector3d.z) == MathHelper.floor(vector3d1.z)) {
+                Vec3 vector3d = this.getTempMobPos();
+                Vec3 vector3d1 = path.getNextEntityPos(this.mob);
+                if (((this.mob.onClimbable() && Math.abs(vector3d.y - vector3d1.y)<0.3) || vector3d.y > vector3d1.y) && !this.mob.isOnGround() && Mth.floor(vector3d.x) == Mth.floor(vector3d1.x) && Mth.floor(vector3d.z) == Mth.floor(vector3d1.z)) {
                     path.advance();
                 }
             }
 
-            DebugPacketSender.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
+            DebugPackets.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
             if (!this.isDone()) {
-                Vector3d vector3d2 = this.path.getNextEntityPos(this.mob);
+                Vec3 vector3d2 = this.path.getNextEntityPos(this.mob);
                 BlockPos blockpos = new BlockPos(vector3d2);
-                double y = this.level.getBlockState(blockpos.below()).getMaterial() == Material.AIR ? vector3d2.y : WalkNodeProcessor.getFloorLevel(this.level, blockpos);
+                double y = this.level.getBlockState(blockpos.below()).getMaterial() == Material.AIR ? vector3d2.y : WalkNodeEvaluator.getFloorLevel(this.level, blockpos);
                 this.mob.getMoveControl().setWantedPosition(vector3d2.x, y, vector3d2.z, this.speedModifier);
             }
         }
     }
 
     protected void followThePath() {
-        Vector3d tempMobPosition = this.getTempMobPos();
+        Vec3 tempMobPosition = this.getTempMobPos();
         this.maxDistanceToWaypoint = this.mob.getBbWidth() > 0.75F ? this.mob.getBbWidth() / 2.0F : 0.75F - this.mob.getBbWidth() / 2.0F;
-        Vector3i vector3i = this.path.getNextNodePos();
+        Vec3i vector3i = this.path.getNextNodePos();
         double d0 = Math.abs(this.mob.getX() - ((double)vector3i.getX() + (this.mob.getBbWidth() + 1) / 2D)); //Forge: Fix MC-94054
         double d1 = Math.abs(this.mob.getY() - (double)vector3i.getY());
         double d2 = Math.abs(this.mob.getZ() - ((double)vector3i.getZ() + (this.mob.getBbWidth() + 1) / 2D)); //Forge: Fix MC-94054
@@ -66,17 +72,17 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
         this.doStuckDetection(tempMobPosition);
     }
 
-    private boolean shouldTargetNextNodeInDirection(Vector3d currentPosition) {
+    private boolean shouldTargetNextNodeInDirection(Vec3 currentPosition) {
         if (this.path.getNextNodeIndex() + 1 >= this.path.getNodeCount()) {
             return false;
         } else {
-            Vector3d nextNodePosition = Vector3d.atBottomCenterOf(this.path.getNextNodePos());
+            Vec3 nextNodePosition = Vec3.atBottomCenterOf(this.path.getNextNodePos());
             if (!currentPosition.closerThan(nextNodePosition, 2.0D)) {
                 return false;
             } else {
-                Vector3d next_nextPos = Vector3d.atBottomCenterOf(this.path.getNodePos(this.path.getNextNodeIndex() + 1));
-                Vector3d deltaPos = next_nextPos.subtract(nextNodePosition);
-                Vector3d vector3d3 = currentPosition.subtract(nextNodePosition);
+                Vec3 next_nextPos = Vec3.atBottomCenterOf(this.path.getNodePos(this.path.getNextNodeIndex() + 1));
+                Vec3 deltaPos = next_nextPos.subtract(nextNodePosition);
+                Vec3 vector3d3 = currentPosition.subtract(nextNodePosition);
                 double result = deltaPos.dot(vector3d3);
                 return result > 0.0D;
             }
@@ -90,13 +96,13 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
         return new PathFinder(this.nodeEvaluator, p_179679_1_);
     }
 
-    protected boolean hasValidPathType(PathNodeType p_230287_1_) {
-        if (p_230287_1_ == PathNodeType.WATER) {
+    protected boolean hasValidPathType(BlockPathTypes p_230287_1_) {
+        if (p_230287_1_ == BlockPathTypes.WATER) {
             return true;
-        } else if (p_230287_1_ == PathNodeType.LAVA) {
+        } else if (p_230287_1_ == BlockPathTypes.LAVA) {
             return false;
         } else {
-            return p_230287_1_ != PathNodeType.OPEN;
+            return p_230287_1_ != BlockPathTypes.OPEN;
         }
     }
 

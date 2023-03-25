@@ -2,19 +2,19 @@ package com.yor42.projectazure.gameobject.crafting.recipes;
 
 import com.yor42.projectazure.gameobject.items.tools.ItemSyringe;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.PotionItem;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.TRANSFERPOTION;
 
-public class TransferPotiontoSyringeRecipe extends SpecialRecipe {
+public class TransferPotiontoSyringeRecipe extends CustomRecipe {
 
     private ItemStack syringetofill = ItemStack.EMPTY;
     private ItemStack targetpotion = ItemStack.EMPTY;
@@ -25,7 +25,7 @@ public class TransferPotiontoSyringeRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World p_77569_2_) {
+    public boolean matches(CraftingContainer inv, Level p_77569_2_) {
         this.syringetofill=ItemStack.EMPTY;
         this.targetpotion = ItemStack.EMPTY;
         for(int i=0;i<inv.getContainerSize(); i++){
@@ -46,7 +46,7 @@ public class TransferPotiontoSyringeRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack syringe = this.syringetofill.copy();
         PotionUtils.setPotion(syringe, PotionUtils.getPotion(this.targetpotion));
         return syringe;
@@ -58,7 +58,7 @@ public class TransferPotiontoSyringeRecipe extends SpecialRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return TRANSFERPOTION.get();
     }
 }

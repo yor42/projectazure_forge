@@ -1,45 +1,47 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ModSwordItem extends SwordItem {
 
     private final boolean isLimitedtoOwner;
 
-    public ModSwordItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn) {
+    public ModSwordItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn) {
         this(tier, attackDamageIn, attackSpeedIn, false, builderIn);
     }
 
-    public ModSwordItem(IItemTier tier, int attackDamageIn, float attackSpeedIn,boolean isLimitedtoOwner, Properties builderIn) {
+    public ModSwordItem(Tier tier, int attackDamageIn, float attackSpeedIn,boolean isLimitedtoOwner, Properties builderIn) {
         super(tier, attackDamageIn, attackSpeedIn, builderIn);
         this.isLimitedtoOwner = isLimitedtoOwner;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int p_77663_4_, boolean p_77663_5_) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int p_77663_4_, boolean p_77663_5_) {
         super.inventoryTick(stack, world, entity, p_77663_4_, p_77663_5_);
 
-        CompoundNBT compound = stack.getOrCreateTag();
+        CompoundTag compound = stack.getOrCreateTag();
         if(compound.contains("owner") && this.isLimitedtoOwner){
             UUID owner = compound.getUUID("owner");
             if(!entity.getUUID().equals(owner)){

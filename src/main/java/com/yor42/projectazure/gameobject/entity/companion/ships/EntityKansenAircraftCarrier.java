@@ -2,18 +2,18 @@ package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getPlaneFuel;
 
 public abstract class EntityKansenAircraftCarrier extends EntityKansenBase {
-    protected EntityKansenAircraftCarrier(EntityType<? extends TameableEntity> type, World worldIn) {
+    protected EntityKansenAircraftCarrier(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
         this.setShipClass(enums.shipClass.AircraftCarrier);
     }

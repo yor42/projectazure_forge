@@ -11,20 +11,20 @@ import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -41,7 +41,7 @@ import static com.yor42.projectazure.gameobject.blocks.machines.RecruitBeaconBlo
 import static com.yor42.projectazure.libs.utils.MathUtil.getRandomBlockposInRadius2D;
 
 public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -130,7 +130,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    protected void SpawnResultEntity(ServerPlayerEntity owner) {
+    protected void SpawnResultEntity(ServerPlayer owner) {
 
         boolean worldReady = this.level != null && !this.level.isClientSide();
         boolean EntityTypeNotNull = this.RollResult != null;
@@ -156,8 +156,8 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
             BlockPos blockpos;
             if(!isDupe) {
                 //Special spawn mechanism for when sunlight is lava. probably Spawning In cave
-                if (SolarApocalypse.isSunlightDangerous((ServerWorld) this.level)) {
-                    BlockPos.Mutable CandidatePos = this.worldPosition.mutable();
+                if (SolarApocalypse.isSunlightDangerous((ServerLevel) this.level)) {
+                    BlockPos.MutableBlockPos CandidatePos = this.worldPosition.mutable();
                     CandidatePos = CandidatePos.move(this.level.getBlockState(this.worldPosition).getValue(FACING));
                     blockpos = CandidatePos;
                 } else {
@@ -174,7 +174,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         }
     }
 
-    public void spawnEntity(BlockPos pos, ServerPlayerEntity owner, boolean spawn_sitting){
+    public void spawnEntity(BlockPos pos, ServerPlayer owner, boolean spawn_sitting){
         if(this.level != null) {
             AbstractEntityCompanion entityCompanion = this.RollResult.create(this.level);
             if (entityCompanion != null) {
@@ -200,7 +200,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+    protected <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         return PlayState.STOP;
     }
 
@@ -210,7 +210,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    public void encodeExtraData(PacketBuffer buffer) {
+    public void encodeExtraData(FriendlyByteBuf buffer) {
         int[] var = {this.ProcessTime, this.totalProcessTime, this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored(), this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ()};
         buffer.writeVarIntArray(var);
     }
@@ -255,17 +255,17 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         }
     }
 
-    public IIntArray getFields(){
+    public ContainerData getFields(){
         return this.fields;
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("recruit_beacon");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("recruit_beacon");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new ContainerRecruitBeacon(id, player, this.inventory, this.getFields());
     }
 }

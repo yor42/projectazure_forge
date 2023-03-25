@@ -1,13 +1,13 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.setup.register.RegisterContainer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.ItemStackHandler;
@@ -15,13 +15,13 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class ContainerBasicChemicalReactor extends Container {
+public class ContainerBasicChemicalReactor extends AbstractContainerMenu {
 
-    private final IIntArray field;
+    private final ContainerData field;
     private final FluidStack outputtank;
 
-    public ContainerBasicChemicalReactor(int id, PlayerInventory inventory, PacketBuffer buffer){
-        this(id, inventory, new ItemStackHandler(3), new IIntArray() {
+    public ContainerBasicChemicalReactor(int id, Inventory inventory, FriendlyByteBuf buffer){
+        this(id, inventory, new ItemStackHandler(3), new ContainerData() {
 
             final int[] values = buffer.readVarIntArray();
 
@@ -42,7 +42,7 @@ public class ContainerBasicChemicalReactor extends Container {
         }, buffer.readFluidStack());
     }
 
-    public ContainerBasicChemicalReactor(int id, PlayerInventory inventory, ItemStackHandler itemStackHandler, IIntArray fields, FluidStack outputtank) {
+    public ContainerBasicChemicalReactor(int id, Inventory inventory, ItemStackHandler itemStackHandler, ContainerData fields, FluidStack outputtank) {
         super(RegisterContainer.BASICCCHEMICALREACTOR.get(), id);
 
         this.field = fields;
@@ -68,12 +68,12 @@ public class ContainerBasicChemicalReactor extends Container {
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity p_75145_1_) {
+    public boolean stillValid(@Nonnull Player p_75145_1_) {
         return true;
     }
 
     @Nonnull
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack CopyofStackinSlot = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

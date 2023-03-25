@@ -3,18 +3,18 @@ package com.yor42.projectazure.gameobject.entity.ai.sensor;
 import com.google.common.collect.ImmutableSet;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.util.Mth;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -24,20 +24,20 @@ import java.util.stream.Collectors;
 
 public class EntitySensor extends Sensor<AbstractEntityCompanion> {
     @Override
-    protected void doTick(ServerWorld world, AbstractEntityCompanion entity) {
-        AxisAlignedBB axisalignedbb = entity.getBoundingBox().inflate(16.0D, 16.0D, 16.0D);
+    protected void doTick(ServerLevel world, AbstractEntityCompanion entity) {
+        AABB axisalignedbb = entity.getBoundingBox().inflate(16.0D, 16.0D, 16.0D);
         List<Entity> entitylist = world.getEntitiesOfClass(Entity.class, axisalignedbb, (candidate) -> {
             if (candidate instanceof LivingEntity) {
                 if (candidate != entity && candidate.isAlive()) {
-                    if (candidate instanceof TameableEntity) {
+                    if (candidate instanceof TamableAnimal) {
                         if (entity.getOwner() != null) {
-                            return ((TameableEntity) candidate).isOwnedBy(entity.getOwner());
+                            return ((TamableAnimal) candidate).isOwnedBy(entity.getOwner());
                         }
                     }
                     return entity.isOwnedBy((LivingEntity) candidate);
                 }
             }
-            return candidate instanceof BoatEntity || candidate instanceof MonsterEntity;
+            return candidate instanceof Boat || candidate instanceof Monster;
         });
         Brain<?> brain = entity.getBrain();
 
@@ -53,14 +53,14 @@ public class EntitySensor extends Sensor<AbstractEntityCompanion> {
 
         //B O A T E M
         entitylist.sort(Comparator.comparingDouble(entity::distanceToSqr));
-        entitylist.stream().filter((etr)->etr instanceof BoatEntity).map(BoatEntity.class::cast).findFirst().ifPresent((boat)->brain.setMemory(RegisterAI.NEAREST_BOAT.get(), boat));
+        entitylist.stream().filter((etr)->etr instanceof Boat).map(Boat.class::cast).findFirst().ifPresent((boat)->brain.setMemory(RegisterAI.NEAREST_BOAT.get(), boat));
 
         List<LivingEntity> list = entitylist.stream().filter((etr)->etr instanceof LivingEntity).map(LivingEntity.class::cast).collect(Collectors.toList());
         brain.setMemory(RegisterAI.NEARBY_ALLYS.get(), list);
-        EntityPredicate TARGET_CONDITIONS = (new EntityPredicate()).range(16.0D).allowSameTeam().allowNonAttackable().selector((ety)->entity.getSensing().canSee(ety));
+        TargetingConditions TARGET_CONDITIONS = (new TargetingConditions()).range(16.0D).allowSameTeam().allowNonAttackable().selector((ety)->entity.getSensing().canSee(ety));
 
         //HOSTILE
-        List<LivingEntity> hostiles = entitylist.stream().filter((etr)->etr instanceof MonsterEntity).map(LivingEntity.class::cast).collect(Collectors.toList());
+        List<LivingEntity> hostiles = entitylist.stream().filter((etr)->etr instanceof Monster).map(LivingEntity.class::cast).collect(Collectors.toList());
         brain.setMemory(RegisterAI.NEARBY_HOSTILES.get(), hostiles);
         brain.setMemory(MemoryModuleType.NEAREST_HOSTILE, hostiles.stream().min((p_220986_2_, p_220986_3_) -> this.compareMobDistance(entity, p_220986_2_, p_220986_3_)));
         List<LivingEntity> enemies = hostiles.stream().filter((p_220981_1_) -> TARGET_CONDITIONS.test(entity, p_220981_1_)).collect(Collectors.toList());
@@ -81,7 +81,7 @@ public class EntitySensor extends Sensor<AbstractEntityCompanion> {
     }
 
     private int compareMobDistance(LivingEntity p_220983_1_, LivingEntity p_220983_2_, LivingEntity p_220983_3_) {
-        return MathHelper.floor(p_220983_2_.distanceToSqr(p_220983_1_) - p_220983_3_.distanceToSqr(p_220983_1_));
+        return Mth.floor(p_220983_2_.distanceToSqr(p_220983_1_) - p_220983_3_.distanceToSqr(p_220983_1_));
     }
 
     @Nonnull

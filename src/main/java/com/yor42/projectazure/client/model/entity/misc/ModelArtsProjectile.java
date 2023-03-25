@@ -3,22 +3,22 @@ package com.yor42.projectazure.client.model.entity.misc;// Made with Blockbench 
 // Paste this class into your mod and generate all required imports
 
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
 
 import javax.annotation.Nonnull;
 
 public class ModelArtsProjectile extends EntityModel<EntityArtsProjectile> {
-	private final ModelRenderer bone;
+	private final ModelPart bone;
 
 	public ModelArtsProjectile() {
 		texWidth = 32;
 		texHeight = 32;
 
-		bone = new ModelRenderer(this);
+		bone = new ModelPart(this);
 		bone.setPos(0.0F, 4.0F, 0.0F);
 		bone.texOffs(0, 0).addBox(-2.5F, -2.5F, -1.5F, 5.0F, 5.0F, 7.0F, 0.0F, false);
 		bone.texOffs(12, 12).addBox(-1.0F, -1.0F, -5.5F, 2.0F, 2.0F, 2.0F, 0.0F, false);
@@ -33,11 +33,11 @@ public class ModelArtsProjectile extends EntityModel<EntityArtsProjectile> {
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		bone.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+	public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
 		modelRenderer.xRot = x;
 		modelRenderer.yRot = y;
 		modelRenderer.zRot = z;

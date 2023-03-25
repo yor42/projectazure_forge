@@ -15,8 +15,8 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayCon
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipelogics.RiftwayRecipeLogic;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -88,7 +88,7 @@ public class RiftwayRecipePage extends PageWidget {
     }
 
     @Override
-    public void writeInitialData(PacketBuffer buffer) {
+    public void writeInitialData(FriendlyByteBuf buffer) {
         super.writeInitialData(buffer);
         detectAndSendChanges();
         writeRecipe(buffer);
@@ -96,7 +96,7 @@ public class RiftwayRecipePage extends PageWidget {
     }
 
     @Override
-    public void readInitialData(PacketBuffer buffer) {
+    public void readInitialData(FriendlyByteBuf buffer) {
         super.readInitialData(buffer);
         readRecipe(buffer);
         readStatus(buffer);
@@ -122,19 +122,19 @@ public class RiftwayRecipePage extends PageWidget {
         }
     }
 
-    private void writeStatus(PacketBuffer buffer) {
+    private void writeStatus(FriendlyByteBuf buffer) {
         buffer.writeEnum(status);
         buffer.writeVarInt(progress);
         buffer.writeVarInt(fuelTime);
     }
 
-    private void readStatus(PacketBuffer buffer) {
+    private void readStatus(FriendlyByteBuf buffer) {
         status = buffer.readEnum(RecipeLogic.Status.class);
         progress = buffer.readVarInt();
         fuelTime = buffer.readVarInt();
     }
 
-    private void writeRecipe(PacketBuffer buffer) {
+    private void writeRecipe(FriendlyByteBuf buffer) {
         if (recipe == null) {
             buffer.writeBoolean(false);
         }
@@ -144,7 +144,7 @@ public class RiftwayRecipePage extends PageWidget {
         }
     }
 
-    private void readRecipe(PacketBuffer buffer) {
+    private void readRecipe(FriendlyByteBuf buffer) {
         if (buffer.readBoolean()) {
             RecipeMap recipeMap = controller.getDefinition().getRecipeMap();
             recipe = recipeMap.recipes.get(buffer.readUtf());
@@ -177,7 +177,7 @@ public class RiftwayRecipePage extends PageWidget {
     }
 
     @Override
-    public void readUpdateInfo(int id, PacketBuffer buffer) {
+    public void readUpdateInfo(int id, FriendlyByteBuf buffer) {
         if (id == -1) {
             readRecipe(buffer);
         } else if (id == -2) {

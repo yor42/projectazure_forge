@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.model.planes;
 
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;

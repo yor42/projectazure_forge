@@ -2,24 +2,24 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.brain.BrainUtil;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.RIDE_TARGET;
 
-public class CompanionStartRidingTask extends Task<AbstractEntityCompanion> {
+public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypentityCompanion> {
     public CompanionStartRidingTask() {
-        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryModuleStatus.REGISTERED, RIDE_TARGET, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, RIDE_TARGET, MemoryStatus.VALUE_PRESENT));
     }
 
-    protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion p_212832_2_) {
+    protected boolean checkExtraStartConditions(ServerLevel p_212832_1_, AbstractEntityCompanion p_212832_2_) {
         if(p_212832_2_.isCriticallyInjured()){
             return false;
         }
@@ -27,10 +27,10 @@ public class CompanionStartRidingTask extends Task<AbstractEntityCompanion> {
         return !p_212832_2_.isPassenger();
     }
 
-    protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
+    protected void start(ServerLevel p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
         AtomicBoolean cancelled = new AtomicBoolean(false);
         entity.getBrain().getMemory(RIDE_TARGET).ifPresent((target) -> {
-            if(target instanceof BoatEntity && target.getPassengers().size()==2 || !(target instanceof BoatEntity) && !target.getPassengers().isEmpty()){
+            if(target instanceof Boat && target.getPassengers().size()==2 || !(target instanceof Boat) && !target.getPassengers().isEmpty()){
                 entity.getBrain().eraseMemory(RIDE_TARGET);
                 cancelled.set(true);
             }
@@ -42,7 +42,7 @@ public class CompanionStartRidingTask extends Task<AbstractEntityCompanion> {
                     entity.getBrain().eraseMemory(RIDE_TARGET);
                 }
             } else {
-                BrainUtil.setWalkAndLookTargetMemories(entity, this.getRidableEntity(entity), 1, 1);
+                BehaviorUtils.setWalkAndLookTargetMemories(entity, this.getRidableEntity(entity), 1, 1);
             }
         }
     }

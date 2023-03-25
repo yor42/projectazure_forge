@@ -3,25 +3,25 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.ISpellUser;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.BrainUtil;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.*;
 
-public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion> {
+public class CompanionSpellRangedAttackTask extends Behavior<AbstractEntityCompanion> {
     public CompanionSpellRangedAttackTask() {
-        super(ImmutableMap.of(LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryModuleStatus.VALUE_PRESENT), 1200);
+        super(ImmutableMap.of(LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
     }
 
     @Override
-    protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, @Nonnull AbstractEntityCompanion p_212832_2_) {
+    protected boolean checkExtraStartConditions(@Nonnull ServerLevel p_212832_1_, @Nonnull AbstractEntityCompanion p_212832_2_) {
         LivingEntity target = getAttackTarget(p_212832_2_);
 
         if(!(p_212832_2_ instanceof  ISpellUser)){
@@ -35,16 +35,16 @@ public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion
         if(!p_212832_2_.wantsToAttack(target, p_212832_2_)){
             return false;
         }
-        boolean flag = ((ISpellUser) p_212832_2_).shouldUseSpell(target) && p_212832_2_.RangedAttackCoolDown<=0 && BrainUtil.canSee(p_212832_2_, target);
+        boolean flag = ((ISpellUser) p_212832_2_).shouldUseSpell(target) && p_212832_2_.RangedAttackCoolDown<=0 && BehaviorUtils.canSee(p_212832_2_, target);
         return flag && !p_212832_2_.isUsingSpell();
     }
 
     @Override
-    protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion entity, long p_212831_3_) {
+    protected void start(@Nonnull ServerLevel p_212831_1_, @Nonnull AbstractEntityCompanion entity, long p_212831_3_) {
         LivingEntity target = getAttackTarget(entity);
         if (entity instanceof ISpellUser) {
             if(!entity.closerThan(target, entity.getSpellRange())){
-                BrainUtil.setWalkAndLookTargetMemories(entity, target, 1, (int) (entity.getSpellRange()-2));
+                BehaviorUtils.setWalkAndLookTargetMemories(entity, target, 1, (int) (entity.getSpellRange()-2));
             }
             else {
                 this.clearWalkTarget(entity);
@@ -57,7 +57,7 @@ public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion
     }
 
     @Override
-    protected boolean canStillUse(ServerWorld p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
+    protected boolean canStillUse(ServerLevel p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
         if(!p_212834_2_.getBrain().hasMemoryValue(ATTACK_TARGET) || getAttackTarget(p_212834_2_).isDeadOrDying()){
             return false;
         }
@@ -67,7 +67,7 @@ public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion
     }
 
     @Override
-    protected void tick(ServerWorld p_212833_1_, AbstractEntityCompanion p_212833_2_, long p_212833_3_) {
+    protected void tick(ServerLevel p_212833_1_, AbstractEntityCompanion p_212833_2_, long p_212833_3_) {
         p_212833_2_.getBrain().eraseMemory(WALK_TARGET);
         if(p_212833_2_.isSprinting()){
             p_212833_2_.setSprinting(false);
@@ -84,7 +84,7 @@ public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion
     }
 
     @Override
-    protected void stop(ServerWorld p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
+    protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
         p_212835_2_.setSpellDelay(0);
         super.stop(p_212835_1_, p_212835_2_, p_212835_3_);
     }

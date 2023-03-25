@@ -2,13 +2,20 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemCannonshell extends ItemBaseTooltip {
     private final AmmoProperties properties;
@@ -27,29 +34,29 @@ public class ItemCannonshell extends ItemBaseTooltip {
     }
 
     @Override
-    public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         AmmoProperties properties = this.properties;
         super.addInformationAfterShift(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new StringTextComponent("----------"));
-        tooltip.add(new TranslationTextComponent("tooltip.shell.hitchance").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(properties.getRawhitChance() * 100 +"%").withStyle(TextFormatting.DARK_GREEN)));
-        tooltip.add(new TranslationTextComponent("tooltip.shell.riggingdamage").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(String.valueOf(properties.getRawRiggingDamage())).withStyle(TextFormatting.DARK_GREEN)));
-        tooltip.add(new TranslationTextComponent("tooltip.shell.componentdamage").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(String.valueOf(properties.getRawEntityDamage())).withStyle(TextFormatting.DARK_GREEN)));
-        tooltip.add(new TranslationTextComponent("tooltip.shell.entitydamage").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(String.valueOf(properties.getRawEntityDamage())).withStyle(TextFormatting.DARK_GREEN)));
-        tooltip.add(new TranslationTextComponent("tooltip.shell.minimumdamagepercentage").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(properties.getRawDamageModifer()*100 +"%").withStyle(TextFormatting.DARK_GREEN)));
+        tooltip.add(new TextComponent("----------"));
+        tooltip.add(new TranslatableComponent("tooltip.shell.hitchance").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(properties.getRawhitChance() * 100 +"%").withStyle(ChatFormatting.DARK_GREEN)));
+        tooltip.add(new TranslatableComponent("tooltip.shell.riggingdamage").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(String.valueOf(properties.getRawRiggingDamage())).withStyle(ChatFormatting.DARK_GREEN)));
+        tooltip.add(new TranslatableComponent("tooltip.shell.componentdamage").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(String.valueOf(properties.getRawEntityDamage())).withStyle(ChatFormatting.DARK_GREEN)));
+        tooltip.add(new TranslatableComponent("tooltip.shell.entitydamage").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(String.valueOf(properties.getRawEntityDamage())).withStyle(ChatFormatting.DARK_GREEN)));
+        tooltip.add(new TranslatableComponent("tooltip.shell.minimumdamagepercentage").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(properties.getRawDamageModifer()*100 +"%").withStyle(ChatFormatting.DARK_GREEN)));
 
-        IFormattableTextComponent component = new TranslationTextComponent("tooltip.shell.specialeffect").append(": ").withStyle(TextFormatting.GRAY);
+        MutableComponent component = new TranslatableComponent("tooltip.shell.specialeffect").append(": ").withStyle(ChatFormatting.GRAY);
         if(properties.isFiery()){
-            component.append(new TranslationTextComponent("tooltip.shell.incendiary").withStyle(TextFormatting.DARK_RED).withStyle(TextFormatting.BOLD));
+            component.append(new TranslatableComponent("tooltip.shell.incendiary").withStyle(ChatFormatting.DARK_RED).withStyle(ChatFormatting.BOLD));
             if(properties.isExplosive()){
-                component.append(", ").append(new TranslationTextComponent("tooltip.shell.explosive").withStyle(TextFormatting.AQUA).withStyle(TextFormatting.BOLD));
+                component.append(", ").append(new TranslatableComponent("tooltip.shell.explosive").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.BOLD));
             }
         }
         else{
             if(properties.isExplosive()){
-                component.append(new TranslationTextComponent("tooltip.shell.explosive").withStyle(TextFormatting.AQUA).withStyle(TextFormatting.BOLD));
+                component.append(new TranslatableComponent("tooltip.shell.explosive").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.BOLD));
             }
             else{
-                component.append(new TranslationTextComponent("tooltip.shell.none").withStyle(TextFormatting.DARK_GRAY));
+                component.append(new TranslatableComponent("tooltip.shell.none").withStyle(ChatFormatting.DARK_GRAY));
             }
         }
 

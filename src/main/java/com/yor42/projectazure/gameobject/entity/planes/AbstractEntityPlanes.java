@@ -10,21 +10,21 @@ import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAirc
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.controller.BodyController;
-import net.minecraft.entity.ai.controller.LookController;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.ai.control.BodyRotationControl;
+import net.minecraft.world.entity.ai.control.LookControl;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -42,11 +42,17 @@ import java.util.EnumSet;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.serializePlane;
 
-public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnimatable {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.FlyingMob;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+
+public abstract class AbstractEntityPlanes extends FlyingMob implements IAnimatable {
 
     private AbstractEntityCompanion owner;
     private boolean hasPayloads;
-    public Vector3d moveTargetPoint = Vector3d.ZERO;
+    public Vec3 moveTargetPoint = Vec3.ZERO;
     public BlockPos anchorPoint = BlockPos.ZERO;
     public PlaneStatus planestatus = PlaneStatus.ATTACKING;
     private int maxOperativetime;
@@ -54,20 +60,20 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
     protected float attackdamage;
     private final boolean hasRadar;
 
-    protected AbstractEntityPlanes(EntityType<? extends FlyingEntity> type, World worldIn) {
+    protected AbstractEntityPlanes(EntityType<? extends FlyingMob> type, Level worldIn) {
         super(type, worldIn);
         this.lookControl = new LookHelperController(this);
         this.moveControl = new PlaneFlyMovementController(this, 20, true);
-        this.navigation = new FlyingPathNavigator(this, worldIn);
+        this.navigation = new FlyingPathNavigation(this, worldIn);
         this.isLifeLimited = false;
         this.hasRadar = false;
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
         this.attackdamage = this.getPlaneItem().getAttackDamage();
     }
 
     @Nonnull
-    protected BodyController createBodyControl() {
+    protected BodyRotationControl createBodyControl() {
         return new BodyHelperController(this);
     }
 
@@ -128,7 +134,7 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
         this.setNoGravity(this.isAlive());
         //in water = crash
         if(this.isInWater()){
-            this.level.explode(this, this.getX(), getY(), getZ(), 0.5F, Explosion.Mode.DESTROY);
+            this.level.explode(this, this.getX(), getY(), getZ(), 0.5F, Explosion.BlockInteraction.DESTROY);
             this.remove();
         }
         if(this.isLimitedLifespan()) {
@@ -208,14 +214,14 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
 
     @Override
     protected void tickDeath() {
-        Vector3d movement = this.getDeltaMovement();
+        Vec3 movement = this.getDeltaMovement();
         double d0 = this.getX() + movement.x;
         double d1 = this.getY() + movement.y;
         double d2 = this.getZ() + movement.z;
         this.level.addParticle(ParticleTypes.SMOKE, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
 
         if(this.isOnGround() || isInWater()) {
-            this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, Explosion.Mode.DESTROY);
+            this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, Explosion.BlockInteraction.DESTROY);
             this.remove();
         }
 
@@ -242,9 +248,9 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
 
             this.dead = true;
             this.getCombatTracker().recheckStatus();
-            if (this.level instanceof ServerWorld) {
+            if (this.level instanceof ServerLevel) {
                 if (entity != null) {
-                    entity.killed((ServerWorld) this.level, this);
+                    entity.killed((ServerLevel) this.level, this);
                 }
             }
 
@@ -259,7 +265,7 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
 
     @Nonnull
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -351,7 +357,7 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
             }
 
             this.angle += this.clockwise * 15.0F * ((float)Math.PI / 180F);
-            Vector3d pos = Vector3d.atLowerCornerOf(AbstractEntityPlanes.this.anchorPoint).add(this.distance * MathHelper.cos(this.angle), -4.0F + this.height, this.distance * MathHelper.sin(this.angle));
+            Vec3 pos = Vec3.atLowerCornerOf(AbstractEntityPlanes.this.anchorPoint).add(this.distance * Mth.cos(this.angle), -4.0F + this.height, this.distance * Mth.sin(this.angle));
             AbstractEntityPlanes.this.getNavigation().moveTo(pos.x, pos.y, pos.z, 1);
         }
 
@@ -382,8 +388,8 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
         }
     }
 
-    class BodyHelperController extends BodyController {
-        public BodyHelperController(MobEntity p_i49925_2_) {
+    class BodyHelperController extends BodyRotationControl {
+        public BodyHelperController(Mob p_i49925_2_) {
             super(p_i49925_2_);
         }
 
@@ -393,8 +399,8 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
         }
     }
 
-    static class LookHelperController extends LookController {
-        public LookHelperController(MobEntity p_i48802_2_) {
+    static class LookHelperController extends LookControl {
+        public LookHelperController(Mob p_i48802_2_) {
             super(p_i48802_2_);
         }
 

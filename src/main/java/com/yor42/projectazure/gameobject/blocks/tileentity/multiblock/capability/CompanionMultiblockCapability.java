@@ -21,16 +21,16 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.Ri
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,7 +54,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
     }
 
     @Override
-    public boolean isBlockHasCapability(@Nonnull IO io, @Nonnull TileEntity tileEntity) {
+    public boolean isBlockHasCapability(@Nonnull IO io, @Nonnull BlockEntity tileEntity) {
         if (tileEntity instanceof ComponentTileEntity) {
             return ((ComponentTileEntity<?>) tileEntity).hasTrait(CAP);
         }
@@ -72,7 +72,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
     }
 
     @Override
-    protected CapabilityProxy<? extends EntityIngredient> createProxy(@Nonnull IO io, @Nonnull TileEntity tileEntity) {
+    protected CapabilityProxy<? extends EntityIngredient> createProxy(@Nonnull IO io, @Nonnull BlockEntity tileEntity) {
         return new EntityCapabilityProxy(tileEntity);
     }
 
@@ -110,18 +110,18 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
 
     public static class EntityCapabilityProxy extends CapabilityProxy<EntityIngredient> {
 
-        public EntityCapabilityProxy(TileEntity tileEntity) {
+        public EntityCapabilityProxy(BlockEntity tileEntity) {
             super(CompanionMultiblockCapability.CAP, tileEntity);
         }
 
         @Override
         protected List<EntityIngredient> handleRecipeInner(IO io, Recipe recipe, List<EntityIngredient> left, @Nullable String slotName, boolean simulate) {
-            TileEntity tileEntity =getTileEntity();
+            BlockEntity tileEntity =getTileEntity();
             if (tileEntity instanceof ComponentTileEntity) {
                 ComponentTileEntity<?> component = (ComponentTileEntity<?>) tileEntity;
                 BlockPos pos = component.getBlockPos().relative(component.getFrontFacing());
                 if (io == IO.IN) {
-                    List<Entity> entities = component.getLevel().getEntities(null, new AxisAlignedBB(
+                    List<Entity> entities = component.getLevel().getEntities(null, new AABB(
                             pos,
                             pos.offset(1, 1, 1)));
                     for (Entity entity : entities) {
@@ -134,14 +134,14 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
                         }
                     }
                 } else if (io == IO.OUT){
-                    if (!simulate && component.getLevel() instanceof ServerWorld) {
-                        ServerWorld serverLevel = (ServerWorld) component.getLevel();
+                    if (!simulate && component.getLevel() instanceof ServerLevel) {
+                        ServerLevel serverLevel = (ServerLevel) component.getLevel();
                         if(recipe instanceof RiftwayRecipes) {
                             UUID playeruuid = ((RiftwayRecipes) recipe).getPlayerUUID();
                             if (playeruuid == null) {
                                 return null;
                             }
-                            PlayerEntity player = serverLevel.getPlayerByUUID(playeruuid);
+                            Player player = serverLevel.getPlayerByUUID(playeruuid);
                             ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability(player);
                             for (EntityIngredient ingredient : left) {
                                 Entity entity;
@@ -151,7 +151,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
                                     entity = new ItemEntity(serverLevel, pos.getX(), pos.getY(), pos.getZ(), stack);
                                 }
                                 else {
-                                    entity = ingredient.type.spawn(serverLevel, ingredient.tag, null, null, pos, SpawnReason.NATURAL, false, false);
+                                    entity = ingredient.type.spawn(serverLevel, ingredient.tag, null, null, pos, MobSpawnType.NATURAL, false, false);
                                 }
 
 
@@ -168,7 +168,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
                         }
                         else{
                             for (EntityIngredient ingredient : left) {
-                                Entity entity = ingredient.type.spawn(serverLevel, ingredient.tag, null, null, pos, SpawnReason.NATURAL, false, false);
+                                Entity entity = ingredient.type.spawn(serverLevel, ingredient.tag, null, null, pos, MobSpawnType.NATURAL, false, false);
                                 serverLevel.addFreshEntity(entity);
                             }
                         }
@@ -186,7 +186,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
             if (getTileEntity() instanceof ComponentTileEntity<?>) {
                 ComponentTileEntity<?> component = (ComponentTileEntity<?>) getTileEntity();
                 BlockPos pos = component.getBlockPos().relative(component.getFrontFacing());
-                List<Entity> entities = component.getLevel().getEntities(null, new AxisAlignedBB(
+                List<Entity> entities = component.getLevel().getEntities(null, new AABB(
                         pos,
                         pos.offset(1, 1, 1)));
                 Set<Entity> temp = new HashSet<>();

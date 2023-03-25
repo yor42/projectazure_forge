@@ -6,23 +6,23 @@ import com.yor42.projectazure.libs.utils.BlockUtil;
 import com.yor42.projectazure.setup.register.RegisterFluids;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 import static com.yor42.projectazure.libs.utils.FluidPredicates.*;
 
-public class TileEntityBasicRefinery extends LockableTileEntity implements INamedContainerProvider, IRecipeHelperPopulator, ITickableTileEntity {
+public class TileEntityBasicRefinery extends BaseContainerBlockEntity implements MenuProvider, StackedContentsCompatible, TickableBlockEntity {
 
 
     private int burnTime = 0;
@@ -57,7 +57,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
     private final int[] FieldArray = {this.burnTime,this.totalBurntime,this.CrudeOilTank.getFluidAmount(), this.CrudeOilTank.getCapacity(),this.GasolineTank.getFluidAmount(), this.GasolineTank.getCapacity(),this.DieselTank.getFluidAmount(),this.DieselTank.getCapacity(),this.FuelOilTank.getFluidAmount(),this.FuelOilTank.getCapacity(), this.isActive};
 
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch(index){
@@ -118,7 +118,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                 }
             }
             else if(slot == 9){
-                return ForgeHooks.getBurnTime(stack, IRecipeType.SMELTING)>0;
+                return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING)>0;
             }
             return false;
         }
@@ -130,12 +130,12 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("tileentity.basic_refinery.name");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("tileentity.basic_refinery.name");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new ContainerBasicRefinery(id, player, this.ITEMHANDLER, this.fields, this.CrudeOilTank.getFluid(), this.GasolineTank.getFluid(), this.DieselTank.getFluid(), this.FuelOilTank.getFluid());
     }
 
@@ -179,7 +179,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity) {
+    public boolean stillValid(Player playerEntity) {
         return true;
     }
 
@@ -191,7 +191,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public void fillStackedContents(RecipeItemHelper recipeItemHelper) {
+    public void fillStackedContents(StackedContents recipeItemHelper) {
         for(int i=0;i<this.ITEMHANDLER.getSlots();i++) {
             recipeItemHelper.accountStack(this.ITEMHANDLER.getStackInSlot(i));
         }
@@ -271,7 +271,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                 ItemStack itemstack = this.ITEMHANDLER.getStackInSlot(9);
                 if(this.isBurning() || this.CrudeOilTank.getFluidAmount()>100 && !itemstack.isEmpty()){
                     if (!this.isBurning() && this.CrudeOilTank.getFluidAmount()>100) {
-                        this.burnTime = ForgeHooks.getBurnTime(itemstack, IRecipeType.SMELTING);
+                        this.burnTime = ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING);
                         this.totalBurntime = this.burnTime;
                         if (this.isBurning()) {
                             flag1 = true;
@@ -330,13 +330,13 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.put("inventory", this.ITEMHANDLER.serializeNBT());
-        compound.put("crudeoiltank", this.CrudeOilTank.writeToNBT(new CompoundNBT()));
-        compound.put("gasolinetank", this.GasolineTank.writeToNBT(new CompoundNBT()));
-        compound.put("dieseltank", this.DieselTank.writeToNBT(new CompoundNBT()));
-        compound.put("fueloiltank", this.FuelOilTank.writeToNBT(new CompoundNBT()));
+        compound.put("crudeoiltank", this.CrudeOilTank.writeToNBT(new CompoundTag()));
+        compound.put("gasolinetank", this.GasolineTank.writeToNBT(new CompoundTag()));
+        compound.put("dieseltank", this.DieselTank.writeToNBT(new CompoundTag()));
+        compound.put("fueloiltank", this.FuelOilTank.writeToNBT(new CompoundTag()));
         compound.putInt("bitumentick", this.bitumentick);
         compound.putInt("totalburntime", this.totalBurntime);
         compound.putInt("burntime", this.burnTime);
@@ -345,7 +345,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public void load(BlockState p_230337_1_, CompoundNBT compound) {
+    public void load(BlockState p_230337_1_, CompoundTag compound) {
         super.load(p_230337_1_, compound);
         this.ITEMHANDLER.deserializeNBT(compound.getCompound("inventory"));
         this.CrudeOilTank.readFromNBT(compound.getCompound("crudeoiltank"));
@@ -358,7 +358,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         this.isActive = compound.getInt("activestate");
     }
 
-    public void encodeExtraData(PacketBuffer buffer) {
+    public void encodeExtraData(FriendlyByteBuf buffer) {
         buffer.writeVarIntArray(this.FieldArray);
         buffer.writeFluidStack(this.CrudeOilTank.getFluid());
         buffer.writeFluidStack(this.GasolineTank.getFluid());

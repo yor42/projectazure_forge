@@ -1,13 +1,13 @@
 package com.yor42.projectazure.libs.utils;
 
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.state.properties.BedPart;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -119,7 +119,7 @@ public class BlockUtil {
     }
 
     @Nonnull
-    public static Optional<BlockPos> getBedHeadPos(@Nonnull IWorldReader world, @Nonnull BlockPos Bedpos, @Nullable LivingEntity sleeper){
+    public static Optional<BlockPos> getBedHeadPos(@Nonnull LevelReader world, @Nonnull BlockPos Bedpos, @Nullable LivingEntity sleeper){
         BlockState state = world.getBlockState(Bedpos);
         if(state.isBed(world, Bedpos, sleeper)){
             Block block = state.getBlock();
@@ -131,7 +131,7 @@ public class BlockUtil {
         }
     }
 
-    public static Optional<BlockPos> getAvailableBedPos(@Nonnull IWorldReader world, @Nonnull BlockPos Bedpos, @Nullable LivingEntity sleeper){
+    public static Optional<BlockPos> getAvailableBedPos(@Nonnull LevelReader world, @Nonnull BlockPos Bedpos, @Nullable LivingEntity sleeper){
         return getBedHeadPos(world, Bedpos, sleeper).map((pos)->{
             @Nullable
             BlockPos blockpos;

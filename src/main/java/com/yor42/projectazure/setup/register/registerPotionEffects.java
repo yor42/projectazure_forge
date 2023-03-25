@@ -2,12 +2,12 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class registerPotionEffects {
-    public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Constants.MODID);
-    public static RegistryObject<Effect> ACUTE_ORIPATHY_REGISTRY = EFFECTS.register("acute_oripathy", AcuteOripathyEffect::new);
+    public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Constants.MODID);
+    public static RegistryObject<MobEffect> ACUTE_ORIPATHY_REGISTRY = EFFECTS.register("acute_oripathy", AcuteOripathyEffect::new);
 
-    public static RegistryObject<Effect> FROSTBITE_REGISTRY = EFFECTS.register("frostbite", ()-> new FrostbiteEffect().addAttributeModifier(Attributes.MOVEMENT_SPEED, UUID.randomUUID().toString(), -0.11F, AttributeModifier.Operation.MULTIPLY_TOTAL));
+    public static RegistryObject<MobEffect> FROSTBITE_REGISTRY = EFFECTS.register("frostbite", ()-> new FrostbiteEffect().addAttributeModifier(Attributes.MOVEMENT_SPEED, UUID.randomUUID().toString(), -0.11F, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
-    public static class AcuteOripathyEffect extends Effect{
+    public static class AcuteOripathyEffect extends MobEffect{
 
         protected AcuteOripathyEffect() {
-            super(EffectType.HARMFUL, 0x8b4235);
+            super(MobEffectCategory.HARMFUL, 0x8b4235);
         }
 
         @Override
@@ -50,10 +50,10 @@ public class registerPotionEffects {
         }
     }
 
-    public static class FrostbiteEffect extends Effect{
+    public static class FrostbiteEffect extends MobEffect{
 
         protected FrostbiteEffect() {
-            super(EffectType.HARMFUL, 0xa5f2f3);
+            super(MobEffectCategory.HARMFUL, 0xa5f2f3);
         }
 
         @Override

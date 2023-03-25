@@ -1,11 +1,11 @@
 package com.yor42.projectazure.data.common;
 
-import net.minecraft.data.BlockTagsProvider;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
@@ -32,7 +32,7 @@ public class CuriosItemTagProvider extends ItemTagProvider {
         this.tag(curios(slottype.getIdentifier())).add(item);
     }
 
-    private static ITag.INamedTag<Item> curios(String path) {
+    private static Tag.Named<Item> curios(String path) {
         return ItemTags.bind(new ResourceLocation("curios", path).toString());
     }
 

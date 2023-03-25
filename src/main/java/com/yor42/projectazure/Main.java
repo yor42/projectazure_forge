@@ -30,12 +30,12 @@ import com.yor42.projectazure.setup.CrushingRecipeCache;
 import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -80,7 +80,7 @@ public class Main
     public static final Logger LOGGER = LogManager.getLogger();
     public static final SimpleChannel NETWORK = registerNetwork.getNetworkChannel();
     public static final CrushingRecipeCache CRUSHING_REGISTRY = new CrushingRecipeCache();
-    public static ItemGroup PA_GROUP = new ItemGroup(MODID) {
+    public static CreativeModeTab PA_GROUP = new CreativeModeTab(MODID) {
         @Nonnull
         @Override
         public ItemStack makeIcon() {
@@ -88,7 +88,7 @@ public class Main
         }
     };
 
-    public static ItemGroup PA_COMPANIONS = new ItemGroup("pa_ship") {
+    public static CreativeModeTab PA_COMPANIONS = new CreativeModeTab("pa_ship") {
         @Nonnull
         @Override
         public ItemStack makeIcon() {
@@ -96,7 +96,7 @@ public class Main
         }
     };
 
-    public static ItemGroup PA_RESOURCES = new ItemGroup("pa_resources") {
+    public static CreativeModeTab PA_RESOURCES = new CreativeModeTab("pa_resources") {
         @Nonnull
         @Override
         public ItemStack makeIcon() {
@@ -104,7 +104,7 @@ public class Main
         }
     };
 
-    public static ItemGroup PA_MACHINES = new ItemGroup("pa_machines") {
+    public static CreativeModeTab PA_MACHINES = new CreativeModeTab("pa_machines") {
         @Nonnull
         @Override
         public ItemStack makeIcon() {
@@ -112,7 +112,7 @@ public class Main
         }
     };
 
-    public static ItemGroup PA_WEAPONS = new ItemGroup("pa_weapons") {
+    public static CreativeModeTab PA_WEAPONS = new CreativeModeTab("pa_weapons") {
         @Nonnull
         @Override
         public ItemStack makeIcon() {
@@ -172,7 +172,7 @@ public class Main
     private static RecipeMap getRecipeFromJSON(ResourceLocation location) throws IOException {
         InputStream stream = Minecraft.getInstance().getResourceManager().getResource(location).getInputStream();
         InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-        RecipeMap map = JSONUtils.fromJson(Multiblocked.GSON, reader, RecipeMap.class);
+        RecipeMap map = GsonHelper.fromJson(Multiblocked.GSON, reader, RecipeMap.class);
         if (map != null) {
             return map;
         }

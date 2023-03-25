@@ -1,23 +1,23 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerCLSInventory;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> implements IHasContainer<ContainerCLSInventory> {
+public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> implements MenuAccess<ContainerCLSInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/closers_inventory.png");
 
-    public GuiCLSInventory(ContainerCLSInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
+    public GuiCLSInventory(ContainerCLSInventory p_i51105_1_, Inventory p_i51105_2_, Component p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
         this.imageWidth = 214;
         this.imageHeight = 202;
@@ -26,7 +26,7 @@ public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> im
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialticks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialticks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialticks);
         this.renderValues(matrixStack, mouseX, mouseY);
@@ -44,11 +44,11 @@ public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> im
     }
 
     @Override
-    protected void renderLabels(MatrixStack stack, int p_230451_2_, int p_230451_3_) {
+    protected void renderLabels(PoseStack stack, int p_230451_2_, int p_230451_3_) {
         stack.pushPose();
         this.font.draw(stack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 0xe3eef4);
         this.font.draw(stack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY, 0xe3eef4);
-        this.font.draw(stack, new TranslationTextComponent("gui.ammostorage.title"), this.imageWidth+6, 10, 16777215);
+        this.font.draw(stack, new TranslatableComponent("gui.ammostorage.title"), this.imageWidth+6, 10, 16777215);
         stack.popPose();
         stack.pushPose();
         stack.scale(0.75F, 0.75F, 0.75F);
@@ -62,7 +62,7 @@ public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> im
         stack.popPose();
     }
 
-    private void renderValues(MatrixStack matrixStack, int mouseX, int mouseY) {
+    private void renderValues(PoseStack matrixStack, int mouseX, int mouseY) {
         this.minecraft.getTextureManager().bind(TEXTURE);
         int health = ((int)(40*(this.host.getHealth()/this.host.getMaxHealth())));
         this.blit(matrixStack, this.leftPos+27,this.topPos+35, 18, 244, health, 6);
@@ -74,7 +74,7 @@ public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> im
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         matrixStack.pushPose();
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bind(TEXTURE);

@@ -2,7 +2,7 @@ package com.yor42.projectazure.client.model.armor;
 
 import com.yor42.projectazure.gameobject.items.GasMaskItem;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class GeoGasMaskModel extends AnimatedGeoModel<GasMaskItem> {

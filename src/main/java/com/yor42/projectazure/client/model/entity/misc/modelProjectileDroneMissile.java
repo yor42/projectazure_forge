@@ -3,20 +3,20 @@ package com.yor42.projectazure.client.model.entity.misc;// Made with Blockbench 
 // Paste this class into your mod and generate all required imports
 
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
 
 public class modelProjectileDroneMissile extends EntityModel<EntityMissileDroneMissile> {
-	private final ModelRenderer Body;
+	private final ModelPart Body;
 
 	public modelProjectileDroneMissile() {
 		texWidth = 64;
 		texHeight = 64;
 
-		Body = new ModelRenderer(this);
+		Body = new ModelPart(this);
 		Body.setPos(0.0F, 24.0F, 0.0F);
 		Body.texOffs(1, 24).addBox(-1.5F, -1.5F, -10.0F, 3.0F, 3.0F, 1.0F, 0.0F, false);
 		Body.texOffs(1, 1).addBox(-2.0F, -2.0F, -9.0F, 4.0F, 4.0F, 18.0F, 0.0F, false);
@@ -43,11 +43,11 @@ public class modelProjectileDroneMissile extends EntityModel<EntityMissileDroneM
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		Body.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+	public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
 		modelRenderer.xRot = x;
 		modelRenderer.yRot = y;
 		modelRenderer.zRot = z;

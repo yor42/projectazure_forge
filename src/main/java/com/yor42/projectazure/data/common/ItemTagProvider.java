@@ -6,11 +6,11 @@ import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import mekanism.common.registries.MekanismItems;
 import net.minecraft.block.Block;
-import net.minecraft.data.BlockTagsProvider;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -180,9 +180,9 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ItemTags.MUSIC_DISCS).add(RegisterItems.DISC_CC5.get(), RegisterItems.DISC_DRAGONHEARTED.get(), RegisterItems.DISC_FRIDAYNIGHT.get(), RegisterItems.DISC_REVENGE.get(), RegisterItems.DISC_FALLEN_KINGDOM.get(), RegisterItems.DISC_TAKE_BACK_THE_NIGHT.get(), RegisterItems.DISC_FIND_THE_PIECES.get());
     }
 
-    protected void copyItems(ITag.INamedTag<Item> from, ITag.INamedTag<Item> to) {
-        ITag.Builder tgt = this.getOrCreateRawBuilder(to);
-        ITag.Builder original = this.getOrCreateRawBuilder(from);
+    protected void copyItems(Tag.Named<Item> from, Tag.Named<Item> to) {
+        Tag.Builder tgt = this.getOrCreateRawBuilder(to);
+        Tag.Builder original = this.getOrCreateRawBuilder(from);
         original.getEntries().forEach(tgt::add);
     }
 

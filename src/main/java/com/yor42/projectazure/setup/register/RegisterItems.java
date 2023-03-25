@@ -19,12 +19,12 @@ import com.yor42.projectazure.gameobject.misc.ModFoods;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.item.*;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -36,6 +36,28 @@ import java.util.function.Supplier;
 
 import static com.yor42.projectazure.Main.*;
 import static com.yor42.projectazure.data.client.itemModelProvider.ITEMENTRY;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.RecordItem;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.SwordItem;
 
 @SuppressWarnings("unused")
 public class RegisterItems {
@@ -203,7 +225,7 @@ public class RegisterItems {
     public static final RegistryObject<Item> ORIGINIUM_SHARD = register("originium_shard", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)){
         @Override
-        public int getBurnTime(ItemStack itemStack, @Nullable IRecipeType<?> recipeType) {
+        public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
             return 100;
         }
     });
@@ -229,14 +251,14 @@ public class RegisterItems {
     public static final RegistryObject<Item> C99_CARBON = register("c99", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)){
         @Override
-        public int getBurnTime(ItemStack itemStack, @Nullable IRecipeType<?> recipeType) {
+        public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
             return 2400;
         }
     });
     public static final RegistryObject<Item> AMBER_ORIGINIUM_FUEL_ROD = register("amber_originium_fuel_rod", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)){
         @Override
-        public int getBurnTime(ItemStack itemStack, @Nullable IRecipeType<?> recipeType) {
+        public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
             return 25000;
         }
     });
@@ -257,7 +279,7 @@ public class RegisterItems {
             .tab(PA_RESOURCES)));
 
     public static final RegistryObject<Item> PIG_FAT = register("pork_fat", () -> new Item(new Item.Properties()
-            .tab(PA_RESOURCES).food(new Food.Builder().meat().nutrition(1).saturationMod(0.8F).fast().build())));
+            .tab(PA_RESOURCES).food(new FoodProperties.Builder().meat().nutrition(1).saturationMod(0.8F).fast().build())));
 
     public static final RegistryObject<Item> MOLD_PLATE = register("mold_plate", () -> new ItemCraftTool(128));
     public static final RegistryObject<Item> MOLD_WIRE = register("mold_wire", () -> new ItemCraftTool(128));
@@ -267,24 +289,24 @@ public class RegisterItems {
             .tab(PA_GROUP)
             .rarity(Rarity.EPIC)){
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
             if(worldIn != null && worldIn.isClientSide) {
                 if (Screen.hasShiftDown()) {
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip1").setStyle(Style.EMPTY.withBold(true).withColor(Color.fromRgb(0xff00fc)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip2"));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip3"));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip4").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x990000)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip5").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip6").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip7").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x999900)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip8").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip9").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip10").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip1").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(0xff00fc)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip2"));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip3"));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip4").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x990000)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip5").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip6").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip7").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x999900)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip8").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip9").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip10").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
                 } else {
-                    ITextComponent shift = new StringTextComponent("[SHIFT]").withStyle(TextFormatting.YELLOW);
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e))));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.shiftinfo", shift).withStyle(TextFormatting.GRAY));
+                    Component shift = new TextComponent("[SHIFT]").withStyle(ChatFormatting.YELLOW);
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.desc1").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e))));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.shiftinfo", shift).withStyle(ChatFormatting.GRAY));
                 }
             }
         }
@@ -357,11 +379,11 @@ public class RegisterItems {
     //No.....
     //AND THERE'S MORE.
     //DEAR GOD....
-    public static final RegistryObject<Item> CRUDE_OIL_BUCKET = register("crude_oil_bucket", ()-> new BucketItem(RegisterFluids.CRUDE_OIL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> GASOLINE_BUCKET = register("gasoline_bucket", ()-> new BucketItem(RegisterFluids.GASOLINE_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> DIESEL_BUCKET = register("diesel_bucket", ()-> new BucketItem(RegisterFluids.DIESEL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> KETON_BUCKET = register("keton_bucket", ()-> new BucketItem(RegisterFluids.KETON_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> FUEL_OIL_BUCKET = register("fuel_oil_bucket", ()-> new BucketItem(RegisterFluids.FUEL_OIL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> CRUDE_OIL_BUCKET = register("crude_oil_bucket", ()-> new BucketItem(RegisterFluids.CRUDE_OIL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> GASOLINE_BUCKET = register("gasoline_bucket", ()-> new BucketItem(RegisterFluids.GASOLINE_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> DIESEL_BUCKET = register("diesel_bucket", ()-> new BucketItem(RegisterFluids.DIESEL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> KETON_BUCKET = register("keton_bucket", ()-> new BucketItem(RegisterFluids.KETON_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> FUEL_OIL_BUCKET = register("fuel_oil_bucket", ()-> new BucketItem(RegisterFluids.FUEL_OIL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
 
 
     public static final RegistryObject<Item> WISDOM_CUBE = register("wisdomcube", () -> new ItemBaseTooltip(new Item.Properties()
@@ -407,71 +429,71 @@ public class RegisterItems {
             .tab(PA_GROUP).stacksTo(1)));
 
     //I'M READY TO GO TONIIIIGHT YEAH THERES PARTY ALRIGHTTTTTTT WE DON'T NEED REASON FOR JOY OH YEAHHHHH
-    public static final RegistryObject<Item> DISC_FRIDAYNIGHT = register("disc_fridaynight", () -> new MusicDiscItem(15, ()->registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()
+    public static final RegistryObject<Item> DISC_FRIDAYNIGHT = register("disc_fridaynight", () -> new RecordItem(15, ()->registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1)){
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
-    public static final RegistryObject<Item> DISC_CC5 = register("disc_cc5", () -> new MusicDiscItem(15, ()->registerSounds.DISC_CC5, new Item.Properties()
+    public static final RegistryObject<Item> DISC_CC5 = register("disc_cc5", () -> new RecordItem(15, ()->registerSounds.DISC_CC5, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
-    public static final RegistryObject<Item> DISC_REVENGE = register("disc_revenge", () -> new MusicDiscItem(15, ()->registerSounds.DISC_REVENGE, new Item.Properties()
+    public static final RegistryObject<Item> DISC_REVENGE = register("disc_revenge", () -> new RecordItem(15, ()->registerSounds.DISC_REVENGE, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
-        }
-    });
-
-    public static final RegistryObject<Item> DISC_FALLEN_KINGDOM = register("disc_fallen_kingdom", () -> new MusicDiscItem(15, ()->registerSounds.DISC_FALLEN_KINGDOM, new Item.Properties()
-            .tab(PA_GROUP).stacksTo(1))
-    {
-        @Nonnull
-        @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
-    public static final RegistryObject<Item> DISC_FIND_THE_PIECES = register("disc_findthepieces", () -> new MusicDiscItem(15, ()->registerSounds.DISC_FIND_THE_PIECES, new Item.Properties()
+    public static final RegistryObject<Item> DISC_FALLEN_KINGDOM = register("disc_fallen_kingdom", () -> new RecordItem(15, ()->registerSounds.DISC_FALLEN_KINGDOM, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
-    public static final RegistryObject<Item> DISC_TAKE_BACK_THE_NIGHT = register("disc_takebackthenight", () -> new MusicDiscItem(15, ()->registerSounds.DISC_TAKE_BACK_THE_NIGHT, new Item.Properties()
+    public static final RegistryObject<Item> DISC_FIND_THE_PIECES = register("disc_findthepieces", () -> new RecordItem(15, ()->registerSounds.DISC_FIND_THE_PIECES, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
-    public static final RegistryObject<Item> DISC_DRAGONHEARTED = register("disc_dragonhearted", () -> new MusicDiscItem(15, ()->registerSounds.DISC_DRAGONHEARTED, new Item.Properties()
+    public static final RegistryObject<Item> DISC_TAKE_BACK_THE_NIGHT = register("disc_takebackthenight", () -> new RecordItem(15, ()->registerSounds.DISC_TAKE_BACK_THE_NIGHT, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
+        }
+    });
+
+    public static final RegistryObject<Item> DISC_DRAGONHEARTED = register("disc_dragonhearted", () -> new RecordItem(15, ()->registerSounds.DISC_DRAGONHEARTED, new Item.Properties()
+            .tab(PA_GROUP).stacksTo(1))
+    {
+        @Nonnull
+        @Override
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 

@@ -2,18 +2,18 @@ package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemDefibPaddleRenderer;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -34,6 +34,8 @@ import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemSt
 import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public static final String controllerName = "paddle_controller";
@@ -45,7 +47,7 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
 
     @Nonnull
     @Override
-    public ActionResultType interactLivingEntity(@Nonnull ItemStack p_111207_1_, @Nonnull PlayerEntity p_111207_2_, @Nonnull LivingEntity p_111207_3_, @Nonnull Hand p_111207_4_) {
+    public InteractionResult interactLivingEntity(@Nonnull ItemStack p_111207_1_, @Nonnull Player p_111207_2_, @Nonnull LivingEntity p_111207_3_, @Nonnull InteractionHand p_111207_4_) {
         return super.interactLivingEntity(p_111207_1_, p_111207_2_, p_111207_3_, p_111207_4_);
     }
 
@@ -65,8 +67,8 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World world, @Nonnull PlayerEntity entity, @Nonnull Hand hand) {
-        Hand oppositehand = hand == MAIN_HAND? Hand.OFF_HAND: MAIN_HAND;
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, @Nonnull Player entity, @Nonnull InteractionHand hand) {
+        InteractionHand oppositehand = hand == MAIN_HAND? InteractionHand.OFF_HAND: MAIN_HAND;
         if(entity.getItemInHand(oppositehand).getItem() instanceof ItemDefibPaddle) {
             if (entity.isCrouching()) {
                 ItemStack ChargerStack = ItemStack.EMPTY;
@@ -100,7 +102,7 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
                         entity.playSound(registerSounds.DEFIB_CHARGING, 1.0f, 1.0f);
                     }
                 }else{
-                    entity.displayClientMessage(new TranslationTextComponent(this.getDescriptionId()+".tooltip.nocharger").withStyle(TextFormatting.RED), true);
+                    entity.displayClientMessage(new TranslatableComponent(this.getDescriptionId()+".tooltip.nocharger").withStyle(ChatFormatting.RED), true);
                 }
             }
         }
@@ -109,9 +111,9 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack p_77624_1_, @Nullable World p_77624_2_, @Nonnull List<ITextComponent> tooltips, ITooltipFlag p_77624_4_) {
+    public void appendHoverText(@Nonnull ItemStack p_77624_1_, @Nullable Level p_77624_2_, @Nonnull List<Component> tooltips, TooltipFlag p_77624_4_) {
         super.appendHoverText(p_77624_1_, p_77624_2_, tooltips, p_77624_4_);
-        tooltips.add(new TranslationTextComponent(this.getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
+        tooltips.add(new TranslatableComponent(this.getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
 
     }
 

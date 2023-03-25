@@ -14,18 +14,18 @@ import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterFluids;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.*;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -33,27 +33,34 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class RecipeProvider extends net.minecraft.data.RecipeProvider {
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.data.recipes.SpecialRecipeBuilder;
+import net.minecraft.data.recipes.UpgradeRecipeBuilder;
+
+public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
     public RecipeProvider(DataGenerator generatorIn) {
         super(generatorIn);
     }
 
     @Override
-    protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
+    protected void buildShapelessRecipes(@Nonnull Consumer<FinishedRecipe> consumer) {
         this.generateMetalRecipes(consumer);
 
-        CookingRecipeBuilder.smelting(Ingredient.of(ModTags.Items.TREE_SAP), RegisterItems.PLATE_POLYMER.get(), 0.5F, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModTags.Items.TREE_SAP), RegisterItems.PLATE_POLYMER.get(), 0.5F, 200)
                 .unlockedBy("has_item", has(ModTags.Items.TREE_SAP))
                 .save(consumer);
 
-        CookingRecipeBuilder.blasting(Ingredient.of(RegisterBlocks.COBBLED_ORIROCK.get()), RegisterBlocks.ORIROCK.get(), 0.1F, 100)
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(RegisterBlocks.COBBLED_ORIROCK.get()), RegisterBlocks.ORIROCK.get(), 0.1F, 100)
                 .unlockedBy("has_item", has(RegisterBlocks.COBBLED_ORIROCK.get()))
                 .save(consumer);
 
-        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).save(consumer, "reloading_items");
-        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).save(consumer, "repairing_items");
-        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.TRANSFERPOTION.get()).save(consumer, "potion_transfer");
-        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.SAW_SILICON.get()).save(consumer, "sawing_silicon");
+        SpecialRecipeBuilder.special((SimpleRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).save(consumer, "reloading_items");
+        SpecialRecipeBuilder.special((SimpleRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).save(consumer, "repairing_items");
+        SpecialRecipeBuilder.special((SimpleRecipeSerializer<?>) registerRecipes.Serializers.TRANSFERPOTION.get()).save(consumer, "potion_transfer");
+        SpecialRecipeBuilder.special((SimpleRecipeSerializer<?>) registerRecipes.Serializers.SAW_SILICON.get()).save(consumer, "sawing_silicon");
 
         this.generateAlloyingRecipe(consumer);
         this.generatePressingRecipe(consumer);
@@ -66,11 +73,11 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         this.generateChemicalReactionRecipe(consumer);
     }
 
-    private void generateChemicalReactionRecipe(Consumer<IFinishedRecipe> consumer) {
+    private void generateChemicalReactionRecipe(Consumer<FinishedRecipe> consumer) {
         ChemicalReactorRecipeBuilder.add(RegisterFluids.KETON_SOURCE_REGISTRY.get(), 100, Ingredient.of(RegisterItems.PIG_FAT.get()), consumer);
     }
 
-    private void generateGunBenchRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+    private void generateGunBenchRecipe(@Nonnull Consumer<FinishedRecipe> consumer){
         WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.CASELESS_4MM.get(),6).addIngredient(RegisterItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(RegisterItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
 
         WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 14).addIngredient(RegisterItems.PRIMITIVE_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(RegisterItems.MECHANICAL_PARTS.get(), 4).build(consumer, Constants.MODID,"gunbench_granadelauncher");
@@ -80,7 +87,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SUPERNOVA.get()).addIngredient(ModTags.Items.INGOT_STEEL, 33).addIngredient(ModTags.Items.CIRCUITS_CRYSTALLINE, 12).addIngredient(RegisterItems.BASIC_DEVICE.get(), 8).build(consumer, Constants.MODID,"gunbench_supernova");
     }
 
-    private void generateMetalRecipes(@Nonnull Consumer<IFinishedRecipe> consumer){
+    private void generateMetalRecipes(@Nonnull Consumer<FinishedRecipe> consumer){
         BuildMetalRecipe(consumer, 0.5F, new Metals("copper", RegisterItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).block(RegisterBlocks.COPPER_BLOCK.get(), ModTags.Items.BLOCK_COPPER).ore(RegisterBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(RegisterItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER).plates(RegisterItems.PLATE_COPPER.get(), ModTags.Items.PLATE_COPPER).nugget(RegisterItems.NUGGET_COPPER.get(), ModTags.Items.NUGGET_COPPER));
         BuildMetalRecipe(consumer, 0.5F, new Metals("tin", RegisterItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).block(RegisterBlocks.TIN_BLOCK.get(), ModTags.Items.BLOCK_TIN).ore(RegisterBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(RegisterItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(RegisterItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN).nugget(RegisterItems.NUGGET_TIN.get(), ModTags.Items.NUGGET_TIN));
         BuildMetalRecipe(consumer, 0.5F, new Metals("lead", RegisterItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).block(RegisterBlocks.LEAD_BLOCK.get(), ModTags.Items.BLOCK_LEAD).ore(RegisterBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(RegisterItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD).plates(RegisterItems.PLATE_LEAD.get(), ModTags.Items.PLATE_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD));
@@ -99,7 +106,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     }
 
-    private void generateCrushingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+    private void generateCrushingRecipe(@Nonnull Consumer<FinishedRecipe> consumer){
         createHammerRecipes(consumer, Blocks.STONE, Blocks.COBBLESTONE, "cobblestone");
         createHammerRecipes(consumer, Blocks.COBBLESTONE, Blocks.GRAVEL, "gravel");
         createHammerRecipes(consumer, Blocks.GRAVEL, Blocks.SAND, "sand");
@@ -115,7 +122,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     }
 
-    private void generateAlloyingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
+    private void generateAlloyingRecipe(@Nonnull Consumer<FinishedRecipe> consumer) {
         AlloyingRecipeBuilder.AlloyRecipe(RegisterItems.INGOT_BRONZE.get(), (byte)4)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), (byte) 3)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_TIN), (byte) 1)
@@ -141,12 +148,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_RMA7012), (byte) 1)
                 .build(consumer);
     }
-    private void generatePressingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
+    private void generatePressingRecipe(@Nonnull Consumer<FinishedRecipe> consumer) {
         PressingRecipeBuilder.addRecipe(RegisterItems.TREE_SAP.get(), Ingredient.of(ItemTags.LOGS), Ingredient.of(RegisterItems.MOLD_EXTRACTION.get()), 1, 200)
                 .build(consumer, new ResourceLocation("iron_plate_pressing"));
     }
 
-    private void generateCrystalizingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+    private void generateCrystalizingRecipe(@Nonnull Consumer<FinishedRecipe> consumer){
         CrystalizingRecipeBuilder.addRecipe(RegisterItems.ORIGINIUM_PRIME.get(), Ingredient.of(RegisterItems.ORIGINIUM_SEED.get()), RegisterFluids.ORIGINIUM_SOLUTION_SOURCE_REGISTRY.get(), 3000)
                 .build(consumer, new ResourceLocation("originium_crystalizing"));
 
@@ -154,7 +161,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .build(consumer, new ResourceLocation("quartz_crystalizing"));
     }
 
-    private void generateShapelessRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+    private void generateShapelessRecipe(@Nonnull Consumer<FinishedRecipe> consumer){
 
         ShapelessRecipeBuilder.shapeless(RegisterItems.COPPER_WIRE.get(), 4)
                 .requires(ModTags.Items.CUTTER)
@@ -274,7 +281,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     }
 
-    private void generateShapedRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+    private void generateShapedRecipe(@Nonnull Consumer<FinishedRecipe> consumer){
 
         ShapedRecipeBuilder.shaped(RegisterItems.TREE_SAP.get(),4)
                 .define('L', ItemTags.LOGS)
@@ -579,9 +586,9 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material2", has(RegisterItems.ADVANCED_MOTOR.get()))
                 .save(consumer);
 
-        SmithingRecipeBuilder.smithing(Ingredient.of(RegisterItems.SAW_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.SAW_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritesaw"));
-        SmithingRecipeBuilder.smithing(Ingredient.of(RegisterItems.HAMMER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.HAMMER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritehammer"));
-        SmithingRecipeBuilder.smithing(Ingredient.of(RegisterItems.CUTTER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.CUTTER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritecutter"));
+        UpgradeRecipeBuilder.smithing(Ingredient.of(RegisterItems.SAW_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.SAW_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritesaw"));
+        UpgradeRecipeBuilder.smithing(Ingredient.of(RegisterItems.HAMMER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.HAMMER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritehammer"));
+        UpgradeRecipeBuilder.smithing(Ingredient.of(RegisterItems.CUTTER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.CUTTER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritecutter"));
 
         ShapedRecipeBuilder.shaped(RegisterItems.CHARCOAL_FILTER.get())
                 .define('P', Items.PAPER)
@@ -2158,18 +2165,18 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     }
 
-    private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {
+    private void BuildMetalRecipe(Consumer<FinishedRecipe> consumer, float smeltingXp, Metals metal) {
         if (metal.ore != null) {
-            CookingRecipeBuilder.blasting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 100)
+            SimpleCookingRecipeBuilder.blasting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", has(metal.oreTag))
                     .save(consumer, ResourceUtils.ModResourceLocation(metal.name + "_ore_blasting"));
-            CookingRecipeBuilder.smelting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 200)
+            SimpleCookingRecipeBuilder.smelting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", has(metal.oreTag))
                     .save(consumer, ResourceUtils.ModResourceLocation(metal.name + "_ore_smelting"));
         }
 
-        InventoryChangeTrigger.Instance hasIngot = has(metal.ingotTag);
-        InventoryChangeTrigger.Instance hasPlate = has(metal.plateTag);
+        InventoryChangeTrigger.TriggerInstance hasIngot = has(metal.ingotTag);
+        InventoryChangeTrigger.TriggerInstance hasPlate = has(metal.plateTag);
 
         if (metal.block != null) {
             ShapelessRecipeBuilder.shapeless(metal.ingot, 9)
@@ -2199,12 +2206,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         }
         if (metal.dustTag != null) {
             Ingredient dustOrChunks = metal.chunksTag != null
-                    ? Ingredient.fromValues(Stream.of(new Ingredient.TagList(metal.chunksTag), new Ingredient.TagList(metal.dustTag)))
+                    ? Ingredient.fromValues(Stream.of(new Ingredient.TagValue(metal.chunksTag), new Ingredient.TagValue(metal.dustTag)))
                     : Ingredient.of(metal.dustTag);
-            CookingRecipeBuilder.blasting(dustOrChunks, metal.ingot, smeltingXp, 100)
+            SimpleCookingRecipeBuilder.blasting(dustOrChunks, metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", hasIngot)
                     .save(consumer, ResourceUtils.ModResourceLocation(metal.name + "_dust_blasting"));
-            CookingRecipeBuilder.smelting(dustOrChunks, metal.ingot, smeltingXp, 200)
+            SimpleCookingRecipeBuilder.smelting(dustOrChunks, metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", hasIngot)
                     .save(consumer, ResourceUtils.ModResourceLocation(metal.name + "_dust_smelting"));
         }
@@ -2248,83 +2255,83 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     private static class Metals {
         private final String name;
-        private IItemProvider ore;
-        private ITag<Item> oreTag;
-        private IItemProvider block;
-        private ITag<Item> blockTag;
-        private final IItemProvider ingot;
-        private final ITag<Item> ingotTag;
-        private IItemProvider nugget;
-        private ITag<Item> nuggetTag;
-        private IItemProvider dust;
-        private ITag<Item> dustTag;
-        private IItemProvider plate;
-        private ITag<Item> plateTag;
-        private IItemProvider gear;
-        private ITag<Item> gearTag;
-        private ITag<Item> chunksTag;
+        private ItemLike ore;
+        private Tag<Item> oreTag;
+        private ItemLike block;
+        private Tag<Item> blockTag;
+        private final ItemLike ingot;
+        private final Tag<Item> ingotTag;
+        private ItemLike nugget;
+        private Tag<Item> nuggetTag;
+        private ItemLike dust;
+        private Tag<Item> dustTag;
+        private ItemLike plate;
+        private Tag<Item> plateTag;
+        private ItemLike gear;
+        private Tag<Item> gearTag;
+        private Tag<Item> chunksTag;
 
-        public Metals(String name, IItemProvider ingot, ITag<Item> ingotTag) {
+        public Metals(String name, ItemLike ingot, Tag<Item> ingotTag) {
             this.name = name;
             this.ingot = ingot;
             this.ingotTag = ingotTag;
         }
 
-        public Metals ore(IItemProvider item, ITag<Item> tag) {
+        public Metals ore(ItemLike item, Tag<Item> tag) {
             this.ore = item;
             this.oreTag = tag;
             return this;
         }
 
-        public Metals block(IItemProvider item, ITag<Item> tag) {
+        public Metals block(ItemLike item, Tag<Item> tag) {
             this.block = item;
             this.blockTag = tag;
             return this;
         }
 
-        public Metals gear(IItemProvider item, ITag<Item> tag) {
+        public Metals gear(ItemLike item, Tag<Item> tag) {
             this.gear = item;
             this.gearTag = tag;
             return this;
         }
 
-        public Metals nugget(IItemProvider item, ITag<Item> tag) {
+        public Metals nugget(ItemLike item, Tag<Item> tag) {
             this.nugget = item;
             this.nuggetTag = tag;
             return this;
         }
 
-        public Metals dust(IItemProvider item, ITag<Item> tag) {
+        public Metals dust(ItemLike item, Tag<Item> tag) {
             this.dust = item;
             this.dustTag = tag;
             return this;
         }
 
-        public Metals chunks(ITag<Item> tag) {
+        public Metals chunks(Tag<Item> tag) {
             this.chunksTag = tag;
             return this;
         }
 
-        public Metals plates(IItemProvider item, ITag<Item> tag) {
+        public Metals plates(ItemLike item, Tag<Item> tag) {
             this.plate = item;
             this.plateTag = tag;
             return this;
         }
     }
 
-    protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Block blockOutput, String id) {
+    protected void createHammerRecipes(Consumer<FinishedRecipe> consumer, Block blockInput, Block blockOutput, String id) {
         CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer_"+id));
     }
 
-    protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Item blockOutput, int count, String id) {
+    protected void createHammerRecipes(Consumer<FinishedRecipe> consumer, Block blockInput, Item blockOutput, int count, String id) {
         CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer_"+id));
     }
 
-    protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, ITag<Item> blockInput, Item out, int count, String id) {
+    protected void createHammerRecipes(Consumer<FinishedRecipe> consumer, Tag<Item> blockInput, Item out, int count, String id) {
         CrushingRecipeBuilder.builder().input(blockInput).addDrop(out, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer_"+id));
     }
 
-    protected void registerSawingRecipe(ITag<Item> log, Item plank, Consumer<IFinishedRecipe> consumer){
+    protected void registerSawingRecipe(Tag<Item> log, Item plank, Consumer<FinishedRecipe> consumer){
         ShapelessRecipeBuilder.shapeless(plank, 6)
                 .requires(log)
                 .requires(ModTags.Items.SAW)

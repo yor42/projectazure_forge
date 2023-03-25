@@ -1,21 +1,21 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.AbstractContainerInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ClientUtils;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,53 +24,53 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 
-public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> extends ContainerScreen<T> {
+public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> extends AbstractContainerScreen<T> {
 
     protected final AbstractEntityCompanion host;
 
-    protected final Button.ITooltip FREEROAM_TOOLTIP;
-    protected final Button.ITooltip DEFENCE_TOOLTIP;
-    protected final Button.ITooltip ITEM_TOOLTIP;
-    public AbstractGUIScreen(T p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
+    protected final Button.OnTooltip FREEROAM_TOOLTIP;
+    protected final Button.OnTooltip DEFENCE_TOOLTIP;
+    protected final Button.OnTooltip ITEM_TOOLTIP;
+    public AbstractGUIScreen(T p_i51105_1_, Inventory p_i51105_2_, Component p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
         this.host = p_i51105_1_.companion;
         this.FREEROAM_TOOLTIP =  (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            List<MutableComponent> tooltips = new ArrayList<>();
 
             if(this.host.isFreeRoaming()){
-                tooltips.add(new TranslationTextComponent("gui.tooltip.freeroaming.on").withStyle(TextFormatting.GREEN));
+                tooltips.add(new TranslatableComponent("gui.tooltip.freeroaming.on").withStyle(ChatFormatting.GREEN));
             }
             else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.freeroaming.off").withStyle(TextFormatting.BLUE));
+                tooltips.add(new TranslatableComponent("gui.tooltip.freeroaming.off").withStyle(ChatFormatting.BLUE));
             }
 
             if(this.host.getHOMEPOS().isPresent()) {
                 BlockPos Home = this.host.getHOMEPOS().get();
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homepos").append(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
+                tooltips.add(new TranslatableComponent("gui.tooltip.homepos").append(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
             }else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome").withStyle(TextFormatting.GRAY));
+                tooltips.add(new TranslatableComponent("gui.tooltip.homemode.nohome").withStyle(ChatFormatting.GRAY));
             }
             this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
         };
 
         this.DEFENCE_TOOLTIP = (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            List<MutableComponent> tooltips = new ArrayList<>();
             if(this.host.shouldAttackFirst()){
-                tooltips.add(new TranslationTextComponent("gui.tooltip.aggressive.on").withStyle(TextFormatting.GREEN));
+                tooltips.add(new TranslatableComponent("gui.tooltip.aggressive.on").withStyle(ChatFormatting.GREEN));
             }
             else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.aggressive.off").withStyle(TextFormatting.BLUE));
+                tooltips.add(new TranslatableComponent("gui.tooltip.aggressive.off").withStyle(ChatFormatting.BLUE));
             }
             this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
         };
 
         this.ITEM_TOOLTIP = (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            List<MutableComponent> tooltips = new ArrayList<>();
             if(this.host.shouldPickupItem()){
-                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.on").withStyle(TextFormatting.GREEN));
+                tooltips.add(new TranslatableComponent("gui.tooltip.itempickup.on").withStyle(ChatFormatting.GREEN));
             }
             else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.off").withStyle(TextFormatting.BLUE));
+                tooltips.add(new TranslatableComponent("gui.tooltip.itempickup.off").withStyle(ChatFormatting.BLUE));
             }
             this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
         };
@@ -86,7 +86,7 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
     }
 
     @Override
-    public void render(MatrixStack matrixstacck, int mousex, int mousey, float partialticks) {
+    public void render(PoseStack matrixstacck, int mousex, int mousey, float partialticks) {
         this.renderBackground(matrixstacck);
         super.render(matrixstacck, mousex, mousey, partialticks);
         this.rendergauges(matrixstacck, mousex, mousey);
@@ -109,7 +109,7 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
             }
         }
     }
-    protected void rendergauges(MatrixStack matrixStack, int mousex, int mousey){
+    protected void rendergauges(PoseStack matrixStack, int mousex, int mousey){
 
     }
 

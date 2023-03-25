@@ -1,11 +1,11 @@
 package com.yor42.projectazure.gameobject.misc;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -25,7 +25,7 @@ public class PACompanionAttackDamage extends DamageSource {
         return this.damageSourceEntity;
     }
 
-    public ITextComponent getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+    public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
 
         ItemStack itemstack = this.damageSourceEntity != null ? this.damageSourceEntity.getMainHandItem() : ItemStack.EMPTY;
         String s;
@@ -36,11 +36,11 @@ public class PACompanionAttackDamage extends DamageSource {
         else {
             s = "death.attack." + this.msgId;
         }
-        return !itemstack.isEmpty() && itemstack.hasCustomHoverName() ? new TranslationTextComponent(s + ".item", entityLivingBaseIn.getDisplayName(), this.damageSourceEntity.getDisplayName(), itemstack.getDisplayName()) : new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName(), this.damageSourceEntity.getDisplayName());
+        return !itemstack.isEmpty() && itemstack.hasCustomHoverName() ? new TranslatableComponent(s + ".item", entityLivingBaseIn.getDisplayName(), this.damageSourceEntity.getDisplayName(), itemstack.getDisplayName()) : new TranslatableComponent(s, entityLivingBaseIn.getDisplayName(), this.damageSourceEntity.getDisplayName());
     }
 
     @Nullable
-    public Vector3d getSourcePosition() {
+    public Vec3 getSourcePosition() {
         return this.damageSourceEntity != null ? this.damageSourceEntity.position() : null;
     }
 }

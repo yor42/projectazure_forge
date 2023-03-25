@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals.planes;
 
 import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 

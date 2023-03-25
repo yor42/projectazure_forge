@@ -2,16 +2,16 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.EntityArtoria;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class ItemExcaliburSheath extends Item implements ICurioItem {
     }
 
     @Override
-    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull Entity holder, int p_77663_4_, boolean p_77663_5_) {
+    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull Entity holder, int p_77663_4_, boolean p_77663_5_) {
         super.inventoryTick(stack, world, holder, p_77663_4_, p_77663_5_);
         if(holder instanceof LivingEntity) {
             applyRegen(world, (LivingEntity) holder, stack);
@@ -34,14 +34,14 @@ public class ItemExcaliburSheath extends Item implements ICurioItem {
         applyRegen(holder.getCommandSenderWorld(), holder, stack);
     }
 
-    private static void applyRegen(World world, LivingEntity holder, ItemStack stack){
-        CompoundNBT compound = stack.getOrCreateTag();
+    private static void applyRegen(Level world, LivingEntity holder, ItemStack stack){
+        CompoundTag compound = stack.getOrCreateTag();
         if(world.isClientSide()){
             return;
         }
         if(compound.contains("owner")){
             UUID ownerUUID = compound.getUUID("owner");
-            Entity ownerEntity = ((ServerWorld)world).getEntity(ownerUUID);
+            Entity ownerEntity = ((ServerLevel)world).getEntity(ownerUUID);
 
             if(!(ownerEntity instanceof LivingEntity) || ((LivingEntity) ownerEntity).isDeadOrDying()){
                 stack.shrink(1);
@@ -51,7 +51,7 @@ public class ItemExcaliburSheath extends Item implements ICurioItem {
             if(ownerEntity instanceof EntityArtoria){
                 EntityArtoria entity = (EntityArtoria) ownerEntity;
                 if(entity.getOwner() == holder && entity.getAffection()>=90 && entity.blockPosition().closerThan(holder.blockPosition(), 16)){
-                    holder.addEffect(new EffectInstance(Effects.REGENERATION, 30, 1));
+                    holder.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 30, 1));
                 }
             }
         }

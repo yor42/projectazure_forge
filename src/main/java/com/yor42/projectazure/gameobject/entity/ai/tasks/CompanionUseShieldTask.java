@@ -3,30 +3,30 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.RavagerEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.util.Hand;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.server.level.ServerLevel;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 
-public class CompanionUseShieldTask extends Task<AbstractEntityCompanion> {
+public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypeityCompanion> {
     public CompanionUseShieldTask() {
-        super(ImmutableMap.of(ATTACK_TARGET, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(ATTACK_TARGET, MemoryStatus.VALUE_PRESENT));
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion companion) {
+    protected boolean checkExtraStartConditions(ServerLevel p_212832_1_, AbstractEntityCompanion companion) {
         return companion.getOffhandItem().getItem().isShield(companion.getOffhandItem(), companion) && raiseShield(companion) && companion.getShieldCoolDown() == 0;
     }
 
     @Override
-    protected boolean canStillUse(ServerWorld p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
+    protected boolean canStillUse(ServerLevel p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
         boolean bool = this.checkExtraStartConditions(p_212834_1_, p_212834_2_);
 
         if(!bool){
@@ -37,9 +37,9 @@ public class CompanionUseShieldTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion companion, long p_212831_3_) {
+    protected void start(ServerLevel p_212831_1_, AbstractEntityCompanion companion, long p_212831_3_) {
         if (companion.getOffhandItem().getItem().isShield(companion.getOffhandItem(), companion))
-            companion.startUsingItem(Hand.OFF_HAND);
+            companion.startUsingItem(InteractionHand.OFF_HAND);
     }
 
     protected boolean raiseShield(AbstractEntityCompanion companion) {
@@ -50,7 +50,7 @@ public class CompanionUseShieldTask extends Task<AbstractEntityCompanion> {
 
             if (companion.getShieldCoolDown() == 0) {
                 boolean ranged = companion.getMainHandItem().getItem() instanceof CrossbowItem || companion.getMainHandItem().getItem() instanceof BowItem || companion.getMainHandItem().getItem() instanceof GunItem;
-                return companion.distanceTo(target) <= 4.0D || target instanceof CreeperEntity || target instanceof IRangedAttackMob && target.distanceTo(companion) >= 5.0D && !ranged || target instanceof RavagerEntity;
+                return companion.distanceTo(target) <= 4.0D || target instanceof Creeper || target instanceof RangedAttackMob && target.distanceTo(companion) >= 5.0D && !ranged || target instanceof Ravager;
             }
             return false;
         }).orElse(false);

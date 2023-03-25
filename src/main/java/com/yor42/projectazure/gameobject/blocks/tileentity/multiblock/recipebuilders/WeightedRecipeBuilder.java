@@ -17,11 +17,11 @@ import mekanism.api.chemical.gas.GasStack;
 import mekanism.api.chemical.infuse.InfusionStack;
 import mekanism.api.chemical.pigment.PigmentStack;
 import mekanism.api.chemical.slurry.SlurryStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.*;
@@ -37,7 +37,7 @@ public class WeightedRecipeBuilder {
 
     public final List<RecipeCondition> conditions = new ArrayList<>();
     protected int duration;
-    protected ITextComponent text;
+    protected Component text;
     protected boolean perTick;
     protected String fixedName;
     protected String slotName;
@@ -85,7 +85,7 @@ public class WeightedRecipeBuilder {
     }
 
 
-    public WeightedRecipeBuilder text(ITextComponent text) {
+    public WeightedRecipeBuilder text(Component text) {
         this.text = text;
         return this;
     }

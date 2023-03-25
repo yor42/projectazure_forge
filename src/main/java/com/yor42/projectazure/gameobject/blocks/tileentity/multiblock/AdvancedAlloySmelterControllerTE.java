@@ -13,7 +13,7 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.Ha
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class AdvancedAlloySmelterControllerTE extends ControllerTileEntity {
     public static final ControllerDefinition SMELTRYDefinition = new ControllerDefinition(new ResourceLocation(Constants.MODID, "advanced_alloy_smelter"), AdvancedAlloySmelterControllerTE::new);

@@ -1,10 +1,10 @@
 package com.yor42.projectazure.interfaces;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
 
 import java.util.ArrayList;
 
@@ -26,8 +26,8 @@ public interface IMeleeAttacker {
 
     boolean hasMeleeItem();
 
-    default Hand getNonVanillaMeleeAttackHand(){
-        return Hand.MAIN_HAND;
+    default InteractionHand getNonVanillaMeleeAttackHand(){
+        return InteractionHand.MAIN_HAND;
     }
 
     float getAttackRange(boolean isUsingTalentedWeapon);

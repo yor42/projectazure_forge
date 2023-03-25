@@ -2,37 +2,37 @@ package com.yor42.projectazure.network;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import static com.yor42.projectazure.libs.Constants.StarterList;
 
 public class serverEvents {
-    public static void spawnStarter(ServerPlayerEntity player, int StarterID){
-        World world = player.level;
+    public static void spawnStarter(ServerPlayer player, int StarterID){
+        Level world = player.level;
         EntityType<?> entitytype;
 
         if(!world.isClientSide)
         {
             entitytype = StarterList[StarterID];
             if (entitytype == null){
-                player.sendMessage(new TranslationTextComponent("message.invalidstarter"), player.getUUID());
+                player.sendMessage(new TranslatableComponent("message.invalidstarter"), player.getUUID());
             }
             else{
-                EntityKansenBase entity = (EntityKansenBase) entitytype.spawn((ServerWorld)world, player.getUseItem(), player, player.blockPosition(), SpawnReason.SPAWN_EGG, false, false);
+                EntityKansenBase entity = (EntityKansenBase) entitytype.spawn((ServerLevel)world, player.getUseItem(), player, player.blockPosition(), MobSpawnType.SPAWN_EGG, false, false);
                 if (entity != null){
                     if(!player.isCreative()) {
-                        if(player.getItemInHand(Hand.MAIN_HAND).getItem() == RegisterItems.Rainbow_Wisdom_Cube.get())
-                            player.getItemInHand(Hand.MAIN_HAND).shrink(1);
+                        if(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == RegisterItems.Rainbow_Wisdom_Cube.get())
+                            player.getItemInHand(InteractionHand.MAIN_HAND).shrink(1);
                         else
-                            player.getItemInHand(Hand.OFF_HAND).shrink(1);
+                            player.getItemInHand(InteractionHand.OFF_HAND).shrink(1);
                     }
                     entity.tame(player);
                     entity.setAffection(40.0F);
@@ -43,7 +43,7 @@ public class serverEvents {
         }
     }
 
-    public static void selectStartkit(ServerPlayerEntity playerEntity, byte id, Hand hand) {
+    public static void selectStartkit(ServerPlayer playerEntity, byte id, InteractionHand hand) {
         playerEntity.getItemInHand(hand).shrink(1);
         if(id == 0){
             //AKN
@@ -51,7 +51,7 @@ public class serverEvents {
         }
         else{
             ItemStack cubeStack = new ItemStack(RegisterItems.Rainbow_Wisdom_Cube.get());
-            CompoundNBT nbt = cubeStack.getOrCreateTag();
+            CompoundTag nbt = cubeStack.getOrCreateTag();
             nbt.putUUID("owner", playerEntity.getUUID());
             playerEntity.setItemInHand(hand, cubeStack);
         }

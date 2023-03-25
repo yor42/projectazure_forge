@@ -6,16 +6,16 @@ import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
@@ -24,6 +24,13 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item.Properties;
+
 public class GasMaskFilterItem extends ItemDestroyable {
     public GasMaskFilterItem(Properties p_i48487_1_, int maxDamage) {
         super(p_i48487_1_.stacksTo(1), maxDamage);
@@ -31,10 +38,10 @@ public class GasMaskFilterItem extends ItemDestroyable {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, @Nonnull Player player, @Nonnull InteractionHand hand) {
 
         ItemStack filterstack = player.getItemInHand(hand);
-        ItemStack gasmask = player.getItemBySlot(EquipmentSlotType.HEAD);
+        ItemStack gasmask = player.getItemBySlot(EquipmentSlot.HEAD);
         if(!(gasmask.getItem() instanceof GasMaskItem)){
 
             if(CompatibilityUtils.isCurioLoaded()){
@@ -43,21 +50,21 @@ public class GasMaskFilterItem extends ItemDestroyable {
 
 
             if(!(gasmask.getItem() instanceof GasMaskItem)){
-                return ActionResult.pass(filterstack);
+                return InteractionResultHolder.pass(filterstack);
             }
         }
 
 
 
-        CompoundNBT compoundNBT = gasmask.getOrCreateTag();
-        ListNBT list = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        CompoundTag compoundNBT = gasmask.getOrCreateTag();
+        ListTag list = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
         if(list.size()<2){
-            list.add(filterstack.save(new CompoundNBT()));
+            list.add(filterstack.save(new CompoundTag()));
             compoundNBT.put("filters", list);
             filterstack.shrink(1);
             player.setItemInHand(hand, filterstack);
             player.playSound(registerSounds.GASMASK_FILTER_ADD, 0.8F*(0.4F*MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
-            return ActionResult.consume(filterstack);
+            return InteractionResultHolder.consume(filterstack);
         }
         else{
             int damage = ItemStackUtils.getCurrentDamage(filterstack);
@@ -72,13 +79,13 @@ public class GasMaskFilterItem extends ItemDestroyable {
                 index = i;
             }
             if(index<0){
-                return ActionResult.fail(filterstack);
+                return InteractionResultHolder.fail(filterstack);
             }
             ItemStack buffer = ItemStack.of(list.getCompound(index)).copy();
-            list.set(index, filterstack.save(new CompoundNBT()));
+            list.set(index, filterstack.save(new CompoundTag()));
             player.setItemInHand(hand, buffer);
             player.playSound(registerSounds.GASMASK_FILTER_CHANGE, 0.8F*(0.4F* MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
-            return ActionResult.success(buffer);
+            return InteractionResultHolder.success(buffer);
         }
 
     }
@@ -94,8 +101,8 @@ public class GasMaskFilterItem extends ItemDestroyable {
     }
 
     @Override
-    public void appendHoverText(ItemStack p_77624_1_, @Nullable World p_77624_2_, List<ITextComponent> p_77624_3_, ITooltipFlag p_77624_4_) {
+    public void appendHoverText(ItemStack p_77624_1_, @Nullable Level p_77624_2_, List<Component> p_77624_3_, TooltipFlag p_77624_4_) {
         super.appendHoverText(p_77624_1_, p_77624_2_, p_77624_3_, p_77624_4_);
-        p_77624_3_.add(new TranslationTextComponent("item.projectazure.filter.tooltip", new StringTextComponent(String.format("%.2f", (double)ItemStackUtils.getCurrentHP(p_77624_1_)/(double) this.getMaxHP()*100)+"%").withStyle(Style.EMPTY.withColor(getHPColor(p_77624_1_)))).withStyle(TextFormatting.GRAY));
+        p_77624_3_.add(new TranslatableComponent("item.projectazure.filter.tooltip", new TextComponent(String.format("%.2f", (double)ItemStackUtils.getCurrentHP(p_77624_1_)/(double) this.getMaxHP()*100)+"%").withStyle(Style.EMPTY.withColor(getHPColor(p_77624_1_)))).withStyle(ChatFormatting.GRAY));
     }
 }

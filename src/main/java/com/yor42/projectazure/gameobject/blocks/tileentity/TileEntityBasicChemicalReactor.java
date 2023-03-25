@@ -4,18 +4,18 @@ import com.yor42.projectazure.gameobject.containers.machine.ContainerBasicChemic
 import com.yor42.projectazure.gameobject.crafting.recipes.BasicChemicalReactionRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullConsumer;
@@ -44,7 +44,7 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     private final int[] FieldArray = {this.ProcessTime,this.totalProcessTime,TileEntityBasicChemicalReactor.this.energyStorage.getEnergyStored(), TileEntityBasicChemicalReactor.this.energyStorage.getMaxEnergyStored(),this.OutputTank.getFluidAmount(), this.OutputTank.getCapacity()};
 
 
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -127,7 +127,7 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     }
 
     @Override
-    protected int getTargetProcessTime(IRecipe<?> recipe) {
+    protected int getTargetProcessTime(Recipe<?> recipe) {
 
         if(recipe instanceof BasicChemicalReactionRecipe){
             return ((BasicChemicalReactionRecipe) recipe).getProcesstime();
@@ -137,7 +137,7 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     }
 
     @Override
-    protected void process(IRecipe<?> irecipe) {
+    protected void process(Recipe<?> irecipe) {
         if(irecipe instanceof BasicChemicalReactionRecipe){
             ItemStack inputStack = this.inventory.getStackInSlot(0);
             if(!((BasicChemicalReactionRecipe) irecipe).test(inputStack)){
@@ -150,7 +150,7 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     }
 
     @Override
-    protected boolean canProcess(IRecipe<?> irecipe) {
+    protected boolean canProcess(Recipe<?> irecipe) {
         if(irecipe instanceof BasicChemicalReactionRecipe){
             ItemStack inputStack = this.inventory.getStackInSlot(0);
             if(!((BasicChemicalReactionRecipe) irecipe).test(inputStack)){
@@ -170,7 +170,7 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     }
 
     @Override
-    protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+    protected <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         return PlayState.STOP;
     }
 
@@ -180,26 +180,26 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
-        compound.put("outputtank", this.OutputTank.writeToNBT(new CompoundNBT()));
+    public CompoundTag save(CompoundTag compound) {
+        compound.put("outputtank", this.OutputTank.writeToNBT(new CompoundTag()));
         return super.save(compound);
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         this.OutputTank.readFromNBT(nbt.getCompound("outputtank"));
         super.load(state, nbt);
     }
 
     @Override
-    public void encodeExtraData(PacketBuffer buffer) {
+    public void encodeExtraData(FriendlyByteBuf buffer) {
         buffer.writeVarIntArray(this.FieldArray);
         buffer.writeFluidStack(this.OutputTank.getFluid());
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("tileentity.basic_chemicalreactor.name");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("tileentity.basic_chemicalreactor.name");
     }
 
     private final LazyOptional<ItemStackHandler> INVENTORY = LazyOptional.of(()->this.inventory);
@@ -221,7 +221,7 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     }
 
     @Override
-    protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
+    protected AbstractContainerMenu createMenu(int p_213906_1_, Inventory p_213906_2_) {
         return new ContainerBasicChemicalReactor(p_213906_1_, p_213906_2_,this.inventory,  this.fields, this.OutputTank.getFluid());
     }
 }

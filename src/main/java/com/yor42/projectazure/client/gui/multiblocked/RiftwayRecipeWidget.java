@@ -15,9 +15,9 @@ import com.lowdragmc.multiblocked.api.recipe.Recipe;
 import com.lowdragmc.multiblocked.api.recipe.RecipeCondition;
 import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -115,11 +115,11 @@ public class RiftwayRecipeWidget extends WidgetGroup {
             if (!list.isEmpty()) {
                 index++;
                 boolean reversed = false;
-                List<ITextComponent> components = new ArrayList<>();
+                List<Component> components = new ArrayList<>();
                 for (RecipeCondition condition : list) {
                     if (!reversed && condition.isReverse()) {
                         reversed = true;
-                        components.add(new TranslationTextComponent("multiblocked.gui.condition.reverse"));
+                        components.add(new TranslatableComponent("multiblocked.gui.condition.reverse"));
                     }
                     components.add(condition.getTooltips());
                 }

@@ -2,12 +2,12 @@ package com.yor42.projectazure.gameobject.crafting.ingredients;
 
 import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
 public class EntityIngredientCompanions extends EntityIngredient {
 
@@ -18,8 +18,8 @@ public class EntityIngredientCompanions extends EntityIngredient {
     }
 
     @Override
-    public void spawn(ServerWorld serverLevel, CompoundNBT tag, BlockPos pos) {
-        Entity entity = type.spawn(serverLevel, tag, null, null, pos, SpawnReason.NATURAL, false, false);
+    public void spawn(ServerLevel serverLevel, CompoundTag tag, BlockPos pos) {
+        Entity entity = type.spawn(serverLevel, tag, null, null, pos, MobSpawnType.NATURAL, false, false);
         if(entity instanceof AbstractEntityCompanion){
             AbstractEntityCompanion companion = (AbstractEntityCompanion) entity;
             companion.setOrderedToSit(true);

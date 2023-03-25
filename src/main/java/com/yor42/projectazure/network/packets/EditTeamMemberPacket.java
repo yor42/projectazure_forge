@@ -2,11 +2,11 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -21,14 +21,14 @@ public class EditTeamMemberPacket {
         this.action = action;
     }
 
-    public static EditTeamMemberPacket decode (final PacketBuffer buffer){
+    public static EditTeamMemberPacket decode (final FriendlyByteBuf buffer){
         final UUID teamUUID = buffer.readUUID();
         final UUID memberUUID = buffer.readUUID();
         final ACTION action = buffer.readEnum(ACTION.class);
         return new EditTeamMemberPacket(teamUUID, memberUUID, action);
     }
 
-    public static void encode(final EditTeamMemberPacket msg, final PacketBuffer buffer){
+    public static void encode(final EditTeamMemberPacket msg, final FriendlyByteBuf buffer){
         buffer.writeUUID(msg.teamUUID);
         buffer.writeUUID(msg.memberUUID);
         buffer.writeEnum(msg.action);
@@ -37,10 +37,10 @@ public class EditTeamMemberPacket {
     public static void handle(final EditTeamMemberPacket msg, final Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() -> {
-            final ServerPlayerEntity playerEntity = ctx.get().getSender(
+            final ServerPlayer playerEntity = ctx.get().getSender(
             );
             if (playerEntity != null) {
-                ServerWorld world = playerEntity.getLevel();
+                ServerLevel world = playerEntity.getLevel();
                 ProjectAzureWorldSavedData data = ProjectAzureWorldSavedData.getSaveddata(world);
                 Entity entity = world.getEntity(msg.memberUUID);
                 switch (msg.action) {

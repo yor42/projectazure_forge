@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -20,12 +20,12 @@ public class CapabilityMultiInventory {
     public static class MultiInventoryStorage<T extends IMultiInventory> implements Capability.IStorage<T> {
         @Nullable
         @Override
-        public INBT writeNBT(Capability<T> capability, T instance, Direction side) {
+        public Tag writeNBT(Capability<T> capability, T instance, Direction side) {
             throw new NotImplementedException();
         }
 
         @Override
-        public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
+        public void readNBT(Capability<T> capability, T instance, Direction side, Tag nbt) {
             throw new NotImplementedException();
         }
     }

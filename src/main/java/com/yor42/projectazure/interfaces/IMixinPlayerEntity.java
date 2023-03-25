@@ -1,23 +1,23 @@
 package com.yor42.projectazure.interfaces;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.Optional;
 
 public interface IMixinPlayerEntity {
 
-    CompoundNBT getEntityonBack();
+    CompoundTag getEntityonBack();
 
-    boolean setEntityonBack(CompoundNBT compound);
+    boolean setEntityonBack(CompoundTag compound);
 
-    void forcesetEntityonBack(CompoundNBT compound);
+    void forcesetEntityonBack(CompoundTag compound);
 
     Optional<Entity> removeEntityOnBack();
 
     Optional<Entity> forceremoveEntityOnBack();
 
-    Optional<Entity> respawnEntityOnBack(CompoundNBT compound);
+    Optional<Entity> respawnEntityOnBack(CompoundTag compound);
 
 
 }

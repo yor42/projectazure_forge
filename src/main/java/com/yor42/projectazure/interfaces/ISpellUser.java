@@ -1,8 +1,8 @@
 package com.yor42.projectazure.interfaces;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
@@ -16,13 +16,13 @@ public interface ISpellUser {
     Delay of Pre animation before actually firing projectile
      */
     int getProjectilePreAnimationDelay();
-    Hand getSpellUsingHand();
+    InteractionHand getSpellUsingHand();
     boolean shouldUseSpell(LivingEntity target);
 
     default int SpellCooldown(){
         return 0;
     }
 
-    void ShootProjectile(World world, @Nonnull LivingEntity target);
+    void ShootProjectile(Level world, @Nonnull LivingEntity target);
     default void StartSpellAttack(LivingEntity target){}
 }

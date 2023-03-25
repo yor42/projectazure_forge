@@ -3,33 +3,39 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.task.Task;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.item.*;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.LightType;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.TORCH_INDEX;
 import static net.minecraft.util.Hand.OFF_HAND;
 
-public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+
+public class CompanionPlaceTorchTask extends Behavior<AbstractEntityCompanion> {
 
     private int Cooldown =0;
 
     public CompanionPlaceTorchTask() {
-        super(ImmutableMap.of(RegisterAI.TORCH_INDEX.get(), MemoryModuleStatus.REGISTERED));
+        super(ImmutableMap.of(RegisterAI.TORCH_INDEX.get(), MemoryStatus.REGISTERED));
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerWorld world, AbstractEntityCompanion entity) {
+    protected boolean checkExtraStartConditions(ServerLevel world, AbstractEntityCompanion entity) {
 
         if (this.Cooldown > 0) {
             this.Cooldown--;
@@ -37,7 +43,7 @@ public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {
         }
         else {
             if (this.getTorchHand(entity).isPresent()) {
-                return !world.canSeeSky(entity.blockPosition()) && world.getBrightness(LightType.BLOCK, entity.blockPosition())<1;
+                return !world.canSeeSky(entity.blockPosition()) && world.getBrightness(LightLayer.BLOCK, entity.blockPosition())<1;
             } else {
                 entity.getBrain().getMemory(TORCH_INDEX.get()).ifPresent((idx) -> {
                     if (entity.getItemSwapIndexOffHand() == -1) {
@@ -51,17 +57,17 @@ public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void start(ServerWorld world, AbstractEntityCompanion entity, long p_212831_3_) {
+    protected void start(ServerLevel world, AbstractEntityCompanion entity, long p_212831_3_) {
         this.getTorchHand(entity).ifPresent((hand) -> {
             ItemStack stack = entity.getItemInHand(hand);
             Item item = stack.getItem();
             if(item instanceof BlockItem){
-                Vector3d vector3d = new Vector3d(entity.getX(), entity.getEyeY(), entity.getZ());
-                Vector3d vector3d2 = new Vector3d(entity.getX(), entity.getY()-4, entity.getZ());
-                RayTraceContext rtx =new RayTraceContext(vector3d, vector3d2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, null);
-                BlockRayTraceResult result = world.clip(rtx);
-                if(result.getType() == RayTraceResult.Type.BLOCK) {
-                    BlockState state = ((BlockItem) item).getBlock().getStateForPlacement(new BlockItemUseContext(world, null, hand, stack, result));
+                Vec3 vector3d = new Vec3(entity.getX(), entity.getEyeY(), entity.getZ());
+                Vec3 vector3d2 = new Vec3(entity.getX(), entity.getY()-4, entity.getZ());
+                ClipContext rtx =new ClipContext(vector3d, vector3d2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null);
+                BlockHitResult result = world.clip(rtx);
+                if(result.getType() == HitResult.Type.BLOCK) {
+                    BlockState state = ((BlockItem) item).getBlock().getStateForPlacement(new BlockPlaceContext(world, null, hand, stack, result));
                     if (state != null) {
                         world.setBlock(result.getBlockPos(), state, 2);
                         stack.shrink(1);
@@ -73,7 +79,7 @@ public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void stop(ServerWorld p_212835_1_, AbstractEntityCompanion entity, long p_212835_3_) {
+    protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion entity, long p_212835_3_) {
         if(entity.getItemSwapIndexOffHand()>-1) {
             ItemStack buffer = entity.getOffhandItem();
             entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
@@ -82,8 +88,8 @@ public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {
         }
     }
 
-    private Optional<Hand> getTorchHand(AbstractEntityCompanion entity){
-        for(Hand hand : Hand.values()){
+    private Optional<InteractionHand> getTorchHand(AbstractEntityCompanion entity){
+        for(InteractionHand hand : InteractionHand.values()){
             Item item = entity.getItemInHand(hand).getItem();
             if(item == Items.TORCH || item == Items.SOUL_TORCH){
                 return Optional.of(hand);

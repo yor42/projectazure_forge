@@ -1,14 +1,16 @@
 package com.yor42.projectazure.gameobject.blocks.machines;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class DroneDockingStationBlock extends AbstractMachineBlock {
     public DroneDockingStationBlock(Properties properties) {
@@ -17,12 +19,12 @@ public class DroneDockingStationBlock extends AbstractMachineBlock {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
         return null;
     }
 
     @Override
-    protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
+    protected void interactWith(Level worldIn, BlockPos pos, Player player) {
 
     }
 }

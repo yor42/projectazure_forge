@@ -4,23 +4,23 @@ import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.BrainUtil;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_WORLDSKILLABLE;
 
-public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
+public class CompanionMoveforWorkTask extends Behavior<AbstractEntityCompanion> {
     private final float MaxDistance;
     private BlockPos position;
     private boolean isWorldSkill = false;
     public CompanionMoveforWorkTask(float maxDistance) {
-        super(ImmutableMap.of(RegisterAI.NEAREST_ORE.get(), MemoryModuleStatus.REGISTERED, RegisterAI.NEAREST_HARVESTABLE.get(), MemoryModuleStatus.REGISTERED, RegisterAI.NEAREST_PLANTABLE.get(), MemoryModuleStatus.REGISTERED, RegisterAI.NEAREST_BONEMEALABLE.get(), MemoryModuleStatus.REGISTERED));
+        super(ImmutableMap.of(RegisterAI.NEAREST_ORE.get(), MemoryStatus.REGISTERED, RegisterAI.NEAREST_HARVESTABLE.get(), MemoryStatus.REGISTERED, RegisterAI.NEAREST_PLANTABLE.get(), MemoryStatus.REGISTERED, RegisterAI.NEAREST_BONEMEALABLE.get(), MemoryStatus.REGISTERED));
         this.MaxDistance = maxDistance;
     }
 
@@ -29,7 +29,7 @@ public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, AbstractEntityCompanion entity) {
+    protected boolean checkExtraStartConditions(@Nonnull ServerLevel p_212832_1_, AbstractEntityCompanion entity) {
 
         if(entity.isAngry()){
             return false;
@@ -68,13 +68,13 @@ public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
+    protected void start(ServerLevel p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
         if(entity instanceof IWorldSkillUseable && this.isWorldSkill){
-            BrainUtil.setWalkAndLookTargetMemories(entity, this.position,1, (int) ((IWorldSkillUseable) entity).getWorldSkillRange());
+            BehaviorUtils.setWalkAndLookTargetMemories(entity, this.position,1, (int) ((IWorldSkillUseable) entity).getWorldSkillRange());
             this.isWorldSkill = false;
         }
         else {
-            BrainUtil.setWalkAndLookTargetMemories(entity, this.position, 1, 1);
+            BehaviorUtils.setWalkAndLookTargetMemories(entity, this.position, 1, 1);
         }
     }
 }

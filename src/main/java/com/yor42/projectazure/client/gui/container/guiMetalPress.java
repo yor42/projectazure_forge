@@ -1,33 +1,33 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
-public class guiMetalPress extends ContainerScreen<ContainerMetalPress> implements IHasContainer<ContainerMetalPress> {
+public class guiMetalPress extends AbstractContainerScreen<ContainerMetalPress> implements MenuAccess<ContainerMetalPress> {
 
     private static final ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/metal_press.png");
 
     private final ContainerMetalPress container;
 
-    public guiMetalPress(ContainerMetalPress container, PlayerInventory inv, ITextComponent titleIn) {
+    public guiMetalPress(ContainerMetalPress container, Inventory inv, Component titleIn) {
         super(container, inv, titleIn);
         this.container = container;
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
 
         if(isHovering(157, 6,10,72,mouseX,mouseY)){
-            this.renderTooltip(matrixStack, new StringTextComponent(this.container.getField().get(2)+"/"+this.container.getField().get(3)), mouseX,mouseY);
+            this.renderTooltip(matrixStack, new TextComponent(this.container.getField().get(2)+"/"+this.container.getField().get(3)), mouseX,mouseY);
         }
 
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -35,7 +35,7 @@ public class guiMetalPress extends ContainerScreen<ContainerMetalPress> implemen
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);

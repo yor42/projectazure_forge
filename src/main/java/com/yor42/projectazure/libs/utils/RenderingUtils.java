@@ -1,22 +1,22 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderState;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -29,10 +29,10 @@ import org.lwjgl.opengl.GL11;
  */
 
 public class RenderingUtils {
-    public static void drawRepeatedFluidSpriteGui(IRenderTypeBuffer buffer, MatrixStack stack, FluidStack fluid, float x, float y, float w, float h)
+    public static void drawRepeatedFluidSpriteGui(MultiBufferSource buffer, PoseStack stack, FluidStack fluid, float x, float y, float w, float h)
     {
-        RenderType renderType = getGui(PlayerContainer.BLOCK_ATLAS);
-        IVertexBuilder builder = buffer.getBuffer(renderType);
+        RenderType renderType = getGui(InventoryMenu.BLOCK_ATLAS);
+        VertexConsumer builder = buffer.getBuffer(renderType);
         drawRepeatedFluidSprite(builder, stack, fluid, x, y, w, h);
     }
 
@@ -40,17 +40,17 @@ public class RenderingUtils {
     {
         return RenderType.create(
                 "gui_"+texture,
-                DefaultVertexFormats.POSITION_COLOR_TEX,
+                DefaultVertexFormat.POSITION_COLOR_TEX,
                 GL11.GL_QUADS,
                 256,
-                RenderType.State.builder()
-                        .setTextureState(new RenderState.TextureState(texture, false, false))
-                        .setAlphaState(new RenderState.AlphaState(0.5F))
+                RenderType.CompositeState.builder()
+                        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                        .setAlphaState(new RenderStateShard.AlphaStateShard(0.5F))
                         .createCompositeState(false)
         );
     }
 
-    public static void drawRepeatedFluidSprite(IVertexBuilder builder, MatrixStack transform, FluidStack fluid, float x, float y, float w, float h)
+    public static void drawRepeatedFluidSprite(VertexConsumer builder, PoseStack transform, FluidStack fluid, float x, float y, float w, float h)
     {
         TextureAtlasSprite sprite = getSprite(fluid.getFluid().getAttributes().getStillTexture(fluid));
         int col = fluid.getFluid().getAttributes().getColor(fluid);
@@ -61,7 +61,7 @@ public class RenderingUtils {
                     sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1(),
                     (col >> 16&255)/255.0f, (col >> 8&255)/255.0f, (col&255)/255.0f, 1);
     }
-    public static void drawRepeatedSprite(IVertexBuilder builder, MatrixStack transform, float x, float y, float w,
+    public static void drawRepeatedSprite(VertexConsumer builder, PoseStack transform, float x, float y, float w,
                                           float h, int iconWidth, int iconHeight, float uMin, float uMax, float vMin, float vMax,
                                           float r, float g, float b, float alpha)
     {
@@ -91,7 +91,7 @@ public class RenderingUtils {
         }
     }
     public static void drawTexturedColoredRect(
-            IVertexBuilder builder, MatrixStack transform,
+            VertexConsumer builder, PoseStack transform,
             float x, float y, float w, float h,
             float r, float g, float b, float alpha,
             float u0, float u1, float v0, float v1
@@ -109,7 +109,7 @@ public class RenderingUtils {
     }
     public static TextureAtlasSprite getSprite(ResourceLocation rl)
     {
-        return Minecraft.getInstance().getModelManager().getAtlas(PlayerContainer.BLOCK_ATLAS).getSprite(rl);
+        return Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(rl);
     }
 
     public static void renderEntityInInventory(int x, int y, float scale, float mouseX, float mouseY, LivingEntity entity) {
@@ -118,7 +118,7 @@ public class RenderingUtils {
         RenderSystem.pushMatrix();
         RenderSystem.translatef((float)x, (float)y, 1050.0F);
         RenderSystem.scalef(1.0F, 1.0F, -1.0F);
-        MatrixStack matrixstack = new MatrixStack();
+        PoseStack matrixstack = new PoseStack();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
         matrixstack.scale(scale, scale, scale);
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
@@ -135,11 +135,11 @@ public class RenderingUtils {
         entity.xRot = -f1 * 20.0F;
         entity.yHeadRot = entity.yRot;
         entity.yHeadRotO = entity.yRot;
-        EntityRendererManager entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderDispatcher entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
         quaternion1.conj();
         entityrenderermanager.overrideCameraOrientation(quaternion1);
         entityrenderermanager.setRenderShadow(false);
-        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
+        MultiBufferSource.BufferSource irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
         RenderSystem.runAsFancy(() -> entityrenderermanager.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880));
         irendertypebuffer$impl.endBatch();
         entityrenderermanager.setRenderShadow(true);

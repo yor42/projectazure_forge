@@ -1,25 +1,25 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -28,13 +28,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
-public class EntityMissileDroneMissile extends DamagingProjectileEntity {
+public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
     @Nullable
     protected LivingEntity targetEntity;
-    protected static final DataParameter<Optional<UUID>> TARGET = EntityDataManager.defineId(EntityMissileDroneMissile.class, DataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Optional<UUID>> TARGET = SynchedEntityData.defineId(EntityMissileDroneMissile.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final double TURNLIMIT = 9 * Math.PI;
 
-    public EntityMissileDroneMissile(EntityType<EntityMissileDroneMissile> p_i50173_1_, World p_i50173_2_) {
+    public EntityMissileDroneMissile(EntityType<EntityMissileDroneMissile> p_i50173_1_, Level p_i50173_2_) {
         super(p_i50173_1_, p_i50173_2_);
     }
 
@@ -71,13 +71,13 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compoundNBT) {
+    public void addAdditionalSaveData(CompoundTag compoundNBT) {
         super.addAdditionalSaveData(compoundNBT);
         this.getTargetUUID().ifPresent((UUID)->compoundNBT.putUUID("target", UUID));
     }
 
     @Override
-    public void readAdditionalSaveData(@ParametersAreNonnullByDefault CompoundNBT compoundNBT) {
+    public void readAdditionalSaveData(@ParametersAreNonnullByDefault CompoundTag compoundNBT) {
         super.readAdditionalSaveData(compoundNBT);
         if(compoundNBT.contains("target")){
             this.getEntityData().set(TARGET, Optional.of(compoundNBT.getUUID("target")));
@@ -90,13 +90,13 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
         if (this.level.isClientSide || (entity == null || !entity.removed) && this.level.hasChunkAt(this.blockPosition())) {
             super.tick();
 
-            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
-            if (raytraceresult.getType() != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+            HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
+            if (raytraceresult.getType() != HitResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
 
             this.checkInsideBlocks();
-            Vector3d vector3d = this.getDeltaMovement();
+            Vec3 vector3d = this.getDeltaMovement();
             double d0 = this.getX() + vector3d.x;
             double d1 = this.getY() + vector3d.y;
             double d2 = this.getZ() + vector3d.z;
@@ -108,14 +108,14 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
         if(!this.getCommandSenderWorld().isClientSide()){
 
             if(this.targetEntity != null){
-                Vector3d motion = this.getDeltaMovement();
+                Vec3 motion = this.getDeltaMovement();
                 double speed = motion.length();
 
-                Vector3d v2 = new Vector3d(this.targetEntity.getX(), this.targetEntity.getY()+0.5, this.targetEntity.getZ()).subtract(new Vector3d(this.getX(), this.getY(), this.getZ())).normalize();
-                Vector3d v1 = motion.normalize();
+                Vec3 v2 = new Vec3(this.targetEntity.getX(), this.targetEntity.getY()+0.5, this.targetEntity.getZ()).subtract(new Vec3(this.getX(), this.getY(), this.getZ())).normalize();
+                Vec3 v1 = motion.normalize();
 
                 double angle = Math.acos(v1.dot(v2));
-                Vector3d axis = v1.cross(v2).normalize();
+                Vec3 axis = v1.cross(v2).normalize();
 
                 //angle = Math.min(angle, MAX_TURN_ANGLE);
 
@@ -130,7 +130,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
             }
 
             if (this.targetEntity == null && this.getTargetUUID().isPresent()) {
-                Entity TargetEntity = ((ServerWorld)this.level).getEntity(this.getTargetUUID().get());
+                Entity TargetEntity = ((ServerLevel)this.level).getEntity(this.getTargetUUID().get());
                 if (this.targetEntity == null) {
                     this.setTarget(null);
                 }
@@ -140,17 +140,17 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
             }
 
             if(!this.targetEntity.isAlive()){
-                this.getCommandSenderWorld().explode(this, this.getX(), this.getY(), this.getZ(), 0, Explosion.Mode.NONE);
+                this.getCommandSenderWorld().explode(this, this.getX(), this.getY(), this.getZ(), 0, Explosion.BlockInteraction.NONE);
                 this.remove();
             }
 
-            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
-            if (raytraceresult.getType() != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+            HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
+            if (raytraceresult.getType() != HitResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
 
         }
-        Vector3d vector3d = this.getDeltaMovement();
+        Vec3 vector3d = this.getDeltaMovement();
         /*
 
         double d4 = vector3d.y;
@@ -161,14 +161,14 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
 
          */
 
-        ProjectileHelper.rotateTowardsMovement(this, 0.5F);
+        ProjectileUtil.rotateTowardsMovement(this, 0.5F);
         if(this.getCommandSenderWorld().isClientSide()){
             this.level.addParticle(ParticleTypes.FLAME, this.getX() - vector3d.x, this.getY() - vector3d.y + 0.15D, this.getZ() - vector3d.z, 0.0D, 0.0D, 0.0D);
         }
     }
 
     @Override
-    protected void onHit(RayTraceResult result) {
+    protected void onHit(HitResult result) {
         super.onHit(result);
         this.Detonate();
     }
@@ -195,19 +195,19 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult result) {
+    protected void onHitEntity(EntityHitResult result) {
         if(result.getEntity() != this.getOwner()) {
             this.Detonate();
         }
     }
 
     private void Detonate(){
-        this.level.explode(this, this.getX(), getY(), getZ(), 1F, Explosion.Mode.BREAK);
+        this.level.explode(this, this.getX(), getY(), getZ(), 1F, Explosion.BlockInteraction.BREAK);
         this.remove();
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

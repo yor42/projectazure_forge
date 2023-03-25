@@ -1,35 +1,35 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class SyncTeamListPacket {
 
-    private final CompoundNBT entry;
+    private final CompoundTag entry;
     private final ACTION action;
 
-    public SyncTeamListPacket(CompoundNBT compound) {
+    public SyncTeamListPacket(CompoundTag compound) {
         this(compound, ACTION.ADD);
     }
 
-    public SyncTeamListPacket(CompoundNBT compound, ACTION action) {
+    public SyncTeamListPacket(CompoundTag compound, ACTION action) {
         this.entry = compound;
         this.action = action;
     }
 
-    public static SyncTeamListPacket decode (final PacketBuffer buffer){
+    public static SyncTeamListPacket decode (final FriendlyByteBuf buffer){
         final ACTION action = buffer.readEnum(ACTION.class);
-        final CompoundNBT compound = buffer.readNbt();
+        final CompoundTag compound = buffer.readNbt();
         return new SyncTeamListPacket(compound, action);
     }
 
-    public static void encode(final SyncTeamListPacket msg, final PacketBuffer buffer){
+    public static void encode(final SyncTeamListPacket msg, final FriendlyByteBuf buffer){
         buffer.writeEnum(msg.action);
         buffer.writeNbt(msg.entry);
     }

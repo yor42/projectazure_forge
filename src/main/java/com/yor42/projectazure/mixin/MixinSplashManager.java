@@ -1,9 +1,9 @@
 package com.yor42.projectazure.mixin;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.client.util.Splashes;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
+import net.minecraft.client.resources.SplashManager;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,11 +15,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
-@Mixin(Splashes.class)
+@Mixin(SplashManager.class)
 public class MixinSplashManager {
 
     @Inject(method = "apply(Ljava/util/List;Lnet/minecraft/resources/IResourceManager;Lnet/minecraft/profiler/IProfiler;)V", at = @At("HEAD"))
-    private void onApply(List<String> p_212853_1_, IResourceManager p_212853_2_, IProfiler p_212853_3_, CallbackInfo ci){
+    private void onApply(List<String> p_212853_1_, ResourceManager p_212853_2_, ProfilerFiller p_212853_3_, CallbackInfo ci){
         p_212853_1_.addAll(addCustomSplashes());
     }
 

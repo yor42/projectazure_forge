@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.capability;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
@@ -39,7 +39,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
 
     @Override
     public int getSlots() {
-        CompoundNBT nbt = this.getContainerNBT();
+        CompoundTag nbt = this.getContainerNBT();
         return nbt.getInt("Size");
     }
 
@@ -47,9 +47,9 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
     @Override
     public ItemStack getStackInSlot(int slot) {
         validateSlotIndex(slot);
-        CompoundNBT nbt = this.getContainerNBT();
-        ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
-        CompoundNBT itemTags = tagList.getCompound(slot);
+        CompoundTag nbt = this.getContainerNBT();
+        ListTag tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        CompoundTag itemTags = tagList.getCompound(slot);
         if(slot == itemTags.getInt("Slot"))
             return ItemStack.of(itemTags);
         else
@@ -69,11 +69,11 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
     public void setStackInSlot(int slot, @Nonnull ItemStack stack)
     {
         validateSlotIndex(slot);
-        CompoundNBT nbt = this.getContainerNBT();
-        ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
-        CompoundNBT itemTags = tagList.getCompound(slot);
+        CompoundTag nbt = this.getContainerNBT();
+        ListTag tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        CompoundTag itemTags = tagList.getCompound(slot);
         if(slot == itemTags.getInt("Slot")){
-            CompoundNBT itemTag = new CompoundNBT();
+            CompoundTag itemTag = new CompoundTag();
             itemTag.putInt("Slot", slot);
             stack.save(itemTag);
             tagList.set(slot, itemTag);
@@ -85,7 +85,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
                 itemTags = tagList.getCompound(i);
                 int slotnum = itemTags.getInt("Slot");
                 if(slot == slotnum){
-                    CompoundNBT itemTag = new CompoundNBT();
+                    CompoundTag itemTag = new CompoundTag();
                     itemTag.putInt("Slot", slot);
                     stack.save(itemTag);
                     tagList.set(slot, itemTag);
@@ -199,25 +199,25 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
     }
 
     private void setSize(int newsize) {
-        ListNBT nbtTagList = new ListNBT();
+        ListTag nbtTagList = new ListTag();
         for (int i = 0; i < newsize; i++){
-            CompoundNBT itemTag = new CompoundNBT();
+            CompoundTag itemTag = new CompoundTag();
             itemTag.putInt("Slot", i);
             ItemStack.EMPTY.save(itemTag);
             nbtTagList.add(itemTag);
         }
-        CompoundNBT nbt = this.getContainerNBT();
+        CompoundTag nbt = this.getContainerNBT();
         nbt.put("Items", nbtTagList);
         nbt.putInt("Size", newsize);
     }
 
-    private CompoundNBT getContainerNBT(){
+    private CompoundTag getContainerNBT(){
         return this.container.getOrCreateTag().getCompound(ITEMSTACKHANDLER_NBTKEY);
     }
 
     protected void validateSlotIndex(int slot)
     {
-        ListNBT tagList = getContainerNBT().getList("Items", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = getContainerNBT().getList("Items", Constants.NBT.TAG_COMPOUND);
         if (slot>this.size || slot>=tagList.size())
             throw new RuntimeException("Slot " + slot + " not in valid range - [0," + Math.max(this.size, tagList.size()) + ")");
     }

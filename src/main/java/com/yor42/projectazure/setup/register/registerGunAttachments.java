@@ -2,8 +2,8 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -40,7 +40,7 @@ public enum registerGunAttachments {
     private final ResourceLocation modelLocation;
     private final boolean specialModel;
     @OnlyIn(Dist.CLIENT)
-    private IBakedModel cachedModel;
+    private BakedModel cachedModel;
 
     registerGunAttachments(String modelName) {
         this(new ResourceLocation(Constants.MODID, "special/" + modelName), true);
@@ -52,9 +52,9 @@ public enum registerGunAttachments {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public IBakedModel getModel() {
+    public BakedModel getModel() {
         if (this.cachedModel == null) {
-            IBakedModel model = Minecraft.getInstance().getModelManager().getModel(this.modelLocation);
+            BakedModel model = Minecraft.getInstance().getModelManager().getModel(this.modelLocation);
             if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
                 return model;
             }

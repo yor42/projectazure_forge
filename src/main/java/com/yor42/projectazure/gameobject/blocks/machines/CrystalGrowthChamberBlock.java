@@ -2,16 +2,18 @@ package com.yor42.projectazure.gameobject.blocks.machines;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class CrystalGrowthChamberBlock extends AbstractMachineBlock {
     public CrystalGrowthChamberBlock(Properties properties) {
@@ -25,16 +27,16 @@ public class CrystalGrowthChamberBlock extends AbstractMachineBlock {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
         return new TileEntityCrystalGrowthChamber();
     }
 
     @Override
-    protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity TileentityAtPos = worldIn.getBlockEntity(pos);
-        if(TileentityAtPos instanceof TileEntityCrystalGrowthChamber && player instanceof ServerPlayerEntity && !worldIn.isClientSide()){
+    protected void interactWith(Level worldIn, BlockPos pos, Player player) {
+        BlockEntity TileentityAtPos = worldIn.getBlockEntity(pos);
+        if(TileentityAtPos instanceof TileEntityCrystalGrowthChamber && player instanceof ServerPlayer && !worldIn.isClientSide()){
             TileEntityCrystalGrowthChamber TE = (TileEntityCrystalGrowthChamber) TileentityAtPos;
-            NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
+            NetworkHooks.openGui((ServerPlayer) player, TE, TE::encodeExtraData);
         }
     }
 }

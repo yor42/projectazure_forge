@@ -13,11 +13,11 @@ import com.lowdragmc.multiblocked.api.tile.part.PartTileEntity;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -86,13 +86,13 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
     }
 
     @Override
-    public ModularUI createUI(PlayerEntity PlayerEntity) {
+    public ModularUI createUI(Player PlayerEntity) {
         TabContainer tabContainer = new TabContainer(0, 0, 256, 166);
         this.initTraitUI(tabContainer, PlayerEntity);
         return (new ModularUI(196, 166, this, PlayerEntity)).widget(tabContainer);
     }
 
-    protected void initTraitUI(TabContainer tabContainer, PlayerEntity PlayerEntity) {
+    protected void initTraitUI(TabContainer tabContainer, Player PlayerEntity) {
         WidgetGroup group = new WidgetGroup(20, 0, 176, 256);
 
         String textureloc;
@@ -145,16 +145,16 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
 
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT compound) {
+    public CompoundTag save(@Nonnull CompoundTag compound) {
         compound = super.save(compound);
         compound.put("inventory", this.inventory.serializeNBT());
-        compound.put("tank", this.tank.writeToNBT(new CompoundNBT()));
+        compound.put("tank", this.tank.writeToNBT(new CompoundTag()));
         compound.put("battery", this.battery.serializeNBT());
         return compound;
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
         super.load(state, compound);
         this.inventory.deserializeNBT(compound.getCompound("inventory"));
         this.tank.readFromNBT(compound.getCompound("tank"));

@@ -2,18 +2,18 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -26,20 +26,20 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity implements IAnimatable, INamedContainerProvider, ITickableTileEntity {
+public abstract class AbstractAnimateableEnergyTickTE extends BaseContainerBlockEntity implements IAnimatable, MenuProvider, TickableBlockEntity {
     protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     protected final CustomEnergyStorage energyStorage;
     protected ItemStackHandler inventory;
 
-    protected AbstractAnimateableEnergyTickTE(TileEntityType<?> typeIn) {
+    protected AbstractAnimateableEnergyTickTE(BlockEntityType<?> typeIn) {
         this(typeIn, 15000, 1000, 1000, 1);
     }
 
-    protected AbstractAnimateableEnergyTickTE(TileEntityType<?> typeIn, int buffercapacity, int inventorysize) {
+    protected AbstractAnimateableEnergyTickTE(BlockEntityType<?> typeIn, int buffercapacity, int inventorysize) {
         this(typeIn, buffercapacity, buffercapacity, buffercapacity, inventorysize);
     }
 
-    protected AbstractAnimateableEnergyTickTE(TileEntityType<?> typeIn, int buffercapacity, int maxin, int maxout, int invsize) {
+    protected AbstractAnimateableEnergyTickTE(BlockEntityType<?> typeIn, int buffercapacity, int maxin, int maxout, int invsize) {
         super(typeIn);
         this.energyStorage = new CustomEnergyStorage(buffercapacity, maxin, maxout);
         this.inventory = new ItemStackHandler(invsize);
@@ -62,7 +62,7 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
         }
     }
 
-    protected abstract <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event);
+    protected abstract <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event);
 
     protected abstract void playsound();
 
@@ -82,14 +82,14 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         this.energyStorage.deserializeNBT(nbt.getCompound("energy_storage"));
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.put("inventory", this.inventory.serializeNBT());
         compound.put("energy_storage", this.energyStorage.serializeNBT());
@@ -98,17 +98,17 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT syncTag = this.getUpdateTag();
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        CompoundTag syncTag = this.getUpdateTag();
         syncTag.put("inventory", this.inventory.serializeNBT());
         syncTag.put("energy", this.energyStorage.serializeNBT());
-        return new SUpdateTileEntityPacket(worldPosition, 1, syncTag);
+        return new ClientboundBlockEntityDataPacket(worldPosition, 1, syncTag);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         super.onDataPacket(net, pkt);
-        CompoundNBT syncTag = pkt.getTag();
+        CompoundTag syncTag = pkt.getTag();
         this.inventory.deserializeNBT(syncTag.getCompound("inventory"));
         this.energyStorage.deserializeNBT(syncTag.getCompound("energy"));
     }
@@ -144,7 +144,7 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
@@ -165,7 +165,7 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
         return this.inventory;
     }
 
-    public abstract void encodeExtraData(PacketBuffer buffer);
+    public abstract void encodeExtraData(FriendlyByteBuf buffer);
 
     protected int getPowerConsumption(){
         return 100;

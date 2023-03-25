@@ -1,16 +1,16 @@
 package com.yor42.projectazure.client.renderer.layer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.client.model.entity.misc.ModelClaymore;
 import com.yor42.projectazure.client.model.items.ModelItemClaymore;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
 import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Quaternion;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -23,14 +23,14 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureLocation;
 @OnlyIn(Dist.CLIENT)
 public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> implements IGeoRenderer<EntityRosmontis> {
 
-    public IRenderTypeBuffer rtb;
+    public MultiBufferSource rtb;
 
     public RosmontisClaymoreLayer(IGeoRenderer<EntityRosmontis> entityRendererIn) {
         super(entityRendererIn);
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityRosmontis entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityRosmontis entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         this.rtb = bufferIn;
         int SpellItemIndex = entityLivingBaseIn.getNextSkillItemindex();
         if(entityLivingBaseIn.isSkillItemInindex(0)){
@@ -117,12 +117,12 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
     }
 
     @Override
-    public void setCurrentRTB(IRenderTypeBuffer rtb) {
+    public void setCurrentRTB(MultiBufferSource rtb) {
         this.rtb = rtb;
     }
 
     @Override
-    public IRenderTypeBuffer getCurrentRTB() {
+    public MultiBufferSource getCurrentRTB() {
         return this.rtb;
     }
 

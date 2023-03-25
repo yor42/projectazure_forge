@@ -1,20 +1,20 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.PAConfig;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector4f;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector4f;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.NaturalSpawner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,8 +22,7 @@ import java.util.Random;
 
 import static net.minecraft.util.math.MathHelper.clamp;
 
-public class MathUtil {
-    public static Random rand = new Random();
+public clasnet.minecraft.util.Mthndom rand = new Random();
 
     public static Random getRand() {
         return rand;
@@ -31,15 +30,15 @@ public class MathUtil {
 
     //Oh, yeah its Big brain time
 
-    public static CompoundNBT serializeBlockPos(BlockPos pos){
-        CompoundNBT compound = new CompoundNBT();
+    public static CompoundTag serializeBlockPos(BlockPos pos){
+        CompoundTag compound = new CompoundTag();
         compound.putInt("x", pos.getX());
         compound.putInt("Y", pos.getY());
         compound.putInt("Z", pos.getZ());
         return compound;
     }
 
-    public static BlockPos deserializeBlockPos(CompoundNBT compound){
+    public static BlockPos deserializeBlockPos(CompoundTag compound){
 
         int x=compound.getInt("x");
         int y=compound.getInt("Y");
@@ -146,7 +145,7 @@ public class MathUtil {
             double x = entity1.getX() - entity2.getX();
             double y = entity1.getY() - entity2.getY();
             double z = entity1.getY() - entity2.getY();
-            double dist = MathHelper.sqrt(x * x + y * y + z * z);
+            double dist = Mth.sqrt(x * x + y * y + z * z);
 
             if (dist > 1.0E-4D)
             {
@@ -161,7 +160,7 @@ public class MathUtil {
     }
 
     public static int ColorHexToInt(String HEX_VALUE){
-        Color color = Color.parseColor(HEX_VALUE);
+        TextColor color = TextColor.parseColor(HEX_VALUE);
         return color.getValue();
     }
 
@@ -177,14 +176,14 @@ public class MathUtil {
         return Tick2Minute(Tick)/60;
     }
 
-    public static StringTextComponent Tick2FormattedClock(int Tick){
+    public static TextComponent Tick2FormattedClock(int Tick){
 
         int millisecs = Tick%20*50;
         int second = Tick2Second(Tick)%60;
         int minute = Tick2Minute(Tick)%60;
         int hour = Tick2Hour(Tick);
 
-        return new StringTextComponent(String.format("%02d", hour)+":"+String.format("%02d", minute)+":"+String.format("%02d", second)+":"+String.format("%03d", millisecs));
+        return new TextComponent(String.format("%02d", hour)+":"+String.format("%02d", minute)+":"+String.format("%02d", second)+":"+String.format("%03d", millisecs));
     }
 
     public static String Tick2StringClock(int Tick){
@@ -208,28 +207,28 @@ public class MathUtil {
         return String.format("%.2f%s", value, suffix[index]);
     }
 
-    public static BlockPos getRandomBlockposInRadius2D(World world, BlockPos originPos, int maxRadius, int minRadius){
+    public static BlockPos getRandomBlockposInRadius2D(Level world, BlockPos originPos, int maxRadius, int minRadius){
         if(maxRadius-minRadius<0){
             throw new IllegalArgumentException("maxRadius must be larger then minRadius!");
         }
         double RandRadian = rand.nextFloat() * 2 * Math.PI;
         int tries = 0;
-        BlockPos.Mutable pos = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         do {
             double radius = ((maxRadius - minRadius) * rand.nextDouble()) + minRadius;
             int x = originPos.getX() + (int) (radius * Math.cos(RandRadian));
             int z = originPos.getZ() + (int) (radius * Math.sin(RandRadian));
-            int y = world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z);
+            int y = world.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
             pos.set(x,y,z);
             tries++;
-        }while(!WorldEntitySpawner.isSpawnPositionOk(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkSource().isEntityTickingChunk(new ChunkPos(pos)) && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
+        }while(!NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkSource().isEntityTickingChunk(new ChunkPos(pos)) && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
         if(tries >= PAConfig.CONFIG.BeaconFindSpawnPositionTries.get()){
             pos.set(originPos.getX(),originPos.getY(), originPos.getZ());
         }
         return pos;
     }
 
-    public static Vector3d rotateVector(Vector3d vec, Vector3d axis, double theta) {
+    public static Vec3 rotateVector(Vec3 vec, Vec3 axis, double theta) {
         double u = axis.x;
         double v = axis.y;
         double w = axis.z;
@@ -243,7 +242,7 @@ public class MathUtil {
         double zPrime = w*(u*vec.x + v*vec.y + w*vec.z)*(1d - Math.cos(theta))
                 + vec.z*Math.cos(theta)
                 + (-v*vec.x + u*vec.y)*Math.sin(theta);
-        return new Vector3d(xPrime, yPrime, zPrime);
+        return new Vec3(xPrime, yPrime, zPrime);
     }
 
 }

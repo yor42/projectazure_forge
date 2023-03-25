@@ -2,8 +2,8 @@ package com.yor42.projectazure.gameobject.containers.slots;
 
 import com.tac.guns.item.AmmoItem;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 

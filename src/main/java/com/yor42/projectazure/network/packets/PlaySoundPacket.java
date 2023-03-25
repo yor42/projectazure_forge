@@ -1,13 +1,13 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.network.ClientEvents;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
@@ -17,14 +17,14 @@ public class PlaySoundPacket {
     private final ResourceLocation sound;
     private final double x,y,z;
     private final float pitch, volume;
-    private final SoundCategory soundCategory;
+    private final SoundSource soundCategory;
 
 
-    public PlaySoundPacket(SoundEvent soundEvent, SoundCategory category, double x, double y, double z, float pitch, float volume){
+    public PlaySoundPacket(SoundEvent soundEvent, SoundSource category, double x, double y, double z, float pitch, float volume){
         this(soundEvent.getRegistryName(),category, x,y,z,pitch,volume);
     }
 
-    public PlaySoundPacket(ResourceLocation soundEvent, SoundCategory category, double x, double y, double z, float pitch, float volume){
+    public PlaySoundPacket(ResourceLocation soundEvent, SoundSource category, double x, double y, double z, float pitch, float volume){
         this.sound = soundEvent;
         this.x = x;
         this.y = y;
@@ -34,9 +34,9 @@ public class PlaySoundPacket {
         this.volume = volume;
     }
 
-    public static PlaySoundPacket decode (final PacketBuffer buffer){
+    public static PlaySoundPacket decode (final FriendlyByteBuf buffer){
         ResourceLocation soundEvent = buffer.readResourceLocation();
-        SoundCategory category = buffer.readEnum(SoundCategory.class);
+        SoundSource category = buffer.readEnum(SoundSource.class);
         double x = buffer.readDouble();
         double y = buffer.readDouble();
         double z = buffer.readDouble();
@@ -45,7 +45,7 @@ public class PlaySoundPacket {
         return new PlaySoundPacket(soundEvent, category, x,y,z,pitch,volume);
     }
 
-    public static void encode(final PlaySoundPacket msg, final PacketBuffer buffer){
+    public static void encode(final PlaySoundPacket msg, final FriendlyByteBuf buffer){
         buffer.writeResourceLocation(msg.sound);
         buffer.writeEnum(msg.soundCategory);
         buffer.writeDouble(msg.x);

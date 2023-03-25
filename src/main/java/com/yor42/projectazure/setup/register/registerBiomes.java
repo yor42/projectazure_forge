@@ -2,13 +2,13 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
 import net.minecraft.world.biome.*;
-import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.structure.StructureFeatures;
-import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilders;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.data.worldgen.StructureFeatures;
+import net.minecraft.data.worldgen.SurfaceBuilders;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,15 +17,22 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.data.worldgen.BiomeDefaultFeatures;
+import net.minecraft.world.level.biome.AmbientMoodSettings;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.biome.BiomeSpecialEffects;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+
 public class registerBiomes {
 
     public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, Constants.MODID);
     private static final List<BiomeData> BiomeList = new ArrayList<>();
     public static Biome makeMirrorSea(){
 
-        MobSpawnInfo.Builder spawnbuilder = new MobSpawnInfo.Builder();
+        MobSpawnSettings.Builder spawnbuilder = new MobSpawnSettings.Builder();
 
-        return (new Biome.Builder()).precipitation(Biome.RainType.RAIN).biomeCategory(Biome.Category.OCEAN).depth(-1.8F).scale(0.1F).temperature(0.5F).downfall(0.5F).specialEffects((new BiomeAmbience.Builder()).waterColor(0x0a0091).waterFogColor(0x480066).fogColor(0x8a0037).skyColor(0x001a5b).ambientMoodSound(MoodSoundAmbience.LEGACY_CAVE_SETTINGS).build()).mobSpawnSettings(spawnbuilder.build()).generationSettings(getOceanGenerationSettingsBuilder().build()).build();
+        return (new Biome.BiomeBuilder()).precipitation(Biome.Precipitation.RAIN).biomeCategory(Biome.BiomeCategory.OCEAN).depth(-1.8F).scale(0.1F).temperature(0.5F).downfall(0.5F).specialEffects((new BiomeSpecialEffects.Builder()).waterColor(0x0a0091).waterFogColor(0x480066).fogColor(0x8a0037).skyColor(0x001a5b).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build()).mobSpawnSettings(spawnbuilder.build()).generationSettings(getOceanGenerationSettingsBuilder().build()).build();
     }
 
     public static void addBiometoList(String BiomeID, Biome biome, int chance, BiomeManager.BiomeType climate) {
@@ -41,23 +48,23 @@ public class registerBiomes {
         BiomeList.add(new BiomeData(BiomeID, biome, chance, climate));
     }
     private static BiomeGenerationSettings.Builder getOceanGenerationSettingsBuilder() {
-        BiomeGenerationSettings.Builder biomegenerationsettings$builder = (new BiomeGenerationSettings.Builder()).surfaceBuilder(ConfiguredSurfaceBuilders.GRASS);
-        StructureFeature<?, ?> structurefeature = StructureFeatures.OCEAN_RUIN_COLD;
-        DefaultBiomeFeatures.addDefaultOverworldOceanStructures(biomegenerationsettings$builder);
+        BiomeGenerationSettings.Builder biomegenerationsettings$builder = (new BiomeGenerationSettings.Builder()).surfaceBuilder(SurfaceBuilders.GRASS);
+        ConfiguredStructureFeature<?, ?> structurefeature = StructureFeatures.OCEAN_RUIN_COLD;
+        BiomeDefaultFeatures.addDefaultOverworldOceanStructures(biomegenerationsettings$builder);
         biomegenerationsettings$builder.addStructureStart(structurefeature);
         biomegenerationsettings$builder.addStructureStart(StructureFeatures.RUINED_PORTAL_OCEAN);
-        DefaultBiomeFeatures.addOceanCarvers(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultLakes(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultMonsterRoom(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultUndergroundVariety(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultOres(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultSoftDisks(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addWaterTrees(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultFlowers(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultGrass(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultMushrooms(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultExtraVegetation(biomegenerationsettings$builder);
-        DefaultBiomeFeatures.addDefaultSprings(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addOceanCarvers(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultLakes(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultMonsterRoom(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultUndergroundVariety(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultOres(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultSoftDisks(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addWaterTrees(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultFlowers(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultGrass(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultMushrooms(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomegenerationsettings$builder);
+        BiomeDefaultFeatures.addDefaultSprings(biomegenerationsettings$builder);
         return biomegenerationsettings$builder;
     }
 
@@ -73,8 +80,8 @@ public class registerBiomes {
 
     public static void registerviaData(BiomeData data){
         BIOMES.register(data.getID(), data::getBiome);
-        BiomeManager.addBiome(data.getType(), new BiomeManager.BiomeEntry(RegistryKey.create(Registry.BIOME_REGISTRY, ResourceUtils.ModResourceLocation(data.getID())), data.getChance()));
-        BiomeDictionary.addTypes(RegistryKey.create(Registry.BIOME_REGISTRY, data.getResourceLocationID()), BiomeDictionary.Type.OCEAN);
+        BiomeManager.addBiome(data.getType(), new BiomeManager.BiomeEntry(ResourceKey.create(Registry.BIOME_REGISTRY, ResourceUtils.ModResourceLocation(data.getID())), data.getChance()));
+        BiomeDictionary.addTypes(ResourceKey.create(Registry.BIOME_REGISTRY, data.getResourceLocationID()), BiomeDictionary.Type.OCEAN);
     }
 
     private static class BiomeData{

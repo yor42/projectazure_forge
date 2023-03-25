@@ -2,9 +2,9 @@ package com.yor42.projectazure.events;
 
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

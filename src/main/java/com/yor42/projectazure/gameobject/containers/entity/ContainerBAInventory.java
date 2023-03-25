@@ -4,16 +4,16 @@ import com.tac.guns.item.AmmoItem;
 import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -28,11 +28,11 @@ public class ContainerBAInventory extends AbstractContainerInventory {
     private final ItemStackHandler AmmoStack;
 
 
-    public ContainerBAInventory(int ID, PlayerInventory inventory, PacketBuffer data) {
+    public ContainerBAInventory(int ID, Inventory inventory, FriendlyByteBuf data) {
         this(ID, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 
-    public ContainerBAInventory(int ID, PlayerInventory inventory, ItemStackHandler Inventory, IItemHandlerModifiable Equipments, ItemStackHandler Ammo, AbstractEntityCompanion companion) {
+    public ContainerBAInventory(int ID, Inventory inventory, ItemStackHandler Inventory, IItemHandlerModifiable Equipments, ItemStackHandler Ammo, AbstractEntityCompanion companion) {
         super(BA_CONTAINER.get(), ID, companion);
         this.AmmoStack = Ammo;
         //mainhand
@@ -89,7 +89,7 @@ public class ContainerBAInventory extends AbstractContainerInventory {
     }
 
     @Nonnull
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -156,7 +156,7 @@ public class ContainerBAInventory extends AbstractContainerInventory {
         return itemstack;
     }
 
-    public static class Supplier implements INamedContainerProvider {
+    public static class Supplier implements MenuProvider {
 
         EntityGunUserBase companion;
 
@@ -165,13 +165,13 @@ public class ContainerBAInventory extends AbstractContainerInventory {
         }
 
         @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.companioninventory");
+        public Component getDisplayName() {
+            return new TranslatableComponent("gui.companioninventory");
         }
 
         @Nullable
         @Override
-        public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
+        public AbstractContainerMenu createMenu(int openContainerId, Inventory inventory, Player player) {
             return new ContainerBAInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), this.companion);
         }
     }

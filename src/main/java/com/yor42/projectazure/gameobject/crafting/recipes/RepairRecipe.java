@@ -2,17 +2,17 @@ package com.yor42.projectazure.gameobject.crafting.recipes;
 
 import com.yor42.projectazure.interfaces.IItemDestroyable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.REPAIRING;
 
-public class RepairRecipe extends SpecialRecipe {
+public class RepairRecipe extends CustomRecipe {
 
     private int repairvalue = 0;
     private ItemStack RepairTarget = ItemStack.EMPTY;
@@ -22,7 +22,7 @@ public class RepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         IItemDestroyable RepairTargetItem = null;
         this.RepairTarget = ItemStack.EMPTY;
         for(int i = 0; i < inv.getContainerSize(); ++i) {
@@ -58,7 +58,7 @@ public class RepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
 
         ItemStack OutputStack = this.RepairTarget.copy();
         if(this.repairvalue>0) {
@@ -74,7 +74,7 @@ public class RepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return REPAIRING.get();
     }
 }

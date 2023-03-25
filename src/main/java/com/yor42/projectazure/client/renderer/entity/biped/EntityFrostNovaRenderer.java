@@ -3,15 +3,15 @@ package com.yor42.projectazure.client.renderer.entity.biped;
 import com.yor42.projectazure.client.model.entity.bonus.ModelFrostNova;
 import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class EntityFrostNovaRenderer extends GeoCompanionRenderer<EntityFrostnova> {
-    public EntityFrostNovaRenderer(EntityRendererManager renderManager) {
+    public EntityFrostNovaRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new ModelFrostNova());
     }
 

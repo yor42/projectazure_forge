@@ -1,10 +1,10 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.UUID;
@@ -19,13 +19,13 @@ public class ChangeContainerPacket {
         this.EntityID = EntityID;
     }
 
-    public static ChangeContainerPacket decode (final PacketBuffer buffer){
+    public static ChangeContainerPacket decode (final FriendlyByteBuf buffer){
         final ItemStack riggingstack = buffer.readItem();
         final UUID id = buffer.readUUID();
         return new ChangeContainerPacket(riggingstack, id);
     }
 
-    public static void encode(final ChangeContainerPacket msg, final PacketBuffer buffer){
+    public static void encode(final ChangeContainerPacket msg, final FriendlyByteBuf buffer){
         buffer.writeItem(msg.riggingstack);
         buffer.writeUUID(msg.EntityID);
     }
@@ -33,7 +33,7 @@ public class ChangeContainerPacket {
     public static void handle(final ChangeContainerPacket msg, final Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() -> {
-            final ServerPlayerEntity playerEntity = ctx.get().getSender();
+            final ServerPlayer playerEntity = ctx.get().getSender();
             if(playerEntity != null) {
                 NetworkHooks.openGui(playerEntity, new RiggingContainer.Provider(msg.riggingstack, msg.EntityID), buf -> {
                     buf.writeItem(msg.riggingstack);

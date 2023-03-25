@@ -10,25 +10,25 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -40,9 +40,9 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public class EntitySkullShatterer extends EntityGunUserBase implements IAknOp {
+public clasnet.minecraft.world.InteractionHandextends EntityGunUserBase implements IAknOp {
 
-    protected static final DataParameter<Boolean> COSMETIC = EntityDataManager.defineId(EntitySkullShatterer.class, DataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> COSMETIC = SynchedEntityData.defineId(EntitySkullShatterer.class, EntityDataSerializers.BOOLEAN);
 
     @Override
     public void populateInitialEquipments() {
@@ -50,18 +50,18 @@ public class EntitySkullShatterer extends EntityGunUserBase implements IAknOp {
         Item gasmaskitem = gasmask.getItem();
 
         if(gasmaskitem instanceof GasMaskItem){
-            ListNBT filters = new ListNBT();
+            ListTag filters = new ListTag();
             for(int i=0; i<2; i++) {
                 ItemStack filter = new ItemStack(RegisterItems.GASMASK_FILTER.get());
                 ItemStackUtils.setCurrentDamage(filter, (int) (((GasMaskFilterItem) filter.getItem()).getMaxHP()* MathUtil.rand.nextFloat()));
-                filters.add(filter.save(new CompoundNBT()));
+                filters.add(filter.save(new CompoundTag()));
             }
             gasmask.getOrCreateTag().put("filters", filters);
         }
-        this.setItemSlot(EquipmentSlotType.HEAD, gasmask);
+        this.setItemSlot(EquipmentSlot.HEAD, gasmask);
     }
 
-    public EntitySkullShatterer(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntitySkullShatterer(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -81,33 +81,33 @@ public class EntitySkullShatterer extends EntityGunUserBase implements IAknOp {
 
     @Nonnull
     @Override
-    public ActionResultType interactAt(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand) {
+    public InteractionResult interactAt(@Nonnull Player player, @Nonnull Vec3 vec, @Nonnull InteractionHand hand) {
 
         if(this.isOwnedBy(player)&&!this.getCommandSenderWorld().isClientSide() && player.getItemInHand(hand).isEmpty() && player.isCrouching()&&this.distanceTo(player)<=2){
-            Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
+            Vec3 PlayerLook = player.getViewVector(1.0F).normalize();
             float eyeHeight = (float) this.getEyeY();
 
 
-            Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
+            Vec3 EyeDelta = new Vec3(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
             EyeDelta = EyeDelta.normalize();
             double EyeCheckFinal = PlayerLook.dot(EyeDelta);
 
             if (EyeCheckFinal > 0.998 && this.entityData.get(ECCI_ANIMATION_TIME)==0) {
                 this.SetCosmetic(!this.getCosmeticValue());
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         return super.interactAt(player, vec, hand);
     }
 
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.SetCosmetic(compound.getBoolean("cosmetic"));
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("cosmetic", this.getCosmeticValue());
     }
@@ -153,7 +153,7 @@ public class EntitySkullShatterer extends EntityGunUserBase implements IAknOp {
             if(this.getUsedItemHand() == MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
@@ -281,9 +281,9 @@ public class EntitySkullShatterer extends EntityGunUserBase implements IAknOp {
         return null;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.SkullShattererMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.SkullShattererSwimSpeed.get())

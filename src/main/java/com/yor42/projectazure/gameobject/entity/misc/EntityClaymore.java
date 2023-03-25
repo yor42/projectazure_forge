@@ -4,24 +4,24 @@ import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmon
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.util.HandSide;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.players.OldUsersConverter;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -45,13 +45,13 @@ import java.util.UUID;
 
 import static net.minecraft.util.HandSide.RIGHT;
 
-public class EntityClaymore extends LivingEntity implements IAnimatable {
+public clasnet.minecraft.world.entity.HumanoidArmvingEntity implements IAnimatable {
 
     public static final int life = 30;
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(EntityClaymore.class, DataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Optional<UUID>> OWNER_UNIQUE_ID = SynchedEntityData.defineId(EntityClaymore.class, EntityDataSerializers.OPTIONAL_UUID);
     protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    public EntityClaymore(EntityType<? extends LivingEntity> type, World worldIn) {
+    public EntityClaymore(EntityType<? extends LivingEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -76,7 +76,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
         if(!this.getCommandSenderWorld().isClientSide()) {
             try {
                 UUID uuid = this.getOwnerId();
-                return uuid == null ? null : ((ServerWorld)this.level).getEntity(this.getOwnerId());
+                return uuid == null ? null : ((ServerLevel)this.level).getEntity(this.getOwnerId());
             } catch (IllegalArgumentException illegalargumentexception) {
                 return null;
             }
@@ -134,19 +134,19 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
 
     @Override
-    public HandSide getMainArm() {
+    public HumanoidArm getMainArm() {
         return RIGHT;
     }
 
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         UUID uuid;
         if (compound.hasUUID("Owner")) {
             uuid = compound.getUUID("Owner");
         } else {
             String s = compound.getString("Owner");
-            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
+            uuid = OldUsersConverter.convertMobOwnerIfNecessary(this.getServer(), s);
         }
 
         if (uuid != null) {
@@ -164,17 +164,17 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
     }
 
     @Override
-    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlot slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
 
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         if (this.getOwnerId() != null) {
             compound.putUUID("owner", this.getOwnerId());
         }
@@ -182,7 +182,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     @Nonnull
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -214,9 +214,9 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
         return this.factory;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, 0)
                 .add(ForgeMod.SWIM_SPEED.get(), 0)

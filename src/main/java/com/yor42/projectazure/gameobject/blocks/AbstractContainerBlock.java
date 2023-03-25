@@ -1,12 +1,14 @@
 package com.yor42.projectazure.gameobject.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class AbstractContainerBlock extends Block {
     public AbstractContainerBlock(Properties properties) {
@@ -22,14 +24,14 @@ public class AbstractContainerBlock extends Block {
     }
 
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 
-        TileEntity tile = worldIn.getBlockEntity(pos);
+        BlockEntity tile = worldIn.getBlockEntity(pos);
 
         //drop item
-        if (canDropInventory(state) && tile instanceof IInventory)
+        if (canDropInventory(state) && tile instanceof Container)
         {
-            InventoryHelper.dropContents(worldIn, pos, (IInventory) tile);
+            Containers.dropContents(worldIn, pos, (Container) tile);
         }
 
         //alert block change

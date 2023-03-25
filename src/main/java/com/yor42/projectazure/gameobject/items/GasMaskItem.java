@@ -9,21 +9,21 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -43,11 +43,18 @@ import java.util.List;
 import static com.yor42.projectazure.gameobject.items.materials.ModArmorMaterials.ArmorModMaterials.GASMASK;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item.Properties;
+
 public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem {
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public GasMaskItem(Properties builder) {
-        super(GASMASK, EquipmentSlotType.HEAD, builder);
+        super(GASMASK, EquipmentSlot.HEAD, builder);
     }
 
     @Override
@@ -61,7 +68,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return CuriosCompat.addCapability(stack);
     }
 
@@ -78,14 +85,14 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
 
-        CompoundNBT compoundNBT = stack.getOrCreateTag();
+        CompoundTag compoundNBT = stack.getOrCreateTag();
         if(!compoundNBT.contains("filters")){
             return 1;
         }
 
         int damage=0, totaldamage=0;
 
-        ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
         for(int i = 0; i<filters.size(); i++){
             ItemStack filterstack = ItemStack.of(filters.getCompound(i));
             Item item = filterstack.getItem();
@@ -103,11 +110,11 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
     }
 
     @Override
-    public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
+    public void onArmorTick(ItemStack stack, Level world, Player player) {
         super.onArmorTick(stack, world, player);
-        CompoundNBT compoundNBT = stack.getOrCreateTag();
+        CompoundTag compoundNBT = stack.getOrCreateTag();
         boolean activefilter = false;
-        ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
         for(int i = 0; i<filters.size(); i++){
             ItemStack filterstack = ItemStack.of(filters.getCompound(i));
             if(ItemStackUtils.DamageItem(player.isUnderWater()?5F:1F, filterstack)){
@@ -130,23 +137,23 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
 
     @Override
     public void curioTick(LivingEntity entity, int index, ItemStack stack) {
-        if(entity instanceof PlayerEntity) {
-            this.onArmorTick(stack, entity.getCommandSenderWorld(), (PlayerEntity) entity);
+        if(entity instanceof Player) {
+            this.onArmorTick(stack, entity.getCommandSenderWorld(), (Player) entity);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void renderHelmetOverlay(ItemStack stack, PlayerEntity player, int width, int height, float partialTicks) {
+    public void renderHelmetOverlay(ItemStack stack, Player player, int width, int height, float partialTicks) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.defaultBlendFunc();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableAlphaTest();
         Minecraft.getInstance().getTextureManager().bind(ResourceUtils.ModResourceLocation("textures/misc/gasmaskblur.png"));
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.begin(7, DefaultVertexFormat.POSITION_TEX);
         bufferbuilder.vertex(0.0D, height, -90.0D).uv(0.0F, 1.0F).endVertex();
         bufferbuilder.vertex(width, height, -90.0D).uv(1.0F, 1.0F).endVertex();
         bufferbuilder.vertex(width, 0.0D, -90.0D).uv(1.0F, 0.0F).endVertex();
@@ -159,28 +166,28 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World p_77624_2_, List<ITextComponent> p_77624_3_, ITooltipFlag p_77624_4_) {
+    public void appendHoverText(ItemStack stack, @Nullable Level p_77624_2_, List<Component> p_77624_3_, TooltipFlag p_77624_4_) {
         super.appendHoverText(stack, p_77624_2_, p_77624_3_, p_77624_4_);
-        CompoundNBT compoundNBT = stack.getOrCreateTag();
-        ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        CompoundTag compoundNBT = stack.getOrCreateTag();
+        ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
         for(int i = 0; i<filters.size(); i++){
             ItemStack filterstack = ItemStack.of(filters.getCompound(i));
             Item filteritem = filterstack.getItem();
             if(filteritem instanceof GasMaskFilterItem){
-                p_77624_3_.add(new TranslationTextComponent("item.projectazure.gasmask.tooltip.filter", i+1, new StringTextComponent(String.format("%.2f", (double)ItemStackUtils.getCurrentHP(filterstack)/(double) ((GasMaskFilterItem) filteritem).getMaxHP()*100)+"%").withStyle(Style.EMPTY.withColor(getHPColor(filterstack)))).withStyle(TextFormatting.GRAY));
+                p_77624_3_.add(new TranslatableComponent("item.projectazure.gasmask.tooltip.filter", i+1, new TextComponent(String.format("%.2f", (double)ItemStackUtils.getCurrentHP(filterstack)/(double) ((GasMaskFilterItem) filteritem).getMaxHP()*100)+"%").withStyle(Style.EMPTY.withColor(getHPColor(filterstack)))).withStyle(ChatFormatting.GRAY));
                 //p_77624_3_.add(new StringTextComponent(Integer.toHexString(ItemStackUtils.getHPColorInt(filterstack))));
             }
         }
     }
 
     @Override
-    public ActionResult<ItemStack> use(World p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
+    public InteractionResultHolder<ItemStack> use(Level p_77659_1_, Player p_77659_2_, InteractionHand p_77659_3_) {
         ItemStack stack = p_77659_2_.getItemInHand(p_77659_3_);
-        CompoundNBT compoundNBT = stack.getOrCreateTag();
-        ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        CompoundTag compoundNBT = stack.getOrCreateTag();
+        ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
 
         if(filters.isEmpty()){
-            return ActionResult.pass(stack);
+            return InteractionResultHolder.pass(stack);
         }
 
         if(p_77659_2_.isCrouching()){
@@ -197,7 +204,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
         }
         p_77659_2_.playSound(registerSounds.GASMASK_FILTER_REMOVE, 0.8F*(0.4F* MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
         compoundNBT.put("filters", filters);
-        return ActionResult.success(stack);
+        return InteractionResultHolder.success(stack);
     }
 
     @Nullable

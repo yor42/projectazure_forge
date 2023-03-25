@@ -1,9 +1,9 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.network.serverEvents;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -14,19 +14,19 @@ public class selectedStarterPacket {
         this.starterID = id;
     }
 
-    public static selectedStarterPacket decode (final PacketBuffer buffer){
+    public static selectedStarterPacket decode (final FriendlyByteBuf buffer){
         final int starterid = buffer.readInt();
         return new selectedStarterPacket(starterid);
     }
 
-    public static void encode(final selectedStarterPacket msg, final PacketBuffer buffer){
+    public static void encode(final selectedStarterPacket msg, final FriendlyByteBuf buffer){
         buffer.writeInt(msg.starterID);
     }
 
     public static void handle(final selectedStarterPacket msg, final Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() -> {
-            final ServerPlayerEntity playerEntity = ctx.get().getSender();
+            final ServerPlayer playerEntity = ctx.get().getSender();
 
             if (playerEntity != null) {
                 serverEvents.spawnStarter(playerEntity, msg.starterID);

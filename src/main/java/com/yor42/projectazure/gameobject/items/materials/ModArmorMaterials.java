@@ -1,17 +1,17 @@
 package com.yor42.projectazure.gameobject.items.materials;
 
 import mekanism.api.annotations.NonNull;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nonnull;
 
 public class ModArmorMaterials {
 
-    public enum ArmorModMaterials implements IArmorMaterial{
+    public enum ArmorModMaterials implements ArmorMaterial{
         GASMASK("gasmask",new int[]{0, 0, 0, 0}, new int[]{2,0,0,0}, 0, 0, 0, SoundEvents.ARMOR_EQUIP_LEATHER, Ingredient.EMPTY);
 
         private final int[] durability, defence;
@@ -33,12 +33,12 @@ public class ModArmorMaterials {
         }
 
         @Override
-        public int getDurabilityForSlot(EquipmentSlotType p_200896_1_) {
+        public int getDurabilityForSlot(EquipmentSlot p_200896_1_) {
             return this.durability[p_200896_1_.getIndex()];
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlotType p_200902_1_) {
+        public int getDefenseForSlot(EquipmentSlot p_200902_1_) {
             return this.defence[p_200902_1_.getIndex()];
         }
 

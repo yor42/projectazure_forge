@@ -5,32 +5,32 @@ import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.blocks.PantryBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityPantry;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.BrainUtil;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.item.Food;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.EffectType;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.*;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_ABSENT;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_PRESENT;
+import staticnet.minecraft.world.entity.ai.memory.MemoryStatuss.VALUE_PRESENT;
 
-public class CompanionTakeFoodFromPantryGoal extends Task<AbstractEntityCompanion> {
+public class CompanionTakeFoodFromPantryGoal extends Behavior<AbstractEntityCompanion> {
 
     private long chestopenTimestamp;
     int emptyinvslot = -1;
@@ -40,7 +40,7 @@ public class CompanionTakeFoodFromPantryGoal extends Task<AbstractEntityCompanio
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerWorld world, AbstractEntityCompanion entity) {
+    protected boolean checkExtraStartConditions(ServerLevel world, AbstractEntityCompanion entity) {
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
 
         for(int i=0; i<entity.getInventory().getSlots();i++){
@@ -68,7 +68,7 @@ public class CompanionTakeFoodFromPantryGoal extends Task<AbstractEntityCompanio
         if(owner == null){
             return false;
         }
-        TileEntity te = world.getBlockEntity(target);
+        BlockEntity te = world.getBlockEntity(target);
         if(te == null || !te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()){
             brain.eraseMemory(FOOD_PANTRY.get());
             return false;
@@ -95,12 +95,12 @@ public class CompanionTakeFoodFromPantryGoal extends Task<AbstractEntityCompanio
     }
 
     @Override
-    protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
+    protected void start(ServerLevel p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
         GlobalPos pos = brain.getMemory(FOOD_PANTRY.get()).get();
         BlockPos target = pos.pos();
         if(!target.closerThan(entity.blockPosition(), 3)) {
-            BrainUtil.setWalkAndLookTargetMemories(entity, target, 1, 2);
+            BehaviorUtils.setWalkAndLookTargetMemories(entity, target, 1, 2);
         }
         else{
             brain.eraseMemory(MemoryModuleType.WALK_TARGET);
@@ -108,11 +108,11 @@ public class CompanionTakeFoodFromPantryGoal extends Task<AbstractEntityCompanio
     }
 
     @Override
-    protected void tick(ServerWorld world, AbstractEntityCompanion entity, long tickcount) {
+    protected void tick(ServerLevel world, AbstractEntityCompanion entity, long tickcount) {
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
         GlobalPos pos = brain.getMemory(FOOD_PANTRY.get()).get();
         BlockPos target = pos.pos();
-        TileEntity te = world.getBlockEntity(target);
+        BlockEntity te = world.getBlockEntity(target);
 
         if(te == null || !te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()){
             this.doStop(world, entity, tickcount);
@@ -125,7 +125,7 @@ public class CompanionTakeFoodFromPantryGoal extends Task<AbstractEntityCompanio
 
         if(this.chestopenTimestamp<0){
             if(te instanceof TileEntityPantry){
-                entity.swing(Hand.MAIN_HAND);
+                entity.swing(InteractionHand.MAIN_HAND);
                 this.chestopenTimestamp = tickcount;
                 playSound(target, world, SoundEvents.CHEST_OPEN);
                 BlockState state = world.getBlockState(target);
@@ -176,7 +176,7 @@ public class CompanionTakeFoodFromPantryGoal extends Task<AbstractEntityCompanio
             return false;
         }
 
-        Food food = stack.getItem().getFoodProperties();
+        FoodProperties food = stack.getItem().getFoodProperties();
         if(food == null){
             return false;
         }
@@ -185,8 +185,8 @@ public class CompanionTakeFoodFromPantryGoal extends Task<AbstractEntityCompanio
             return true;
         }
         else{
-            for(Pair<EffectInstance, Float> effect : food.getEffects()){
-                if(effect.getFirst().getEffect().getCategory() == EffectType.HARMFUL){
+            for(Pair<MobEffectInstance, Float> effect : food.getEffects()){
+                if(effect.getFirst().getEffect().getCategory() == MobEffectCategory.HARMFUL){
                     return false;
                 }
             }
@@ -196,23 +196,23 @@ public class CompanionTakeFoodFromPantryGoal extends Task<AbstractEntityCompanio
     }
 
 
-    private static void playSound(BlockPos pos, ServerWorld world, SoundEvent p_213965_2_) {
-        Vector3i vector3i = world.getBlockState(pos).getValue(PantryBlock.FACING).getNormal();
+    private static void playSound(BlockPos pos, ServerLevel world, SoundEvent p_213965_2_) {
+        Vec3i vector3i = world.getBlockState(pos).getValue(PantryBlock.FACING).getNormal();
         double d0 = (double)pos.getX() + 0.5D + (double)vector3i.getX() / 2.0D;
         double d1 = (double)pos.getY() + 0.5D + (double)vector3i.getY() / 2.0D;
         double d2 = (double)pos.getZ() + 0.5D + (double)vector3i.getZ() / 2.0D;
-        world.playSound(null, d0, d1, d2, p_213965_2_, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 1.5F);
+        world.playSound(null, d0, d1, d2, p_213965_2_, SoundSource.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 1.5F);
     }
 
     @Override
-    protected void stop(ServerWorld p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
+    protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
         super.stop(p_212835_1_, p_212835_2_, p_212835_3_);
         this.chestopenTimestamp = -1;
         this.emptyinvslot = -1;
     }
 
     @Override
-    protected boolean canStillUse(ServerWorld p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
+    protected boolean canStillUse(ServerLevel p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
         return this.checkExtraStartConditions(p_212834_1_, p_212834_2_);
     }
 }

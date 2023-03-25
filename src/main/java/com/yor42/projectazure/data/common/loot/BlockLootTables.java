@@ -4,24 +4,30 @@ import com.lowdragmc.multiblocked.api.block.BlockComponent;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.block.Block;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.item.Items;
 import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.conditions.MatchTool;
-import net.minecraft.loot.conditions.TableBonus;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Collectors;
 
-public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
-    private static final ILootCondition.IBuilder WITH_SLEDGEHAMMER = MatchTool.toolMatches(ItemPredicate.Builder.item().of(RegisterItems.SLEDGEHAMMER.get()));
+import net.minecraft.world.level.storage.loot.ConstantIntValue;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.RandomValueBounds;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+
+public class BlockLootTables extends net.minecraft.data.loot.BlockLoot {
+    private static final LootItemCondition.Builder WITH_SLEDGEHAMMER = MatchTool.toolMatches(ItemPredicate.Builder.item().of(RegisterItems.SLEDGEHAMMER.get()));
 
     @Override
     protected void addTables() {
@@ -67,16 +73,16 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.dropSelf(RegisterBlocks.WARPED_PANTRY.get());
         this.dropSelf(RegisterBlocks.COBBLED_ORIROCK.get());
 
-        this.add(RegisterBlocks.METAL_PRESS.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
-        this.add(RegisterBlocks.BASIC_REFINERY.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
-        this.add(RegisterBlocks.ALLOY_FURNACE.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
-        this.add(RegisterBlocks.RECRUIT_BEACON.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
-        this.add(RegisterBlocks.CRYSTAL_GROWTH_CHAMBER.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
-        this.add(RegisterBlocks.ORIROCK.get(), (orirock) -> createSilkTouchDispatchTable(orirock, applyExplosionCondition(orirock, ItemLootEntry.lootTableItem(RegisterItems.ORIGINITE.get()).when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).otherwise(ItemLootEntry.lootTableItem(RegisterBlocks.COBBLED_ORIROCK.get())))));
+        this.add(RegisterBlocks.METAL_PRESS.get(), net.minecraft.data.loot.BlockLoot::createNameableBlockEntityTable);
+        this.add(RegisterBlocks.BASIC_REFINERY.get(), net.minecraft.data.loot.BlockLoot::createNameableBlockEntityTable);
+        this.add(RegisterBlocks.ALLOY_FURNACE.get(), net.minecraft.data.loot.BlockLoot::createNameableBlockEntityTable);
+        this.add(RegisterBlocks.RECRUIT_BEACON.get(), net.minecraft.data.loot.BlockLoot::createNameableBlockEntityTable);
+        this.add(RegisterBlocks.CRYSTAL_GROWTH_CHAMBER.get(), net.minecraft.data.loot.BlockLoot::createNameableBlockEntityTable);
+        this.add(RegisterBlocks.ORIROCK.get(), (orirock) -> createSilkTouchDispatchTable(orirock, applyExplosionCondition(orirock, LootItem.lootTableItem(RegisterItems.ORIGINITE.get()).when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).otherwise(LootItem.lootTableItem(RegisterBlocks.COBBLED_ORIROCK.get())))));
         this.add(RegisterBlocks.PYROXENE_ORE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.PYROXENE.get()));
     }
-    protected static LootTable.Builder onlyWithHammerDoubling(IItemProvider item) {
-        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(1)).when(WITH_SLEDGEHAMMER).apply(SetCount.setCount(RandomValueRange.between(2.0F, 2.1F))).add(ItemLootEntry.lootTableItem(item)));
+    protected static LootTable.Builder onlyWithHammerDoubling(ItemLike item) {
+        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantIntValue.exactly(1)).when(WITH_SLEDGEHAMMER).apply(SetItemCountFunction.setCount(RandomValueBounds.between(2.0F, 2.1F))).add(LootItem.lootTableItem(item)));
     }
 
     @Nonnull

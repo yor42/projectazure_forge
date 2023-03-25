@@ -3,21 +3,21 @@ package com.yor42.projectazure.gameobject.items.tools;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Rarity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,34 +30,34 @@ public class ItemStasisCrystal extends Item {
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
-        World world = context.getLevel();
+    public InteractionResult useOn(UseOnContext context) {
+        Level world = context.getLevel();
 
         if(context.getPlayer() == null)
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
 
-        if (!(world instanceof ServerWorld)) {
-            return ActionResultType.SUCCESS;
+        if (!(world instanceof ServerLevel)) {
+            return InteractionResult.SUCCESS;
         }
         ItemStack itemstack = context.getItemInHand();
         int level = itemstack.getOrCreateTag().getInt("cost");
-        CompoundNBT compound = itemstack.getOrCreateTag().getCompound("entity");
-        PlayerEntity player = context.getPlayer();
+        CompoundTag compound = itemstack.getOrCreateTag().getCompound("entity");
+        Player player = context.getPlayer();
         if(player.experienceLevel<level){
-            player.displayClientMessage(new TranslationTextComponent("message.stasiscrystal.notenoughlevel", level), true);
-            return ActionResultType.FAIL;
+            player.displayClientMessage(new TranslatableComponent("message.stasiscrystal.notenoughlevel", level), true);
+            return InteractionResult.FAIL;
         }
 
         Optional<Entity> entity = EntityType.create(compound, world);
         entity.map((spawnedEntity)->{
             if(spawnedEntity instanceof AbstractEntityCompanion) {
                 if(((AbstractEntityCompanion) spawnedEntity).getOwner()!= null && player != ((AbstractEntityCompanion) spawnedEntity).getOwner()){
-                    player.displayClientMessage(new TranslationTextComponent("message.stasiscrystal.notowner", ((AbstractEntityCompanion) spawnedEntity).getOwner().getDisplayName()), true);
-                    return ActionResultType.FAIL;
+                    player.displayClientMessage(new TranslatableComponent("message.stasiscrystal.notowner", ((AbstractEntityCompanion) spawnedEntity).getOwner().getDisplayName()), true);
+                    return InteractionResult.FAIL;
                 }
                 AbstractEntityCompanion companion = (AbstractEntityCompanion)spawnedEntity;
                 companion.setPos(context.getClickedPos().getX() + 0.5, context.getClickedPos().getY() + 1.1F, context.getClickedPos().getZ() + 0.5);
-                ((AbstractEntityCompanion) spawnedEntity).getTeamUUID().ifPresent((uuid)->ProjectAzureWorldSavedData.getSaveddata((ServerWorld) world).getTeambyUUID(uuid).ifPresent((team)->{
+                ((AbstractEntityCompanion) spawnedEntity).getTeamUUID().ifPresent((uuid)->ProjectAzureWorldSavedData.getSaveddata((ServerLevel) world).getTeambyUUID(uuid).ifPresent((team)->{
                     if(!team.addEntitytoTeam(companion.getUUID())){
                         companion.setTeam(null);
                     }
@@ -68,28 +68,28 @@ public class ItemStasisCrystal extends Item {
                     itemstack.shrink(1);
                     player.giveExperienceLevels(-level);
                 }
-                return ActionResultType.CONSUME;
+                return InteractionResult.CONSUME;
             }
             else{
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             }
         });
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World p_77624_2_, @Nonnull List<ITextComponent> list, @Nonnull ITooltipFlag p_77624_4_) {
+    public void appendHoverText(ItemStack stack, @Nullable Level p_77624_2_, @Nonnull List<Component> list, @Nonnull TooltipFlag p_77624_4_) {
         super.appendHoverText(stack, p_77624_2_, list, p_77624_4_);
         if(p_77624_2_ != null) {
-            CompoundNBT compound = stack.getOrCreateTag().getCompound("entity");
+            CompoundTag compound = stack.getOrCreateTag().getCompound("entity");
             int cost = stack.getOrCreateTag().getInt("cost");
             Optional<Entity> entity = EntityType.create(compound, p_77624_2_);
             entity.ifPresent((storedEntity) ->{
-                list.add(new TranslationTextComponent("tooltip.companion.name").withStyle(TextFormatting.GRAY).append(": ").append(storedEntity.getDisplayName()).withStyle(TextFormatting.YELLOW));
+                list.add(new TranslatableComponent("tooltip.companion.name").withStyle(ChatFormatting.GRAY).append(": ").append(storedEntity.getDisplayName()).withStyle(ChatFormatting.YELLOW));
                 if(storedEntity instanceof AbstractEntityCompanion && ((AbstractEntityCompanion)storedEntity).getOwner()!= null) {
-                    list.add(new TranslationTextComponent("tooltip.companion.owner", ((AbstractEntityCompanion) storedEntity).getOwner().getDisplayName()).withStyle(TextFormatting.YELLOW));
+                    list.add(new TranslatableComponent("tooltip.companion.owner", ((AbstractEntityCompanion) storedEntity).getOwner().getDisplayName()).withStyle(ChatFormatting.YELLOW));
                 }
-                list.add(new TranslationTextComponent("tooltip.companion.cost", cost).withStyle(TextFormatting.YELLOW));
+                list.add(new TranslatableComponent("tooltip.companion.cost", cost).withStyle(ChatFormatting.YELLOW));
             });
         }
     }

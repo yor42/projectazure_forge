@@ -18,29 +18,29 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.enchantment.ProtectionEnchantment;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.item.enchantment.ProtectionEnchantment;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -69,8 +69,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
     private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",1.5F, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
-    private static final DataParameter<Integer> SHIP_FIRE_TICK = EntityDataManager.defineId(EntityKansenBase.class, DataSerializers.INT);
-    private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.defineId(EntityKansenBase.class, DataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Integer> SHIP_FIRE_TICK = SynchedEntityData.defineId(EntityKansenBase.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<ItemStack> ITEM_RIGGING = SynchedEntityData.defineId(EntityKansenBase.class, EntityDataSerializers.ITEM_STACK);
 
     public ItemStackHandler RiggingSlot = new ItemStackHandler(1) {
         @Override
@@ -106,7 +106,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return this.factory;
     }
 
-    protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
+    protected EntityKansenBase(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
         this.AmmoStorage.setSize(8);
@@ -145,13 +145,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("shipfire", this.getShipFireTicks());
         compound.put("rigging",this.RiggingSlot.serializeNBT());
     }
 
-    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.ForceShipFireTicks(compound.getInt("shipfire"));
         if(compound.contains("rigging"))
@@ -237,10 +237,10 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     @Override
     @ParametersAreNonnullByDefault
     public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() instanceof PlayerEntity && this.isOwnedBy((LivingEntity) source.getEntity())) {
+        if (source.getEntity() instanceof Player && this.isOwnedBy((LivingEntity) source.getEntity())) {
             if (this.toldtomovecount >= 3) {
                 this.toldtomovecount = 0;
-                Vector3d loc = this.WanderRNG();
+                Vec3 loc = this.WanderRNG();
                 if (loc != null) {
                     this.getNavigation().moveTo(loc.x, loc.y, loc.z, 1);
                 }
@@ -265,13 +265,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public void aiStep() {
         super.aiStep();
 
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(ForgeMod.SWIM_SPEED.get());
+        AttributeInstance modifiableattributeinstance = this.getAttribute(ForgeMod.SWIM_SPEED.get());
         if (this.isSailing()) {
             this.kansenFloat();
             if (modifiableattributeinstance != null && modifiableattributeinstance.getModifier(SAILING_SPEED_MODIFIER) == null) {
                 modifiableattributeinstance.addTransientModifier(SAILING_SPEED_BOOST);
             }
-            Vector3d vector3d = this.getDeltaMovement();
+            Vec3 vector3d = this.getDeltaMovement();
             double d0 = this.getX() + vector3d.x;
             double d1 = this.getY() + vector3d.y;
             double d2 = this.getZ() + vector3d.z;
@@ -358,13 +358,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                         if(!(FiringCannon.getItem() instanceof ItemEquipmentBase)){
                             return;
                         }
-                        Vector3d vector3d = this.getViewVector(1.0F);
+                        Vec3 vector3d = this.getViewVector(1.0F);
                         double x = target.getX() - (this.getX());
                         double y = target.getY(0.5) - (this.getY(0.5));
                         double z = target.getZ() - (this.getZ());
                         AmmoProperties properties = ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty();
                         EntityCannonPelllet shell = new EntityCannonPelllet(this.level, this, 0, 0, 0, properties);
-                        Vector3d offset = new Vector3d(-0.5F,0,0).yRot(this.yBodyRot);
+                        Vec3 offset = new Vec3(-0.5F,0,0).yRot(this.yBodyRot);
                         shell.setPos(this.getX()+offset.x, this.getY(0.5)+offset.y, this.getZ()+offset.z);
                         shell.shoot(x,y,z, 1F, 0.05F);
                         this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (MathUtil.getRand().nextFloat() - MathUtil.getRand().nextFloat()) * 0.2F + 1.0F);
@@ -374,7 +374,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
                         if(RiggingItem instanceof ItemRiggingBase && !this.getCommandSenderWorld().isClientSide()) {
                             ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;
-                            final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerWorld) this.getCommandSenderWorld());
+                            final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerLevel) this.getCommandSenderWorld());
                             final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, CONTROLLER_NAME);
                             Pair<String, Integer> animationpair = riggingBase.getFireAnimationname(cannonType, slotindex);
                             if (animationpair != null) {
@@ -389,8 +389,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
                         this.addExp(0.5F);
                         setEquipmentDelay(FiringCannon);
-                        Vector3d recoil = new Vector3d(0.3F, 0, 0).yRot(this.yBodyRot);
-                        Vector3d vec = this.getDeltaMovement().add(recoil);
+                        Vec3 recoil = new Vec3(0.3F, 0, 0).yRot(this.yBodyRot);
+                        Vec3 vec = this.getDeltaMovement().add(recoil);
                         this.setDeltaMovement(vec);
                         this.addMorale(-0.2);
                         this.startPlayingShipAttackAnim();
@@ -412,7 +412,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
             ItemStack torpedostack = MultiInvUtil.getCap(rigging).getInventory(slottype.ordinal()).getStackInSlot(index);
 
-            Vector3d vector3d = this.getViewVector(1.0F);
+            Vec3 vector3d = this.getViewVector(1.0F);
             double d2 = target.getX() - (this.getX() + vector3d.x * 4.0D);
             double d3 = target.getY(0.5D) - this.getY() - 0.5D;
             double d4 = target.getZ() - (this.getZ() + vector3d.z * 4.0D);
@@ -426,7 +426,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
             if(RiggingItem instanceof ItemRiggingBase && !this.getCommandSenderWorld().isClientSide()) {
                 ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;
-                final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerWorld) this.getCommandSenderWorld());
+                final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerLevel) this.getCommandSenderWorld());
                 final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, CONTROLLER_NAME);
                 Pair<String, Integer> animationpair = riggingBase.getFireAnimationname(slottype, index);
                 if (animationpair != null) {
@@ -446,8 +446,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     private void kansenFloat() {
 
         if (this.isInWater()) {
-            ISelectionContext iselectioncontext = ISelectionContext.of(this);
-            if (iselectioncontext.isAbove(FlowingFluidBlock.STABLE_SHAPE, this.blockPosition(), true) && !this.level.getFluidState(this.blockPosition().above()).is(FluidTags.WATER)) {
+            CollisionContext iselectioncontext = CollisionContext.of(this);
+            if (iselectioncontext.isAbove(LiquidBlock.STABLE_SHAPE, this.blockPosition(), true) && !this.level.getFluidState(this.blockPosition().above()).is(FluidTags.WATER)) {
                 this.onGround = true;
             } else {
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.5D).add(0.0D, 0.05D, 0.0D));

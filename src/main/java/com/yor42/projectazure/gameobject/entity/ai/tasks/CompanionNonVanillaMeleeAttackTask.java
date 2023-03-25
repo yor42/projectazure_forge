@@ -3,25 +3,25 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.brain.BrainUtil;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.*;
 
-public class CompanionNonVanillaMeleeAttackTask extends Task<AbstractEntityCompanion> {
+public class CompanionNonVanillaMeleeAttackTask extends Behavior<AbstractEntityCompanion> {
     public CompanionNonVanillaMeleeAttackTask() {
-        super(ImmutableMap.of(LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryModuleStatus.VALUE_PRESENT), 1200);
+        super(ImmutableMap.of(LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
     }
 
     @Override
-    protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, @Nonnull AbstractEntityCompanion p_212832_2_) {
+    protected boolean checkExtraStartConditions(@Nonnull ServerLevel p_212832_1_, @Nonnull AbstractEntityCompanion p_212832_2_) {
         LivingEntity target = getAttackTarget(p_212832_2_);
 
         if(p_212832_2_.isSwimming() && p_212832_2_.isOrderedToSit() && p_212832_2_.isPassenger()){
@@ -31,19 +31,19 @@ public class CompanionNonVanillaMeleeAttackTask extends Task<AbstractEntityCompa
             return false;
         }
 
-        if(!BrainUtil.isWithinAttackRange(p_212832_2_, target, 0)){
+        if(!BehaviorUtils.isWithinAttackRange(p_212832_2_, target, 0)){
             return false;
         }
 
         if(!p_212832_2_.wantsToAttack(target, p_212832_2_)){
             return false;
         }
-        boolean flag = ((IMeleeAttacker) p_212832_2_).shouldUseNonVanillaAttack(target) && BrainUtil.canSee(p_212832_2_, target);
+        boolean flag = ((IMeleeAttacker) p_212832_2_).shouldUseNonVanillaAttack(target) && BehaviorUtils.canSee(p_212832_2_, target);
         return flag && !p_212832_2_.isNonVanillaMeleeAttacking();
     }
 
     @Override
-    protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
+    protected void start(@Nonnull ServerLevel p_212831_1_, @Nonnull AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
         if (p_212831_2_ instanceof IMeleeAttacker) {
             ((IMeleeAttacker) p_212831_2_).StartMeleeAttackingEntity();
             p_212831_2_.setMeleeAttackDelay((int) (((IMeleeAttacker) p_212831_2_).MeleeAttackAnimationLength() * ((IMeleeAttacker) p_212831_2_).getAttackSpeedModifier(((IMeleeAttacker) p_212831_2_).isTalentedWeaponinMainHand())));
@@ -52,7 +52,7 @@ public class CompanionNonVanillaMeleeAttackTask extends Task<AbstractEntityCompa
     }
 
     @Override
-    protected boolean canStillUse(ServerWorld p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
+    protected boolean canStillUse(ServerLevel p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
         if(!p_212834_2_.getBrain().hasMemoryValue(ATTACK_TARGET) || getAttackTarget(p_212834_2_).isDeadOrDying()){
             return false;
         }
@@ -62,7 +62,7 @@ public class CompanionNonVanillaMeleeAttackTask extends Task<AbstractEntityCompa
     }
 
     @Override
-    protected void tick(ServerWorld p_212833_1_, AbstractEntityCompanion p_212833_2_, long p_212833_3_) {
+    protected void tick(ServerLevel p_212833_1_, AbstractEntityCompanion p_212833_2_, long p_212833_3_) {
         int currentspelldelay = p_212833_2_.getNonVanillaMeleeAttackDelay();
         if (currentspelldelay > 0) {
             p_212833_2_.getBrain().eraseMemory(WALK_TARGET);

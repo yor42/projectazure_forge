@@ -1,34 +1,34 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerAlloyFurnace;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
-public class guiAlloyFurnace extends ContainerScreen<ContainerAlloyFurnace> implements IHasContainer<ContainerAlloyFurnace> {
+public class guiAlloyFurnace extends AbstractContainerScreen<ContainerAlloyFurnace> implements MenuAccess<ContainerAlloyFurnace> {
 
     private static final ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/alloy_furnace.png");
 
     private final ContainerAlloyFurnace container;
 
-    public guiAlloyFurnace(ContainerAlloyFurnace screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public guiAlloyFurnace(ContainerAlloyFurnace screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.container = screenContainer;
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 

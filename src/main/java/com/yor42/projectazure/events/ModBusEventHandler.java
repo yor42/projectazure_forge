@@ -13,21 +13,21 @@ import com.yor42.projectazure.intermod.Patchouli;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -54,13 +54,13 @@ public class ModBusEventHandler {
     public void playerLogin(PlayerEvent.PlayerLoggedInEvent event){
         if (!event.getPlayer().level.isClientSide) {
 
-            CompoundNBT playerData = event.getPlayer().getPersistentData();
-            CompoundNBT data;
+            CompoundTag playerData = event.getPlayer().getPersistentData();
+            CompoundTag data;
 
-            if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
-                data = new CompoundNBT();
+            if (!playerData.contains(Player.PERSISTED_NBT_TAG)) {
+                data = new CompoundTag();
             } else {
-                data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
+                data = playerData.getCompound(Player.PERSISTED_NBT_TAG);
             }
 
             boolean flag = !data.getBoolean("PRJA:gotStarterItem");
@@ -68,7 +68,7 @@ public class ModBusEventHandler {
             if (flag) {
                 Patchouli.HandlePatchouliCompatibility(event.getPlayer());
 
-                PlayerEntity player = event.getPlayer();
+                Player player = event.getPlayer();
                 UUID yorUUID = UUID.fromString("d45160dc-ae0b-4f7c-b44a-b535a48182d2");
                 UUID AoichiID = UUID.fromString("d189319f-ee53-4e80-9472-7c5e4711642e");
                 UUID NecromID = UUID.fromString("23b61d99-fbe4-4202-a6e6-3d467a08f3ba");
@@ -81,7 +81,7 @@ public class ModBusEventHandler {
                 boolean isGuri = player.getUUID().equals(GuriUUID);
 
                 ItemStack cubeStack = new ItemStack(RegisterItems.GLITCHED_PHONE.get());
-                CompoundNBT nbt = cubeStack.getOrCreateTag();
+                CompoundTag nbt = cubeStack.getOrCreateTag();
                 nbt.putUUID("owner", player.getUUID());
                 player.inventory.setItem(player.inventory.getFreeSlot(), cubeStack);
                 NonNullList<Item> stacks = NonNullList.create();
@@ -105,11 +105,11 @@ public class ModBusEventHandler {
 
                 if(!stacks.isEmpty()){
                     ItemStack stack = new ItemStack(isDev? RegisterItems.DEVELOPER_BONUS.get(): RegisterItems.CONTRIBUTOR_BONUS.get());
-                    CompoundNBT compound = stack.getOrCreateTag();
+                    CompoundTag compound = stack.getOrCreateTag();
                     compound.putUUID("owner", player.getUUID());
-                    ListNBT stackList = new ListNBT();
+                    ListTag stackList = new ListTag();
                     for(Item item:stacks){
-                        CompoundNBT itemTag = new CompoundNBT();
+                        CompoundTag itemTag = new CompoundTag();
                         new ItemStack(item).save(itemTag);
                         stackList.add(itemTag);
                     }
@@ -118,14 +118,14 @@ public class ModBusEventHandler {
                 }
 
                 data.putBoolean("PRJA:gotStarterItem", true);
-                playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+                playerData.put(Player.PERSISTED_NBT_TAG, data);
             }
-            ServerPlayerEntity serverplayer = (ServerPlayerEntity) event.getPlayer();
+            ServerPlayer serverplayer = (ServerPlayer) event.getPlayer();
             ProjectAzureWorldSavedData.getSaveddata(serverplayer.getLevel()).SyncEntireTeamListtoPlayer(serverplayer);
 
-            for(INBT inbt : playerData.getList("PRJA:passengers", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND)){
-                if(inbt instanceof CompoundNBT){
-                    CompoundNBT compoundNBT = (CompoundNBT) inbt;
+            for(Tag inbt : playerData.getList("PRJA:passengers", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND)){
+                if(inbt instanceof CompoundTag){
+                    CompoundTag compoundNBT = (CompoundTag) inbt;
                     Entity entity1 = EntityType.loadEntityRecursive(compoundNBT.getCompound("Entity"), serverplayer.getLevel(), (p_217885_1_) -> !serverplayer.getLevel().addWithUUID(p_217885_1_) ? null : p_217885_1_);
 
                     if(entity1 == null){
@@ -150,12 +150,12 @@ public class ModBusEventHandler {
     public void onGunFire(GunFireEvent.Pre event) {
         ItemStack gunstack = event.getStack();
         Item gunItem = gunstack.getItem();
-        PlayerEntity player = event.getPlayer();
-        World world = event.getPlayer().getCommandSenderWorld();
+        Player player = event.getPlayer();
+        Level world = event.getPlayer().getCommandSenderWorld();
         if(gunItem instanceof ItemEnergyGun){
             ItemEnergyGun energygun = (ItemEnergyGun) gunItem;
             if(gunstack.getCapability(CapabilityEnergy.ENERGY).map((energyhandler)-> energyhandler.extractEnergy(energygun.getEnergyperShot(), true) < ((ItemEnergyGun) gunItem).getEnergyperShot()).orElse(true)){
-                player.displayClientMessage(new TranslationTextComponent("message.energyguns.gun.notenoughenergy").withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("message.energyguns.gun.notenoughenergy").withStyle(ChatFormatting.DARK_RED), true);
                 SoundEvent sound = ((ItemEnergyGun) gunItem).getNoAmmoSound();
                 if(sound != null) {
                     player.playSound(sound, 1, 1);
@@ -170,7 +170,7 @@ public class ModBusEventHandler {
         }
 
         if(gunItem instanceof GeoGunItem && !world.isClientSide()){
-            final int id = GeckoLibUtil.guaranteeIDForStack(gunstack, (ServerWorld) world);
+            final int id = GeckoLibUtil.guaranteeIDForStack(gunstack, (ServerLevel) world);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player);
             GeckoLibNetwork.syncAnimation(target, (ISyncable) gunItem, id, ANIM_FIRE);
         }
@@ -183,9 +183,9 @@ public class ModBusEventHandler {
 
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof PlayerEntity) {
+        if (event.getObject() instanceof Player) {
             try {
-                event.addCapability(CapabilityID, ProjectAzurePlayerCapability.createNewCapability((PlayerEntity) event.getObject()));
+                event.addCapability(CapabilityID, ProjectAzurePlayerCapability.createNewCapability((Player) event.getObject()));
 
             }
             catch (Exception e) {

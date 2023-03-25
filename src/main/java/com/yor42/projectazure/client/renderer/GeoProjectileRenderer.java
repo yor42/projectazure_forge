@@ -1,18 +1,18 @@
 package com.yor42.projectazure.client.renderer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -31,7 +31,7 @@ import java.util.Collections;
 public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends EntityRenderer<T>
         implements IGeoRenderer<T> {
 
-    public IRenderTypeBuffer rtb;
+    public MultiBufferSource rtb;
 
     static {
         AnimationController.addModelFetcher((IAnimatable object) -> {
@@ -44,24 +44,24 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
 
     protected final AnimatedGeoModel<T> modelProvider;
 
-    protected GeoProjectileRenderer(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
+    protected GeoProjectileRenderer(EntityRendererProvider.Context renderManager, AnimatedGeoModel<T> modelProvider) {
         super(renderManager);
         this.modelProvider = modelProvider;
     }
 
     @Override
-    public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
-                       IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(T entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
+                       MultiBufferSource bufferIn, int packedLightIn) {
         EntityModelData entityModelData = new EntityModelData();
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityIn));
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(
-                MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 180.0F));
+                Mth.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 180.0F));
         matrixStackIn.mulPose(Vector3f.ZP
-                .rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
+                .rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
         Minecraft.getInstance().textureManager.bind(getTextureLocation(entityIn));
         AnimationEvent<T> predicate = new AnimationEvent<T>(entityIn, 0, 0, partialTicks,
-                !entityIn.getDeltaMovement().equals(Vector3d.ZERO), Collections.singletonList(entityModelData));
+                !entityIn.getDeltaMovement().equals(Vec3.ZERO), Collections.singletonList(entityModelData));
         ((IAnimatableModel<T>) modelProvider).setLivingAnimations(entityIn, this.getUniqueID(entityIn), predicate);
         Color renderColor = getRenderColor(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn);
         RenderType renderType = getRenderType(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn,
@@ -79,18 +79,18 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
     }
 
     @Override
-    public void setCurrentRTB(IRenderTypeBuffer rtb) {
+    public void setCurrentRTB(MultiBufferSource rtb) {
         this.rtb = rtb;
     }
 
     @Override
-    public void renderEarly(T animatable, MatrixStack stackIn, float partialTicks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderEarly(T animatable, PoseStack stackIn, float partialTicks, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         IGeoRenderer.super.renderEarly(animatable, stackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         this.rtb = renderTypeBuffer;
     }
 
     @Override
-    public IRenderTypeBuffer getCurrentRTB() {
+    public MultiBufferSource getCurrentRTB() {
         return this.rtb;
     }
 

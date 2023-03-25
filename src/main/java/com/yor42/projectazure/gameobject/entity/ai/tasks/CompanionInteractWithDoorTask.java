@@ -1,33 +1,33 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.Sets;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.InteractWithDoorTask;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.behavior.InteractWithDoor;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Objects;
 
-public class CompanionInteractWithDoorTask extends InteractWithDoorTask {
+public class CompanionInteractWithDoorTask extends InteractWithDoor {
 
     //Damn you private access!
 
     @Nullable
-    private PathPoint lastCheckedNode;
+    private Node lastCheckedNode;
     private int remainingCooldown;
 
-    protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, LivingEntity p_212832_2_) {
+    protected boolean checkExtraStartConditions(ServerLevel p_212832_1_, LivingEntity p_212832_2_) {
         Path path = p_212832_2_.getBrain().getMemory(MemoryModuleType.PATH).get();
         if (!path.notStarted() && !path.isDone()) {
             if (!Objects.equals(this.lastCheckedNode, path.getNextNode())) {
@@ -46,18 +46,18 @@ public class CompanionInteractWithDoorTask extends InteractWithDoorTask {
     }
 
     @Override
-    protected void start(ServerWorld p_212831_1_, LivingEntity p_212831_2_, long p_212831_3_) {
+    protected void start(ServerLevel p_212831_1_, LivingEntity p_212831_2_, long p_212831_3_) {
         Path path = p_212831_2_.getBrain().getMemory(MemoryModuleType.PATH).get();
         this.lastCheckedNode = path.getNextNode();
-        PathPoint pathpoint = path.getPreviousNode();
-        PathPoint pathpoint1 = path.getNextNode();
+        Node pathpoint = path.getPreviousNode();
+        Node pathpoint1 = path.getNextNode();
         BlockPos blockpos = pathpoint.asBlockPos();
         BlockState blockstate = p_212831_1_.getBlockState(blockpos);
         if (blockstate.is(BlockTags.WOODEN_DOORS)) {
             DoorBlock doorblock = (DoorBlock)blockstate.getBlock();
             if (!doorblock.isOpen(blockstate)) {
                 doorblock.setOpen(p_212831_1_, blockstate, blockpos, true);
-                p_212831_2_.swing(Hand.MAIN_HAND);
+                p_212831_2_.swing(InteractionHand.MAIN_HAND);
             }
 
             this.rememberDoorToClose(p_212831_1_, p_212831_2_, blockpos);
@@ -70,14 +70,14 @@ public class CompanionInteractWithDoorTask extends InteractWithDoorTask {
             if (!doorblock1.isOpen(blockstate1)) {
                 doorblock1.setOpen(p_212831_1_, blockstate1, blockpos1, true);
                 this.rememberDoorToClose(p_212831_1_, p_212831_2_, blockpos1);
-                p_212831_2_.swing(Hand.MAIN_HAND);
+                p_212831_2_.swing(InteractionHand.MAIN_HAND);
             }
         }
 
         closeDoorsThatIHaveOpenedOrPassedThrough(p_212831_1_, p_212831_2_, pathpoint, pathpoint1);
     }
 
-    public static void closeDoorsThatIHaveOpenedOrPassedThrough(ServerWorld p_242294_0_, LivingEntity p_242294_1_, @Nullable PathPoint p_242294_2_, @Nullable PathPoint p_242294_3_) {
+    public static void closeDoorsThatIHaveOpenedOrPassedThrough(ServerLevel p_242294_0_, LivingEntity p_242294_1_, @Nullable Node p_242294_2_, @Nullable Node p_242294_3_) {
         Brain<?> brain = p_242294_1_.getBrain();
         if (brain.hasMemoryValue(MemoryModuleType.DOORS_TO_CLOSE)) {
             Iterator<GlobalPos> iterator = brain.getMemory(MemoryModuleType.DOORS_TO_CLOSE).get().iterator();
@@ -110,7 +110,7 @@ public class CompanionInteractWithDoorTask extends InteractWithDoorTask {
 
     }
 
-    private static boolean areOtherMobsComingThroughDoor(ServerWorld p_242295_0_, LivingEntity p_242295_1_, BlockPos p_242295_2_) {
+    private static boolean areOtherMobsComingThroughDoor(ServerLevel p_242295_0_, LivingEntity p_242295_1_, BlockPos p_242295_2_) {
         Brain<?> brain = p_242295_1_.getBrain();
         return brain.hasMemoryValue(MemoryModuleType.LIVING_ENTITIES) && brain.getMemory(MemoryModuleType.LIVING_ENTITIES).get().stream().filter((p_242298_1_) -> {
             return p_242298_1_.getType() == p_242295_1_.getType();
@@ -121,7 +121,7 @@ public class CompanionInteractWithDoorTask extends InteractWithDoorTask {
         });
     }
 
-    private static boolean isMobComingThroughDoor(ServerWorld p_242300_0_, LivingEntity p_242300_1_, BlockPos p_242300_2_) {
+    private static boolean isMobComingThroughDoor(ServerLevel p_242300_0_, LivingEntity p_242300_1_, BlockPos p_242300_2_) {
         if (!p_242300_1_.getBrain().hasMemoryValue(MemoryModuleType.PATH)) {
             return false;
         } else {
@@ -129,22 +129,22 @@ public class CompanionInteractWithDoorTask extends InteractWithDoorTask {
             if (path.isDone()) {
                 return false;
             } else {
-                PathPoint pathpoint = path.getPreviousNode();
+                Node pathpoint = path.getPreviousNode();
                 if (pathpoint == null) {
                     return false;
                 } else {
-                    PathPoint pathpoint1 = path.getNextNode();
+                    Node pathpoint1 = path.getNextNode();
                     return p_242300_2_.equals(pathpoint.asBlockPos()) || p_242300_2_.equals(pathpoint1.asBlockPos());
                 }
             }
         }
     }
 
-    private static boolean isDoorTooFarAway(ServerWorld p_242296_0_, LivingEntity p_242296_1_, GlobalPos p_242296_2_) {
+    private static boolean isDoorTooFarAway(ServerLevel p_242296_0_, LivingEntity p_242296_1_, GlobalPos p_242296_2_) {
         return p_242296_2_.dimension() != p_242296_0_.dimension() || !p_242296_2_.pos().closerThan(p_242296_1_.position(), 2.0D);
     }
 
-    private void rememberDoorToClose(ServerWorld p_242301_1_, LivingEntity p_242301_2_, BlockPos p_242301_3_) {
+    private void rememberDoorToClose(ServerLevel p_242301_1_, LivingEntity p_242301_2_, BlockPos p_242301_3_) {
         Brain<?> brain = p_242301_2_.getBrain();
         GlobalPos globalpos = GlobalPos.of(p_242301_1_.dimension(), p_242301_3_);
         if (brain.getMemory(MemoryModuleType.DOORS_TO_CLOSE).isPresent()) {

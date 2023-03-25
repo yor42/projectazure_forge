@@ -5,10 +5,10 @@ import com.yor42.projectazure.intermod.tconstruct.TinkersRegistry;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fml.RegistryObject;
 import slimeknights.tconstruct.library.data.recipe.ICommonRecipeHelper;
 import slimeknights.tconstruct.library.data.recipe.IMaterialRecipeHelper;
@@ -41,7 +41,7 @@ public class PATConRecipeProvider extends RecipeProvider implements IMaterialRec
     private final String materials ="tconstruct/materials/";
 
     @Override
-    public void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+    public void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
         this.metalMelting(consumer, TinkersRegistry.MoltenD32.FLUID.get(), "d32", false, false, meltingfoler, false);
         this.metalTagCasting(consumer, TinkersRegistry.MoltenD32.OBJECT, "d32", castingfoler, true);
         this.metalMaterialRecipe(consumer, PAMaterialProvider.D32, materials, "d32", false);
@@ -66,7 +66,7 @@ public class PATConRecipeProvider extends RecipeProvider implements IMaterialRec
 
     }
 
-    private void modifier(Consumer<IFinishedRecipe> con, RegistryObject<Modifier> mod, int maxLevel, RegistryObject<Item> item, int amount, float salvageChance, SlotType slotType, String folder, String salvageFolder)
+    private void modifier(Consumer<FinishedRecipe> con, RegistryObject<Modifier> mod, int maxLevel, RegistryObject<Item> item, int amount, float salvageChance, SlotType slotType, String folder, String salvageFolder)
     {
         ModifierRecipeBuilder.modifier(mod.get())
                 .setMaxLevel(maxLevel)
@@ -77,20 +77,20 @@ public class PATConRecipeProvider extends RecipeProvider implements IMaterialRec
                 .build(con, prefix(mod, folder));
     }
 
-    private void upgrade(Consumer<IFinishedRecipe> con, RegistryObject<Modifier> mod, int maxLevel, RegistryObject<Item> item, int amount, float salvageChance)
+    private void upgrade(Consumer<FinishedRecipe> con, RegistryObject<Modifier> mod, int maxLevel, RegistryObject<Item> item, int amount, float salvageChance)
     {
         modifier(con, mod, maxLevel, item, amount, salvageChance, SlotType.UPGRADE, upgradefolder,
                 upgradesalvfolder);
     }
 
-    private void incUpgrade(Consumer<IFinishedRecipe> con, RegistryObject<IncrementalModifier> inc,
+    private void incUpgrade(Consumer<FinishedRecipe> con, RegistryObject<IncrementalModifier> inc,
                             int maxLevel, RegistryObject<Item> item, int amount, boolean fullSalvage)
     {
         incremental(con, inc, maxLevel, item, amount, fullSalvage, SlotType.UPGRADE, upgradefolder,
                 upgradesalvfolder);
     }
 
-    private void incremental(Consumer<IFinishedRecipe> con, RegistryObject<IncrementalModifier> inc, int maxLevel, RegistryObject<Item> item, int amount, boolean fullSalvage, SlotType slotType, String folder, String salvageFolder)
+    private void incremental(Consumer<FinishedRecipe> con, RegistryObject<IncrementalModifier> inc, int maxLevel, RegistryObject<Item> item, int amount, boolean fullSalvage, SlotType slotType, String folder, String salvageFolder)
     {
         IncrementalModifierRecipeBuilder.modifier(inc.get())
                 .setMaxLevel(maxLevel)

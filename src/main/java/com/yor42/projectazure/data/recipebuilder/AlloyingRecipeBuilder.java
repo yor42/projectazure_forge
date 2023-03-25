@@ -6,13 +6,13 @@ import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.crafting.recipes.AlloyingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -27,22 +27,22 @@ public class AlloyingRecipeBuilder {
     private final int processingTime;
     public final List<Pair<Ingredient, Byte>> ingredients;
 
-    public AlloyingRecipeBuilder(IItemProvider result, byte count, int processingTime) {
+    public AlloyingRecipeBuilder(ItemLike result, byte count, int processingTime) {
         this.result = result.asItem();
         this.count = count;
         this.processingTime = processingTime;
         this.ingredients = new ArrayList<>();
     }
 
-    public static AlloyingRecipeBuilder AlloyRecipe(IItemProvider result, byte count, int processingtime){
+    public static AlloyingRecipeBuilder AlloyRecipe(ItemLike result, byte count, int processingtime){
         return new AlloyingRecipeBuilder(result, count, processingtime);
     }
 
-    public static AlloyingRecipeBuilder AlloyRecipe(IItemProvider result, byte count){
+    public static AlloyingRecipeBuilder AlloyRecipe(ItemLike result, byte count){
         return AlloyingRecipeBuilder.AlloyRecipe(result, count, 300);
     }
 
-    public static AlloyingRecipeBuilder AlloyRecipe(IItemProvider result){
+    public static AlloyingRecipeBuilder AlloyRecipe(ItemLike result){
         return AlloyingRecipeBuilder.AlloyRecipe(result, (byte) 1);
     }
 
@@ -55,11 +55,11 @@ public class AlloyingRecipeBuilder {
         return this.addIngredient(ingredient, (byte) 1);
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn) {
+    public void build(Consumer<FinishedRecipe> consumerIn) {
         this.build(consumerIn, ForgeRegistries.ITEMS.getKey(this.result));
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
+    public void build(Consumer<FinishedRecipe> consumerIn, String save) {
         ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
         ResourceLocation resourcelocation1 = ResourceUtils.ModResourceLocation(save);
         if (resourcelocation1.equals(resourcelocation)) {
@@ -69,20 +69,20 @@ public class AlloyingRecipeBuilder {
         }
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
+    public void build(Consumer<FinishedRecipe> consumerIn, ResourceLocation id) {
         consumerIn.accept(new AlloyingRecipeBuilder.Result(id, "", this.ingredients, this.result, this.count, this.processingTime, registerRecipes.Serializers.ALLOYING.get()));
     }
 
-    public static class Result implements IFinishedRecipe {
+    public static class Result implements FinishedRecipe {
 
         private final ResourceLocation id;
         public final List<Pair<Ingredient, Byte>> ingredients;
         private final String group;
         private final Item result;
         private final int cookingTime, outputcount;
-        private final IRecipeSerializer<AlloyingRecipe> serializer;
+        private final RecipeSerializer<AlloyingRecipe> serializer;
 
-        public Result(ResourceLocation id, String group, List<Pair<Ingredient, Byte>> ingredients ,Item resultIn, int outputcount, int cookingTimeIn, IRecipeSerializer<AlloyingRecipe> serializerIn){
+        public Result(ResourceLocation id, String group, List<Pair<Ingredient, Byte>> ingredients ,Item resultIn, int outputcount, int cookingTimeIn, RecipeSerializer<AlloyingRecipe> serializerIn){
             this.id = id;
             this.group = group;
             this.ingredients = ingredients;
@@ -121,7 +121,7 @@ public class AlloyingRecipeBuilder {
         }
 
         @Override
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return this.serializer;
         }
 

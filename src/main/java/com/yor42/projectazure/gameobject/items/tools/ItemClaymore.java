@@ -1,18 +1,18 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemClaymoreRenderer;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -44,23 +44,23 @@ public class ItemClaymore extends SwordItem implements IAnimatable {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World p_77624_2_, List<ITextComponent> tooltip, ITooltipFlag p_77624_4_) {
+    public void appendHoverText(ItemStack stack, @Nullable Level p_77624_2_, List<Component> tooltip, TooltipFlag p_77624_4_) {
         super.appendHoverText(stack, p_77624_2_, tooltip, p_77624_4_);
-        tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
-    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull World p_77663_2_, @Nonnull Entity entityIn, int p_77663_4_, boolean isSelected) {
+    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level p_77663_2_, @Nonnull Entity entityIn, int p_77663_4_, boolean isSelected) {
         super.inventoryTick(stack, p_77663_2_, entityIn, p_77663_4_, isSelected);
-        if(entityIn instanceof PlayerEntity){
+        if(entityIn instanceof Player){
             int claymorecount = 0;
-            for(int i = 0; i<((PlayerEntity) entityIn).inventory.getContainerSize(); i++){
-                if(((PlayerEntity) entityIn).inventory.getItem(i).getItem() == this && ((PlayerEntity) entityIn).inventory.getItem(i) != stack){
+            for(int i = 0; i<((Player) entityIn).inventory.getContainerSize(); i++){
+                if(((Player) entityIn).inventory.getItem(i).getItem() == this && ((Player) entityIn).inventory.getItem(i) != stack){
                     claymorecount+=1;
                 }
             }
             int level = Math.min(claymorecount+(isSelected?2:1), 10);
-            ((PlayerEntity) entityIn).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1, level, true, false));
+            ((Player) entityIn).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1, level, true, false));
         }
     }
 }

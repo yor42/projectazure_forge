@@ -13,22 +13,22 @@ import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.BrainUtil;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.schedule.Activity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.*;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.RangedInteger;
-import net.minecraft.util.TickRangeConverter;
-import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.util.IntRange;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,13 +37,40 @@ import java.util.stream.Collectors;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCannon;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_PRESENT;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
-import static net.minecraft.entity.ai.brain.schedule.Activity.*;
+import staticnet.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.behavior.AcquirePoi;
+import net.minecraft.world.entity.ai.behavior.BackUpIfTooClose;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.ai.behavior.DoNothing;
+import net.minecraft.world.entity.ai.behavior.EraseMemoryIf;
+import net.minecraft.world.entity.ai.behavior.GoToWantedItem;
+import net.minecraft.world.entity.ai.behavior.InsideBrownianWalk;
+import net.minecraft.world.entity.ai.behavior.InteractWith;
+import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
+import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
+import net.minecraft.world.entity.ai.behavior.RandomStroll;
+import net.minecraft.world.entity.ai.behavior.RunIf;
+import net.minecraft.world.entity.ai.behavior.RunOne;
+import net.minecraft.world.entity.ai.behavior.SetClosestHomeAsWalkTarget;
+import net.minecraft.world.entity.ai.behavior.SetEntityLookTarget;
+import net.minecraft.world.entity.ai.behavior.SetLookAndInteract;
+import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
+import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromLookTarget;
+import net.minecraft.world.entity.ai.behavior.SleepInBed;
+import net.minecraft.world.entity.ai.behavior.UpdateActivityFromSchedule;
+import net.minecraft.world.entity.ai.behavior.ValidateNearbyPoi;
+import net.minecraft.world.entity.ai.behavior.VillageBoundRandomStroll;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
 
 public class CompanionTasks {
 
     //I have absolutely 0 idea what I am doing here! :D
 
-    private static final RangedInteger RETREAT_DURATION = TickRangeConverter.rangeOfSeconds(5, 20);
+    private static final IntRange RETREAT_DURATION = TimeUtil.rangeOfSeconds(5, 20);
     public static void registerBrain(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
         brain.addActivity(Activity.CORE, getCorePackage());
         //brain.addActivity(FOLLOWING_OWNER.get(), getFollowOwnerPackage());
@@ -88,12 +115,12 @@ public class CompanionTasks {
         }
     }
 
-    public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getCorePackage() {
+    public static ImmutableList<Pair<Integer, ? extends Behavior<? super AbstractEntityCompanion>>> getCorePackage() {
         return ImmutableList.of(
                 Pair.of(0, new CompanionInteractWithDoorTask()),
-                Pair.of(0, new LookTask(45, 90)),
+                Pair.of(0, new LookAtTargetSink(45, 90)),
                 Pair.of(0, new CompanionWakeupTask()),
-                Pair.of(0, new WalkToTargetTask()),
+                Pair.of(0, new MoveToTargetSink()),
                 Pair.of(1, new CompanionUseTotemTask()),
                 //Pair.of(0, new CompanionEndAttackTask()),
                 Pair.of(1, new CompanionRunAwayTask()),
@@ -102,54 +129,54 @@ public class CompanionTasks {
                 Pair.of(2, new CompanionMoveforWorkTask()),
                 Pair.of(2, new CompanionHealAllyAndPlayerTask(40, 20, 10)),
                 Pair.of(2, new CompanionUseWorldSkill()),
-                Pair.of(0, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 5)),
+                Pair.of(0, new SetLookAndInteract(EntityType.PLAYER, 5)),
                 Pair.of(3, new CompanionTakeFoodFromPantryGoal()),
-                Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false, Optional.of((byte)14))),
+                Pair.of(10, new AcquirePoi(PoiType.HOME, MemoryModuleType.HOME, false, Optional.of((byte)14))),
                 Pair.of(2, new CompanionEatTask()));
     }
 
     private static void addWaitPlayerActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivityAndRemoveMemoryWhenStopped(RegisterAI.WAITING.get(), 10, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
+        brain.addActivityAndRemoveMemoryWhenStopped(RegisterAI.WAITING.get(), 10, ImmutableList.<net.minecraft.world.entity.ai.behavior.Behavior<? super AbstractEntityCompanion>>of(
                 new CompanionStayNearPointTask(RegisterAI.WAIT_POINT.get(), 0.5F, 1, 150, 1200),
-                new SleepAtHomeTask(),
+                new SleepInBed(),
                 new CompanionProtectOwnerTask(true),
-                new PickupWantedItemTask<>(AbstractEntityCompanion::shouldPickupItem, 0.5F, false, 4),
-                new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 2), Pair.of(new DummyTask(30, 60), 8)))
+                new GoToWantedItem<>(AbstractEntityCompanion::shouldPickupItem, 0.5F, false, 4),
+                new RunOne<>(ImmutableList.of(Pair.of(new SetEntityLookTarget(EntityType.PLAYER, 8.0F), 2), Pair.of(new DoNothing(30, 60), 8)))
 
         ), RegisterAI.WAIT_POINT.get());
     }
 
-    public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getIdlePackage(AbstractEntityCompanion companion, float p_220641_1_) {
+    public static ImmutableList<Pair<Integer, ? extends Behavior<? super AbstractEntityCompanion>>> getIdlePackage(AbstractEntityCompanion companion, float p_220641_1_) {
         return ImmutableList.of(
-                Pair.of(0, new FirstShuffledTask<>(ImmutableMap.of(MemoryModuleType.HOME, MemoryModuleStatus.REGISTERED),
+                Pair.of(0, new RunOne<>(ImmutableMap.of(MemoryModuleType.HOME, MemoryStatus.REGISTERED),
                         ImmutableList.of(
-                                Pair.of(new WalkRandomlyInsideTask(p_220641_1_), 4),
-                                Pair.of(new DummyTask(20, 40), 2)))),
+                                Pair.of(new InsideBrownianWalk(p_220641_1_), 4),
+                                Pair.of(new DoNothing(20, 40), 2)))),
                 //Pair.of(1, new CompanionStayNearPointTask(MemoryModuleType.HOME, p_220641_1_, 3, 150, 1200)),
-                Pair.of(2, new FirstShuffledTask<>(ImmutableList.of(
-                Pair.of(new FindWalkTargetTask(p_220641_1_), 1), Pair.of(new WalkTowardsLookTargetTask(p_220641_1_, 2), 1), Pair.of(new DummyTask(30, 60), 1)))),
-                Pair.of(3, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)),
+                Pair.of(2, new RunOne<>(ImmutableList.of(
+                Pair.of(new VillageBoundRandomStroll(p_220641_1_), 1), Pair.of(new SetWalkTargetFromLookTarget(p_220641_1_, 2), 1), Pair.of(new DoNothing(30, 60), 1)))),
+                Pair.of(3, new SetLookAndInteract(EntityType.PLAYER, 4)),
                 getFullLookBehavior(),
-                Pair.of(99, new UpdateActivityTask()));
+                Pair.of(99, new UpdateActivityFromSchedule()));
     }
-    private static Pair<Integer, Task<LivingEntity>> getFullLookBehavior() {
-        return Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(EntityType.CAT, 8.0F), 8), Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 2), Pair.of(new LookAtEntityTask(EntityClassification.CREATURE, 8.0F), 1), Pair.of(new LookAtEntityTask(EntityClassification.WATER_CREATURE, 8.0F), 1), Pair.of(new LookAtEntityTask(EntityClassification.WATER_AMBIENT, 8.0F), 1), Pair.of(new LookAtEntityTask(EntityClassification.MONSTER, 8.0F), 1), Pair.of(new DummyTask(30, 60), 2))));
+    private static Pair<Integer, Behavior<LivingEntity>> getFullLookBehavior() {
+        return Pair.of(5, new RunOne<>(ImmutableList.of(Pair.of(new SetEntityLookTarget(EntityType.CAT, 8.0F), 8), Pair.of(new SetEntityLookTarget(EntityType.PLAYER, 8.0F), 2), Pair.of(new SetEntityLookTarget(MobCategory.CREATURE, 8.0F), 1), Pair.of(new SetEntityLookTarget(MobCategory.WATER_CREATURE, 8.0F), 1), Pair.of(new SetEntityLookTarget(MobCategory.WATER_AMBIENT, 8.0F), 1), Pair.of(new SetEntityLookTarget(MobCategory.MONSTER, 8.0F), 1), Pair.of(new DoNothing(30, 60), 2))));
     }
 
     private static void initRetreatActivity(Brain<AbstractEntityCompanion> p_234507_0_) {
-        p_234507_0_.addActivityAndRemoveMemoryWhenStopped(AVOID, 10, ImmutableList.of(new FollowOwnerTask(), RunAwayTask.entity(MemoryModuleType.AVOID_TARGET, 1.0F, 12, true), createIdleLookBehaviors(), createIdleMovementBehaviors(), new PredicateTask<>(CompanionTasks::wantsToStopFleeing, MemoryModuleType.AVOID_TARGET)), MemoryModuleType.AVOID_TARGET);
+        p_234507_0_.addActivityAndRemoveMemoryWhenStopped(AVOID, 10, ImmutableList.of(new FollowOwnerTask(), SetWalkTargetAwayFrom.entity(MemoryModuleType.AVOID_TARGET, 1.0F, 12, true), createIdleLookBehaviors(), createIdleMovementBehaviors(), new EraseMemoryIf<>(CompanionTasks::wantsToStopFleeing, MemoryModuleType.AVOID_TARGET)), MemoryModuleType.AVOID_TARGET);
     }
 
-    private static FirstShuffledTask<AbstractEntityCompanion> createIdleLookBehaviors() {
-        return new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 1), Pair.of(new LookAtEntityTask(8.0F), 1), Pair.of(new DummyTask(30, 60), 1)));
+    private static RunOne<AbstractEntityCompanion> createIdleLookBehaviors() {
+        return new RunOne<>(ImmutableList.of(Pair.of(new SetEntityLookTarget(EntityType.PLAYER, 8.0F), 1), Pair.of(new SetEntityLookTarget(8.0F), 1), Pair.of(new DoNothing(30, 60), 1)));
     }
 
-    private static FirstShuffledTask<AbstractEntityCompanion> createIdleMovementBehaviors() {
-        return new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WalkRandomlyTask(0.6F), 2), Pair.of(InteractWithEntityTask.of(EntityType.PLAYER, 8, MemoryModuleType.INTERACTION_TARGET, 0.6F, 2), 2), Pair.of(new DummyTask(30, 60), 1)));
+    private static RunOne<AbstractEntityCompanion> createIdleMovementBehaviors() {
+        return new RunOne<>(ImmutableList.of(Pair.of(new RandomStroll(0.6F), 2), Pair.of(InteractWith.of(EntityType.PLAYER, 8, MemoryModuleType.INTERACTION_TARGET, 0.6F, 2), 2), Pair.of(new DoNothing(30, 60), 1)));
     }
 
     private static void addSittingActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivityAndRemoveMemoryWhenStopped(RegisterAI.SITTING.get(), 0, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
+        brain.addActivityAndRemoveMemoryWhenStopped(RegisterAI.SITTING.get(), 0, ImmutableList.<net.minecraft.world.entity.ai.behavior.Behavior<? super AbstractEntityCompanion>>of(
                 new CompanionClearMovementTask()
                 ), RegisterAI.MEMORY_SITTING.get());
 
@@ -162,7 +189,7 @@ public class CompanionTasks {
                 Pair.of(1, new CompanionFindEntitytoRideTask()),
                 Pair.of(1, new CompanionStartRidingTask()),
                 Pair.of(1, new CompanionSteerEntityTask()),
-                Pair.of(2, new PickupWantedItemTask<>(AbstractEntityCompanion::shouldPickupItem, 0.75F, false, 4)),
+                Pair.of(2, new GoToWantedItem<>(AbstractEntityCompanion::shouldPickupItem, 0.75F, false, 4)),
                 Pair.of(3, new CompanionPlaceTorchTask()),
                 Pair.of(3, new CompanionMineTask()),
                 Pair.of(4, new FindWalktargetbyChanceTask(0.5F,3,2, 0.1F)),
@@ -186,9 +213,9 @@ public class CompanionTasks {
 
     private static void addCombatActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
         //brain.addActivityWithConditions(Activity.FIGHT, getFightPackage(companion), ImmutableSet.of(Pair.of(ATTACK_TARGET, VALUE_PRESENT)));
-        brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
+        brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.<net.minecraft.world.entity.ai.behavior.Behavior<? super AbstractEntityCompanion>>of(
                         //new FindNewAttackTargetTask<>((p_234523_1_) -> !isNearestValidAttackTarget(companion, p_234523_1_)),
-                        new SupplementedTask<>(CompanionTasks::shouldStrafe, new AttackStrafingTask<>(5, 0.75F)),
+                        new RunIf<>(CompanionTasks::shouldStrafe, new BackUpIfTooClose<>(5, 0.75F)),
                         new CompanionMovetoTargetTask(companion,1.0F),
                         new CompanionEndAttackTask(),
                         new CompanionLaunchPlaneTasks(20, 40, 50),
@@ -205,21 +232,21 @@ public class CompanionTasks {
                 MemoryModuleType.ATTACK_TARGET);
     }
 
-    public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getInjuredPackage() {
-        return ImmutableList.of(Pair.of(0, new CompanionClearMovementTask()), Pair.of(3, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)));
+    public static ImmutableList<Pair<Integer, ? extends Behavior<? super AbstractEntityCompanion>>> getInjuredPackage() {
+        return ImmutableList.of(Pair.of(0, new CompanionClearMovementTask()), Pair.of(3, new SetLookAndInteract(EntityType.PLAYER, 4)));
     }
 
 
-    public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getRestPackage(float p_220635_1_) {
+    public static ImmutableList<Pair<Integer, ? extends Behavior<? super AbstractEntityCompanion>>> getRestPackage(float p_220635_1_) {
         return ImmutableList.of(Pair.of(0, new CompanionStayNearPointTask(MemoryModuleType.HOME, p_220635_1_, 1, 150, 1200))
-                , Pair.of(3, new ExpirePOITask(PointOfInterestType.HOME, MemoryModuleType.HOME)),
-                Pair.of(3, new SleepAtHomeTask()),
-                Pair.of(5, new FirstShuffledTask<>(ImmutableMap.of(MemoryModuleType.HOME, MemoryModuleStatus.VALUE_ABSENT),
-                        ImmutableList.of(Pair.of(new WalkToHouseTask(p_220635_1_), 1),
-                                Pair.of(new WalkRandomlyInsideTask(p_220635_1_), 4),
-                                Pair.of(new DummyTask(20, 40), 2)))),
+                , Pair.of(3, new ValidateNearbyPoi(PoiType.HOME, MemoryModuleType.HOME)),
+                Pair.of(3, new SleepInBed()),
+                Pair.of(5, new RunOne<>(ImmutableMap.of(MemoryModuleType.HOME, MemoryStatus.VALUE_ABSENT),
+                        ImmutableList.of(Pair.of(new SetClosestHomeAsWalkTarget(p_220635_1_), 1),
+                                Pair.of(new InsideBrownianWalk(p_220635_1_), 4),
+                                Pair.of(new DoNothing(20, 40), 2)))),
                 getMinimalLookBehavior(),
-                Pair.of(99, new UpdateActivityTask()));
+                Pair.of(99, new UpdateActivityFromSchedule()));
     }
 
     private static boolean shouldStrafe(LivingEntity livingEntity) {
@@ -234,11 +261,11 @@ public class CompanionTasks {
             boolean isSailing = ((EntityKansenBase) livingEntity).isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
             return isArmed && isSailing;
         }
-        return livingEntity.isHolding(item -> item instanceof net.minecraft.item.CrossbowItem) || livingEntity.isHolding(item -> item instanceof BowItem);
+        return livingEntity.isHolding(item -> item instanceof net.minecraft.world.item.CrossbowItem) || livingEntity.isHolding(item -> item instanceof BowItem);
     }
 
-    private static Pair<Integer, Task<AbstractEntityCompanion>> getMinimalLookBehavior() {
-        return Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 2), Pair.of(new DummyTask(30, 60), 8))));
+    private static Pair<Integer, Behavior<AbstractEntityCompanion>> getMinimalLookBehavior() {
+        return Pair.of(5, new RunOne<>(ImmutableList.of(Pair.of(new SetEntityLookTarget(EntityType.PLAYER, 8.0F), 2), Pair.of(new DoNothing(30, 60), 8))));
     }
 
     private static boolean isFriendlyOutnumbered(AbstractEntityCompanion entity) {
@@ -273,7 +300,7 @@ public class CompanionTasks {
 
     private static void maybeRetaliate(AbstractEntityCompanion companion, LivingEntity target) {
         if (!companion.getBrain().isActive(AVOID)) {
-            if (EntityPredicates.ATTACK_ALLOWED.test(target)) {
+            if (EntitySelector.ATTACK_ALLOWED.test(target)) {
                 if (hasWeapon(companion, target) && (companion.getOwner() == null || companion.wantsToAttack(target, companion.getOwner()))) {
 
                     if(companion.getVehicle() != null){
@@ -285,7 +312,7 @@ public class CompanionTasks {
                         }
                     }
 
-                    if (!BrainUtil.isOtherTargetMuchFurtherAwayThanCurrentAttackTarget(companion, target, 4.0D) || (companion.getBrain().getMemory(ATTACK_TARGET).isPresent() && target instanceof MonsterEntity && ((MonsterEntity) target).getTarget() == companion && (!(companion.getBrain().getMemory(ATTACK_TARGET).get() instanceof MonsterEntity)|| ((MonsterEntity)companion.getBrain().getMemory(ATTACK_TARGET).get()).getTarget() !=companion) )) {
+                    if (!BehaviorUtils.isOtherTargetMuchFurtherAwayThanCurrentAttackTarget(companion, target, 4.0D) || (companion.getBrain().getMemory(ATTACK_TARGET).isPresent() && target instanceof Monster && ((Monster) target).getTarget() == companion && (!(companion.getBrain().getMemory(ATTACK_TARGET).get() instanceof Monster)|| ((Monster)companion.getBrain().getMemory(ATTACK_TARGET).get()).getTarget() !=companion) )) {
                         setAttackTarget(companion, target);
                         broadcastAttackTarget(companion, target);
                     }
@@ -295,7 +322,7 @@ public class CompanionTasks {
     }
 
     private static boolean hasWeapon(AbstractEntityCompanion companion, LivingEntity tgt){
-        ItemStack stack = companion.getItemBySlot(EquipmentSlotType.MAINHAND);
+        ItemStack stack = companion.getItemBySlot(EquipmentSlot.MAINHAND);
         Item item = stack.getItem();
 
         if(companion instanceof IFGOServant){
@@ -327,7 +354,7 @@ public class CompanionTasks {
 
     public static void setAttackTargetIfCloserThanCurrent(AbstractEntityCompanion p_234401_0_, LivingEntity p_234401_1_) {
         Optional<LivingEntity> optional = p_234401_0_.getBrain().getMemory(ATTACK_TARGET);
-        LivingEntity livingentity = BrainUtil.getNearestTarget(p_234401_0_, optional, p_234401_1_);
+        LivingEntity livingentity = BehaviorUtils.getNearestTarget(p_234401_0_, optional, p_234401_1_);
         setAttackTarget(p_234401_0_, livingentity);
     }
 
@@ -336,7 +363,7 @@ public class CompanionTasks {
     }
 
     private static boolean isAttackAllowed(LivingEntity p_234506_0_) {
-        return EntityPredicates.ATTACK_ALLOWED.test(p_234506_0_);
+        return EntitySelector.ATTACK_ALLOWED.test(p_234506_0_);
     }
 
     private static void broadcastRetreat(AbstractEntityCompanion p_234516_0_, LivingEntity p_234516_1_) {
@@ -349,8 +376,8 @@ public class CompanionTasks {
 
     private static void retreatFromNearestTarget(AbstractEntityCompanion companion, LivingEntity attacker) {
         Brain<AbstractEntityCompanion> brain = companion.getBrain();
-        LivingEntity lvt_3_1_ = BrainUtil.getNearestTarget(companion, brain.getMemory(MemoryModuleType.AVOID_TARGET), attacker);
-        lvt_3_1_ = BrainUtil.getNearestTarget(companion, brain.getMemory(ATTACK_TARGET), lvt_3_1_);
+        LivingEntity lvt_3_1_ = BehaviorUtils.getNearestTarget(companion, brain.getMemory(MemoryModuleType.AVOID_TARGET), attacker);
+        lvt_3_1_ = BehaviorUtils.getNearestTarget(companion, brain.getMemory(ATTACK_TARGET), lvt_3_1_);
         retreatforAwhile(companion, lvt_3_1_);
     }
 

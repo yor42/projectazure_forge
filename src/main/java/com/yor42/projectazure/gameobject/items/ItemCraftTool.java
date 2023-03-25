@@ -1,14 +1,16 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.ItemTier;
 
 import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemCraftTool extends Item {
 
@@ -18,7 +20,7 @@ public class ItemCraftTool extends Item {
         this(new Item.Properties().tab(PA_RESOURCES).durability(Durability), 0);
     }
 
-    public ItemCraftTool(final int Durability ,IItemTier tier){
+    public ItemCraftTool(final int Durability ,Tier tier){
         this(new Item.Properties().tab(PA_RESOURCES).durability(Durability), tier.getLevel());
     }
 

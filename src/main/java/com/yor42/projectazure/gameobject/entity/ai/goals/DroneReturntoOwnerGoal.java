@@ -2,10 +2,10 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 
@@ -58,10 +58,10 @@ public class DroneReturntoOwnerGoal extends Goal {
             if(this.entity.distanceTo(owner)>3){
                 ItemStack stack = this.entity.turnPlanetoItemStack();
                 boolean ItemInserted = false;
-                if(owner instanceof PlayerEntity){
-                    for(int i = 0; i< ((PlayerEntity) owner).inventory.getContainerSize(); i++){
-                        if(((PlayerEntity) owner).inventory.canPlaceItem(i, stack)){
-                            ((PlayerEntity) owner).inventory.setItem(i, stack);
+                if(owner instanceof Player){
+                    for(int i = 0; i< ((Player) owner).inventory.getContainerSize(); i++){
+                        if(((Player) owner).inventory.canPlaceItem(i, stack)){
+                            ((Player) owner).inventory.setItem(i, stack);
                             this.entity.remove();
                             ItemInserted = true;
                             break;

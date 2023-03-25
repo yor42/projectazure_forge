@@ -6,15 +6,15 @@ import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.BrainUtil;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.EntityPosWrapper;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 
@@ -22,17 +22,17 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
 
-public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
+public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypetyCompanion> {
 
     private int attackTime = -1;
     private int seeTime;
 
     public CompanionShootGunTask() {
-        super(ImmutableMap.of(ATTACK_TARGET, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(ATTACK_TARGET, MemoryStatus.VALUE_PRESENT));
     }
 
     @Override
-    protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, @Nonnull AbstractEntityCompanion entity) {
+    protected boolean checkExtraStartConditions(@Nonnull ServerLevel p_212832_1_, @Nonnull AbstractEntityCompanion entity) {
 
         if(entity.getGunStack().isEmpty()){
             return false;
@@ -57,7 +57,7 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected boolean canStillUse(@Nonnull ServerWorld p_212834_1_, @Nonnull AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
+    protected boolean canStillUse(@Nonnull ServerLevel p_212834_1_, @Nonnull AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
 
         if(!p_212834_2_.getBrain().getMemory(ATTACK_TARGET).isPresent()){
             return false;
@@ -67,12 +67,12 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void start(@Nonnull ServerWorld p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
+    protected void start(@Nonnull ServerLevel p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
         if(!entity.getBrain().getMemory(ATTACK_TARGET).isPresent()){
             return;
         }
         if(!entity.closerThan(entity.getBrain().getMemory(ATTACK_TARGET).get(), entity.getSpellRange()) || !entity.getSensing().canSee(entity.getBrain().getMemory(ATTACK_TARGET).get())){
-            BrainUtil.setWalkAndLookTargetMemories(entity, entity.getBrain().getMemory(ATTACK_TARGET).get(), 1, (int) (entity.getSpellRange()-2));
+            BehaviorUtils.setWalkAndLookTargetMemories(entity, entity.getBrain().getMemory(ATTACK_TARGET).get(), 1, (int) (entity.getSpellRange()-2));
         }
         else {
             this.clearWalkTarget(entity);
@@ -84,7 +84,7 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void tick(@Nonnull ServerWorld p_212833_1_, AbstractEntityCompanion entity, long p_212833_3_) {
+    protected void tick(@Nonnull ServerLevel p_212833_1_, AbstractEntityCompanion entity, long p_212833_3_) {
         entity.getBrain().getMemory(ATTACK_TARGET).ifPresent((target) ->
 
         {
@@ -109,7 +109,7 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
                     entity.setUsingGun(true);
                 }
                 boolean flag = entity.isUsingGun();
-                entity.getBrain().setMemory(LOOK_TARGET, new EntityPosWrapper(target, true));
+                entity.getBrain().setMemory(LOOK_TARGET, new EntityTracker(target, true));
                 if (flag) {
                     if (!canSee && this.seeTime < -80) {
                         entity.setUsingGun(false);
@@ -135,7 +135,7 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void stop(@Nonnull ServerWorld p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
+    protected void stop(@Nonnull ServerLevel p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
         p_212835_2_.setUsingGun(false);
     }
 }

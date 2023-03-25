@@ -12,22 +12,22 @@ import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.RegistryObject;
@@ -42,6 +42,15 @@ import java.util.function.ToIntFunction;
 
 import static com.yor42.projectazure.data.client.BlockModelProvider.SIMPLEBLOCKLIST;
 import static com.yor42.projectazure.data.client.itemModelProvider.SIMPLETEXTUREBBLOCKLIST;
+
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class RegisterBlocks {
 
@@ -70,50 +79,50 @@ public class RegisterBlocks {
     public static final RegistryObject<Block> MANGANESE_BLOCK = registerMaterialBlock("manganese");
     public static final RegistryObject<Block> INCANDESCENT_ALLOY_BLOCK = registerMaterialBlock("incandescent_alloy");
 
-    public static final RegistryObject<Block> ORIROCK = register_simplemodel("orirock",() -> new OreBlock(AbstractBlock.Properties.of(Material.STONE).harvestLevel(0).strength(1.5F, 3F)), Main.PA_RESOURCES);
-    public static final RegistryObject<Block> COBBLED_ORIROCK = register_simplemodel("cobbled_orirock",() -> new Block(AbstractBlock.Properties.of(Material.STONE).harvestLevel(0).strength(1.5F, 3F)), Main.PA_RESOURCES);
-    public static final RegistryObject<Block> CRUDE_OIL = register_noItem("crude_oil", ()->new FlowingFluidBlock(()-> (FlowingFluid) RegisterFluids.CRUDE_OIL_FLOWING_REGISTRY.get(), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<Block> GASOLINE = register_noItem("gasoline", ()->new FlowingFluidBlock(()-> (FlowingFluid) RegisterFluids.GASOLINE_SOURCE_REGISTRY.get(), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<Block> DIESEL = register_noItem("diesel", ()->new FlowingFluidBlock(()-> (FlowingFluid) RegisterFluids.DIESEL_SOURCE_REGISTRY.get(), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<Block> KETON = register_noItem("keton", ()->new FlowingFluidBlock(()-> (FlowingFluid) RegisterFluids.KETON_SOURCE_REGISTRY.get(), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<Block> FUEL_OIL = register_noItem("fuel_oil", ()->new FlowingFluidBlock(()-> (FlowingFluid) RegisterFluids.FUEL_OIL_SOURCE_REGISTRY.get(), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<Block> ORIROCK = register_simplemodel("orirock",() -> new OreBlock(BlockBehaviour.Properties.of(Material.STONE).harvestLevel(0).strength(1.5F, 3F)), Main.PA_RESOURCES);
+    public static final RegistryObject<Block> COBBLED_ORIROCK = register_simplemodel("cobbled_orirock",() -> new Block(BlockBehaviour.Properties.of(Material.STONE).harvestLevel(0).strength(1.5F, 3F)), Main.PA_RESOURCES);
+    public static final RegistryObject<Block> CRUDE_OIL = register_noItem("crude_oil", ()->new LiquidBlock(()-> (FlowingFluid) RegisterFluids.CRUDE_OIL_FLOWING_REGISTRY.get(), BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<Block> GASOLINE = register_noItem("gasoline", ()->new LiquidBlock(()-> (FlowingFluid) RegisterFluids.GASOLINE_SOURCE_REGISTRY.get(), BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<Block> DIESEL = register_noItem("diesel", ()->new LiquidBlock(()-> (FlowingFluid) RegisterFluids.DIESEL_SOURCE_REGISTRY.get(), BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<Block> KETON = register_noItem("keton", ()->new LiquidBlock(()-> (FlowingFluid) RegisterFluids.KETON_SOURCE_REGISTRY.get(), BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<Block> FUEL_OIL = register_noItem("fuel_oil", ()->new LiquidBlock(()-> (FlowingFluid) RegisterFluids.FUEL_OIL_SOURCE_REGISTRY.get(), BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
 
-    public static final RegistryObject<Block> REENFORCED_PLANK = register_simplemodel("reenforced_plank",() -> new Block(AbstractBlock.Properties.of(Material.WOOD).harvestLevel(2).strength(4F, 6F)), Main.PA_RESOURCES);
+    public static final RegistryObject<Block> REENFORCED_PLANK = register_simplemodel("reenforced_plank",() -> new Block(BlockBehaviour.Properties.of(Material.WOOD).harvestLevel(2).strength(4F, 6F)), Main.PA_RESOURCES);
 
 
     public static final RegistryObject<Block> MACHINE_FRAME = register_simplemodel("machine_frame", () ->
-            new Block((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.BOTH);
+            new Block((BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.BOTH);
     public static final RegistryObject<Block> MACHINE_FRAME_SLAB = register_simplemodel("machine_frame_slab", () ->
-            new SlabBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.ITEM);
+            new SlabBlock((BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.ITEM);
 
-    public static final RegistryObject<Block> MACHINE_COMPONENTBLOCK = register_simplemodel("machine_component", ()->new Block((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.BOTH);
-    public static final RegistryObject<Block> MACHINE_DYNAMO = register_simplemodel("machine_dynamo", ()->new RotatedPillarBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.ITEM);
+    public static final RegistryObject<Block> MACHINE_COMPONENTBLOCK = register_simplemodel("machine_component", ()->new Block((BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.BOTH);
+    public static final RegistryObject<Block> MACHINE_DYNAMO = register_simplemodel("machine_dynamo", ()->new RotatedPillarBlock((BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.ITEM);
 
 
 
     public static final RegistryObject<Block> METAL_PRESS = register_blockWithToolTiponItem("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
     public static final RegistryObject<Block> ALLOY_FURNACE = register_blockWithToolTiponItem("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_MACHINES);
     public static final RegistryObject<Block> BASIC_CHEMICAL_REACTOR = register_blockWithToolTiponItem("basic_chemicalreactor", BasicChemicalReactorBlock::new, Main.PA_MACHINES);
-    public static final RegistryObject<Block> BASIC_REFINERY = register_blockWithToolTiponItem("basic_refinery", ()->new BasicRefineryBlock(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).lightLevel(RegisterBlocks.getLightValueLit(8)).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> CRYSTAL_GROWTH_CHAMBER = register_blockWithToolTiponItem("crystal_growth_chamber", ()->new CrystalGrowthChamberBlock(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).lightLevel((block)->0).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> BASIC_REFINERY = register_blockWithToolTiponItem("basic_refinery", ()->new BasicRefineryBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).lightLevel(RegisterBlocks.getLightValueLit(8)).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> CRYSTAL_GROWTH_CHAMBER = register_blockWithToolTiponItem("crystal_growth_chamber", ()->new CrystalGrowthChamberBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).lightLevel((block)->0).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
 
-    public static final RegistryObject<Block> OAK_PANTRY = register_blockWithToolTiponItem("oak_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> SPRUCE_PANTRY = register_blockWithToolTiponItem("spruce_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> ACACIA_PANTRY = register_blockWithToolTiponItem("acacia_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> BIRCH_PANTRY = register_blockWithToolTiponItem("birch_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> DARK_OAK_PANTRY = register_blockWithToolTiponItem("dark_oak_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> JUNGLE_PANTRY = register_blockWithToolTiponItem("jungle_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> WARPED_PANTRY = register_blockWithToolTiponItem("warped_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> CRIMSON_PANTRY = register_blockWithToolTiponItem("crimson_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> OAK_PANTRY = register_blockWithToolTiponItem("oak_pantry", ()->new PantryBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> SPRUCE_PANTRY = register_blockWithToolTiponItem("spruce_pantry", ()->new PantryBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> ACACIA_PANTRY = register_blockWithToolTiponItem("acacia_pantry", ()->new PantryBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> BIRCH_PANTRY = register_blockWithToolTiponItem("birch_pantry", ()->new PantryBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> DARK_OAK_PANTRY = register_blockWithToolTiponItem("dark_oak_pantry", ()->new PantryBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> JUNGLE_PANTRY = register_blockWithToolTiponItem("jungle_pantry", ()->new PantryBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> WARPED_PANTRY = register_blockWithToolTiponItem("warped_pantry", ()->new PantryBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> CRIMSON_PANTRY = register_blockWithToolTiponItem("crimson_pantry", ()->new PantryBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
 
-    public static final RegistryObject<Block> STEEL_FOUNDATION = register_simplemodel("steel_foundation",()-> new Block(AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL)), Main.PA_RESOURCES);
-    public static final RegistryObject<Block> REENFORCEDCONCRETE = register_simplemodel("reenforced_concrete",()-> new Block(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).sound(SoundType.STONE)), Main.PA_MACHINES);
-    public static final RegistryObject<Block> ASPHALTCONCRETE = register_simplemodel("asphalt_concrete",()-> new Block(AbstractBlock.Properties.of(Material.STONE).strength(2, 8).harvestLevel(2).sound(SoundType.STONE)){
+    public static final RegistryObject<Block> STEEL_FOUNDATION = register_simplemodel("steel_foundation",()-> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL)), Main.PA_RESOURCES);
+    public static final RegistryObject<Block> REENFORCEDCONCRETE = register_simplemodel("reenforced_concrete",()-> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).sound(SoundType.STONE)), Main.PA_MACHINES);
+    public static final RegistryObject<Block> ASPHALTCONCRETE = register_simplemodel("asphalt_concrete",()-> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(2, 8).harvestLevel(2).sound(SoundType.STONE)){
         @Override
-        public void stepOn(World p_176199_1_, BlockPos p_176199_2_, Entity entity) {
+        public void stepOn(Level p_176199_1_, BlockPos p_176199_2_, Entity entity) {
             super.stepOn(p_176199_1_, p_176199_2_, entity);
             if(entity instanceof LivingEntity) {
-                ((LivingEntity) entity).addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 2, 0, false, false));
+                ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 2, 0, false, false));
             }
         }
     }, Main.PA_RESOURCES);
@@ -124,11 +133,11 @@ public class RegisterBlocks {
         return BLOCKS.register(name, block);
     }
 
-    private static <T extends Block> RegistryObject<T> register_blockWithToolTiponItem(String name, Supplier<T> block, ItemGroup group){
+    private static <T extends Block> RegistryObject<T> register_blockWithToolTiponItem(String name, Supplier<T> block, CreativeModeTab group){
         RegistryObject<T> ret = register_noItem(name, block);
         RegisterItems.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(group)){
             @Override
-            public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+            public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
                 super.appendHoverText(stack, worldIn, tooltip, flagIn);
                 if (worldIn != null && worldIn.isClientSide) {
                     TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, tooltip));
@@ -136,22 +145,22 @@ public class RegisterBlocks {
             }
 
             @OnlyIn(Dist.CLIENT)
-            public void addInformationAfterShift(ItemStack stack, List<ITextComponent> tooltip){
-                tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
+            public void addInformationAfterShift(ItemStack stack, List<Component> tooltip){
+                tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
             }
 
         });
         return ret;
     }
 
-    private static RegistryObject<Block> register_simplemodel(String name, Supplier<Block> block, ItemGroup itemGroup){
+    private static RegistryObject<Block> register_simplemodel(String name, Supplier<Block> block, CreativeModeTab itemGroup){
         return register_simplemodel(name, block, new Item.Properties().tab(itemGroup), REGISTERMODEL.BOTH);
     }
     private static RegistryObject<Block> register_simplemodel(String name, Supplier<Block> block, Item.Properties properties){
         return register_simplemodel(name, block, properties, REGISTERMODEL.BOTH);
     }
 
-    private static RegistryObject<Block> register_simplemodel(String name, Supplier<Block> block, ItemGroup itemGroup, REGISTERMODEL model){
+    private static RegistryObject<Block> register_simplemodel(String name, Supplier<Block> block, CreativeModeTab itemGroup, REGISTERMODEL model){
         return register_simplemodel(name, block, new Item.Properties().tab(itemGroup), model);
     }
     private static RegistryObject<Block> register_simplemodel(String name, Supplier<Block> block, Item.Properties properties, REGISTERMODEL modelregistry){
@@ -167,7 +176,7 @@ public class RegisterBlocks {
     }
 
 
-    private static <T extends Block> RegistryObject<T> registerAnimatedMachines(String name, Supplier<T> block, ItemGroup group, Item.Properties properties){
+    private static <T extends Block> RegistryObject<T> registerAnimatedMachines(String name, Supplier<T> block, CreativeModeTab group, Item.Properties properties){
         RegistryObject<T> ret = register_noItem(name, block);
         RegisterItems.ITEMS.register(name, () -> new AnimateableMachineBlockItems(ret.get(), properties.tab(group), true));
         return ret;

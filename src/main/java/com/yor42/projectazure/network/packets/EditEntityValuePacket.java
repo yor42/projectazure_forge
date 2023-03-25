@@ -1,11 +1,11 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -22,7 +22,7 @@ public class EditEntityValuePacket {
         this.value = value;
     }
 
-    public static EditEntityValuePacket decode (final PacketBuffer buffer){
+    public static EditEntityValuePacket decode (final FriendlyByteBuf buffer){
         final int ID = buffer.readInt();
         final EditEntityValuePacket.ValueType ValueType = buffer.readEnum(EditEntityValuePacket.ValueType.class);
         final EditType editType = buffer.readEnum(EditType.class);
@@ -30,7 +30,7 @@ public class EditEntityValuePacket {
         return new EditEntityValuePacket(ID, ValueType, editType, value);
     }
 
-    public static void encode(final EditEntityValuePacket msg, final PacketBuffer buffer){
+    public static void encode(final EditEntityValuePacket msg, final FriendlyByteBuf buffer){
         buffer.writeInt(msg.EntityID);
         buffer.writeEnum(msg.valueType);
         buffer.writeEnum(msg.editType);
@@ -40,9 +40,9 @@ public class EditEntityValuePacket {
     public static void handle(final EditEntityValuePacket msg, final Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() -> {
-            final ServerPlayerEntity playerEntity = ctx.get().getSender();
+            final ServerPlayer playerEntity = ctx.get().getSender();
             if(playerEntity != null) {
-                final ServerWorld world = Objects.requireNonNull(ctx.get().getSender()).getLevel();
+                final ServerLevel world = Objects.requireNonNull(ctx.get().getSender()).getLevel();
                 Entity entity = world.getEntity(msg.EntityID);
                 if(entity instanceof AbstractEntityCompanion){
                     switch(msg.editType){

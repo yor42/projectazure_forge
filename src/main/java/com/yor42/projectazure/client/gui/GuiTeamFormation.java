@@ -1,6 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
@@ -12,17 +12,17 @@ import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
 import com.yor42.projectazure.network.packets.RemoveTeamPacket;
 import com.yor42.projectazure.network.packets.TeamNameChangedPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.text.*;
 
 import javax.annotation.Nullable;
@@ -34,10 +34,15 @@ import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static net.minecraft.util.text.TextFormatting.DARK_RED;
-import static net.minecraft.util.text.TextFormatting.YELLOW;
+import static net.minecraft.util.text.TextFormatting.Yimport net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
-public class GuiTeamFormation extends Screen {
-    /*
+ELLOW;
+
+public clasnet.minecraft.ChatFormatting   /*
      * Part of class is based on SkillScreen from Dexterity.
      * Get the Source Code in github:
      * https://github.com/Rongmario/Dexterity/blob/master/src/main/java/zone/rong/dexterity/rpg/skill/client/SkillScreen.java
@@ -61,10 +66,10 @@ public class GuiTeamFormation extends Screen {
     private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/button_teamformation.png");
     List<AbstractEntityCompanion> Entitycache = new ArrayList<>();
 
-    private TextFieldWidget name;
+    private EditBox name;
 
 
-    public GuiTeamFormation(ITextComponent p_i51108_1_) {
+    public GuiTeamFormation(Component p_i51108_1_) {
         super(p_i51108_1_);
 
     }
@@ -86,7 +91,7 @@ public class GuiTeamFormation extends Screen {
     @Override
     public void init(Minecraft p_231158_1_, int p_231158_2_, int p_231158_3_) {
         super.init(p_231158_1_, p_231158_2_, p_231158_3_);
-        this.name = new TextFieldWidget(this.font, x + 9, y + 25, 109, 16, new TranslationTextComponent("team.defaultteamname"));
+        this.name = new EditBox(this.font, x + 9, y + 25, 109, 16, new TranslatableComponent("team.defaultteamname"));
         this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
         this.name.setTextColor(-1);
         this.name.setTextColorUneditable(-1);
@@ -149,7 +154,7 @@ public class GuiTeamFormation extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         this.drawBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
         this.name.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -161,7 +166,7 @@ public class GuiTeamFormation extends Screen {
          */
     }
 
-    private void drawForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    private void drawForegroundLayer(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (this.Subscreen == 0) {
             this.renderMainScreenButtons(matrixStack, mouseX, mouseY, partialTicks);
         } else {
@@ -169,8 +174,8 @@ public class GuiTeamFormation extends Screen {
         }
     }
 
-    private void renderSubScreenButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        font.drawShadow(matrixStack, new TranslationTextComponent("gui.membermanagement.title"),this.x+6,this.y+6, -1);
+    private void renderSubScreenButtons(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        font.drawShadow(matrixStack, new TranslatableComponent("gui.membermanagement.title"),this.x+6,this.y+6, -1);
         ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(this.minecraft.player);
         List<AbstractEntityCompanion> entities = capability.getCompanionList().stream().filter((entity)->{
             for(CompanionTeam team:this.player_teams){
@@ -196,7 +201,7 @@ public class GuiTeamFormation extends Screen {
         this.notYetPopulated = false;
     }
 
-    protected void renderScroller(MatrixStack stack, int drop, int entityCount) {
+    protected void renderScroller(PoseStack stack, int drop, int entityCount) {
         int maxy = this.y + 139;
         if(entityCount>5) {
             int scrollbarTop = this.scrollBarTop;
@@ -206,21 +211,21 @@ public class GuiTeamFormation extends Screen {
         this.blit(stack, this.x + 135, this.lastScrollY, this.scrollbarClicked || entityCount<=5 ? 167 : 155, 0, 12, 20);
     }
 
-    private void renderMainScreenButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    private void renderMainScreenButtons(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if(this.minecraft!= null) {
-            font.drawShadow(matrixStack, new TranslationTextComponent("gui.teamformation.title"),this.x+4,this.y+4, -1);
+            font.drawShadow(matrixStack, new TranslatableComponent("gui.teamformation.title"),this.x+4,this.y+4, -1);
             //Draw Team Lists
             int i = 0;
             while (i < 5 && 5 * this.TeamListPage + i <= this.player_teams.size()) {
                 if (5 * this.TeamListPage + i == this.player_teams.size()) {
                     if (this.notYetPopulated) {
                         //draw create team button here
-                        Button button = new CreateButton(this.x + 126, this.y + 6 + 37 * i, 110, 37, new TranslationTextComponent("gui.teamformation.createteam"), (runnable) -> this.addTeam());
+                        Button button = new CreateButton(this.x + 126, this.y + 6 + 37 * i, 110, 37, new TranslatableComponent("gui.teamformation.createteam"), (runnable) -> this.addTeam());
                         this.addButton(button);
                     }
                 } else {
                     CompanionTeam team = this.player_teams.get(i+(5*this.TeamListPage));
-                    ITextComponent text = team.getDisplayName();
+                    Component text = team.getDisplayName();
                     int x = 130;
                     int y = 10 + 37 * i;
                     boolean isSelected = this.editingTeam != null && this.editingTeam.equals(team.getTeamUUID());
@@ -253,30 +258,30 @@ public class GuiTeamFormation extends Screen {
                         matrixStack.pushPose();
                         float renderscale = 0.8F;
                         matrixStack.scale(renderscale,renderscale,renderscale);
-                        TextFormatting color = TextFormatting.GREEN;
+                        ChatFormatting color = ChatFormatting.GREEN;
                         float health_percent = entity.getHealth()/entity.getMaxHealth();
                         if(entity.isCriticallyInjured()){
                             color = DARK_RED;
                         }
                         else if(health_percent<=0.25F){
-                            color = TextFormatting.RED;
+                            color = ChatFormatting.RED;
                         }
                         else if(health_percent<=0.5F){
                             color = YELLOW;
                         }
-                        IFormattableTextComponent text = new StringTextComponent("HP:").withStyle(TextFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslationTextComponent("gui.team.injured"):new StringTextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(color));
+                        MutableComponent text = new TextComponent("HP:").withStyle(ChatFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslatableComponent("gui.team.injured"):new TextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(color));
                         float width = this.font.width(text)*renderscale;
                         float textx =(float) (this.x+26)/renderscale;
                         float texty = (float) (this.y + 79.5 + (29 * j))/renderscale;
                         this.font.drawShadow(matrixStack, text, textx, texty, -1);
-                        this.font.drawShadow(matrixStack, new StringTextComponent("Lv.").withStyle(TextFormatting.WHITE).append(new StringTextComponent(Integer.toString(entity.getLevel())).withStyle(TextFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
+                        this.font.drawShadow(matrixStack, new TextComponent("Lv.").withStyle(ChatFormatting.WHITE).append(new TextComponent(Integer.toString(entity.getLevel())).withStyle(ChatFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
                         matrixStack.popPose();
                         renderEntityInInventory(x+99, y+26, 14, mouseX, mouseY, entity);
                     }
                     else {
                         if (this.notYetPopulated) {
                             //draw add member button here
-                            Button button = new CreateButton(x, y, 111, 29, new TranslationTextComponent("gui.teamformation.addmember"), true, (runnable) -> this.changeScreen(1));
+                            Button button = new CreateButton(x, y, 111, 29, new TranslatableComponent("gui.teamformation.addmember"), true, (runnable) -> this.changeScreen(1));
                             this.addButton(button);
                         }
                     }
@@ -287,8 +292,8 @@ public class GuiTeamFormation extends Screen {
                 }
             }
 
-            IFormattableTextComponent text = new TranslationTextComponent("gui.teamformation.pages", (this.TeamListPage + 1) + "/" + (this.player_teams.size() / 5 + 1));
-            IReorderingProcessor ireorderingprocessor = text.getVisualOrderText();
+            MutableComponent text = new TranslatableComponent("gui.teamformation.pages", (this.TeamListPage + 1) + "/" + (this.player_teams.size() / 5 + 1));
+            FormattedCharSequence ireorderingprocessor = text.getVisualOrderText();
             int textWidth = this.font.width(ireorderingprocessor);
             int x = this.x + 182 - (textWidth + 40) / 2;
             int y = this.y + 204;
@@ -324,10 +329,10 @@ public class GuiTeamFormation extends Screen {
         this.init();
     }
 
-    protected void resolveAndRenderButtons(MatrixStack stack, int mouseX, int mouseY, float delta) {
+    protected void resolveAndRenderButtons(PoseStack stack, int mouseX, int mouseY, float delta) {
         int position = Math.floorDiv(this.lastScrollY - this.scrollBarTop, 5); // CORRECT - GETS THE 'INDEX"
         for (int i = 0; i < this.buttons.size(); i++) {
-            Widget button = this.buttons.get(i);
+            AbstractWidget button = this.buttons.get(i);
             if(button instanceof EntityButton) {
                 if (i < position || i > position + 6) {
                     button.visible = false;
@@ -383,8 +388,8 @@ public class GuiTeamFormation extends Screen {
         return false;
     }
 
-    public void playDownSound(SoundHandler p_230988_1_) {
-        p_230988_1_.play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    public void playDownSound(SoundManager p_230988_1_) {
+        p_230988_1_.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
 
     public void changeScreen(int value){
@@ -435,7 +440,7 @@ public class GuiTeamFormation extends Screen {
         return p_195359_5_ >= (double)(p_195359_1_ - 1) && p_195359_5_ < (double)(p_195359_1_ + p_195359_3_ + 1) && p_195359_7_ >= (double)(p_195359_2_ - 1) && p_195359_7_ < (double)(p_195359_2_ + p_195359_4_ + 1);
     }
 
-    private void drawBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation textureLocation = this.Subscreen==0? TEXTURE_MAINSCREEN:TEXTURE_SUBSCREEN;
         this.minecraft.getTextureManager().bind(textureLocation);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
@@ -450,20 +455,20 @@ public class GuiTeamFormation extends Screen {
 
         private final boolean hasBG;
 
-        public CreateButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, ITextComponent p_i232255_5_, IPressable p_i232255_6_) {
+        public CreateButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, Component p_i232255_5_, OnPress p_i232255_6_) {
             this(p_i232255_1_, p_i232255_2_, p_i232255_3_, p_i232255_4_, p_i232255_5_, false,  p_i232255_6_);
         }
 
-        public CreateButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, ITextComponent p_i232255_5_, boolean hasBG, IPressable p_i232255_6_) {
+        public CreateButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, Component p_i232255_5_, boolean hasBG, OnPress p_i232255_6_) {
             super(p_i232255_1_, p_i232255_2_, p_i232255_3_, p_i232255_4_, p_i232255_5_, p_i232255_6_);
             this.hasBG = hasBG;
         }
 
         @Override
-        public void renderButton(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+        public void renderButton(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
             Minecraft minecraft = Minecraft.getInstance();
-            FontRenderer font = minecraft.font;
-            IReorderingProcessor ireorderingprocessor = this.getMessage().getVisualOrderText();
+            Font font = minecraft.font;
+            FormattedCharSequence ireorderingprocessor = this.getMessage().getVisualOrderText();
             int textWidth = font.width(ireorderingprocessor);
             int startX = (this.x+this.width/2) - (textWidth+20) / 2;
             if(this.hasBG){
@@ -477,38 +482,38 @@ public class GuiTeamFormation extends Screen {
 
     private static class EntityButton extends Button {
         private final AbstractEntityCompanion entity;
-        public EntityButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, AbstractEntityCompanion p_i232255_5_, IPressable p_i232255_6_) {
+        public EntityButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, AbstractEntityCompanion p_i232255_5_, OnPress p_i232255_6_) {
             super(p_i232255_1_, p_i232255_2_, p_i232255_3_, p_i232255_4_, p_i232255_5_.getDisplayName(), p_i232255_6_);
             this.entity = p_i232255_5_;
         }
 
         @Override
-        public void renderButton(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+        public void renderButton(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
             Minecraft minecraft = Minecraft.getInstance();
-            FontRenderer font = minecraft.font;
+            Font font = minecraft.font;
             minecraft.getTextureManager().bind(GuiTeamFormation.TEXTURE_SUBSCREEN);
             this.blit(matrix, this.x, this.y, 0,this.isHovered()?194:167, 121,27);
             font.drawShadow(matrix, this.getMessage(), this.x+4, this.y + 4, this.isHovered()?0xffff00:0xffffff);
             matrix.pushPose();
             float renderscale = 0.8F;
             matrix.scale(renderscale,renderscale,renderscale);
-            TextFormatting color = TextFormatting.GREEN;
+            ChatFormatting color = ChatFormatting.GREEN;
             float health_percent = entity.getHealth()/entity.getMaxHealth();
             if(entity.isCriticallyInjured()){
                 color = DARK_RED;
             }
             else if(health_percent<=0.25F){
-                color = TextFormatting.RED;
+                color = ChatFormatting.RED;
             }
             else if(health_percent<=0.5F){
                 color = YELLOW;
             }
-            IFormattableTextComponent text = new StringTextComponent("HP:").withStyle(TextFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslationTextComponent("gui.team.injured"):new StringTextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(color));
+            MutableComponent text = new TextComponent("HP:").withStyle(ChatFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslatableComponent("gui.team.injured"):new TextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(color));
             float width = font.width(text)*renderscale;
             float textx =(float) (this.x+4)/renderscale;
             float texty = (float) (this.y + 15)/renderscale;
             font.drawShadow(matrix, text, textx, texty, -1);
-            font.drawShadow(matrix, new StringTextComponent("Lv.").withStyle(TextFormatting.WHITE).append(new StringTextComponent(Integer.toString(entity.getLevel())).withStyle(TextFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
+            font.drawShadow(matrix, new TextComponent("Lv.").withStyle(ChatFormatting.WHITE).append(new TextComponent(Integer.toString(entity.getLevel())).withStyle(ChatFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
             matrix.popPose();
             renderEntityInInventory(this.x+this.width-10, this.y+this.height-3, 11, mouseX, mouseY, this.entity);
         }

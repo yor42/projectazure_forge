@@ -1,13 +1,15 @@
 package com.yor42.projectazure.client.gui.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
+
+import net.minecraft.client.gui.components.Button.OnPress;
 
 public class EntityStatusButton extends Button {
 
@@ -22,7 +24,7 @@ public class EntityStatusButton extends Button {
     private final int textureHeight;
 
     public EntityStatusButton(AbstractEntityCompanion entity, int imagex, int imagey, int width, int height, int textureX, int textureY, int activeXDelta, int hoverYDelta, ResourceLocation texture, ACTIONTYPES action) {
-        super(imagex, imagey, width, height, StringTextComponent.EMPTY, getAction(entity, action));
+        super(imagex, imagey, width, height, TextComponent.EMPTY, getAction(entity, action));
         this.textureWidth = 256;
         this.textureHeight = 256;
         this.xTexStart = textureX;
@@ -34,8 +36,8 @@ public class EntityStatusButton extends Button {
         this.entity = entity;
     }
 
-    public EntityStatusButton(AbstractEntityCompanion entity, int imagex, int imagey, int width, int height, int textureX, int textureY, int activeXDelta, int hoverYDelta, ResourceLocation texture, ACTIONTYPES action, Button.ITooltip pOnTooltip) {
-        super(imagex, imagey, width, height, StringTextComponent.EMPTY, getAction(entity, action), pOnTooltip);
+    public EntityStatusButton(AbstractEntityCompanion entity, int imagex, int imagey, int width, int height, int textureX, int textureY, int activeXDelta, int hoverYDelta, ResourceLocation texture, ACTIONTYPES action, Button.OnTooltip pOnTooltip) {
+        super(imagex, imagey, width, height, TextComponent.EMPTY, getAction(entity, action), pOnTooltip);
         this.textureWidth = 256;
         this.textureHeight = 256;
         this.xTexStart = textureX;
@@ -47,7 +49,7 @@ public class EntityStatusButton extends Button {
         this.entity = entity;
     }
 
-    public void renderButton(MatrixStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
+    public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bind(this.resourceLocation);
         int i = this.yTexStart;
@@ -99,7 +101,7 @@ public class EntityStatusButton extends Button {
         entity.SwitchPassiveAttack();
     }
 
-    private static IPressable getAction(AbstractEntityCompanion entity, ACTIONTYPES action){
+    private static OnPress getAction(AbstractEntityCompanion entity, ACTIONTYPES action){
         switch (action) {
             default:
                 return (pressible)->switchBehavior(entity);

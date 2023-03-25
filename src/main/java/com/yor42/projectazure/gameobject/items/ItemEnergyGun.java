@@ -8,17 +8,17 @@ import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.Process;
 import com.yor42.projectazure.gameobject.capability.ItemPowerCapabilityProvider;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -28,6 +28,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.KeybindComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class ItemEnergyGun extends TimelessGunItem {
 
@@ -72,12 +79,12 @@ public class ItemEnergyGun extends TimelessGunItem {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new ItemPowerCapabilityProvider(stack, this.energycapacity);
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> stacks) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> stacks) {
         if (this.allowdedIn(group)) {
             ItemStack stack = new ItemStack(this);
             stack.getOrCreateTag().putInt("AmmoCount", this.getGun().getReloads().getMaxAmmo());
@@ -88,61 +95,61 @@ public class ItemEnergyGun extends TimelessGunItem {
     }
 
     @Override
-    public void onCraftedBy(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull PlayerEntity player) {
+    public void onCraftedBy(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull Player player) {
         super.onCraftedBy(stack, world, player);
         stack.getOrCreateTag().putBoolean("IgnoreAmmo", this.ignoreAmmo);
     }
 
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flag) {
         Gun modifiedGun = this.getModifiedGun(stack);
         Item ammo = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
         if(doesIgnoreAmmo(stack)) {
 
-            ITextComponent text = new TranslationTextComponent("message.energyguns.gun.ammo.energy").withStyle(TextFormatting.BLUE);
-            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", (text))).withStyle(TextFormatting.DARK_GRAY));
+            Component text = new TranslatableComponent("message.energyguns.gun.ammo.energy").withStyle(ChatFormatting.BLUE);
+            tooltip.add((new TranslatableComponent("info.tac.ammo_type", (text))).withStyle(ChatFormatting.DARK_GRAY));
         }
         else if (ammo != null) {
-            IFormattableTextComponent text = new TranslationTextComponent("message.energyguns.gun.ammo.energy").withStyle(TextFormatting.BLUE);
-            text.append(new StringTextComponent(", ").withStyle(TextFormatting.DARK_GRAY)).append(new TranslationTextComponent(ammo.getDescriptionId()).withStyle(TextFormatting.GOLD));
-            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", (text)).withStyle(TextFormatting.DARK_GRAY)));
+            MutableComponent text = new TranslatableComponent("message.energyguns.gun.ammo.energy").withStyle(ChatFormatting.BLUE);
+            text.append(new TextComponent(", ").withStyle(ChatFormatting.DARK_GRAY)).append(new TranslatableComponent(ammo.getDescriptionId()).withStyle(ChatFormatting.GOLD));
+            tooltip.add((new TranslatableComponent("info.tac.ammo_type", (text)).withStyle(ChatFormatting.DARK_GRAY)));
         }
 
 
 
         String additionalDamageText = "";
-        CompoundNBT tagCompound = stack.getTag();
+        CompoundTag tagCompound = stack.getTag();
         float additionalDamage;
         if (tagCompound != null && tagCompound.contains("AdditionalDamage", 99)) {
             additionalDamage = tagCompound.getFloat("AdditionalDamage");
             additionalDamage += GunModifierHelper.getAdditionalDamage(stack);
             if (additionalDamage > 0.0F) {
-                additionalDamageText = TextFormatting.GREEN + " +" + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
+                additionalDamageText = ChatFormatting.GREEN + " +" + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
             } else if (additionalDamage < 0.0F) {
-                additionalDamageText = TextFormatting.RED + " " + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
+                additionalDamageText = ChatFormatting.RED + " " + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
             }
         }
 
         additionalDamage = modifiedGun.getProjectile().getDamage();
         additionalDamage = GunModifierHelper.getModifiedProjectileDamage(stack, additionalDamage);
         additionalDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, additionalDamage);
-        tooltip.add((new TranslationTextComponent("info.tac.damage", TextFormatting.GOLD + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage) + additionalDamageText)).withStyle(TextFormatting.DARK_GRAY));
+        tooltip.add((new TranslatableComponent("info.tac.damage", ChatFormatting.GOLD + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage) + additionalDamageText)).withStyle(ChatFormatting.DARK_GRAY));
         if (tagCompound != null) {
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> {
-                tooltip.add((new TranslationTextComponent("tooltip.energygun.remainingenergy", TextFormatting.BLUE.toString() + energyhandler.getEnergyStored() + "/" + energyhandler.getMaxEnergyStored()).withStyle(TextFormatting.DARK_GRAY)));
+                tooltip.add((new TranslatableComponent("tooltip.energygun.remainingenergy", ChatFormatting.BLUE.toString() + energyhandler.getEnergyStored() + "/" + energyhandler.getMaxEnergyStored()).withStyle(ChatFormatting.DARK_GRAY)));
             });
             if (!tagCompound.getBoolean("IgnoreAmmo")) {
                 int ammoCount = tagCompound.getInt("AmmoCount");
-                tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + ammoCount + "/" + GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun))).withStyle(TextFormatting.DARK_GRAY));
+                tooltip.add((new TranslatableComponent("info.tac.ammo", ChatFormatting.GOLD.toString() + ammoCount + "/" + GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun))).withStyle(ChatFormatting.DARK_GRAY));
             }
         }
 
         if (tagCompound != null && tagCompound.get("CurrentFireMode") != null) {
             if (tagCompound.getInt("CurrentFireMode") == 0) {
-                tooltip.add((new TranslationTextComponent("info.tac.firemode_safe", (new KeybindTextComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(TextFormatting.GREEN));
+                tooltip.add((new TranslatableComponent("info.tac.firemode_safe", (new KeybindComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.GREEN));
             } else if (tagCompound.getInt("CurrentFireMode") == 1) {
-                tooltip.add((new TranslationTextComponent("info.tac.firemode_semi", (new KeybindTextComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(TextFormatting.RED));
+                tooltip.add((new TranslatableComponent("info.tac.firemode_semi", (new KeybindComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.RED));
             } else if (tagCompound.getInt("CurrentFireMode") == 2) {
-                tooltip.add((new TranslationTextComponent("info.tac.firemode_auto", (new KeybindTextComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(TextFormatting.RED));
+                tooltip.add((new TranslatableComponent("info.tac.firemode_auto", (new KeybindComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.RED));
             }
         }
 
@@ -151,15 +158,15 @@ public class ItemEnergyGun extends TimelessGunItem {
             float speed = 0.1F / (1.0F + (gun.getModifiedGun(stack).getGeneral().getWeightKilo() * (1.0F + GunModifierHelper.getModifierOfWeaponWeight(stack)) + GunModifierHelper.getAdditionalWeaponWeight(stack)) * 0.0275F);
             speed = Math.max(Math.min(speed, 0.095F), 0.075F);
             if ((double)speed > 0.09D) {
-                tooltip.add((new TranslationTextComponent("info.tac.lightWeightGun", (new TranslationTextComponent(-((int)((0.1D - (double)speed) * 1000.0D)) + "%")).withStyle(TextFormatting.RED))).withStyle(TextFormatting.DARK_AQUA));
+                tooltip.add((new TranslatableComponent("info.tac.lightWeightGun", (new TranslatableComponent(-((int)((0.1D - (double)speed) * 1000.0D)) + "%")).withStyle(ChatFormatting.RED))).withStyle(ChatFormatting.DARK_AQUA));
             } else if ((double)speed < 0.09D && (double)speed > 0.0825D) {
-                tooltip.add((new TranslationTextComponent("info.tac.standardWeightGun", (new TranslationTextComponent(-((int)((0.1D - (double)speed) * 1000.0D)) + "%")).withStyle(TextFormatting.RED))).withStyle(TextFormatting.DARK_GREEN));
+                tooltip.add((new TranslatableComponent("info.tac.standardWeightGun", (new TranslatableComponent(-((int)((0.1D - (double)speed) * 1000.0D)) + "%")).withStyle(ChatFormatting.RED))).withStyle(ChatFormatting.DARK_GREEN));
             } else {
-                tooltip.add((new TranslationTextComponent("info.tac.heavyWeightGun", (new TranslationTextComponent(-((int)((0.1D - (double)speed) * 1000.0D)) + "%")).withStyle(TextFormatting.RED))).withStyle(TextFormatting.DARK_RED));
+                tooltip.add((new TranslatableComponent("info.tac.heavyWeightGun", (new TranslatableComponent(-((int)((0.1D - (double)speed) * 1000.0D)) + "%")).withStyle(ChatFormatting.RED))).withStyle(ChatFormatting.DARK_RED));
             }
         }
 
-        tooltip.add((new TranslationTextComponent("info.tac.attachment_help", (new KeybindTextComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH))).withStyle(TextFormatting.YELLOW));
+        tooltip.add((new TranslatableComponent("info.tac.attachment_help", (new KeybindComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.YELLOW));
     }
 
     public double getDurabilityForDisplay(ItemStack stack) {
@@ -182,7 +189,7 @@ public class ItemEnergyGun extends TimelessGunItem {
         Gun modifiedGun = this.getModifiedGun(stack);
         Item ammo = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
         if(doesIgnoreAmmo(stack)) {
-            return Objects.requireNonNull(TextFormatting.BLUE.getColor());
+            return Objects.requireNonNull(ChatFormatting.BLUE.getColor());
         }
         else{
             return super.getRGBDurabilityForDisplay(stack);
@@ -202,13 +209,13 @@ public class ItemEnergyGun extends TimelessGunItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int tick, boolean isfocused) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int tick, boolean isfocused) {
         super.inventoryTick(stack, world, entity, tick, isfocused);
-        CompoundNBT tagCompound = stack.getOrCreateTag();
+        CompoundTag tagCompound = stack.getOrCreateTag();
         int currentfiremode = tagCompound.getInt("CurrentFireMode");
         int previousfiremode = tagCompound.getInt("previousfiremode");
 
-        if(!(entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.instabuild)&&currentfiremode != 0){
+        if(!(entity instanceof Player && ((Player) entity).abilities.instabuild)&&currentfiremode != 0){
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energystorage)->{
                 if(energystorage.extractEnergy(this.idleenergyconsumption, false)<this.idleenergyconsumption){
                     tagCompound.putInt("CurrentFireMode", 0);

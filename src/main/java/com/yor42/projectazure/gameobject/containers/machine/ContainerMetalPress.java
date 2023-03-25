@@ -3,29 +3,29 @@ package com.yor42.projectazure.gameobject.containers.machine;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
 import com.yor42.projectazure.setup.register.RegisterContainer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class ContainerMetalPress extends Container {
+public class ContainerMetalPress extends AbstractContainerMenu {
 
-    private final IIntArray field;
+    private final ContainerData field;
 
-    public ContainerMetalPress(int id, PlayerInventory inventory, PacketBuffer buffer) {
-        this(id, inventory, new ItemStackHandler(3), new IntArray(4));
+    public ContainerMetalPress(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, new ItemStackHandler(3), new SimpleContainerData(4));
     }
 
-    public ContainerMetalPress(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
+    public ContainerMetalPress(int id, Inventory inventory, ItemStackHandler Inventory, ContainerData field) {
         super(RegisterContainer.METAL_PRESS_CONTAINER.get(), id);
 
         this.addSlot(new SlotItemHandler(Inventory, 0, 41, 35));
@@ -48,7 +48,7 @@ public class ContainerMetalPress extends Container {
         }
     }
 
-    public IIntArray getField() {
+    public ContainerData getField() {
         return this.field;
     }
 
@@ -66,7 +66,7 @@ public class ContainerMetalPress extends Container {
         return (int)(i != 0 ? k * pixels : 0);
     }
 
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -116,7 +116,7 @@ public class ContainerMetalPress extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
     //Why do I have to do this all over again forge :kekw:

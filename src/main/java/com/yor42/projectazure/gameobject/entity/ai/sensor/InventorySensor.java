@@ -3,18 +3,18 @@ package com.yor42.projectazure.gameobject.entity.ai.sensor;
 import com.google.common.collect.ImmutableSet;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.item.BedItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.EffectType;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.item.BedItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Set;
 
 import static net.minecraft.fluid.Fluids.WATER;
-import static net.minecraft.item.Items.*;
+import staticnet.minecraft.world.level.material.Fluids*;
 
 public class InventorySensor extends Sensor<AbstractEntityCompanion> {
     @Override
-    protected void doTick(@Nonnull ServerWorld world, @Nonnull AbstractEntityCompanion entity) {
+    protected void doTick(@Nonnull ServerLevel world, @Nonnull AbstractEntityCompanion entity) {
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
         ItemStackHandler inventory = entity.getInventory();
         boolean foundTotem = brain.hasMemoryValue(RegisterAI.TOTEM_INDEX.get());
@@ -52,8 +52,8 @@ public class InventorySensor extends Sensor<AbstractEntityCompanion> {
                 boolean ispoisonous = false;
                 if(!stack.getItem().getFoodProperties().getEffects().isEmpty()){
                     for(int j =0; j<stack.getItem().getFoodProperties().getEffects().size(); j++){
-                        EffectInstance instance = stack.getItem().getFoodProperties().getEffects().get(j).getFirst();
-                        if(instance.getEffect().getCategory() == EffectType.HARMFUL){
+                        MobEffectInstance instance = stack.getItem().getFoodProperties().getEffects().get(j).getFirst();
+                        if(instance.getEffect().getCategory() == MobEffectCategory.HARMFUL){
                             ispoisonous = true;
                         }
                     }
@@ -86,17 +86,17 @@ public class InventorySensor extends Sensor<AbstractEntityCompanion> {
                     foundFireExtinguisher = true;
                 }
                 else if(!PotionUtils.getPotion(stack).getEffects().isEmpty()){
-                    List<EffectInstance> effects = PotionUtils.getMobEffects(stack);
-                    if(effects.stream().noneMatch((effect)->effect.getEffect().getCategory() == EffectType.HARMFUL)){
-                        if(!foundRegenerationPotion && effects.stream().anyMatch((effect)->effect.getEffect() == Effects.REGENERATION)){
+                    List<MobEffectInstance> effects = PotionUtils.getMobEffects(stack);
+                    if(effects.stream().noneMatch((effect)->effect.getEffect().getCategory() == MobEffectCategory.HARMFUL)){
+                        if(!foundRegenerationPotion && effects.stream().anyMatch((effect)->effect.getEffect() == MobEffects.REGENERATION)){
                             brain.setMemory(RegisterAI.REGENERATION_POTION_INDEX.get(), i);
                             foundRegenerationPotion = true;
                         }
-                        else if(!foundHealPotion && effects.stream().anyMatch((effect)->effect.getEffect() == Effects.HEAL)){
+                        else if(!foundHealPotion && effects.stream().anyMatch((effect)->effect.getEffect() == MobEffects.HEAL)){
                             brain.setMemory(RegisterAI.HEAL_POTION_INDEX.get(), i);
                             foundHealPotion = true;
                         }
-                        else if(!foundFireExtinguisher && effects.stream().anyMatch((effect)->effect.getEffect() == Effects.FIRE_RESISTANCE)){
+                        else if(!foundFireExtinguisher && effects.stream().anyMatch((effect)->effect.getEffect() == MobEffects.FIRE_RESISTANCE)){
                             brain.setMemory(RegisterAI.FIRE_EXTINGIGH_ITEM.get(), i);
                             foundFireExtinguisher = true;
                         }

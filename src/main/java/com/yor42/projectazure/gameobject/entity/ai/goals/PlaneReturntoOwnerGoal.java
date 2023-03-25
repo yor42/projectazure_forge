@@ -2,8 +2,8 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.EnumSet;

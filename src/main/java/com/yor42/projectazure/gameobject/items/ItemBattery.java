@@ -3,18 +3,18 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.gameobject.capability.ItemPowerCapabilityProvider;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorageItem;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -22,6 +22,8 @@ import net.minecraftforge.energy.IEnergyStorage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemBattery extends Item {
     private final int capacity, maxin, maxout;
@@ -45,7 +47,7 @@ public class ItemBattery extends Item {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new ItemPowerCapabilityProvider(stack, this.capacity, this.maxin, this.maxout);
     }
 
@@ -61,7 +63,7 @@ public class ItemBattery extends Item {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup p_150895_1_, NonNullList<ItemStack> p_150895_2_) {
+    public void fillItemCategory(CreativeModeTab p_150895_1_, NonNullList<ItemStack> p_150895_2_) {
         super.fillItemCategory(p_150895_1_, p_150895_2_);
         if (this.allowdedIn(p_150895_1_)) {
             ItemStack stack = new ItemStack(this);
@@ -75,7 +77,7 @@ public class ItemBattery extends Item {
     }
 
     @Override
-    public void onCraftedBy(ItemStack stack, World p_77622_2_, PlayerEntity p_77622_3_) {
+    public void onCraftedBy(ItemStack stack, Level p_77622_2_, Player p_77622_3_) {
         super.onCraftedBy(stack, p_77622_2_, p_77622_3_);
         if(this.shouldeFilledonCraft){
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((battery)->{
@@ -87,25 +89,25 @@ public class ItemBattery extends Item {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack p_77624_1_, @Nullable World p_77624_2_,@Nonnull List<ITextComponent> p_77624_3_,@Nonnull ITooltipFlag p_77624_4_) {
+    public void appendHoverText(@Nonnull ItemStack p_77624_1_, @Nullable Level p_77624_2_,@Nonnull List<Component> p_77624_3_,@Nonnull TooltipFlag p_77624_4_) {
         super.appendHoverText(p_77624_1_, p_77624_2_, p_77624_3_, p_77624_4_);
         int remainingBattery = p_77624_1_.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
         float percentage = (float) remainingBattery/this.capacity;
 
-        TextFormatting color;
+        ChatFormatting color;
         if(percentage>=0.6){
-            color = TextFormatting.GREEN;
+            color = ChatFormatting.GREEN;
         }
         else if(percentage>=0.3){
-            color = TextFormatting.YELLOW;
+            color = ChatFormatting.YELLOW;
         }
         else{
-            color = TextFormatting.DARK_RED;
+            color = ChatFormatting.DARK_RED;
         }
         percentage*=100;
-        p_77624_3_.add(new TranslationTextComponent("item.tooltip.energystored", new StringTextComponent(MathUtil.formatValueMatric(remainingBattery)+" FE / "+MathUtil.formatValueMatric(this.capacity)+String.format(" FE (%.2f", percentage)+"%)").withStyle(color)).withStyle(TextFormatting.GRAY));
+        p_77624_3_.add(new TranslatableComponent("item.tooltip.energystored", new TextComponent(MathUtil.formatValueMatric(remainingBattery)+" FE / "+MathUtil.formatValueMatric(this.capacity)+String.format(" FE (%.2f", percentage)+"%)").withStyle(color)).withStyle(ChatFormatting.GRAY));
         if(this.maxin<=0){
-            p_77624_3_.add(new TranslationTextComponent("item.tooltip.energynonrechargeable").withStyle(TextFormatting.DARK_RED));
+            p_77624_3_.add(new TranslatableComponent("item.tooltip.energynonrechargeable").withStyle(ChatFormatting.DARK_RED));
         }
     }
 }
