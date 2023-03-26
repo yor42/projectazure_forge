@@ -59,10 +59,10 @@ public class DroneReturntoOwnerGoal extends Goal {
                 ItemStack stack = this.entity.turnPlanetoItemStack();
                 boolean ItemInserted = false;
                 if(owner instanceof Player){
-                    for(int i = 0; i< ((Player) owner).inventory.getContainerSize(); i++){
-                        if(((Player) owner).inventory.canPlaceItem(i, stack)){
-                            ((Player) owner).inventory.setItem(i, stack);
-                            this.entity.remove();
+                    for(int i = 0; i< ((Player) owner).getInventory().getContainerSize(); i++){
+                        if(((Player) owner).getInventory().canPlaceItem(i, stack)){
+                            ((Player) owner).getInventory().setItem(i, stack);
+                            this.entity.discard();
                             ItemInserted = true;
                             break;
                         }
@@ -73,7 +73,7 @@ public class DroneReturntoOwnerGoal extends Goal {
                         int index = 12+k;
                         if(((AbstractEntityCompanion) owner).getInventory().isItemValid(index, stack)){
                             ((AbstractEntityCompanion) owner).getInventory().setStackInSlot(index, stack);
-                            this.entity.remove();
+                            this.entity.discard();
                             ItemInserted = true;
                             break;
                         }

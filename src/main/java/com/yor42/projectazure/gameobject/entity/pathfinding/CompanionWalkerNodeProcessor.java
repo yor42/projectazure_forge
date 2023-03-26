@@ -27,7 +27,7 @@ public class CompanionWalkerNodeProcessor extends WalkNodeEvaluator {
     public BlockPathTypes getBlockPathType(BlockGetter world, int p_186330_2_, int p_186330_3_, int p_186330_4_) {
         BlockPathTypes superValue = super.getBlockPathType(world, p_186330_2_, p_186330_3_, p_186330_4_);
         if(superValue == BlockPathTypes.OPEN) {
-            if (world.getBlockState(new BlockPos(p_186330_2_, p_186330_3_, p_186330_4_).below()).getBlock().is(BlockTags.CLIMBABLE)) {
+            if (world.getBlockState(new BlockPos(p_186330_2_, p_186330_3_, p_186330_4_).below()).is(BlockTags.CLIMBABLE)) {
                 superValue = BlockPathTypes.WALKABLE;
 
             }

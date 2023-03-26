@@ -7,9 +7,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-import static net.minecraft.entity.ai.goal.Goal.Flag.LOOK;
-import staticnet.minecraft.world.entity.ai.goal.Goal.Flagg.MOVE;
-
 public class DroneRangedAttackGoal extends Goal {
 
     private final EntityMissileDrone drone;
@@ -21,7 +18,7 @@ public class DroneRangedAttackGoal extends Goal {
     public DroneRangedAttackGoal(EntityMissileDrone drone) {
         this.drone = drone;
         this.rangedAttackTime = -1;
-        setFlags(EnumSet.of(LOOK, MOVE));
+        setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
     }
 
     @Override
@@ -59,7 +56,7 @@ public class DroneRangedAttackGoal extends Goal {
 
     public void tick() {
         if (this.target != null) {
-            boolean lvt_3_1_ = this.drone.getSensing().canSee(this.target);
+            boolean lvt_3_1_ = this.drone.getSensing().hasLineOfSight(this.target);
             if (lvt_3_1_) {
                 this.drone.getLookControl().setLookAt(this.target, 10.0F, (float) this.drone.getMaxHeadXRot());
                 ++this.seeTime;

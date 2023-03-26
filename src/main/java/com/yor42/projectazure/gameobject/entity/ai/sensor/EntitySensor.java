@@ -57,7 +57,7 @@ public class EntitySensor extends Sensor<AbstractEntityCompanion> {
 
         List<LivingEntity> list = entitylist.stream().filter((etr)->etr instanceof LivingEntity).map(LivingEntity.class::cast).collect(Collectors.toList());
         brain.setMemory(RegisterAI.NEARBY_ALLYS.get(), list);
-        TargetingConditions TARGET_CONDITIONS = (new TargetingConditions()).range(16.0D).allowSameTeam().allowNonAttackable().selector((ety)->entity.getSensing().canSee(ety));
+        TargetingConditions TARGET_CONDITIONS = TargetingConditions.DEFAULT.range(16.0D).allowSameTeam().allowNonAttackable().selector((ety)->entity.getSensing().canSee(ety));
 
         //HOSTILE
         List<LivingEntity> hostiles = entitylist.stream().filter((etr)->etr instanceof Monster).map(LivingEntity.class::cast).collect(Collectors.toList());

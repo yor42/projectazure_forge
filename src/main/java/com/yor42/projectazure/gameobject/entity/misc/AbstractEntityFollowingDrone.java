@@ -31,9 +31,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -46,8 +46,6 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
-
-import static net.minecraft.entity.ai.goal.Goal.Flag.MOVE;
 
 public abstract class AbstractEntityFollowingDrone extends PathfinderMob implements IAnimatable {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);

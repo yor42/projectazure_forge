@@ -6,7 +6,6 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.block.*;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -111,7 +110,7 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
         Block block = state.getBlock();
         BlockState stateBelow = worldIn.getBlockState(pos.below());
         Block blockbelow = stateBelow.getBlock();
-        boolean isOre = (block instanceof OreBlock || block.is(Tags.Blocks.ORES)) && host.getMainHandItem().isCorrectToolForDrops(state);
+        boolean isOre = (block instanceof OreBlock || stateBelow.is(Tags.Blocks.ORES)) && host.getMainHandItem().isCorrectToolForDrops(state);
         boolean crop = block instanceof CropBlock;
         boolean isCactusorSugarcane = block instanceof SugarCaneBlock || block instanceof CactusBlock;
         BlockHitResult result;

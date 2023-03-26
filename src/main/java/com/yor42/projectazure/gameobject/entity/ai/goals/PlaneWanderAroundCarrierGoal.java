@@ -17,7 +17,7 @@ public class PlaneWanderAroundCarrierGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return (this.plane.getTarget() == null || !this.plane.getSensing().canSee(this.plane.getTarget())) && this.plane.hasPayload()&& !this.plane.isOnBombRun() && this.plane.getOwner() != null;
+        return (this.plane.getTarget() == null || !this.plane.getSensing().hasLineOfSight(this.plane.getTarget())) && this.plane.hasPayload()&& !this.plane.isOnBombRun() && this.plane.getOwner() != null;
     }
 
     @Override

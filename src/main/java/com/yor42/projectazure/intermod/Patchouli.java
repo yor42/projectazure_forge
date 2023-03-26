@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Patchouli {
 
     public static void HandlePatchouliCompatibility(Player player){
-        Inventory inv = player.inventory;
+        Inventory inv = player.getInventory();
 
         if(!CompatibilityUtils.isPatchouliLoaded()) {
             player.sendMessage(new TranslatableComponent("message.nopatchouliinstalled", new TranslatableComponent("modnames.patchouli").withStyle(ChatFormatting.AQUA).setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://curseforge.com/minecraft/search?page=1&&pageSize=20&sortType=2&class=mc-mods")))).withStyle(ChatFormatting.GRAY), UUID.randomUUID());

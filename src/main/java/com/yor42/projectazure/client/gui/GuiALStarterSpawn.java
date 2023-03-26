@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -39,8 +40,8 @@ public class GuiALStarterSpawn extends Screen {
     }
 
     @Override
-    public void init(Minecraft minecraft, int width, int height) {
-        super.init(minecraft, width, height);
+    public void init() {
+        super.init();
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2;
         this.minecraft = minecraft;
@@ -56,7 +57,7 @@ public class GuiALStarterSpawn extends Screen {
                     Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex));
                     this.onClose();
                 });
-                this.addButton(button);
+                this.addWidget(button);
                         //createButton(entityList[index], this.scrollBarFarLeft + (++index * buttonHeight), this.y+26, buttonWidth, buttonHeight, new TranslationTextComponent("gui.selectstarter.select"+index), action -> Main.LOGGER.info("Player tried to spawn starter. but guess what. this doesnt do shit!"));
             } /*else {
                 Button button = (Button) this.buttons.get(index);
@@ -84,12 +85,14 @@ public class GuiALStarterSpawn extends Screen {
 
     private void renderButtons(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 
-        if(this.buttons.size() > 0) {
-            for (net.minecraft.client.gui.components.AbstractWidget widget : this.buttons) {
-                buttonStarterSelect button = (buttonStarterSelect) widget;
-                button.render(matrixStack, mouseX, mouseY, partialTicks);
-            }
-        }
+        // Will you need this one? for now we won't use it
+        // if(this.buttons.size() > 0) {
+        //     for (net.minecraft.client.gui.components.AbstractWidget widget : this.buttons) {
+        //         buttonStarterSelect button = (buttonStarterSelect) widget;
+        //         button.render(matrixStack, mouseX, mouseY, partialTicks);
+        //     }
+        // }
+
         //will be implemented when screen actually needs to be scrolled
         /*
         int position = Math.floorDiv(this.lastScrollX - this.scrollBarFarLeft, 20); // CORRECT - GETS THE 'INDEX"
@@ -127,8 +130,9 @@ public class GuiALStarterSpawn extends Screen {
         return this.y;
     }
 
-    public String getNarrationMessage() {
-        return "Hello World";
+    @Override
+    public Component getNarrationMessage() {
+        return new TextComponent("Hello World");
     }
 
     private buttonStarterSelect createButton(int x, int y, int width, int height, int idx, EntityType<?> type, Button.OnPress onPress) {

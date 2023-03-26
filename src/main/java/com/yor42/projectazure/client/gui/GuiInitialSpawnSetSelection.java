@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.libs.Constants;
@@ -31,11 +32,6 @@ public class GuiInitialSpawnSetSelection extends Screen {
     public GuiInitialSpawnSetSelection(InteractionHand hand) {
         super(new TranslatableComponent("gui.initialspawnsetselect"));
         this.hand = hand;
-    }
-
-    @Override
-    public void init(Minecraft p_231158_1_, int p_231158_2_, int p_231158_3_) {
-        super.init(p_231158_1_, p_231158_2_, p_231158_3_);
     }
 
     @Override
@@ -81,8 +77,8 @@ public class GuiInitialSpawnSetSelection extends Screen {
         if(!this.ispopulated) {
             int buttonwidth = 58;
             int buttonheight = 49;
-            this.addButton(new ImageButton(this.x + 42, this.y + 62, buttonwidth, buttonheight, 0, 0, buttonheight, BUTTON_TEXTURE, (runnable) -> this.selectSpawnSet((byte) 0)));
-            this.addButton(new ImageButton(this.x + 150, this.y + 62, buttonwidth, buttonheight, 58, 0, buttonheight, BUTTON_TEXTURE, (runnable) -> this.selectSpawnSet((byte) 1)));
+            this.addWidget(new ImageButton(this.x + 42, this.y + 62, buttonwidth, buttonheight, 0, 0, buttonheight, BUTTON_TEXTURE, (runnable) -> this.selectSpawnSet((byte) 0)));
+            this.addWidget(new ImageButton(this.x + 150, this.y + 62, buttonwidth, buttonheight, 58, 0, buttonheight, BUTTON_TEXTURE, (runnable) -> this.selectSpawnSet((byte) 1)));
             this.ispopulated = true;
         }
 

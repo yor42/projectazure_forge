@@ -29,7 +29,7 @@ public class PlaneAttackGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.entity.getTarget() != null && this.entity.getTarget().isAlive() && this.entity.hasPayload() && this.entity.getSensing().canSee(this.entity.getTarget());
+        return this.entity.getTarget() != null && this.entity.getTarget().isAlive() && this.entity.hasPayload() && this.entity.getSensing().hasLineOfSight(this.entity.getTarget());
     }
 
     @Override
@@ -98,7 +98,7 @@ public class PlaneAttackGoal extends Goal {
                             if(PlaneStack == ItemStack.EMPTY)
                                 break;
                         }
-                        this.entity.remove();
+                        this.entity.discard();
                     }
                 }
             }

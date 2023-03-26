@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui.container;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerSRInventory;
@@ -77,9 +78,9 @@ public class GuiSRInventory extends AbstractGUIScreen<ContainerSRInventory> {
         Button itembutton = new EntityStatusButton(this.host,this.leftPos + 6, this.topPos + 76, 16, 16, 240, 32, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
         Button attackbehaviorbutton = new EntityStatusButton(this.host, this.leftPos + 6, this.topPos + 93, 16, 16, 240, 64, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE);
 
-        this.addButton(homebutton);
-        this.addButton(itembutton);
-        this.addButton(attackbehaviorbutton);
+        this.addWidget(homebutton);
+        this.addWidget(itembutton);
+        this.addWidget(attackbehaviorbutton);
     }
 
     @Override

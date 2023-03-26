@@ -45,7 +45,7 @@ public class PlaneReturntoOwnerGoal extends Goal {
                             if(Hanger.insertItem(i, PlaneStack, true) == ItemStack.EMPTY) {
                                 Hanger.insertItem(i, PlaneStack, false);
                                 SuccessfullyReturned = true;
-                                this.entity.remove();
+                                this.entity.discard();
                                 break;
                             }
                         }

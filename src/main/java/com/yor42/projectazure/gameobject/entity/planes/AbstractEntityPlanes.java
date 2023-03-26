@@ -9,7 +9,6 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.*;
 import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -27,8 +26,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -135,7 +134,7 @@ public abstract class AbstractEntityPlanes extends FlyingMob implements IAnimata
         //in water = crash
         if(this.isInWater()){
             this.level.explode(this, this.getX(), getY(), getZ(), 0.5F, Explosion.BlockInteraction.DESTROY);
-            this.remove();
+            this.discard();
         }
         if(this.isLimitedLifespan()) {
             if (this.tickCount >= this.getMaxOperativeTick()) {
@@ -222,14 +221,14 @@ public abstract class AbstractEntityPlanes extends FlyingMob implements IAnimata
 
         if(this.isOnGround() || isInWater()) {
             this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, Explosion.BlockInteraction.DESTROY);
-            this.remove();
+            this.discard();
         }
 
     }
 
     public void die(DamageSource cause) {
         if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, cause)) return;
-        if (!this.removed && !this.dead) {
+        if (!this.isRemoved() && !this.dead) {
             Entity entity = cause.getEntity();
             LivingEntity livingentity = this.getKillCredit();
             if (this.deathScore >= 0 && livingentity != null) {
@@ -395,7 +394,7 @@ public abstract class AbstractEntityPlanes extends FlyingMob implements IAnimata
 
         public void clientTick() {
             AbstractEntityPlanes.this.yHeadRot = AbstractEntityPlanes.this.yBodyRot;
-            AbstractEntityPlanes.this.yBodyRot = AbstractEntityPlanes.this.yRot;
+            AbstractEntityPlanes.this.yBodyRot = AbstractEntityPlanes.this.getYRot();
         }
     }
 
