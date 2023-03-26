@@ -29,7 +29,7 @@ public class ContainerBasicRefinery extends AbstractContainerMenu {
 
     public final FluidStack crudeoilstack, gasolinestack, dieselstack, fueloilstack;
 
-    public ContainerBasicRefinery(int id, Inventory inventory, FriendlyByteBuf buffer) {
+    public ContainerBasicRefinery(int id, Inventory inventory) {
         this(id, inventory, new ItemStackHandler(10), new ContainerData() {
 
             final int[] values = buffer.readVarIntArray();

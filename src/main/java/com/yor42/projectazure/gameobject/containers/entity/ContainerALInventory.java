@@ -26,7 +26,7 @@ public class ContainerALInventory extends AbstractContainerInventory {
     private final IItemHandler equipment;
 
     //client
-    public ContainerALInventory(int id, Inventory playerInventory, FriendlyByteBuf data) {
+    public ContainerALInventory(int id, Inventory playerInventory) {
         this(id, playerInventory, new ItemStackHandler(12),  new ItemStackHandler(1), new ItemStackHandler(6), new ItemStackHandler(8), (EntityKansenBase) playerInventory.player.level.getEntity(data.readInt()));
     }
 

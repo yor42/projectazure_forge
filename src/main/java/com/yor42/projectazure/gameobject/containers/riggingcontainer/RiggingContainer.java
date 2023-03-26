@@ -34,7 +34,7 @@ public class RiggingContainer extends AbstractContainerMenu {
     @Nullable
     public UUID previousEntityUUID = null;
 
-    public RiggingContainer(int id, Inventory playerInv, FriendlyByteBuf data) {
+    public RiggingContainer(int id, Inventory playerInv) {
         super(RIGGING_INVENTORY.get(), id);
         this.riggingStack = data.readItem();
         try {

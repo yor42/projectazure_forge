@@ -14,6 +14,6 @@ public class FuelSlotItemhandler extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(@Nonnull ItemStack stack) {
-        return ForgeHooks.getBurnTime(stack)>0;
+        return ForgeHooks.getBurnTime(stack, null)>0;
     }
 }

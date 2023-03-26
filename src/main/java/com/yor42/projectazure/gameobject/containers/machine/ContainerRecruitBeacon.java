@@ -22,7 +22,7 @@ public class ContainerRecruitBeacon extends AbstractContainerMenu {
 
     private final ContainerData field;
 
-    public ContainerRecruitBeacon(int id, Inventory inventory, FriendlyByteBuf buffer) {
+    public ContainerRecruitBeacon(int id, Inventory inventory) {
 this(id, inventory, new ItemStackHandler(5), new ContainerData() {
 
     final int[] values = buffer.readVarIntArray();
