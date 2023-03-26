@@ -32,7 +32,7 @@ public class ProjectAzurePlayerCapability {
 
     public static final ResourceLocation CapabilityID = ModResourceLocation("capability_paplayer");
 
-    public static final Capability<ProjectAzurePlayerCapability> PA_PLAYER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});;
+    public static final Capability<ProjectAzurePlayerCapability> PA_PLAYER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
     public ProjectAzurePlayerCapability(Player player){
         this.player = player;
@@ -87,7 +87,7 @@ public class ProjectAzurePlayerCapability {
 
             @Override
             public void deserializeNBT(CompoundTag nbt) {
-                PA_PLAYER_CAPABILITY.getStorage().readNBT(PA_PLAYER_CAPABILITY, inst, null, nbt);
+                this.inst.deserializeNBT(nbt);
             }
 
             @Nonnull
@@ -98,7 +98,7 @@ public class ProjectAzurePlayerCapability {
 
             @Override
             public CompoundTag serializeNBT() {
-                return (CompoundTag) PA_PLAYER_CAPABILITY.getStorage().writeNBT(PA_PLAYER_CAPABILITY, inst, null);
+                return this.inst.serializeNBT();
             }
         };
     }
@@ -127,25 +127,5 @@ public class ProjectAzurePlayerCapability {
             }
         }
     }
-
-    public static void registerCapability() {
-        CapabilityManager.INSTANCE.register(ProjectAzurePlayerCapability.class, new Inventory(), ProjectAzurePlayerCapability::new);
-    }
-
-    private static class Inventory implements Capability.IStorage<ProjectAzurePlayerCapability>{
-
-        @Nullable
-        @Override
-        public Tag writeNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side) {
-            return instance.serializeNBT();
-
-        }
-
-        @Override
-        public void readNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side, Tag nbt) {
-            instance.deserializeNBT((CompoundTag) nbt);
-        }
-    }
-
 
 }

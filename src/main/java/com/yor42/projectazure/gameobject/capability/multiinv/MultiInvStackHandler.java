@@ -130,9 +130,6 @@ public class MultiInvStackHandler implements IItemHandlerModifiable {
             throw new RuntimeException("Slot " + slot + " not in valid range - [0," + stacks.size() + ")");
     }
 
-    protected void onLoad() {
-
-    }
 
     protected void onContentsChanged(int slot) {}
 

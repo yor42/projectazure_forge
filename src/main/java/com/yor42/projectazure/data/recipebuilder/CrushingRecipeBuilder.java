@@ -9,6 +9,7 @@ import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -93,7 +94,7 @@ public class CrushingRecipeBuilder implements FinishedRecipe {
         return this.input(Ingredient.of(input));
     }
 
-    public CrushingRecipeBuilder input(Tag<Item> input) {
+    public CrushingRecipeBuilder input(TagKey<Item> input) {
         return this.input(Ingredient.of(input));
     }
 
@@ -101,7 +102,7 @@ public class CrushingRecipeBuilder implements FinishedRecipe {
         return addInput(new ItemStack(input));
     }
 
-    protected CrushingRecipeBuilder addInput(Tag.Named<Item> tag) {
+    protected CrushingRecipeBuilder addInput(TagKey<Item> tag) {
         return addInput(Ingredient.of(tag));
     }
 

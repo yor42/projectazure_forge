@@ -21,13 +21,13 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.item.*;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.*;
-import net.minecraft.util.text.*;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -35,6 +35,7 @@ import net.minecraftforge.registries.RegistryObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static com.yor42.projectazure.Main.*;
@@ -529,7 +530,20 @@ public class RegisterItems {
 
     public static final RegistryObject<Item> GASMASK_FILTER = register_withoutTexture("gasmask_filter", ()->new GasMaskFilterItem(new Item.Properties().tab(PA_RESOURCES), 24000));
     public static final RegistryObject<Item> CHARCOAL_FILTER = register("replacement_filter", ()->new Item(new Item.Properties().tab(PA_RESOURCES)));
-    public static final RegistryObject<Item> GASMASK = register_withoutTexture("gasmask", ()->new GasMaskItem(new Item.Properties().tab(PA_RESOURCES).stacksTo(1).setISTER(()->GasMaskItemRenderer::new)));
+    public static final RegistryObject<Item> GASMASK = register_withoutTexture("gasmask", ()->new GasMaskItem(new Item.Properties().tab(PA_RESOURCES).stacksTo(1)){
+        @Override
+        public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+            super.initializeClient(consumer);
+            consumer.accept(new IItemRenderProperties() {
+                private final BlockEntityWithoutLevelRenderer renderer = new GasMaskItemRenderer();
+
+                @Override
+                public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                    return renderer;
+                }
+            });
+        }
+    });
     public static final RegistryObject<Item> SYRINGE = register_withoutTexture("syringe", ()->new ItemSyringe(new Item.Properties().tab(PA_RESOURCES)));
     public static final RegistryObject<Item> RMA7024_pickaxe = register("rma7024_pickaxe", () -> new PickaxeItem(ModMaterials.RMA_70_24, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> RMA7024_axe = register("rma7024_axe", () -> new AxeItem(ModMaterials.RMA_70_24, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
@@ -586,35 +600,106 @@ public class RegisterItems {
     public static final RegistryObject<Item> COMMANDING_STICK = register("commanding_stick", ItemCommandStick::new);
 
     public static final RegistryObject<Item> DD_DEFAULT_RIGGING = register_withoutTexture("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
-    .setISTER(() -> DDDefaultRiggingRenderer::new)
     .tab(PA_WEAPONS).stacksTo(1), 0,2,1,3,0,0, 5000, 500));
 
     public static final RegistryObject<Item> CV_DEFAULT_RIGGING = register_withoutTexture("cv_default_rigging", () -> new ItemRiggingCVDefault(new Item.Properties()
-            .setISTER(() -> CVDefaultRiggingRenderer::new)
-            .tab(PA_WEAPONS).stacksTo(1), 0,2,4,0, 0,0,5000, 750));
+            .tab(PA_WEAPONS).stacksTo(1), 0,2,4,0, 0,0,5000, 750){
+        @Override
+        public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+            super.initializeClient(consumer);
+            consumer.accept(new IItemRenderProperties() {
+                private final BlockEntityWithoutLevelRenderer renderer = new CVDefaultRiggingRenderer();
+
+                @Override
+                public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                    return renderer;
+                }
+            });
+        }
+    });
 
     public static final RegistryObject<Item> BB_DEFAULT_RIGGING = register_withoutTexture("bb_default_rigging", () -> new ItemRiggingBBDefault(new Item.Properties()
-            .setISTER(() -> BBDefaultRiggingRenderer::new)
-            .tab(PA_WEAPONS).stacksTo(1), 4,2,3,1,0,0, 5000, 1200));
+            .tab(PA_WEAPONS).stacksTo(1), 4,2,3,1,0,0, 5000, 1200){
+        @Override
+        public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+            super.initializeClient(consumer);
+            consumer.accept(new IItemRenderProperties() {
+                private final BlockEntityWithoutLevelRenderer renderer = new BBDefaultRiggingRenderer();
+
+                @Override
+                public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                    return renderer;
+                }
+            });
+        }
+    });
 
     public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = register_withoutTexture("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533Mm(new Item.Properties()
-            .setISTER(() -> equipment533mmTorpedoRenderer::new)
-            .tab(PA_WEAPONS).stacksTo(1), 40));
+            .tab(PA_WEAPONS).stacksTo(1), 40){
+        @Override
+        public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+            super.initializeClient(consumer);
+            consumer.accept(new IItemRenderProperties() {
+                private final BlockEntityWithoutLevelRenderer renderer = new equipment533mmTorpedoRenderer();
+
+                @Override
+                public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                    return renderer;
+                }
+            });
+        }
+    });
 
     public static final RegistryObject<Item> EQUIPMENT_GUN_127MM = register_withoutTexture("equipment_gun_127mm", () -> new ItemEquipmentGun127Mm(new Item.Properties()
-            .setISTER(() -> Equipment127mmGunRenderer::new)
-            .tab(PA_WEAPONS).stacksTo(1), 40));
+            .tab(PA_WEAPONS).stacksTo(1), 40){
+        @Override
+        public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+            super.initializeClient(consumer);
+            consumer.accept(new IItemRenderProperties() {
+                private final BlockEntityWithoutLevelRenderer renderer = new Equipment127mmGunRenderer();
+
+                @Override
+                public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                    return renderer;
+                }
+            });
+        }
+    });
 
     public static float WildcatHP = 30;
 
     public static final RegistryObject<Item> EQUIPMENT_PLANE_F4FWildcat = register_withoutTexture("equipment_plane_f4fwildcat", () -> new ItemPlanef4Fwildcat(new Item.Properties()
-            .setISTER(() -> ItemPlanef4fWildcatRenderer::new)
-            .tab(PA_WEAPONS).stacksTo(1), (int) WildcatHP));
+            .tab(PA_WEAPONS).stacksTo(1), (int) WildcatHP){
+        @Override
+        public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+            super.initializeClient(consumer);
+            consumer.accept(new IItemRenderProperties() {
+                private final BlockEntityWithoutLevelRenderer renderer = new ItemPlanef4fWildcatRenderer();
+
+                @Override
+                public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                    return renderer;
+                }
+            });
+        }
+    });
 
 
     public static final RegistryObject<Item> DRONE_BAMISSILE = register_withoutTexture("missiledrone", () -> new ItemMissleDrone(new Item.Properties()
-            .setISTER(() -> ItemMissileDroneRenderer::new)
-            .tab(PA_WEAPONS).stacksTo(1),10, 20000));
+            .tab(PA_WEAPONS).stacksTo(1),10, 20000){
+        @Override
+        public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+            super.initializeClient(consumer);
+            consumer.accept(new IItemRenderProperties() {
+                private final BlockEntityWithoutLevelRenderer renderer = new ItemMissileDroneRenderer();
+
+                @Override
+                public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                    return renderer;
+                }
+            });
+        }
+    });
 
     public static final RegistryObject<Item> SPAWM_AYANAMI = register_AL("spawnayanami", () -> new ItemCompanionSpawnEgg<>(registerEntity.AYANAMI, new Item.Properties()
             .tab(PA_COMPANIONS)));

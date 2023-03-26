@@ -5,7 +5,7 @@ import com.yor42.projectazure.intermod.tconstruct.datagen.PAMaterialRenderInfoPr
 import com.yor42.projectazure.intermod.tconstruct.datagen.PAMaterialSpriteGenerator;
 import com.yor42.projectazure.intermod.tconstruct.datagen.PATConRecipeProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import slimeknights.tconstruct.library.client.data.material.MaterialPartTextureGenerator;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
 import slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider;

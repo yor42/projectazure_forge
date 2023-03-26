@@ -17,6 +17,7 @@ import com.yor42.projectazure.client.renderer.block.MachineRecruitBeaconRenderer
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityRailgunProjectile;
 import com.yor42.projectazure.gameobject.items.GasMaskItem;
@@ -38,8 +39,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -148,8 +151,6 @@ public class Main
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        ProjectAzurePlayerCapability.registerCapability();
-        CapabilityMultiInventory.register();
 
     for (Pair<String, ResourceLocation> pair:registerMultiBlocks.DEFINITIONS){
         ComponentDefinition def = MbdComponents.DEFINITION_REGISTRY.get(pair.getSecond());
@@ -231,6 +232,12 @@ public class Main
             }
         }
 
+    }
+
+    @SubscribeEvent
+    public void RegisterCapabilities(RegisterCapabilitiesEvent event){
+        event.register(ProjectAzurePlayerCapability.class);
+        event.register(IMultiInventory.class);
     }
 
 }
