@@ -7,18 +7,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RangeDecoratorConfiguration;
-import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 public class WorldgenInit {
 
     public static void registerWorldgen(final BiomeLoadingEvent event){
-        if(PAConfig.CONFIG.ENABLE_COPPER.get()) {
-            addOreSpawn(event, OreConfiguration.Predicates.NATURAL_STONE, RegisterBlocks.COPPER_ORE, PAConfig.CONFIG.COPPER_VEINSIZE.get(), PAConfig.CONFIG.COPPER_MINHEIGHT.get(), PAConfig.CONFIG.COPPER_MAXHEIGHT.get(), PAConfig.CONFIG.COPPER_VEINSPERCHUNK.get());
-        }
         if(PAConfig.CONFIG.ENABLE_TIN.get()) {
             addOreSpawn(event, OreConfiguration.Predicates.NATURAL_STONE, RegisterBlocks.TIN_ORE, PAConfig.CONFIG.TIN_VEINSIZE.get(), PAConfig.CONFIG.TIN_MINHEIGHT.get(), PAConfig.CONFIG.TIN_MAXHEIGHT.get(), PAConfig.CONFIG.TIN_VEINSPERCHUNK.get());
         }

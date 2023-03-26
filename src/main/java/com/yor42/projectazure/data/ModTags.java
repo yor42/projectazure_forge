@@ -31,7 +31,6 @@ public class ModTags {
 
     public static final class Blocks {
         public static final TagKey<Block> ORES_ALUMINIUM = forge("ores/aluminium");
-        public static final TagKey<Block> ORES_COPPER = forge("ores/copper");
         public static final TagKey<Block> ORES_TIN = forge("ores/tin");
         public static final TagKey<Block> ORES_LEAD = forge("ores/lead");
         public static final TagKey<Block> ORES_ZINC = forge("ores/zinc");
@@ -66,7 +65,6 @@ public class ModTags {
     public static final class Items {
 
         public static final TagKey<Item> INGOT_ALUMINIUM = forge("ingots/aluminium");
-        public static final TagKey<Item> INGOT_COPPER = forge("ingots/copper");
         public static final TagKey<Item> INGOT_TIN = forge("ingots/tin");
         public static final TagKey<Item> INGOT_BRONZE = forge("ingots/bronze");
         public static final TagKey<Item> INGOT_LEAD = forge("ingots/lead");

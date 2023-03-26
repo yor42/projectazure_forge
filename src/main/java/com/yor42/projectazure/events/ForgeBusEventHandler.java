@@ -220,7 +220,7 @@ public class ForgeBusEventHandler {
                     .input(ItemMultiblockCapability.CAP, Ingredient.of(ModTags.Items.PLATE_BRASS))
                     .input(ItemMultiblockCapability.CAP, Ingredient.of(Tags.Items.GUNPOWDER))
                     .input(ItemMultiblockCapability.CAP, Ingredient.of(ModTags.Items.INGOT_LEAD))
-                    .input(ItemMultiblockCapability.CAP, Ingredient.of(ModTags.Items.INGOT_COPPER))
+                    .input(ItemMultiblockCapability.CAP, Ingredient.of(Tags.Items.INGOTS_COPPER))
                     .output(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModItems.BULLET_9.get()), 16))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
@@ -252,7 +252,7 @@ public class ForgeBusEventHandler {
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_BRASS), 1))
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(Tags.Items.GUNPOWDER), 3))
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.NUGGET_LEAD), 8))
-                    .input(ItemMultiblockCapability.CAP, Ingredient.of(ModTags.Items.INGOT_COPPER))
+                    .input(ItemMultiblockCapability.CAP, Ingredient.of(Tags.Items.INGOTS_COPPER))
                     .output(ItemMultiblockCapability.CAP,  new SizedIngredient(Ingredient.of(ModItems.BULLET_308.get()), 24))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
@@ -282,7 +282,7 @@ public class ForgeBusEventHandler {
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_BRASS), 2))
                     .input(ItemMultiblockCapability.CAP, Ingredient.of(Tags.Items.GUNPOWDER))
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 2))
-                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), 2))
+                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(Tags.Items.INGOTS_COPPER), 2))
                     .output(ItemMultiblockCapability.CAP,  new SizedIngredient(Ingredient.of(ModItems.BULLET_762x39.get()), 20))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
@@ -290,7 +290,7 @@ public class ForgeBusEventHandler {
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS), 1))
                     .input(ItemMultiblockCapability.CAP, Ingredient.of(Tags.Items.GUNPOWDER))
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.NUGGET_LEAD), 16))
-                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), 1))
+                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(Tags.Items.INGOTS_COPPER), 1))
                     .output(ItemMultiblockCapability.CAP,  new SizedIngredient(Ingredient.of(ModItems.BULLET_45.get()), 16))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
@@ -306,7 +306,7 @@ public class ForgeBusEventHandler {
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.PLATE_IRON), 1))
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(Tags.Items.GUNPOWDER), 2))
                     .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 1))
-                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), 1))
+                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(Tags.Items.INGOTS_COPPER), 1))
                     .output(ItemMultiblockCapability.CAP,  new SizedIngredient(Ingredient.of(ModItems.BULLET_58x42.get()), 40))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
@@ -317,12 +317,12 @@ public class ForgeBusEventHandler {
                     .perTick(true).input(FEMultiblockCapability.CAP, 300).duration(400).buildAndRegister();
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("bronze")
-                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), 3), new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_TIN), 1))
+                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(Tags.Items.INGOTS_COPPER), 3), new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_TIN), 1))
                     .output(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(RegisterItems.INGOT_BRONZE.get()),4))
                     .perTick(true).input(FEMultiblockCapability.CAP, 120).duration(100).buildAndRegister();
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("brass")
-                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER),1), new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_ZINC),1))
+                    .input(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(Tags.Items.INGOTS_COPPER),1), new SizedIngredient(Ingredient.of(ModTags.Items.INGOT_ZINC),1))
                     .output(ItemMultiblockCapability.CAP, new SizedIngredient(Ingredient.of(RegisterItems.INGOT_BRASS.get()),2))
                     .perTick(true).input(FEMultiblockCapability.CAP, 120).duration(100).buildAndRegister();
 

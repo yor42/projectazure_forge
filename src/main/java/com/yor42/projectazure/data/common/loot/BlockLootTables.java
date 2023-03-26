@@ -28,7 +28,6 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLoot {
     @Override
     protected void addTables() {
         this.dropSelf(RegisterBlocks.BAUXITE_ORE.get());
-        this.dropSelf(RegisterBlocks.COPPER_ORE.get());
         this.dropSelf(RegisterBlocks.TIN_ORE.get());
         this.dropSelf(RegisterBlocks.LEAD_ORE.get());
         this.dropSelf(RegisterBlocks.ZINC_ORE.get());

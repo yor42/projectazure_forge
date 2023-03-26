@@ -102,7 +102,7 @@ public class Main
         @Nonnull
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(RegisterItems.INGOT_COPPER.get().asItem());
+            return new ItemStack(RegisterItems.ORUNDUM.get().asItem());
         }
     };
 
