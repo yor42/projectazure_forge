@@ -3,12 +3,12 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import staticnet.minecraft.world.entity.ai.goal.Goal.Flagg.MOVE;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 import static net.minecraft.entity.ai.goal.Goal.Flag.LOOK;
-import staticnet.minecraft.world.entity.ai.goal.Goal.Flagg.MOVE;
 
 public class DroneRangedAttackGoal extends Goal {
 

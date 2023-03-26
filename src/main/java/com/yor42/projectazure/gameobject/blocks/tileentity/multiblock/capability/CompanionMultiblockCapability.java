@@ -11,8 +11,9 @@ import com.lowdragmc.multiblocked.api.capability.MultiblockCapability;
 import com.lowdragmc.multiblocked.api.capability.proxy.CapabilityProxy;
 import com.lowdragmc.multiblocked.api.capability.trait.CapabilityTrait;
 import com.lowdragmc.multiblocked.api.gui.recipe.ContentWidget;
-import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.lowdragmc.multiblocked.api.recipe.Recipe;
+import com.lowdragmc.multiblocked.api.recipe.ingredient.EntityIngredient;
+import com.lowdragmc.multiblocked.api.recipe.serde.content.IContentSerializer;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.lowdragmc.multiblocked.api.tile.ComponentTileEntity;
 import com.yor42.projectazure.PAConfig;
@@ -21,16 +22,16 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.Ri
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,7 +46,23 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
     public static final CompanionMultiblockCapability CAP = new CompanionMultiblockCapability();
 
     public CompanionMultiblockCapability(){
-        super("companion", 0xFF65CB9D);
+        super("companion", 0xFF65CB9D, new IContentSerializer<>() {
+
+            @Override
+            public EntityIngredient fromJson(JsonElement json) {
+                return EntityIngredient.fromJson(json);
+            }
+
+            @Override
+            public JsonElement toJson(EntityIngredient content) {
+                return content.toJson();
+            }
+
+            @Override
+            public EntityIngredient of(Object o) {
+                return EntityIngredient.of(o);
+            }
+        });
     }
 
     @Override
@@ -128,7 +145,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
                         if (entity.isAlive()) {
                             if (left.removeIf(ingredient -> ingredient.match(entity))) {
                                 if (!simulate) {
-                                    entity.remove(false);
+                                    entity.remove(Entity.RemovalReason.DISCARDED);
                                 }
                             }
                         }

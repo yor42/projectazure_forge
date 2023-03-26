@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.storages;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class CustomEnergyStorageItem implements IEnergyStorage {

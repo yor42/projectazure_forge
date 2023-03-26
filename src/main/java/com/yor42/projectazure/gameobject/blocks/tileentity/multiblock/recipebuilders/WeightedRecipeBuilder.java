@@ -5,7 +5,10 @@ import com.google.common.collect.ImmutableMap;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 import com.lowdragmc.multiblocked.Multiblocked;
 import com.lowdragmc.multiblocked.api.capability.MultiblockCapability;
-import com.lowdragmc.multiblocked.api.recipe.*;
+import com.lowdragmc.multiblocked.api.recipe.Content;
+import com.lowdragmc.multiblocked.api.recipe.Recipe;
+import com.lowdragmc.multiblocked.api.recipe.RecipeCondition;
+import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
 import com.lowdragmc.multiblocked.common.capability.*;
 import com.lowdragmc.multiblocked.common.recipe.conditions.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
@@ -17,11 +20,12 @@ import mekanism.api.chemical.gas.GasStack;
 import mekanism.api.chemical.infuse.InfusionStack;
 import mekanism.api.chemical.pigment.PigmentStack;
 import mekanism.api.chemical.slurry.SlurryStack;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.*;
@@ -147,7 +151,7 @@ public class WeightedRecipeBuilder {
         return output(FEMultiblockCapability.CAP, forgeEnergy);
     }
 
-    public WeightedRecipeBuilder inputItems(ItemsIngredient... inputs) {
+    public WeightedRecipeBuilder inputItems(Ingredient... inputs) {
         return input(ItemMultiblockCapability.CAP, inputs);
     }
 

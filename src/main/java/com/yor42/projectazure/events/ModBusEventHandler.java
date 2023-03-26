@@ -5,7 +5,6 @@ import com.tac.guns.event.GunFireEvent;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.GeoGunItem;
 import com.yor42.projectazure.gameobject.items.ItemCompanionSpawnEgg;
 import com.yor42.projectazure.gameobject.items.ItemEnergyGun;
@@ -13,21 +12,21 @@ import com.yor42.projectazure.intermod.Patchouli;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
 import com.yor42.projectazure.setup.register.RegisterItems;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.core.NonNullList;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -36,7 +35,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -83,7 +82,7 @@ public class ModBusEventHandler {
                 ItemStack cubeStack = new ItemStack(RegisterItems.GLITCHED_PHONE.get());
                 CompoundTag nbt = cubeStack.getOrCreateTag();
                 nbt.putUUID("owner", player.getUUID());
-                player.inventory.setItem(player.inventory.getFreeSlot(), cubeStack);
+                player.getInventory().add(cubeStack);
                 NonNullList<Item> stacks = NonNullList.create();
                 if (isDev) {
                     stacks.addAll(ItemCompanionSpawnEgg.MAP.values());
@@ -114,7 +113,7 @@ public class ModBusEventHandler {
                         stackList.add(itemTag);
                     }
                     compound.put("inventory", stackList);
-                    player.inventory.setItem(player.inventory.getFreeSlot(), stack);
+                    player.getInventory().add(stack);
                 }
 
                 data.putBoolean("PRJA:gotStarterItem", true);
@@ -163,7 +162,7 @@ public class ModBusEventHandler {
                 event.setCanceled(true);
             }
             else{
-                if(!player.abilities.instabuild) {
+                if(!player.getAbilities().instabuild) {
                     gunstack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> energyhandler.extractEnergy(energygun.getEnergyperShot(), false));
                 }
             }

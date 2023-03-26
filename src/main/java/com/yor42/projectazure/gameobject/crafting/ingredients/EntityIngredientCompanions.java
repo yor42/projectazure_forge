@@ -2,12 +2,12 @@ package com.yor42.projectazure.gameobject.crafting.ingredients;
 
 import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 
 public class EntityIngredientCompanions extends EntityIngredient {
 

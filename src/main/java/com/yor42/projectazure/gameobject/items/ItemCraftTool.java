@@ -1,16 +1,11 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.ItemTier;
-
-import javax.annotation.Nullable;
+import net.minecraft.world.item.Tier;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemCraftTool extends Item {
 

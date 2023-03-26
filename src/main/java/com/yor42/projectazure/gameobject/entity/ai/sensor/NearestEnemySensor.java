@@ -3,15 +3,15 @@ package com.yor42.projectazure.gameobject.entity.ai.sensor;
 import com.google.common.collect.ImmutableSet;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.util.Mth;
-import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;

@@ -1,25 +1,19 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
-import com.lowdragmc.multiblocked.api.definition.StatusProperties;
 import com.lowdragmc.multiblocked.api.pattern.FactoryBlockPattern;
 import com.lowdragmc.multiblocked.api.pattern.Predicates;
 import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.lowdragmc.multiblocked.api.tile.ControllerTileEntity;
-import com.lowdragmc.multiblocked.common.capability.EntityMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.FEMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
 import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.resources.ResourceLocation;
 
-import static com.lowdragmc.multiblocked.api.block.CustomProperties.RotationState.Y_AXIS;
-import static com.lowdragmc.multiblocked.api.registry.MbdComponents.DEFINITION_REGISTRY;
 import static com.yor42.projectazure.setup.register.registerMultiBlocks.readTrait;
 
 public class SiliconeCrucibleTE extends ControllerTileEntity {

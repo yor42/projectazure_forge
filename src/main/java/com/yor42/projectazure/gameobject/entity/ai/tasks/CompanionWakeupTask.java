@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.WakeUp;
-import net.minecraft.server.level.ServerLevel;
 
 public class CompanionWakeupTask extends WakeUp {
     @Override

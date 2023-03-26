@@ -3,14 +3,12 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.behavior.MeleeAttack;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.server.level.ServerLevel;
 
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 

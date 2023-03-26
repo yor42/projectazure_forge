@@ -17,8 +17,6 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.libs.enums.SLOTTYPE.SUB_GUN;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.PLAY_ONCE;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable {
 
     int FIRELEFT = 0;

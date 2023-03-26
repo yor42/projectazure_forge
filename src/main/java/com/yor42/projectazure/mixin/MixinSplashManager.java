@@ -2,8 +2,8 @@ package com.yor42.projectazure.mixin;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.resources.SplashManager;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 
 public class slotInventory extends Slot {

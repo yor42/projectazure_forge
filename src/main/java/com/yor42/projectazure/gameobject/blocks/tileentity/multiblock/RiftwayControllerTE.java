@@ -22,8 +22,8 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipelogi
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 
 public class RiftwayControllerTE extends ControllerTileEntity {
 

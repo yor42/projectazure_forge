@@ -9,24 +9,24 @@ import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
-import net.minecraft.util.Mth;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import staticnet.minecraft.world.entity.ai.memory.MemoryModuleTypee.LOOK_TARGET;
 
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.libs.utils.EntityUtils.EntityHasPlanes;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getPreparedPlane;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
-import staticnet.minecraft.world.entity.ai.memory.MemoryModuleTypee.LOOK_TARGET;
 
 public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion> {
 

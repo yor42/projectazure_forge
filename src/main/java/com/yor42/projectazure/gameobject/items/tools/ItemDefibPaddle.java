@@ -2,17 +2,17 @@ package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemDefibPaddleRenderer;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -33,8 +33,6 @@ import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
 import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded;
 import static net.minecraft.util.Hand.MAIN_HAND;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);

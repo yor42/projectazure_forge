@@ -1,13 +1,9 @@
 package com.yor42.projectazure.gameobject.advencements.triggers;
 
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.SerializationContext;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootContext;
 
 public class NameEntityCriterion  extends SimpleCriterionTrigger<NameEntityCriterion.Instance> {
     private static final ResourceLocation ID = new ResourceLocation("name_animal");

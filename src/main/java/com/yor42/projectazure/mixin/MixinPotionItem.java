@@ -10,8 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.world.item.Item.Properties;
-
 @Mixin(value=PotionItem.class, priority = 1500)
 public abstract class MixinPotionItem extends Item{
 

@@ -1,7 +1,7 @@
 package com.yor42.projectazure.interfaces;
 
-import net.minecraft.world.entity.Entity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 
 import java.util.Optional;
 

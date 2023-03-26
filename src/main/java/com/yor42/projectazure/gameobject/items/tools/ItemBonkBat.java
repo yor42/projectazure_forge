@@ -3,12 +3,10 @@ package com.yor42.projectazure.gameobject.items.tools;
 import com.yor42.projectazure.gameobject.items.ItemBaseTooltip;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerSounds;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.sounds.SoundSource;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemBonkBat extends ItemBaseTooltip {
     public ItemBonkBat(Properties properties) {

@@ -5,26 +5,23 @@ import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.item.Items;
 import net.minecraft.loot.*;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nonnull;
-import java.util.stream.Collectors;
-
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.ConstantIntValue;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.RandomValueBounds;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nonnull;
+import java.util.stream.Collectors;
 
 public class BlockLootTables extends net.minecraft.data.loot.BlockLoot {
     private static final LootItemCondition.Builder WITH_SLEDGEHAMMER = MatchTool.toolMatches(ItemPredicate.Builder.item().of(RegisterItems.SLEDGEHAMMER.get()));

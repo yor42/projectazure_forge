@@ -2,8 +2,8 @@ package com.yor42.projectazure.interfaces;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 

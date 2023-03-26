@@ -2,15 +2,13 @@ package com.yor42.projectazure.gameobject.items.shipEquipment;
 
 import com.yor42.projectazure.client.model.equipments.modelEquipmentTorpedo533mm;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemEquipmentTorpedo533Mm extends ItemEquipmentTorpedo implements IAnimatable {
     public ItemEquipmentTorpedo533Mm(Properties properties, int maxHP) {

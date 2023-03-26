@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.misc;
 
 import com.yor42.projectazure.setup.register.registerPotionEffects;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.food.FoodProperties;
 
 public class ModFoods {
 

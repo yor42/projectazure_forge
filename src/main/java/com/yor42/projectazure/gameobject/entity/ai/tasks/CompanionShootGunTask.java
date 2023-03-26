@@ -6,21 +6,19 @@ import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.behavior.EntityTracker;
-import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.LOOK_TARGET;
 

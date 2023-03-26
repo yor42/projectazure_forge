@@ -2,11 +2,9 @@ package com.yor42.projectazure.gameobject.items.shipEquipment;
 
 import com.yor42.projectazure.client.model.equipments.ModelMaingun127mm;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemEquipmentGun127Mm extends ItemEquipmentGun{
     public ItemEquipmentGun127Mm(Properties properties, int maxHP) {

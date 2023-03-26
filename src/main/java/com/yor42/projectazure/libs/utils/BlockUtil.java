@@ -1,13 +1,13 @@
 package com.yor42.projectazure.libs.utils;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.properties.BedPart;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelReader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

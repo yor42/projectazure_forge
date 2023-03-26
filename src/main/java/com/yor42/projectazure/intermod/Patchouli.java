@@ -2,15 +2,15 @@ package com.yor42.projectazure.intermod;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Style;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;

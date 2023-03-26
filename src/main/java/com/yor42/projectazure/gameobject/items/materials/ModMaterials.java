@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.items.materials;
 
 import com.yor42.projectazure.data.ModTags;
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.util.LazyLoadedValue;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Supplier;

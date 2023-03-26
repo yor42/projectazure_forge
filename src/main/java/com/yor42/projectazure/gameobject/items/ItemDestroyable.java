@@ -6,8 +6,6 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentDamage;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class ItemDestroyable extends Item implements IItemDestroyable {
 
     protected int MaxHP;

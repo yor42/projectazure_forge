@@ -1,14 +1,12 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemResource extends Item {
 

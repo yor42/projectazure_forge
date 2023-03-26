@@ -13,9 +13,9 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,8 +27,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-
-import static com.lowdragmc.multiblocked.api.registry.MbdComponents.registerComponent;
 
 @Mod.EventBusSubscriber(modid = Constants.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class registerMultiBlocks {

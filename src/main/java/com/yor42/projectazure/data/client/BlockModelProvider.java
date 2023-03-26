@@ -2,10 +2,10 @@ package com.yor42.projectazure.data.client;
 
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 

@@ -1,15 +1,13 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.gameobject.items.ItemBaseTooltip;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
-
-import net.minecraft.world.item.Item.Properties;
+import net.minecraft.world.item.context.UseOnContext;
 
 public class ItemBandage extends ItemBaseTooltip {
 

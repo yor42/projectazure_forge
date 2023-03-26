@@ -6,8 +6,6 @@ import com.yor42.projectazure.setup.register.registerEntity;
 import net.minecraft.world.entity.EntityType;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class ItemPlanef4Fwildcat extends ItemEquipmentPlaneBase{
     public ItemPlanef4Fwildcat(Properties properties, int maxHP) {
         super(properties, maxHP, 15);

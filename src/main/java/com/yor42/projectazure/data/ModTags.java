@@ -1,12 +1,14 @@
 package com.yor42.projectazure.data;
 
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.tags.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.Tags;
 
 public class ModTags {
 

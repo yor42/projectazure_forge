@@ -2,19 +2,17 @@ package com.yor42.projectazure.gameobject.blocks.machines;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BasicRefineryBlock extends AbstractMachineBlock {
 

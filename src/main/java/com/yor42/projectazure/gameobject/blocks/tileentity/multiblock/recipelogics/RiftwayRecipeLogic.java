@@ -10,8 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-import com.lowdragmc.multiblocked.api.recipe.RecipeLogic.Status;
-
 public class RiftwayRecipeLogic extends RecipeLogic {
 
     @Nullable

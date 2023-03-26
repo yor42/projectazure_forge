@@ -3,10 +3,10 @@ package com.yor42.projectazure.libs.utils;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

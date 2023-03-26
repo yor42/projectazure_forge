@@ -2,19 +2,13 @@ package com.yor42.projectazure.gameobject.crafting.recipes;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.items.ItemCraftTool;
-import com.yor42.projectazure.gameobject.items.tools.ItemSyringe;
-import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.RegisterItems;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.PotionItem;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.CustomRecipe;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.SAW_SILICON;

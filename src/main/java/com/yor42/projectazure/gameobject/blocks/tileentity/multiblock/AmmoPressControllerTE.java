@@ -14,10 +14,8 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.Ha
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.resources.ResourceLocation;
-
-import static com.lowdragmc.multiblocked.api.block.CustomProperties.RotationState.Y_AXIS;
+import net.minecraft.world.level.block.Blocks;
 
 public class AmmoPressControllerTE extends ControllerTileEntity {
     public static final ControllerDefinition AmmoPressDefinition = new ControllerDefinition(new ResourceLocation(Constants.MODID, "ammo_press"), AmmoPressControllerTE::new);

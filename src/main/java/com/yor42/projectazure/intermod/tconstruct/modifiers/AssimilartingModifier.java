@@ -4,7 +4,6 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import slimeknights.tconstruct.library.modifiers.IncrementalModifier;
-import slimeknights.tconstruct.library.modifiers.SingleLevelModifier;
 import slimeknights.tconstruct.library.tools.nbt.IModifierToolStack;
 
 import javax.annotation.Nonnull;

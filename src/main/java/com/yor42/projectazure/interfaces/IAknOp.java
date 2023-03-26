@@ -1,8 +1,8 @@
 package com.yor42.projectazure.interfaces;
 
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 
 import javax.annotation.Nullable;
 

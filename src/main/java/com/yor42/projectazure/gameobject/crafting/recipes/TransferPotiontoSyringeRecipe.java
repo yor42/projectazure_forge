@@ -2,14 +2,14 @@ package com.yor42.projectazure.gameobject.crafting.recipes;
 
 import com.yor42.projectazure.gameobject.items.tools.ItemSyringe;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.TRANSFERPOTION;

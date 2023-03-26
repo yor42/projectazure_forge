@@ -7,8 +7,6 @@ import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class ItemRiggingBBDefault extends ItemRiggingBase{
     public ItemRiggingBBDefault(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots,int fuelcapccity, int HP) {
         super(properties, maingunslotslots, subgunslots, aaslots, torpedoslots, hangerslots, utilityslots, fuelcapccity, HP);

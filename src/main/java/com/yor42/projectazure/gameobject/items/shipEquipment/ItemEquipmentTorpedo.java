@@ -3,23 +3,16 @@ package com.yor42.projectazure.gameobject.items.shipEquipment;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.text.*;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.item.Item.Properties;
 
 public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements ICraftingTableReloadable {
 

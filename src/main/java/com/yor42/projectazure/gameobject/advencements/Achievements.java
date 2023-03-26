@@ -3,8 +3,8 @@ package com.yor42.projectazure.gameobject.advencements;
 import com.yor42.projectazure.gameobject.advencements.triggers.NameEntityCriterion;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.world.item.Items;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
 
