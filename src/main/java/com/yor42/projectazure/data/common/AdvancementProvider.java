@@ -30,7 +30,7 @@ public class AdvancementProvider extends net.minecraft.data.advancements.Advance
         this.generator = generatorIn;
     }
 
-    public void run(HashCache cache) throws IOException {
+    public void run(HashCache cache) {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = Sets.newHashSet();
         Consumer<Advancement> consumer = (advancement) -> {

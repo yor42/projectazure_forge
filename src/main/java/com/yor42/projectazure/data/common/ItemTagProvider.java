@@ -10,6 +10,7 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -179,7 +180,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ItemTags.MUSIC_DISCS).add(RegisterItems.DISC_CC5.get(), RegisterItems.DISC_DRAGONHEARTED.get(), RegisterItems.DISC_FRIDAYNIGHT.get(), RegisterItems.DISC_REVENGE.get(), RegisterItems.DISC_FALLEN_KINGDOM.get(), RegisterItems.DISC_TAKE_BACK_THE_NIGHT.get(), RegisterItems.DISC_FIND_THE_PIECES.get());
     }
 
-    protected void copyItems(Tag.Named<Item> from, Tag.Named<Item> to) {
+    protected void copyItems(TagKey<Item> from, TagKey<Item> to) {
         Tag.Builder tgt = this.getOrCreateRawBuilder(to);
         Tag.Builder original = this.getOrCreateRawBuilder(from);
         original.getEntries().forEach(tgt::add);

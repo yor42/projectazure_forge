@@ -20,6 +20,7 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -39,8 +40,9 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         super(generatorIn);
     }
 
+
     @Override
-    protected void buildShapelessRecipes(@Nonnull Consumer<FinishedRecipe> consumer) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         this.generateMetalRecipes(consumer);
 
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModTags.Items.TREE_SAP), RegisterItems.PLATE_POLYMER.get(), 0.5F, 200)
@@ -2250,63 +2252,63 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
     private static class Metals {
         private final String name;
         private ItemLike ore;
-        private Tag<Item> oreTag;
+        private TagKey<Item> oreTag;
         private ItemLike block;
-        private Tag<Item> blockTag;
+        private TagKey<Item> blockTag;
         private final ItemLike ingot;
-        private final Tag<Item> ingotTag;
+        private final TagKey<Item> ingotTag;
         private ItemLike nugget;
-        private Tag<Item> nuggetTag;
+        private TagKey<Item> nuggetTag;
         private ItemLike dust;
-        private Tag<Item> dustTag;
+        private TagKey<Item> dustTag;
         private ItemLike plate;
-        private Tag<Item> plateTag;
+        private TagKey<Item> plateTag;
         private ItemLike gear;
-        private Tag<Item> gearTag;
-        private Tag<Item> chunksTag;
+        private TagKey<Item> gearTag;
+        private TagKey<Item> chunksTag;
 
-        public Metals(String name, ItemLike ingot, Tag<Item> ingotTag) {
+        public Metals(String name, ItemLike ingot, TagKey<Item> ingotTag) {
             this.name = name;
             this.ingot = ingot;
             this.ingotTag = ingotTag;
         }
 
-        public Metals ore(ItemLike item, Tag<Item> tag) {
+        public Metals ore(ItemLike item, TagKey<Item> tag) {
             this.ore = item;
             this.oreTag = tag;
             return this;
         }
 
-        public Metals block(ItemLike item, Tag<Item> tag) {
+        public Metals block(ItemLike item, TagKey<Item> tag) {
             this.block = item;
             this.blockTag = tag;
             return this;
         }
 
-        public Metals gear(ItemLike item, Tag<Item> tag) {
+        public Metals gear(ItemLike item, TagKey<Item> tag) {
             this.gear = item;
             this.gearTag = tag;
             return this;
         }
 
-        public Metals nugget(ItemLike item, Tag<Item> tag) {
+        public Metals nugget(ItemLike item, TagKey<Item> tag) {
             this.nugget = item;
             this.nuggetTag = tag;
             return this;
         }
 
-        public Metals dust(ItemLike item, Tag<Item> tag) {
+        public Metals dust(ItemLike item, TagKey<Item> tag) {
             this.dust = item;
             this.dustTag = tag;
             return this;
         }
 
-        public Metals chunks(Tag<Item> tag) {
+        public Metals chunks(TagKey<Item> tag) {
             this.chunksTag = tag;
             return this;
         }
 
-        public Metals plates(ItemLike item, Tag<Item> tag) {
+        public Metals plates(ItemLike item, TagKey<Item> tag) {
             this.plate = item;
             this.plateTag = tag;
             return this;
@@ -2321,11 +2323,11 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer_"+id));
     }
 
-    protected void createHammerRecipes(Consumer<FinishedRecipe> consumer, Tag<Item> blockInput, Item out, int count, String id) {
+    protected void createHammerRecipes(Consumer<FinishedRecipe> consumer, TagKey<Item> blockInput, Item out, int count, String id) {
         CrushingRecipeBuilder.builder().input(blockInput).addDrop(out, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer_"+id));
     }
 
-    protected void registerSawingRecipe(Tag<Item> log, Item plank, Consumer<FinishedRecipe> consumer){
+    protected void registerSawingRecipe(TagKey<Item> log, Item plank, Consumer<FinishedRecipe> consumer){
         ShapelessRecipeBuilder.shapeless(plank, 6)
                 .requires(log)
                 .requires(ModTags.Items.SAW)

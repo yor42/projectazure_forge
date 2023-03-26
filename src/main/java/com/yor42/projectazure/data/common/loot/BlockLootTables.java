@@ -5,19 +5,18 @@ import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.loot.*;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.ConstantIntValue;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.RandomValueBounds;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -79,7 +78,7 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLoot {
         this.add(RegisterBlocks.PYROXENE_ORE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.PYROXENE.get()));
     }
     protected static LootTable.Builder onlyWithHammerDoubling(ItemLike item) {
-        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantIntValue.exactly(1)).when(WITH_SLEDGEHAMMER).apply(SetItemCountFunction.setCount(RandomValueBounds.between(2.0F, 2.1F))).add(LootItem.lootTableItem(item)));
+        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(WITH_SLEDGEHAMMER).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 2.1F))).add(LootItem.lootTableItem(item)));
     }
 
     @Nonnull
