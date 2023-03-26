@@ -22,15 +22,18 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipelogi
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class RiftwayControllerTE extends ControllerTileEntity {
 
     public static RecipeMap RIFTWAYRECIPEMAP = new RecipeMap("riftway");
-    public static final ControllerDefinition RiftwayDefinition = new ControllerDefinition(new ResourceLocation(Constants.MODID, "riftway"), RiftwayControllerTE::new);
-    public RiftwayControllerTE(ControllerDefinition definition) {
-        super(definition);
+    public static final ControllerDefinition RiftwayDefinition = new ControllerDefinition(new ResourceLocation(Constants.MODID, "riftway"),RiftwayControllerTE.class);
+
+    public RiftwayControllerTE(ControllerDefinition definition, BlockPos pos, BlockState state) {
+        super(definition, pos, state);
     }
 
     public static void registerTE(){

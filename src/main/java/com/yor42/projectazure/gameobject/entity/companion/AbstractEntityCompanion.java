@@ -1099,7 +1099,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                             if(!isSpawnSuccessful.get()) {
                                 LivingEntity owner = this.getOwner();
                                 if(owner != null) {
-                                    this.getOwner().sendMessage(new TranslatableComponent("message.companion.bedmissing"), UUID.randomUUID());
+                                    newEntity.setPos(owner.getX(), owner.getY(), owner.getZ());
+                                    respawnworld.addFreshEntity(newEntity);
+                                    this.getOwner().sendMessage(new TranslatableComponent("message.companion.bedmissing", newEntity.getDisplayName()), UUID.randomUUID());
                                 }
                             }
                         }
@@ -1113,7 +1115,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     }
                     this.getTeamUUID().ifPresent((team) -> Main.NETWORK.sendToServer(new EditTeamMemberPacket(team, this.getUUID(), EditTeamMemberPacket.ACTION.REMOVE)));
                 }
-                this.remove(false);
+                this.remove(RemovalReason.DISCARDED);
             }
         }
     }
@@ -1645,7 +1647,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     protected void hurtCurrentlyUsedShield(float damage) {
-        if (this.useItem.isShield(this)) {
+        if (this.useItem.getUseAnimation() == UseAnim.BLOCK) {
             if (damage >= 3.0F) {
                 int i = (int) (1 + Math.floor(damage));
                 InteractionHand hand = this.getUsedItemHand();
@@ -1788,7 +1790,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     public void startUsingItem(@Nonnull InteractionHand hand) {
         ItemStack itemstack = this.getItemInHand(hand);
-        if (itemstack.isShield(this)) {
+        if (itemstack.getUseAnimation() == UseAnim.BLOCK) {
             AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
             if(modifiableattributeinstance!=null) {
                 modifiableattributeinstance.removeModifier(USE_ITEM_SPEED_PENALTY);
@@ -2726,7 +2728,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             CompoundTag tag = gunStack.getOrCreateTag();
             int remainingAmmo = tag.getInt("AmmoCount");
             ItemStack[] MagStack = this.getMagazine(gun.getProjectile().getItem());
-            int magazinecap = GunEnchantmentHelper.getAmmoCapacity(gunStack, gun);
+            int magazinecap = GunModifierHelper.getAmmoCapacity(gunStack, gun);
             int availableammo = 0;
             for(ItemStack stack:MagStack){
                 availableammo+=stack.getCount();
@@ -2866,7 +2868,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         compoundnbt.putString("id", this.getEncodeId());
         this.saveWithoutId(compoundnbt);
         if (((IMixinPlayerEntity)p_213439_1_).setEntityonBack(compoundnbt)) {
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
             return true;
         } else {
             return false;
