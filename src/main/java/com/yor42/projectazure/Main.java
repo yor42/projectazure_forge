@@ -38,6 +38,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -201,12 +203,8 @@ public class Main
 
         //register Entity renderers
     	registerEntity.registerRenderer();
-
-        ClientRegistry.bindTileEntityRenderer(registerTE.METAL_PRESS.get(), MachineMetalPressRenderer::new);
-        ClientRegistry.bindTileEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
+        ClientUtils.RegisterModelProperties();
         GeoArmorRenderer.registerArmorRenderer(GasMaskItem.class, GasMaskRenderer::new);
-
-        event.enqueueWork(() -> ClientUtils.RegisterModelProperties(RegisterItems.RECHARGEABLE_BATTERY.get(), "charge", (stack, world, entity)-> stack.getCapability(CapabilityEnergy.ENERGY, null).map((energy)-> ((float)energy.getEnergyStored())/((float)energy.getMaxEnergyStored())).orElse(0F)));
 
         ClientRegisterManager.registerScreen();
 
@@ -238,6 +236,13 @@ public class Main
     public void RegisterCapabilities(RegisterCapabilitiesEvent event){
         event.register(ProjectAzurePlayerCapability.class);
         event.register(IMultiInventory.class);
+    }
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(registerTE.METAL_PRESS.get(), MachineMetalPressRenderer::new);
+        event.registerBlockEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
     }
 
 }

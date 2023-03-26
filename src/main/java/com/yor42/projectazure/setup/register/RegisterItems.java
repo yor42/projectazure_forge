@@ -151,7 +151,8 @@ public class RegisterItems {
             .tab(PA_RESOURCES).stacksTo(4), 1000, 0, 80));
 
     public static final RegistryObject<Item> RECHARGEABLE_BATTERY = register_withoutTexture("rechargeablebattery", () -> new ItemBattery(new Item.Properties()
-            .tab(PA_RESOURCES).stacksTo(16), 25000, 800, 800));
+            .tab(PA_RESOURCES).stacksTo(16)
+            , 25000, 800, 800));
 
 
     public static final RegistryObject<Item> COPPER_IRON_PROBE = register("copper_iron_probe", () -> new Item(new Item.Properties()
