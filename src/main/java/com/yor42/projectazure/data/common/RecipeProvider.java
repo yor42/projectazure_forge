@@ -119,13 +119,13 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
     private void generateAlloyingRecipe(@Nonnull Consumer<FinishedRecipe> consumer) {
         AlloyingRecipeBuilder.AlloyRecipe(RegisterItems.INGOT_BRONZE.get(), (byte)4)
-                .addIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), (byte) 3)
+                .addIngredient(Ingredient.of(Tags.Items.INGOTS_COPPER), (byte) 3)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_TIN), (byte) 1)
                 .build(consumer);
 
         AlloyingRecipeBuilder.AlloyRecipe(RegisterItems.INGOT_BRASS.get(), (byte)2)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_ZINC))
-                .addIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER))
+                .addIngredient(Ingredient.of(Tags.Items.INGOTS_COPPER))
                 .build(consumer);
 
         AlloyingRecipeBuilder.AlloyRecipe(RegisterItems.VITRIFIED_ORIGINIUM.get(), (byte)1)
@@ -345,7 +345,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
         ShapedRecipeBuilder.shaped(RegisterItems.PRIMITIVE_ORIGINIUM_BATTERY.get(),1)
                 .define('I', Tags.Items.INGOTS_IRON)
-                .define('C', ModTags.Items.INGOT_COPPER)
+                .define('C', Tags.Items.INGOTS_COPPER)
                 .define('O', ModTags.Items.ORIGINIUM_PRIME)
                 .define('W', ModTags.Items.WIRE_COPPER)
                 .pattern("IW")
@@ -355,7 +355,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
         ShapedRecipeBuilder.shaped(RegisterItems.POTATO_BATTERY.get(),1)
                 .define('I', Tags.Items.INGOTS_IRON)
-                .define('C', ModTags.Items.INGOT_COPPER)
+                .define('C', Tags.Items.INGOTS_COPPER)
                 .define('O', Tags.Items.CROPS_POTATO)
                 .define('W', ModTags.Items.WIRE_COPPER)
                 .pattern("IW")
@@ -365,7 +365,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
         ShapedRecipeBuilder.shaped(RegisterItems.POTATO_BATTERY.get(),1)
                 .define('I', Tags.Items.INGOTS_IRON)
-                .define('C', ModTags.Items.INGOT_COPPER)
+                .define('C', Tags.Items.INGOTS_COPPER)
                 .define('O', Items.POISONOUS_POTATO)
                 .define('W', ModTags.Items.WIRE_COPPER)
                 .pattern("IW")
@@ -376,7 +376,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         ShapedRecipeBuilder.shaped(RegisterItems.RECHARGEABLE_BATTERY.get(),1)
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('P', ModTags.Items.PLATE_ALUMINIUM)
-                .define('N', ModTags.Items.INGOT_COPPER)
+                .define('N', Tags.Items.INGOTS_COPPER)
                 .define('Z', ModTags.Items.INGOT_ZINC)
                 .define('R', Tags.Items.DUSTS_REDSTONE)
                 .pattern("RIR")
@@ -403,13 +403,13 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_IRON));
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_COPPER.get())
-                .define('I', ModTags.Items.INGOT_COPPER)
+                .define('I', Tags.Items.INGOTS_COPPER)
                 .define('S', Tags.Items.RODS_WOODEN)
                 .pattern(" IS")
                 .pattern(" SI")
                 .pattern("S  ")
                 .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
-                .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
+                .unlockedBy("has_material", has(Tags.Items.INGOTS_COPPER))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_TIN.get())
                 .define('I', ModTags.Items.INGOT_TIN)
@@ -649,14 +649,14 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_COPPER.get())
-                .define('I', ModTags.Items.INGOT_COPPER)
+                .define('I', Tags.Items.INGOTS_COPPER)
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.STONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
                 .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
-                .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
+                .unlockedBy("has_material", has(Tags.Items.INGOTS_COPPER))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_TIN.get())
@@ -1957,47 +1957,47 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
         ShapedRecipeBuilder.shaped(RegisterItems.COPPER_sword.get())
                 .define('S', Tags.Items.RODS_WOODEN)
-                .define('I', ModTags.Items.INGOT_COPPER)
+                .define('I', Tags.Items.INGOTS_COPPER)
                 .pattern("I")
                 .pattern("I")
                 .pattern("S")
-                .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
+                .unlockedBy("has_material", has(Tags.Items.INGOTS_COPPER))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.COPPER_pickaxe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
-                .define('I', ModTags.Items.INGOT_COPPER)
+                .define('I', Tags.Items.INGOTS_COPPER)
                 .pattern("III")
                 .pattern(" S ")
                 .pattern(" S ")
-                .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
+                .unlockedBy("has_material", has(Tags.Items.INGOTS_COPPER))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.COPPER_axe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
-                .define('I', ModTags.Items.INGOT_COPPER)
+                .define('I', Tags.Items.INGOTS_COPPER)
                 .pattern("II")
                 .pattern("IS")
                 .pattern(" S")
-                .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
+                .unlockedBy("has_material", has(Tags.Items.INGOTS_COPPER))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.COPPER_hoe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
-                .define('I', ModTags.Items.INGOT_COPPER)
+                .define('I', Tags.Items.INGOTS_COPPER)
                 .pattern("II")
                 .pattern(" S")
                 .pattern(" S")
-                .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
+                .unlockedBy("has_material", has(Tags.Items.INGOTS_COPPER))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.COPPER_shovel.get())
                 .define('S', Tags.Items.RODS_WOODEN)
-                .define('I', ModTags.Items.INGOT_COPPER)
+                .define('I', Tags.Items.INGOTS_COPPER)
                 .pattern("I")
                 .pattern("S")
                 .pattern("S")
-                .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
+                .unlockedBy("has_material", has(Tags.Items.INGOTS_COPPER))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.TIN_sword.get())

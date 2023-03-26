@@ -32,7 +32,6 @@ public class ItemTagProvider extends ItemTagsProvider {
     @Override
     protected void addTags() {
 
-        copy(ModTags.Blocks.ORES_COPPER, ModTags.Items.ORES_COPPER);
         copy(ModTags.Blocks.ORES_TIN, ModTags.Items.ORES_TIN);
         copy(ModTags.Blocks.ORES_LEAD, ModTags.Items.ORES_LEAD);
         copy(ModTags.Blocks.ORES_ALUMINIUM, ModTags.Items.ORES_ALUMINIUM);
@@ -60,7 +59,6 @@ public class ItemTagProvider extends ItemTagsProvider {
         copy(Tags.Blocks.ORES, Tags.Items.ORES);
 
         this.tag(ModTags.Items.INGOT_ALUMINIUM).add(RegisterItems.INGOT_ALUMINIUM.get());
-        this.tag(ModTags.Items.INGOT_COPPER).add(RegisterItems.INGOT_COPPER.get());
         this.tag(ModTags.Items.INGOT_TIN).add(RegisterItems.INGOT_TIN.get());
         this.tag(ModTags.Items.INGOT_BRONZE).add(RegisterItems.INGOT_BRONZE.get());
         this.tag(ModTags.Items.INGOT_LEAD).add(RegisterItems.INGOT_LEAD.get());
@@ -75,7 +73,6 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.INGOT_INCANDESCENT_ALLOY).add(RegisterItems.INGOT_INCANDESCENT_ALLOY.get());
 
 
-        this.tag(ModTags.Items.NUGGET_COPPER).add(RegisterItems.NUGGET_COPPER.get());
         this.tag(ModTags.Items.NUGGET_TIN).add(RegisterItems.NUGGET_TIN.get());
         this.tag(ModTags.Items.NUGGET_BRONZE).add(RegisterItems.NUGGET_BRONZE.get());
         this.tag(ModTags.Items.NUGGET_LEAD).add(RegisterItems.NUGGET_LEAD.get());
@@ -146,7 +143,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.TREE_SAP).add(RegisterItems.TREE_SAP.get());
 
         this.tag(ModTags.Items.MATERIAL_D32).add(RegisterItems.INGOT_D32.get(), RegisterItems.PLATE_D32.get(), RegisterItems.NUGGET_D32.get(), RegisterBlocks.D32_BLOCK.get().asItem());
-        this.tag(ModTags.Items.MATERIAL_COPPER).add(RegisterItems.INGOT_COPPER.get(), RegisterItems.PLATE_COPPER.get(), RegisterItems.NUGGET_COPPER.get(), RegisterBlocks.COPPER_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_COPPER).add(RegisterItems.PLATE_COPPER.get(), RegisterBlocks.COPPER_BLOCK.get().asItem());
         this.tag(ModTags.Items.MATERIAL_TIN).add(RegisterItems.INGOT_TIN.get(), RegisterItems.PLATE_TIN.get(), RegisterItems.NUGGET_TIN.get(), RegisterBlocks.TIN_BLOCK.get().asItem());
         this.tag(ModTags.Items.MATERIAL_STEEL).add(RegisterItems.INGOT_STEEL.get(), RegisterItems.PLATE_STEEL.get(), RegisterItems.NUGGET_STEEL.get(), RegisterBlocks.STEEL_BLOCK.get().asItem());
         this.tag(ModTags.Items.MATERIAL_MANGANESE).add(RegisterItems.INGOT_MANGANESE.get(), RegisterItems.PLATE_MANGANESE.get(), RegisterItems.NUGGET_MANGANESE.get(), RegisterBlocks.MANGANESE_BLOCK.get().asItem());
@@ -173,7 +170,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.SAW).add(RegisterItems.SAW_STONE.get()).add(RegisterItems.SAW_COPPER.get()).add(RegisterItems.SAW_TIN.get()).add(RegisterItems.SAW_BRONZE.get()).add(RegisterItems.SAW_IRON.get()).add(RegisterItems.SAW_GOLD.get()).add(RegisterItems.SAW_STEEL.get()).add(RegisterItems.SAW_DIAMOND.get()).add(RegisterItems.SAW_NETHERITE.get()).add(RegisterItems.SAW_RMA7012.get()).add(RegisterItems.SAW_RMA7024.get()).add(RegisterItems.SAW_D32.get());
         this.tag(ModTags.Items.KNIFE).add(RegisterItems.KITCHEN_KNIFE.get(), RegisterItems.TACTICAL_KNIFE.get());
         this.copyItems(ModTags.Items.KNIFE, ModTags.Items.KNIVES);
-        this.tag(ItemTags.BEACON_PAYMENT_ITEMS).add(RegisterItems.INGOT_D32.get(), RegisterItems.INGOT_COPPER.get(), RegisterItems.INGOT_TIN.get(), RegisterItems.INGOT_STEEL.get(), RegisterItems.INGOT_MANGANESE.get(),
+        this.tag(ItemTags.BEACON_PAYMENT_ITEMS).add(RegisterItems.INGOT_D32.get(), RegisterItems.INGOT_TIN.get(), RegisterItems.INGOT_STEEL.get(), RegisterItems.INGOT_MANGANESE.get(),
                 RegisterItems.INGOT_BRONZE.get(), RegisterItems.INGOT_BRASS.get(), RegisterItems.INGOT_ZINC.get(), RegisterItems.INGOT_LEAD.get(), RegisterItems.INGOT_ALUMINIUM.get(),
                 RegisterItems.INGOT_RMA7012.get(),RegisterItems.INGOT_RMA7024.get(), RegisterItems.INGOT_INCANDESCENT_ALLOY.get(), RegisterItems.PYROXENE.get());
 

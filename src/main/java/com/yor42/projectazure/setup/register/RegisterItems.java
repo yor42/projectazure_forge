@@ -47,8 +47,6 @@ public class RegisterItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
 
     //Resources
-    //Remove on 1.17
-    public static final RegistryObject<Item> INGOT_COPPER = registerResource("copper", enums.ResourceType.INGOT);
     public static final RegistryObject<Item> INGOT_LEAD = registerResource("lead", enums.ResourceType.INGOT);
     public static final RegistryObject<Item> INGOT_TIN = registerResource("tin", enums.ResourceType.INGOT);
     public static final RegistryObject<Item> INGOT_ALUMINIUM = registerResource("aluminium", enums.ResourceType.INGOT);

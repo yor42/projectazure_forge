@@ -38,7 +38,7 @@ public enum ModMaterials implements Tier {
 
     LEAD(1, 125, 5.5F, 6F, 6, () -> Ingredient.of(ModTags.Items.INGOT_LEAD)),
     STEEL(2, 310, 8.0F, 3.0F, 14, () -> Ingredient.of(ModTags.Items.INGOT_STEEL)),
-    COPPER(1, 205, 5F, 1.5F, 12, () -> Ingredient.of(ModTags.Items.INGOT_COPPER)),
+    COPPER(1, 205, 5F, 1.5F, 12, () -> Ingredient.of(Tags.Items.INGOTS_COPPER)),
     TIN(1, 220, 5F, 1.5F, 10, () -> Ingredient.of(ModTags.Items.INGOT_TIN)),
     BRONZE(1, 230, 5.5F, 2.0F, 13, () -> Ingredient.of(ModTags.Items.INGOT_BRONZE)),
     RMA_70_12(2, 276, 6.75F, 2F, 15, () -> Ingredient.of(ModTags.Items.INGOT_RMA7012)),
