@@ -6,16 +6,18 @@ import com.yor42.projectazure.gameobject.crafting.recipes.PressingRecipe;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.core.Direction;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -71,8 +73,8 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         }
     };
 
-    public TileEntityMetalPress() {
-        super(registerTE.METAL_PRESS.get());
+    public TileEntityMetalPress(BlockPos blockpos, BlockState blockstate) {
+        super(registerTE.METAL_PRESS.get(), blockpos, blockstate);
         this.recipeType = registerRecipes.Types.PRESSING;
         this.powerConsumption = 100;
         this.inventory.setSize(3);
@@ -88,7 +90,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
             return true;
         }
         else if(index == 1){
-            return stack.getItem().is(ModTags.Items.EXTRUSION_MOLD);
+            return stack.is(ModTags.Items.EXTRUSION_MOLD);
         }
         else{
             return false;

@@ -3,19 +3,20 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 import com.yor42.projectazure.gameobject.entity.misc.EntityLogisticsDrone;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.libs.ItemFilterEntry;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TIleEntityDroneDockingStation extends BaseContainerBlockEntity implements TickableBlockEntity {
+public class TIleEntityDroneDockingStation extends BaseContainerBlockEntity implements BlockEntityTicker<TIleEntityDroneDockingStation> {
 
     protected boolean isDestination = false;
     protected final CustomEnergyStorage energyStorage;
@@ -36,8 +37,8 @@ public class TIleEntityDroneDockingStation extends BaseContainerBlockEntity impl
     private int inventoryscanindex = 0;
 
 
-    protected TIleEntityDroneDockingStation(BlockEntityType<?> typeIn) {
-        super(typeIn);
+    protected TIleEntityDroneDockingStation(BlockEntityType<?> typeIn, BlockPos blockpos, BlockState blockstate) {
+        super(typeIn, blockpos, blockstate);
         this.energyStorage = new CustomEnergyStorage(25000,2500,2000);
         this.inventory = new ItemStackHandler(18);
     }
@@ -53,10 +54,10 @@ public class TIleEntityDroneDockingStation extends BaseContainerBlockEntity impl
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-
-        compound.put("energy",this.energyStorage.serializeNBT());
-        compound.put("inventory", this.inventory.serializeNBT());
+    public void saveAdditional(CompoundTag compoundtag) {
+        super.saveAdditional(compoundtag);
+        compoundtag.put("energy",this.energyStorage.serializeNBT());
+        compoundtag.put("inventory", this.inventory.serializeNBT());
         CompoundTag compound2 = new CompoundTag();
         int listsize = this.ItemtoLoad.size();
         for(int i=0; i<listsize;i++){
@@ -64,7 +65,7 @@ public class TIleEntityDroneDockingStation extends BaseContainerBlockEntity impl
         }
         compound2.putInt("size", listsize);
         compound2.putBoolean("inverted", this.invertloaditem);
-        compound.put("ItemtoLoad", compound2);
+        compoundtag.put("ItemtoLoad", compound2);
 
         compound2 = new CompoundTag();
         listsize = this.ItemtounLoad.size();
@@ -73,33 +74,30 @@ public class TIleEntityDroneDockingStation extends BaseContainerBlockEntity impl
         }
         compound2.putInt("size", listsize);
         compound2.putBoolean("inverted", this.invertunloaditem);
-        compound.put("ItemtounLoad", compound2);
-        compound.putInt("inventoryscanindex", this.inventoryscanindex);
-
-        return super.save(compound);
+        compoundtag.put("ItemtounLoad", compound2);
+        compoundtag.putInt("inventoryscanindex", this.inventoryscanindex);
     }
 
     @Override
-    public void load(BlockState p_230337_1_, CompoundTag compound) {
+    public void load(CompoundTag compoundtag) {
+        super.load(compoundtag);
+        this.energyStorage.deserializeNBT(compoundtag.getCompound("energy"));
+        this.inventory.deserializeNBT(compoundtag.getCompound("inventory"));
 
-        this.energyStorage.deserializeNBT(compound.getCompound("energy"));
-        this.inventory.deserializeNBT(compound.getCompound("inventory"));
-
-        CompoundTag compound2 = compound.getCompound("ItemtoLoad");
+        CompoundTag compound2 = compoundtag.getCompound("ItemtoLoad");
         int filtersize = compound2.getInt("size");
         for(int i=0; i<filtersize; i++){
             this.ItemtoLoad.add(ItemFilterEntry.deserializeNBT(compound2.getCompound("filter"+i)));
         }
         this.invertloaditem=compound2.getBoolean("inverted");
 
-        compound2 = compound.getCompound("ItemtounLoad");
+        compound2 = compoundtag.getCompound("ItemtounLoad");
         filtersize = compound2.getInt("size");
         for(int i=0; i<filtersize; i++){
             this.ItemtounLoad.add(ItemFilterEntry.deserializeNBT(compound2.getCompound("filter"+i)));
         }
         this.invertunloaditem=compound2.getBoolean("inverted");
-        this.inventoryscanindex = compound.getInt("inventoryscanindex");
-        super.load(p_230337_1_, compound);
+        this.inventoryscanindex = compoundtag.getInt("inventoryscanindex");
     }
 
     @Override
@@ -167,7 +165,7 @@ public class TIleEntityDroneDockingStation extends BaseContainerBlockEntity impl
     }
 
     @Override
-    public void tick() {
+    public void tick(Level level, BlockPos blockpos, BlockState blockstate, TIleEntityDroneDockingStation tileentitydronedockingstation) {
         Level world = this.getLevel();
         if(world == null){
             return;

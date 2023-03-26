@@ -11,28 +11,26 @@ import com.lowdragmc.multiblocked.api.capability.MultiblockCapability;
 import com.lowdragmc.multiblocked.api.capability.proxy.CapabilityProxy;
 import com.lowdragmc.multiblocked.api.capability.trait.CapabilityTrait;
 import com.lowdragmc.multiblocked.api.gui.recipe.ContentWidget;
+import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.lowdragmc.multiblocked.api.recipe.Recipe;
-import com.lowdragmc.multiblocked.api.recipe.ingredient.EntityIngredient;
-import com.lowdragmc.multiblocked.api.recipe.serde.content.IContentSerializer;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.lowdragmc.multiblocked.api.tile.ComponentTileEntity;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.client.gui.multiblocked.CompanionContentWidget;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.RiftwayRecipes;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
-import com.yor42.projectazure.gameobject.crafting.ingredients.EntityIngredientCompanions;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,33 +40,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class CompanionMultiblockCapability extends MultiblockCapability<EntityIngredientCompanions> {
+public class CompanionMultiblockCapability extends MultiblockCapability<EntityIngredient> {
 
     public static final CompanionMultiblockCapability CAP = new CompanionMultiblockCapability();
 
     public CompanionMultiblockCapability(){
-        super("companion", 0xFF65CB9D, new IContentSerializer<>() {
-
-            @Override
-            public EntityIngredientCompanions fromJson(JsonElement json) {
-                return (EntityIngredientCompanions) EntityIngredientCompanions.fromJson(json);
-            }
-
-            @Override
-            public JsonElement toJson(EntityIngredientCompanions content) {
-                return content.toJson();
-            }
-
-            @Override
-            public EntityIngredientCompanions of(Object o) {
-                return (EntityIngredientCompanions) EntityIngredientCompanions.of(o);
-            }
-        });
+        super("companion", 0xFF65CB9D);
     }
 
     @Override
-    public EntityIngredientCompanions defaultContent() {
-        return new EntityIngredientCompanions();
+    public EntityIngredient defaultContent() {
+        return new EntityIngredient();
     }
 
     @Override
@@ -80,8 +62,8 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
     }
 
     @Override
-    public EntityIngredientCompanions copyInner(EntityIngredientCompanions content) {
-        return (EntityIngredientCompanions) content.copy();
+    public EntityIngredient copyInner(EntityIngredient content) {
+        return content.copy();
     }
 
     @Override
@@ -90,7 +72,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
     }
 
     @Override
-    protected CapabilityProxy<? extends EntityIngredientCompanions> createProxy(@Nonnull IO io, @Nonnull BlockEntity tileEntity) {
+    protected CapabilityProxy<? extends EntityIngredient> createProxy(@Nonnull IO io, @Nonnull BlockEntity tileEntity) {
         return new EntityCapabilityProxy(tileEntity);
     }
 
@@ -112,24 +94,28 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
     }
 
     @Override
-    public EntityIngredientCompanions of(Object o) {
-        return (EntityIngredientCompanions) EntityIngredientCompanions.of(o);
+    public EntityIngredient of(Object o) {
+        return EntityIngredient.of(o);
     }
 
     @Override
-    public EntityIngredientCompanions deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return (EntityIngredientCompanions) EntityIngredientCompanions.fromJson(json);
+    public EntityIngredient deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        return EntityIngredient.fromJson(json);
     }
 
+    @Override
+    public JsonElement serialize(EntityIngredient src, Type typeOfSrc, JsonSerializationContext context) {
+        return src.toJson();
+    }
 
-    public static class EntityCapabilityProxy extends CapabilityProxy<EntityIngredientCompanions> {
+    public static class EntityCapabilityProxy extends CapabilityProxy<EntityIngredient> {
 
         public EntityCapabilityProxy(BlockEntity tileEntity) {
             super(CompanionMultiblockCapability.CAP, tileEntity);
         }
 
         @Override
-        protected List<EntityIngredientCompanions> handleRecipeInner(IO io, Recipe recipe, List<EntityIngredientCompanions> left, @Nullable String slotName, boolean simulate) {
+        protected List<EntityIngredient> handleRecipeInner(IO io, Recipe recipe, List<EntityIngredient> left, @Nullable String slotName, boolean simulate) {
             BlockEntity tileEntity =getTileEntity();
             if (tileEntity instanceof ComponentTileEntity) {
                 ComponentTileEntity<?> component = (ComponentTileEntity<?>) tileEntity;
@@ -142,7 +128,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
                         if (entity.isAlive()) {
                             if (left.removeIf(ingredient -> ingredient.match(entity))) {
                                 if (!simulate) {
-                                    entity.remove(Entity.RemovalReason.DISCARDED);
+                                    entity.remove(false);
                                 }
                             }
                         }

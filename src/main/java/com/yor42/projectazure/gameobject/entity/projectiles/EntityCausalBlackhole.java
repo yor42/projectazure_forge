@@ -3,17 +3,17 @@ package com.yor42.projectazure.gameobject.entity.projectiles;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerEntity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
@@ -56,7 +56,7 @@ public class EntityCausalBlackhole extends Entity {
         super.tick();
         int life = 400;
         if(this.tickCount>= life){
-            this.remove();
+            this.discard();
         }
         if(!this.getCommandSenderWorld().isClientSide()) {
             this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D, 8, 8)).stream().filter((entity) -> {

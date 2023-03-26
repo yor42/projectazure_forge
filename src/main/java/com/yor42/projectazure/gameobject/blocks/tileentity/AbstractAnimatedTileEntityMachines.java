@@ -1,20 +1,22 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.Container;
 import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.inventory.RecipeHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
@@ -30,8 +32,8 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
     protected RecipeType<? extends Recipe<Container>> recipeType;
 
-    protected AbstractAnimatedTileEntityMachines(BlockEntityType<?> typeIn) {
-        super(typeIn);
+    protected AbstractAnimatedTileEntityMachines(BlockEntityType<?> typeIn, BlockPos blockpos, BlockState blockstate) {
+        super(typeIn, blockpos, blockstate);
     }
 
     protected int ProcessTime, totalProcessTime;
@@ -42,7 +44,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     }
 
     @Override
-    public void tick() {
+    public void tick(Level level, BlockPos blockpos, BlockState blockstate, AbstractAnimateableEnergyTickTE abstractanimateableenergytickte) {
         boolean isActive = this.isActive();
         boolean shouldsave = false;
         boolean isPowered = this.isPowered();
@@ -101,27 +103,17 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     protected abstract boolean canProcess(Recipe<?> irecipe);
 
     @Override
-    public void load(BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
-        this.ProcessTime = nbt.getInt("processtime");
-        this.totalProcessTime = nbt.getInt("totalprocesstime");
+    public void load(CompoundTag compoundtag) {
+        super.load(compoundtag);
+        this.ProcessTime = compoundtag.getInt("processtime");
+        this.totalProcessTime = compoundtag.getInt("totalprocesstime");
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
-        compound.putInt("processtime", this.ProcessTime);
-        compound.putInt("totalprocesstime", this.totalProcessTime);
-        return compound;
-    }
-
-    @Nullable
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        CompoundTag syncTag = super.getUpdateTag();
-        syncTag.putInt("progress", this.ProcessTime);
-        syncTag.putInt("totalprogress", this.totalProcessTime);
-        return new ClientboundBlockEntityDataPacket(worldPosition, 1, syncTag);
+    public void saveAdditional(CompoundTag compoundtag) {
+        super.saveAdditional(compoundtag);
+        compoundtag.putInt("processtime", this.ProcessTime);
+        compoundtag.putInt("totalprocesstime", this.totalProcessTime);
     }
 
     @Override

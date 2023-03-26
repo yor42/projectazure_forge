@@ -3,10 +3,10 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.FluidTags;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.EnumSet;

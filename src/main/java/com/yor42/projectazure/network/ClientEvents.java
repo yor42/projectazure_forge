@@ -4,14 +4,14 @@ import com.yor42.projectazure.libs.utils.ClientUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -88,12 +88,12 @@ public class ClientEvents {
         if(target != null) {
             for (int i = 0; i < 16; ++i) {
                 Vec3 vector3d = new Vec3(((double) MathUtil.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
-                vector3d = vector3d.xRot(-target.xRot * ((float) Math.PI / 180F));
-                vector3d = vector3d.yRot(-target.yRot * ((float) Math.PI / 180F));
+                vector3d = vector3d.xRot(-target.getXRot() * ((float) Math.PI / 180F));
+                vector3d = vector3d.yRot(-target.getYRot() * ((float) Math.PI / 180F));
                 double d0 = (double) (-MathUtil.rand.nextFloat()) * 0.6D - 0.3D;
                 Vec3 vector3d1 = new Vec3(((double) MathUtil.rand.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
-                vector3d1 = vector3d1.xRot(-target.xRot * ((float) Math.PI / 180F));
-                vector3d1 = vector3d1.yRot(-target.yRot * ((float) Math.PI / 180F));
+                vector3d1 = vector3d1.xRot(-target.getXRot() * ((float) Math.PI / 180F));
+                vector3d1 = vector3d1.yRot(-target.getYRot() * ((float) Math.PI / 180F));
                 vector3d1 = vector3d1.add(target.getX(), target.getEyeY(), target.getZ());
                 world.addParticle(new ItemParticleOption(ParticleTypes.ITEM, stack), vector3d1.x, vector3d1.y, vector3d1.z, vector3d.x, vector3d.y + 0.05D, vector3d.z);
             }

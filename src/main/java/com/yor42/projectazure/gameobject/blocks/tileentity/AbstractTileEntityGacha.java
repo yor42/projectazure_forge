@@ -4,13 +4,15 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -182,14 +184,14 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         return 0;
     }
 
-    protected AbstractTileEntityGacha(BlockEntityType<?> typeIn) {
-        super(typeIn);
+    protected AbstractTileEntityGacha(BlockEntityType<?> typeIn, BlockPos blockpos, BlockState blockstate) {
+        super(typeIn, blockpos, blockstate);
         this.registerRollEntry();
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(Level level, BlockPos blockpos, BlockState blockstate, AbstractAnimateableEnergyTickTE abstractanimateableenergytickte) {
+        super.tick(level, blockpos, blockstate, abstractanimateableenergytickte);
         boolean isActive = this.isActive();
         boolean shouldsave = false;
         if (this.level != null && !this.level.isClientSide) {
@@ -227,31 +229,26 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     protected boolean canProcess(){return true;}
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
-        compound.putInt("processtime", this.ProcessTime);
-        compound.putInt("totalprocesstime", this.totalProcessTime);
-        compound.putDouble("accumulatedWeight", this.accumulatedWeight);
-        compound.putString("taskresult", this.RollResult == null? "null": EntityType.getKey(this.RollResult).toString());
+    public void saveAdditional(CompoundTag compoundtag) {
+        super.saveAdditional(compoundtag);
+        compoundtag.putInt("processtime", this.ProcessTime);
+        compoundtag.putInt("totalprocesstime", this.totalProcessTime);
+        compoundtag.putDouble("accumulatedWeight", this.accumulatedWeight);
+        compoundtag.putString("taskresult", this.RollResult == null? "null": EntityType.getKey(this.RollResult).toString());
         if(this.nextTaskStarter != null) {
-            compound.putUUID("taskOwner", this.nextTaskStarter.getUUID());
+            compoundtag.putUUID("taskOwner", this.nextTaskStarter.getUUID());
         }
-        compound.putBoolean("shouldProcess", this.shouldProcess);
-        return compound;
+        compoundtag.putBoolean("shouldProcess", this.shouldProcess);
     }
 
-    /*
-    I know What I'm doing java :concern:
-     */
-    @SuppressWarnings("unchecked")
     @Override
-    public void load(BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
-        this.ProcessTime = nbt.getInt("processtime");
-        this.totalProcessTime = nbt.getInt("totalprocesstime");
-        this.accumulatedWeight = nbt.getDouble("accumulatedWeight");
-        this.shouldProcess = nbt.getBoolean("shouldProcess");
-        String key = nbt.getString("taskresult");
+    public void load(CompoundTag compoundtag) {
+        super.load(compoundtag);
+        this.ProcessTime = compoundtag.getInt("processtime");
+        this.totalProcessTime = compoundtag.getInt("totalprocesstime");
+        this.accumulatedWeight = compoundtag.getDouble("accumulatedWeight");
+        this.shouldProcess = compoundtag.getBoolean("shouldProcess");
+        String key = compoundtag.getString("taskresult");
         if(key.equals("null") || !EntityType.byString(key).isPresent()){
             this.RollResult = null;
         }
@@ -259,7 +256,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
             //WARNING: Because of this line DO NOT ADD NON COMPANION ENTITY IN POOL
             this.RollResult = (EntityType<? extends AbstractEntityCompanion>) EntityType.byString(key).orElse(null);
         }
-        this.nextTaskStarter = this.level == null || !nbt.contains("taskOwner")? null:this.level.getPlayerByUUID(nbt.getUUID("taskOwner"));
+        this.nextTaskStarter = this.level == null || !compoundtag.contains("taskOwner")? null:this.level.getPlayerByUUID(compoundtag.getUUID("taskOwner"));
     }
 
     /*

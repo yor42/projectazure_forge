@@ -6,23 +6,25 @@ import com.yor42.projectazure.libs.utils.BlockUtil;
 import com.yor42.projectazure.setup.register.RegisterFluids;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -42,7 +44,7 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 import static com.yor42.projectazure.libs.utils.FluidPredicates.*;
 
-public class TileEntityBasicRefinery extends BaseContainerBlockEntity implements MenuProvider, StackedContentsCompatible, TickableBlockEntity {
+public class TileEntityBasicRefinery extends BaseContainerBlockEntity implements MenuProvider, StackedContentsCompatible, BlockEntityTicker<TileEntityBasicRefinery> {
 
 
     private int burnTime = 0;
@@ -125,8 +127,8 @@ public class TileEntityBasicRefinery extends BaseContainerBlockEntity implements
     };
 
 
-    public TileEntityBasicRefinery() {
-        super(registerTE.BASIC_REFINERY.get());
+    public TileEntityBasicRefinery(BlockPos blockpos, BlockState blockstate) {
+        super(registerTE.BASIC_REFINERY.get(), blockpos, blockstate);
     }
 
     @Override
@@ -203,7 +205,7 @@ public class TileEntityBasicRefinery extends BaseContainerBlockEntity implements
     }
 
     @Override
-    public void tick() {
+    public void tick(Level level, BlockPos blockpos, BlockState blockstate, TileEntityBasicRefinery tileentitybasicrefinery) {
         if(this.getLevel() != null) {
             boolean flag = this.isBurning();
             boolean flag1 = false;
@@ -330,32 +332,31 @@ public class TileEntityBasicRefinery extends BaseContainerBlockEntity implements
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
-        compound.put("inventory", this.ITEMHANDLER.serializeNBT());
-        compound.put("crudeoiltank", this.CrudeOilTank.writeToNBT(new CompoundTag()));
-        compound.put("gasolinetank", this.GasolineTank.writeToNBT(new CompoundTag()));
-        compound.put("dieseltank", this.DieselTank.writeToNBT(new CompoundTag()));
-        compound.put("fueloiltank", this.FuelOilTank.writeToNBT(new CompoundTag()));
-        compound.putInt("bitumentick", this.bitumentick);
-        compound.putInt("totalburntime", this.totalBurntime);
-        compound.putInt("burntime", this.burnTime);
-        compound.putInt("activestate", this.isActive);
-        return compound;
+    public void saveAdditional(CompoundTag compoundtag) {
+        super.saveAdditional(compoundtag);
+        compoundtag.put("inventory", this.ITEMHANDLER.serializeNBT());
+        compoundtag.put("crudeoiltank", this.CrudeOilTank.writeToNBT(new CompoundTag()));
+        compoundtag.put("gasolinetank", this.GasolineTank.writeToNBT(new CompoundTag()));
+        compoundtag.put("dieseltank", this.DieselTank.writeToNBT(new CompoundTag()));
+        compoundtag.put("fueloiltank", this.FuelOilTank.writeToNBT(new CompoundTag()));
+        compoundtag.putInt("bitumentick", this.bitumentick);
+        compoundtag.putInt("totalburntime", this.totalBurntime);
+        compoundtag.putInt("burntime", this.burnTime);
+        compoundtag.putInt("activestate", this.isActive);
     }
 
     @Override
-    public void load(BlockState p_230337_1_, CompoundTag compound) {
-        super.load(p_230337_1_, compound);
-        this.ITEMHANDLER.deserializeNBT(compound.getCompound("inventory"));
-        this.CrudeOilTank.readFromNBT(compound.getCompound("crudeoiltank"));
-        this.GasolineTank.readFromNBT(compound.getCompound("gasolinetank"));
-        this.DieselTank.readFromNBT(compound.getCompound("dieseltank"));
-        this.FuelOilTank.readFromNBT(compound.getCompound("fueloiltank"));
-        this.bitumentick = compound.getInt("bitumentick");
-        this.totalBurntime = compound.getInt("totalburntime");
-        this.burnTime = compound.getInt("burntime");
-        this.isActive = compound.getInt("activestate");
+    public void load(CompoundTag compoundtag) {
+        super.load(compoundtag);
+        this.ITEMHANDLER.deserializeNBT(compoundtag.getCompound("inventory"));
+        this.CrudeOilTank.readFromNBT(compoundtag.getCompound("crudeoiltank"));
+        this.GasolineTank.readFromNBT(compoundtag.getCompound("gasolinetank"));
+        this.DieselTank.readFromNBT(compoundtag.getCompound("dieseltank"));
+        this.FuelOilTank.readFromNBT(compoundtag.getCompound("fueloiltank"));
+        this.bitumentick = compoundtag.getInt("bitumentick");
+        this.totalBurntime = compoundtag.getInt("totalburntime");
+        this.burnTime = compoundtag.getInt("burntime");
+        this.isActive = compoundtag.getInt("activestate");
     }
 
     public void encodeExtraData(FriendlyByteBuf buffer) {

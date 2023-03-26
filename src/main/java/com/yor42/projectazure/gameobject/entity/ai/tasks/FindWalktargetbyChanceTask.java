@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.behavior.VillageBoundRandomStroll;
+import net.minecraft.server.level.ServerLevel;
 
 public class FindWalktargetbyChanceTask extends VillageBoundRandomStroll {
 

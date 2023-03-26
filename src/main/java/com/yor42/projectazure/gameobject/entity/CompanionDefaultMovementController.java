@@ -1,19 +1,19 @@
 package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.Vec3;
 
 public class CompanionDefaultMovementController extends MoveControl {
     protected final AbstractEntityCompanion companion;
@@ -38,8 +38,8 @@ public class CompanionDefaultMovementController extends MoveControl {
             lvt_5_1_ = lvt_2_1_ / lvt_5_1_;
             lvt_3_1_ *= lvt_5_1_;
             lvt_4_1_ *= lvt_5_1_;
-            float lvt_6_1_ = Mth.sin(this.mob.yRot * 0.017453292F);
-            float lvt_7_1_ = Mth.cos(this.mob.yRot * 0.017453292F);
+            float lvt_6_1_ = Mth.sin(this.mob.getYRot() * 0.017453292F);
+            float lvt_7_1_ = Mth.cos(this.mob.getYRot() * 0.017453292F);
             float lvt_8_1_ = lvt_3_1_ * lvt_7_1_ - lvt_4_1_ * lvt_6_1_;
             lvt_9_2_ = lvt_4_1_ * lvt_7_1_ + lvt_3_1_ * lvt_6_1_;
             if (!this.isWalkable(lvt_8_1_, lvt_9_2_)) {
@@ -82,13 +82,13 @@ public class CompanionDefaultMovementController extends MoveControl {
             }
 
             lvt_9_2_ = (float)(Mth.atan2(ZDelta, xDelta) * 57.2957763671875D) - 90.0F;
-            this.mob.yRot = this.rotlerp(this.mob.yRot, lvt_9_2_, 90.0F);
+            this.mob.setYRot(this.rotlerp(this.mob.getYRot(), lvt_9_2_, 90.0F));
             this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
             BlockPos blockPos = this.mob.blockPosition();
             BlockState blockState = this.mob.level.getBlockState(blockPos);
             Block block = blockState.getBlock();
             VoxelShape voxel = blockState.getCollisionShape(this.mob.level, blockPos);
-            if (YDelta > (double)this.mob.maxUpStep && xDelta * xDelta + ZDelta * ZDelta < (double)Math.max(1.0F, this.mob.getBbWidth()) || !voxel.isEmpty() && this.mob.getY() < voxel.max(Direction.Axis.Y) + (double)blockPos.getY() && !this.companion.isSailing() && !block.is(BlockTags.DOORS) && !block.is(BlockTags.FENCES)) {
+            if (YDelta > (double)this.mob.maxUpStep && xDelta * xDelta + ZDelta * ZDelta < (double)Math.max(1.0F, this.mob.getBbWidth()) || !voxel.isEmpty() && this.mob.getY() < voxel.max(Direction.Axis.Y) + (double)blockPos.getY() && !this.companion.isSailing() && !blockState.is(BlockTags.DOORS) && !blockState.is(BlockTags.FENCES)) {
                 this.mob.getJumpControl().jump();
                 this.operation = MoveControl.Operation.JUMPING;
             }

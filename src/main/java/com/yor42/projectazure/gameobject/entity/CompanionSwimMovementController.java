@@ -1,14 +1,14 @@
 package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 
 import static net.minecraft.tags.FluidTags.WATER;
@@ -69,18 +69,18 @@ public class CompanionSwimMovementController extends MoveControl {
             else
             {
                 float f = (float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
-                this.companion.yRot = this.rotlerp(this.companion.yRot, f, 10.0F);
-                this.companion.yBodyRot = this.companion.yRot;
-                this.companion.yHeadRot = this.companion.yRot;
+                this.companion.setYRot(this.rotlerp(this.companion.getYRot(), f, 10.0F));
+                this.companion.yBodyRot = this.companion.getYRot();
+                this.companion.yHeadRot = this.companion.getYRot();
                 float f1 = (float)(this.speedModifier * this.companion.getAttributeValue(ForgeMod.SWIM_SPEED.get()));
                 if(this.companion.isInWater() || this.companion.isInLava())
                 {
                     this.companion.setSpeed(f1);
-                    float f2 = -((float)(Mth.atan2(d1, Mth.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
+                    float f2 = -((float)(Mth.atan2(d1, (float)Math.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
                     f2 = Mth.clamp(Mth.wrapDegrees(f2), -85.0F, 85.0F);
-                    this.companion.xRot = this.rotlerp(this.companion.xRot, f2, 5.0F);
-                    float f3 = Mth.cos(this.companion.xRot * ((float)Math.PI / 180F));
-                    float f4 = Mth.sin(this.companion.xRot * ((float)Math.PI / 180F));
+                    this.companion.setXRot(this.rotlerp(this.companion.getXRot(), f2, 5.0F));
+                    float f3 = Mth.cos(this.companion.getXRot() * ((float)Math.PI / 180F));
+                    float f4 = Mth.sin(this.companion.getXRot() * ((float)Math.PI / 180F));
                     this.companion.zza = f3 * f1;
                     //this.companion.moveVertical = -f4 * f1;
                 }

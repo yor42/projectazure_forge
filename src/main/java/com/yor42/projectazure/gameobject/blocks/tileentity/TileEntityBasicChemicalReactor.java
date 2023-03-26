@@ -4,18 +4,20 @@ import com.yor42.projectazure.gameobject.containers.machine.ContainerBasicChemic
 import com.yor42.projectazure.gameobject.crafting.recipes.BasicChemicalReactionRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullConsumer;
@@ -90,8 +92,8 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
         }
     };
 
-    public TileEntityBasicChemicalReactor() {
-        super(registerTE.BASIC_CHEMICAL_REACTOR.get());
+    public TileEntityBasicChemicalReactor(BlockPos blockpos, BlockState blockstate) {
+        super(registerTE.BASIC_CHEMICAL_REACTOR.get(), blockpos, blockstate);
         this.inventory = new ItemStackHandler(3){
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
@@ -112,7 +114,7 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     }
 
     @Override
-    public void tick() {
+    public void tick(Level level, BlockPos blockpos, BlockState blockstate, AbstractAnimateableEnergyTickTE abstractanimateableenergytickte) {
         ItemStack stack = this.inventory.getStackInSlot(1);
         NonNullConsumer<IFluidHandlerItem> TransferLiquidtoStack = (FluidHandler)->{
             FluidActionResult simresult = FluidUtil.tryFillContainer(stack, this.OutputTank, this.OutputTank.getCapacity(), null, false);
@@ -123,7 +125,7 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
             }
         };
         FluidUtil.getFluidHandler(stack).ifPresent(TransferLiquidtoStack);
-        super.tick();
+        super.tick(level, blockpos, blockstate, abstractanimateableenergytickte);
     }
 
     @Override
@@ -180,15 +182,15 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        compound.put("outputtank", this.OutputTank.writeToNBT(new CompoundTag()));
-        return super.save(compound);
+    public void saveAdditional(CompoundTag compoundtag) {
+        super.saveAdditional(compoundtag);
+        compoundtag.put("outputtank", this.OutputTank.writeToNBT(new CompoundTag()));
     }
 
     @Override
-    public void load(BlockState state, CompoundTag nbt) {
-        this.OutputTank.readFromNBT(nbt.getCompound("outputtank"));
-        super.load(state, nbt);
+    public void load(CompoundTag compoundtag) {
+        super.load(compoundtag);
+        this.OutputTank.readFromNBT(compoundtag.getCompound("outputtank"));
     }
 
     @Override

@@ -60,16 +60,6 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return UID;
-    }
-
-    @Override
-    public Class<? extends PressingRecipe> getRecipeClass() {
-        return PressingRecipe.class;
-    }
-
-    @Override
     public void setIngredients(PressingRecipe pressingRecipe, IIngredients iIngredients) {
         iIngredients.setInputIngredients(pressingRecipe.getIngredients());
         iIngredients.setOutput(VanillaTypes.ITEM, pressingRecipe.getResultItem());

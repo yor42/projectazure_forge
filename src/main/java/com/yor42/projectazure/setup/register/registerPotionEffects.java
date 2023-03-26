@@ -2,22 +2,22 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class registerPotionEffects {
-    public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Constants.MODID);
+    public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Constants.MODID);
     public static RegistryObject<MobEffect> ACUTE_ORIPATHY_REGISTRY = EFFECTS.register("acute_oripathy", AcuteOripathyEffect::new);
 
     public static RegistryObject<MobEffect> FROSTBITE_REGISTRY = EFFECTS.register("frostbite", ()-> new FrostbiteEffect().addAttributeModifier(Attributes.MOVEMENT_SPEED, UUID.randomUUID().toString(), -0.11F, AttributeModifier.Operation.MULTIPLY_TOTAL));

@@ -9,14 +9,10 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.multiblocked.Multiblocked;
 import com.lowdragmc.multiblocked.api.tile.IComponent;
 import com.lowdragmc.multiblocked.client.renderer.IMultiblockedRenderer;
-import com.lowdragmc.multiblocked.client.renderer.impl.GeoComponentRenderer;
-import com.lowdragmc.multiblocked.client.renderer.impl.MBDBlockStateRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import io.netty.util.Constant;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -66,46 +62,299 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class MBDGeoRenderer extends GeoComponentRenderer {
+@Deprecated
+public class MBDGeoRenderer extends AnimatedGeoModel<MBDGeoRenderer.ComponentFactory> implements IMultiblockedRenderer, IGeoRenderer<MBDGeoRenderer.ComponentFactory> {
+    public static final MBDGeoRenderer INSTANCE = new MBDGeoRenderer(null, false);
+    private static final Set<String> particleTexture = new HashSet();
     public final String modelName, texturename;
+    public final boolean isGlobal;
+    @OnlyIn(Dist.CLIENT)
+    private ComponentFactory itemFactory;
+
+    public MultiBufferSource rtb;
 
     public MBDGeoRenderer(String modelName, String texturename, boolean isGlobal) {
-        super(modelName, isGlobal);
         this.modelName = modelName;
+        this.isGlobal = isGlobal;
         this.texturename = texturename;
+        if (Multiblocked.isClient() && modelName != null && particleTexture.add(texturename)) {
+            this.registerTextureSwitchEvent();
+        }
     }
 
     public MBDGeoRenderer(String modelName, boolean isGlobal) {
-        super(modelName, isGlobal);
-        this.modelName = modelName;
-        this.texturename = modelName;
+        this(modelName, modelName, isGlobal);
     }
 
-    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void renderItem(ItemStack stack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay, BakedModel bakedModel) {
+        if (this.itemFactory == null) {
+            this.itemFactory = new ComponentFactory((IComponent)null, this);
+        }
+
+        GeoModel model = this.getModel(this.getModelLocation(this.itemFactory));
+        this.setCustomAnimations(this.itemFactory, this.getInstanceId(this.itemFactory));
+        matrixStack.pushPose();
+        matrixStack.translate(0.0, 0.009999999776482582, 0.0);
+        matrixStack.translate(0.5, 0.0, 0.5);
+        this.render(model, this.itemFactory, Minecraft.getInstance().getFrameTime(), RenderType.entityTranslucent(this.getTextureLocation(this.itemFactory)), matrixStack, buffer, (VertexConsumer)null, combinedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        matrixStack.popPose();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public List<BakedQuad> renderModel(BlockAndTintGetter level, BlockPos pos, BlockState state, Direction side, Random rand, IModelData modelData) {
+        return Collections.emptyList();
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void onTextureSwitchEvent(TextureStitchEvent.Pre event) {
-        event.addSprite(new ResourceLocation(Constants.MODID, modelName));
+        event.addSprite(ResourceUtils.ModResourceLocation(this.texturename));
     }
+    
 
     @Nonnull
-    @Override
     @OnlyIn(Dist.CLIENT)
     public TextureAtlasSprite getParticleTexture() {
-        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation(Constants.MODID, modelName));
+        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ResourceUtils.ModResourceLocation(this.modelName));
     }
 
-    @Override
+    public boolean isGlobalRenderer(@Nonnull BlockEntity te) {
+        return this.isGlobal;
+    }
+
+    public String getType() {
+        return "geo";
+    }
+
+    public IMultiblockedRenderer fromJson(Gson gson, JsonObject jsonObject) {
+        return new MBDGeoRenderer(jsonObject.get("modelName").getAsString(), GsonHelper.getAsBoolean(jsonObject, "isGlobal", false));
+    }
+
+    public JsonObject toJson(Gson gson, JsonObject jsonObject) {
+        jsonObject.addProperty("modelName", this.modelName);
+        if (this.isGlobal) {
+            jsonObject.addProperty("isGlobal", true);
+        }
+
+        return jsonObject;
+    }
+
+    public Supplier<IMultiblockedRenderer> createConfigurator(WidgetGroup parent, DraggableScrollableWidgetGroup group, IMultiblockedRenderer current) {
+        TextFieldWidget tfw = new TextFieldWidget(1, 1, 150, 20, (Supplier)null, (Consumer)null);
+        File path = new File(Multiblocked.location, "assets/multiblocked/geo");
+        AtomicBoolean isGlobal = new AtomicBoolean(false);
+        if (current instanceof MBDGeoRenderer) {
+            tfw.setCurrentString(((MBDGeoRenderer)current).modelName);
+            isGlobal.set(((MBDGeoRenderer)current).isGlobal);
+        }
+
+        group.addWidget((new ButtonWidget(155, 1, 20, 20, (cd) -> {
+            DialogWidget.showFileDialog(parent, "select a geo file", path, true, DialogWidget.suffixFilter(".geo.json"), (r) -> {
+                if (r != null && r.isFile()) {
+                    tfw.setCurrentString(r.getName().replace(".geo.json", ""));
+                }
+
+            });
+        })).setButtonTexture(new IGuiTexture[]{new ResourceTexture("multiblocked:textures/gui/darkened_slot.png"), new TextTexture("F", -1)}).setHoverTooltips(new String[]{"multiblocked.gui.tips.file_selector"}));
+        group.addWidget(tfw);
+        boolean var10006 = isGlobal.get();
+        isGlobal.getClass();
+        group.addWidget(this.createBoolSwitch(1, 25, "isGlobal", "multiblocked.gui.predicate.geo.0", var10006, isGlobal::set));
+        return () -> tfw.getCurrentString().isEmpty() ? null : new MBDGeoRenderer(tfw.getCurrentString(), isGlobal.get());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public boolean isRaw() {
+        return !GeckoLibCache.getInstance().getGeoModels().containsKey(this.getModelLocation((ComponentFactory)null));
+    }
+
+    public boolean hasTESR(BlockEntity tileEntity) {
+        return true;
+    }
+
+    public void onPostAccess(IComponent component) {
+        component.setRendererObject(null);
+    }
+
+    public void onPreAccess(IComponent component) {
+        component.setRendererObject(new ComponentFactory(component, this));
+    }
+
+    public void render(BlockEntity te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+        if (te instanceof IComponent && ((IComponent)te).getRendererObject() instanceof ComponentFactory) {
+            IComponent controller = (IComponent)te;
+            ComponentFactory factory = (ComponentFactory)controller.getRendererObject();
+            GeoModel model = this.getModel(this.getModelLocation(factory));
+
+            this.setCustomAnimations(factory, this.getInstanceId(factory));
+            stack.pushPose();
+            stack.translate(0.0, 0.009999999776482582, 0.0);
+            stack.translate(0.5, 0.0, 0.5);
+            switch (controller.getFrontFacing()) {
+                case SOUTH:
+                    stack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+                    break;
+                case WEST:
+                    stack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+                    break;
+                case NORTH:
+                    stack.mulPose(Vector3f.YP.rotationDegrees(0.0F));
+                    break;
+                case EAST:
+                    stack.mulPose(Vector3f.YP.rotationDegrees(270.0F));
+                    break;
+                case UP:
+                    stack.mulPose(Vector3f.XP.rotationDegrees(90.0F));
+                    break;
+                case DOWN:
+                    stack.mulPose(Vector3f.XN.rotationDegrees(90.0F));
+            }
+
+            this.render(model, stack, buffer, combinedLight);
+            stack.popPose();
+        }
+
+    }
+
+    void render(GeoModel model, PoseStack matrixStackIn, MultiBufferSource buffers, int packedLightIn) {
+        VertexConsumer currentBuffer = buffers.getBuffer(RenderType.entityCutout(this.getTextureLocation((ComponentFactory)null)));
+
+        GeoBone group;
+        for(Iterator var6 = model.topLevelBones.iterator(); var6.hasNext(); currentBuffer = this.renderRecursively(group, matrixStackIn, buffers, currentBuffer, packedLightIn)) {
+            group = (GeoBone)var6.next();
+        }
+
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public VertexConsumer renderRecursively(GeoBone bone, PoseStack stack, MultiBufferSource buffers, VertexConsumer currentBuffer, int packedLightIn) {
+        if (bone.name.contains("emissive")) {
+            packedLightIn = 15728880;
+        }
+
+        boolean isTranslucent = bone.name.startsWith("translucent");
+        if (isTranslucent) {
+            currentBuffer = buffers.getBuffer(RenderType.entityTranslucentCull(this.getTextureLocation((ComponentFactory)null)));
+        }
+
+        stack.pushPose();
+        RenderUtils.translateMatrixToBone(stack, bone);
+        RenderUtils.translateToPivotPoint(stack, bone);
+        RenderUtils.rotateMatrixAroundBone(stack, bone);
+        RenderUtils.scaleMatrixForBone(stack, bone);
+        RenderUtils.translateAwayFromPivotPoint(stack, bone);
+        Iterator var7;
+        if (!bone.isHidden()) {
+            for(var7 = bone.childCubes.iterator(); var7.hasNext(); stack.popPose()) {
+                GeoCube cube = (GeoCube)var7.next();
+                stack.pushPose();
+                if (!bone.cubesAreHidden()) {
+                    this.renderCube(cube, stack, currentBuffer, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                }
+            }
+        }
+
+        GeoBone childBone;
+        if (!bone.childBonesAreHiddenToo()) {
+            for(var7 = bone.childBones.iterator(); var7.hasNext(); currentBuffer = this.renderRecursively(childBone, stack, buffers, currentBuffer, packedLightIn)) {
+                childBone = (GeoBone)var7.next();
+            }
+        }
+
+        if (isTranslucent) {
+            currentBuffer = buffers.getBuffer(RenderType.entityCutout(this.getTextureLocation((ComponentFactory)null)));
+        }
+
+        stack.popPose();
+        return currentBuffer;
+    }
+
     public ResourceLocation getAnimationFileLocation(ComponentFactory entity) {
-        return new ResourceLocation(Constants.MODID, String.format("animations/block/machine/%s.animation.json", modelName));
+        return ResourceUtils.ModResourceLocation(String.format("animations/block/machine/%s.animation.json", this.texturename));
     }
 
-    @Override
     public ResourceLocation getModelLocation(ComponentFactory animatable) {
-        return new ResourceLocation(Constants.MODID, String.format("geo/block/%s.geo.json", modelName));
+        return ResourceUtils.ModResourceLocation(String.format("geo/block/%s.geo.json", this.modelName));
+    }
+
+    public ResourceLocation getTextureLocation(ComponentFactory entity) {
+        return ResourceUtils.ModResourceLocation(String.format("textures/block/%s.png", this.texturename));
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ComponentFactory entity) {
-        return new ResourceLocation(Constants.MODID, String.format("textures/block/%s.png", texturename));
+    public void setCurrentRTB(MultiBufferSource rtb) {
+        this.rtb = rtb;
+    }
+
+    @Override
+    public MultiBufferSource getCurrentRTB() {
+        return this.rtb;
+    }
+
+    public GeoModelProvider<?> getGeoModelProvider() {
+        return this;
+    }
+
+    static {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            AnimationController.addModelFetcher((object) -> {
+                if (object instanceof ComponentFactory) {
+                    ComponentFactory factory = (ComponentFactory)object;
+                    return (IAnimatableModel)factory.renderer.getGeoModelProvider();
+                } else {
+                    return null;
+                }
+            });
+        }
+
+    }
+
+    public static class ComponentFactory implements IAnimatable {
+        public final IComponent component;
+        public final MBDGeoRenderer renderer;
+        public final AnimationFile animationFile;
+        public String currentStatus;
+        private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+        public ComponentFactory(IComponent component, MBDGeoRenderer renderer) {
+            this.component = component;
+            this.renderer = renderer;
+            this.animationFile = GeckoLibCache.getInstance().getAnimations().get(renderer.getAnimationFileLocation(this));
+        }
+
+        private PlayState predicate(AnimationEvent<ComponentFactory> event) {
+            AnimationController<ComponentFactory> controller = event.getController();
+            String lastStatus = this.currentStatus;
+            this.currentStatus = this.component == null ? "unformed" : this.component.getStatus();
+            if (!Objects.equals(lastStatus, this.currentStatus)) {
+                if (this.currentStatus == null) {
+                    return PlayState.STOP;
+                }
+
+                AnimationBuilder animationBuilder = new AnimationBuilder();
+                if (lastStatus != null) {
+                    Animation trans = this.animationFile.getAnimation(lastStatus + "-" + this.currentStatus);
+                    if (trans != null) {
+                        animationBuilder.addAnimation(trans.animationName);
+                    }
+                }
+
+                if (this.animationFile.getAnimation(this.currentStatus) != null) {
+                    animationBuilder.addAnimation(this.currentStatus);
+                }
+
+                controller.setAnimation(animationBuilder);
+            }
+
+            return PlayState.CONTINUE;
+        }
+
+        public void registerControllers(AnimationData data) {
+            data.addAnimationController(new AnimationController(this, "controller", 0.0F, this::predicate));
+        }
+
+        public AnimationFactory getFactory() {
+            return this.factory;
+        }
     }
 }

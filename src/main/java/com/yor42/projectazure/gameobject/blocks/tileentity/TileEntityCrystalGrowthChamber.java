@@ -5,27 +5,29 @@ import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrow
 import com.yor42.projectazure.gameobject.crafting.recipes.CrystalizingRecipe;
 import com.yor42.projectazure.setup.register.RegisterFluids;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.Container;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.Container;
 import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -43,7 +45,7 @@ import java.util.function.Consumer;
 import static com.yor42.projectazure.libs.Constants.CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY;
 import static com.yor42.projectazure.setup.register.registerTE.CRYSTAL_GROWTH_CHAMBER;
 
-public class TileEntityCrystalGrowthChamber extends BaseContainerBlockEntity implements MenuProvider, StackedContentsCompatible, Container, TickableBlockEntity {
+public class TileEntityCrystalGrowthChamber extends BaseContainerBlockEntity implements MenuProvider, StackedContentsCompatible, Container, BlockEntityTicker<TileEntityCrystalGrowthChamber> {
 
     public FluidTank waterTank = new FluidTank(8000, (fluidStack)->fluidStack.getFluid() == Fluids.WATER);
     public FluidTank SolutionTank = new FluidTank(CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY);
@@ -97,8 +99,8 @@ public class TileEntityCrystalGrowthChamber extends BaseContainerBlockEntity imp
         }
     };
 
-    public TileEntityCrystalGrowthChamber() {
-        super(CRYSTAL_GROWTH_CHAMBER.get());
+    public TileEntityCrystalGrowthChamber(BlockPos blockpos, BlockState blockstate) {
+        super(CRYSTAL_GROWTH_CHAMBER.get(), blockpos, blockstate);
         this.recipeType = registerRecipes.Types.CRYSTALIZING;
     }
 
@@ -177,7 +179,7 @@ public class TileEntityCrystalGrowthChamber extends BaseContainerBlockEntity imp
     }
 
     @Override
-    public void tick() {
+    public void tick(Level level, BlockPos blockpos, BlockState blockstate, TileEntityCrystalGrowthChamber tileentitycrystalgrowthchamber) {
         boolean shouldsave = false;
         if(!this.level.isClientSide()){
             for(int i = 1; i<4; i++){
@@ -310,7 +312,7 @@ public class TileEntityCrystalGrowthChamber extends BaseContainerBlockEntity imp
     public boolean tryFillingSolutionTank(int index2try){
         ItemStack stack = this.inventory.getStackInSlot(index2try);
         Item item = stack.getItem();
-        FluidStack FluidToAdd = this.getAmountfromItem(item);
+        FluidStack FluidToAdd = this.getAmountfromItem(stack);
         int fillableAmount = this.SolutionTank.fill(FluidToAdd, IFluidHandler.FluidAction.SIMULATE);
         int drainableAmount = this.waterTank.drain(FluidToAdd.getAmount(), IFluidHandler.FluidAction.SIMULATE).getAmount();
         if(fillableAmount>=FluidToAdd.getAmount() && drainableAmount>0){
@@ -339,14 +341,14 @@ public class TileEntityCrystalGrowthChamber extends BaseContainerBlockEntity imp
         return super.getCapability(capability, side);
     }
 
-    public FluidStack getAmountfromItem(Item item){
-        if(item.is(ModTags.Items.DUST_ORIGINIUM)){
+    public FluidStack getAmountfromItem(ItemStack itemstack){
+        if(itemstack.is(ModTags.Items.DUST_ORIGINIUM)){
             return new FluidStack(RegisterFluids.ORIGINIUM_SOLUTION_SOURCE_REGISTRY.get(), 400);
         }
-        else if(item.is(ModTags.Items.DUST_ORIROCK)){
+        else if(itemstack.is(ModTags.Items.DUST_ORIROCK)){
             return new FluidStack(RegisterFluids.ORIGINIUM_SOLUTION_SOURCE_REGISTRY.get(), 200);
         }
-        else if(item.is(ModTags.Items.DUST_QUARTZ)){
+        else if(itemstack.is(ModTags.Items.DUST_QUARTZ)){
             return new FluidStack(RegisterFluids.NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY.get(), 800);
         }
         return FluidStack.EMPTY;
@@ -359,24 +361,22 @@ public class TileEntityCrystalGrowthChamber extends BaseContainerBlockEntity imp
     }
 
     @Override
-    public void load (BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
-        this.growthProgress = nbt.getInt("progress");
-        this.MaxGrowthProgress = nbt.getInt("maxprogress");
-        this.inventory.deserializeNBT(nbt.getCompound("inventory"));
-        this.waterTank.readFromNBT(nbt.getCompound("water"));
-        this.SolutionTank.readFromNBT(nbt.getCompound("solution"));
+    public void load(CompoundTag compoundtag) {
+        super.load(compoundtag);
+        this.growthProgress = compoundtag.getInt("progress");
+        this.MaxGrowthProgress = compoundtag.getInt("maxprogress");
+        this.inventory.deserializeNBT(compoundtag.getCompound("inventory"));
+        this.waterTank.readFromNBT(compoundtag.getCompound("water"));
+        this.SolutionTank.readFromNBT(compoundtag.getCompound("solution"));
     }
 
-    @Nonnull
     @Override
-    public CompoundTag save(@Nonnull CompoundTag compound) {
-        super.save(compound);
-        compound.putInt("progress", this.growthProgress);
-        compound.putInt("maxprogress", this.MaxGrowthProgress);
-        compound.put("inventory", this.inventory.serializeNBT());
-        compound.put("water", this.waterTank.writeToNBT(new CompoundTag()));
-        compound.put("solution", this.SolutionTank.writeToNBT(new CompoundTag()));
-        return compound;
+    public void saveAdditional(CompoundTag compoundtag) {
+        super.saveAdditional(compoundtag);
+        compoundtag.putInt("progress", this.growthProgress);
+        compoundtag.putInt("maxprogress", this.MaxGrowthProgress);
+        compoundtag.put("inventory", this.inventory.serializeNBT());
+        compoundtag.put("water", this.waterTank.writeToNBT(new CompoundTag()));
+        compoundtag.put("solution", this.SolutionTank.writeToNBT(new CompoundTag()));
     }
 }

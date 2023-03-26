@@ -3,27 +3,28 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.item.*;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.item.*;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.TORCH_INDEX;
 import static net.minecraft.util.Hand.OFF_HAND;
+
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 
 public class CompanionPlaceTorchTask extends Behavior<AbstractEntityCompanion> {
 

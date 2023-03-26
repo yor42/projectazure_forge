@@ -1,27 +1,27 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,7 +46,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
         double d0 = (double)blockpos.getX() + 0.5D;
         double d1 = (double)blockpos.getY() + 0.5D;
         double d2 = (double)blockpos.getZ() + 0.5D;
-        this.moveTo(d0, d1, d2, this.yRot, this.xRot);
+        this.moveTo(d0, d1, d2, this.getYRot(), this.getXRot());
         shooter.getCommandSenderWorld().addFreshEntity(this);
     }
 
@@ -87,7 +87,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
     @Override
     public void tick() {
         Entity entity = this.getOwner();
-        if (this.level.isClientSide || (entity == null || !entity.removed) && this.level.hasChunkAt(this.blockPosition())) {
+        if (this.level.isClientSide || (entity == null || !entity.isRemoved()) && this.level.hasChunkAt(this.blockPosition())) {
             super.tick();
 
             HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
@@ -102,7 +102,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
             double d2 = this.getZ() + vector3d.z;
             this.setPos(d0, d1, d2);
         } else {
-            this.remove();
+            this.discard();
         }
 
         if(!this.getCommandSenderWorld().isClientSide()){
@@ -141,7 +141,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
 
             if(!this.targetEntity.isAlive()){
                 this.getCommandSenderWorld().explode(this, this.getX(), this.getY(), this.getZ(), 0, Explosion.BlockInteraction.NONE);
-                this.remove();
+                this.discard();
             }
 
             HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
@@ -180,7 +180,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
 
     @Override
     public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-        this.remove();
+        this.discard();
         return true;
     }
 
@@ -203,7 +203,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
 
     private void Detonate(){
         this.level.explode(this, this.getX(), getY(), getZ(), 1F, Explosion.BlockInteraction.BREAK);
-        this.remove();
+        this.discard();
     }
 
     @Override

@@ -7,31 +7,25 @@ import com.yor42.projectazure.gameobject.items.tools.ItemSyringe;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.PlaySoundPacket;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.potion.*;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
-import net.minecraft.world.entity.ai.behavior.EntityTracker;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ThrowablePotionItem;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.potion.*;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import staticnet.minecraft.world.effect.MobEffectsork.PacketDistributor.TRACKING_ENTITY_AND_SELF;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,6 +35,13 @@ import java.util.Optional;
 import static com.yor42.projectazure.setup.register.registerSounds.SYRINGE_INJECT;
 import static net.minecraft.potion.Effects.HEAL;
 import static net.minecraft.potion.Effects.REGENERATION;
+import staticnet.minecraft.world.effect.MobEffectsork.PacketDistributor.TRACKING_ENTITY_AND_SELF;
+
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 
 public class CompanionHealAllyAndPlayerTask extends Behavior<AbstractEntityCompanion> {
 

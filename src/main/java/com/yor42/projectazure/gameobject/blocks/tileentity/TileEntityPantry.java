@@ -4,29 +4,25 @@ import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.blocks.PantryBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerPantry;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.util.*;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Container;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -35,23 +31,29 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+
 public class TileEntityPantry extends BlockEntity implements Container {
     private int openCount;
-    public TileEntityPantry() {
-        super(registerTE.PANTRY.get());
+    public TileEntityPantry(BlockPos blockpos, BlockState blockstate) {
+        super(registerTE.PANTRY.get(), blockpos, blockstate);
     }
 
     @Nonnull
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        compound.put("inventory", this.inventory.serializeNBT());
-        return super.save(compound);
+    public void saveAdditional(CompoundTag compoundtag) {
+        super.saveAdditional(compoundtag);
+        compoundtag.put("inventory", this.inventory.serializeNBT());
     }
 
     @Override
-    public void load(@Nonnull BlockState p_230337_1_, @Nonnull CompoundTag compoundNBT) {
-        super.load(p_230337_1_, compoundNBT);
-        this.inventory.deserializeNBT(compoundNBT.getCompound("inventory"));
+    public void load(CompoundTag compoundtag) {
+        super.load(compoundtag);
+        this.inventory.deserializeNBT(compoundtag.getCompound("inventory"));
     }
 
     private final ItemStackHandler inventory = new ItemStackHandler(54){
@@ -134,7 +136,7 @@ public class TileEntityPantry extends BlockEntity implements Container {
     }
 
     private void scheduleRecheck() {
-        this.level.getBlockTicks().scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), 5);
+        this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), 5);
     }
 
     private void updateBlockState(BlockState p_213963_1_, boolean p_213963_2_) {

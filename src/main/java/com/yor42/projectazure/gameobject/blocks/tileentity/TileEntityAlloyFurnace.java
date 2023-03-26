@@ -6,27 +6,29 @@ import com.yor42.projectazure.gameobject.crafting.recipes.AlloyingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -34,7 +36,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements MenuProvider, RecipeHolder, StackedContentsCompatible, TickableBlockEntity {
+public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements MenuProvider, RecipeHolder, StackedContentsCompatible, BlockEntityTicker<TileEntityAlloyFurnace> {
 
     ItemStackHandler inventory = new ItemStackHandler(4);
     private int burnTime;
@@ -82,24 +84,24 @@ public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
     protected final RecipeType<AlloyingRecipe> recipeType = registerRecipes.Types.ALLOYING;
 
-    public TileEntityAlloyFurnace() {
-        super(registerTE.ALLOY_FURNACE.get());
+    public TileEntityAlloyFurnace(BlockPos blockpos, BlockState blockstate) {
+        super(registerTE.ALLOY_FURNACE.get(), blockpos, blockstate);
     }
 
     private boolean isBurning() {
         return this.burnTime > 0;
     }
 
-    public void load(BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
-        this.inventory.deserializeNBT(nbt.getCompound("inventory"));
-        this.burnTime = nbt.getInt("BurnTime");
-        this.cookTime = nbt.getInt("CookTime");
-        this.cookTimeTotal = nbt.getInt("CookTimeTotal");
+    public void load(CompoundTag compoundtag) {
+        super.load(compoundtag);
+        this.inventory.deserializeNBT(compoundtag.getCompound("inventory"));
+        this.burnTime = compoundtag.getInt("BurnTime");
+        this.cookTime = compoundtag.getInt("CookTime");
+        this.cookTimeTotal = compoundtag.getInt("CookTimeTotal");
 
         //This is where forge kicks in
-        this.totalBurntime = ForgeHooks.getBurnTime(this.inventory.getStackInSlot(2));
-        CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
+        this.totalBurntime = ForgeHooks.getBurnTime(this.inventory.getStackInSlot(2), this.recipeType);
+        CompoundTag compoundnbt = compoundtag.getCompound("RecipesUsed");
 
         for(String s : compoundnbt.getAllKeys()) {
             this.recipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
@@ -107,18 +109,17 @@ public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements 
 
     }
 
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
-        compound.putInt("BurnTime", this.burnTime);
-        compound.putInt("CookTime", this.cookTime);
-        compound.putInt("CookTimeTotal", this.cookTimeTotal);
-        compound.put("inventory", this.inventory.serializeNBT());
+    public void saveAdditional(CompoundTag compoundtag) {
+        super.saveAdditional(compoundtag);
+        compoundtag.putInt("BurnTime", this.burnTime);
+        compoundtag.putInt("CookTime", this.cookTime);
+        compoundtag.putInt("CookTimeTotal", this.cookTimeTotal);
+        compoundtag.put("inventory", this.inventory.serializeNBT());
         CompoundTag compoundnbt = new CompoundTag();
         this.recipes.forEach((recipeId, craftedAmount) -> {
             compoundnbt.putInt(recipeId.toString(), craftedAmount);
         });
-        compound.put("RecipesUsed", compoundnbt);
-        return compound;
+        compoundtag.put("RecipesUsed", compoundnbt);
     }
 
     @Override
@@ -215,7 +216,7 @@ public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements 
     }
 
     @Override
-    public void tick() {
+    public void tick(Level level, BlockPos blockpos, BlockState blockstate, TileEntityAlloyFurnace tileentityalloyfurnace) {
         boolean flag = this.isBurning();
         boolean flag1 = false;
         if (this.isBurning()) {

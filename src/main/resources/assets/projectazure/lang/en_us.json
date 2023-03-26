@@ -811,11 +811,5 @@
   "gui.tooltip.homepos": "Bed Location",
   "gui.tooltip.aggressive.on": "This companion will attack hostile entity first",
   "gui.tooltip.aggressive.off": "This companion won't attack hostile entity first",
-  "gui.team.injured": "INJURED",
-  "message.companion.bedmissing": "Companion %s Does not have valid bed!",
-  "message.commandstick.entity_bedpos_differentdimension": "Registered bed %s is in different dimension!",
-  "message.commandstick.entity_bedpos_invalid": "Registered Bed Position %s is invalid!",
-  "entity.status.sleeping": "Sleeping",
-  "entity.status.retreat": "Retreating",
-  "message.commandstick.entity_pantrypos_invalid": "Registered Pantry position %s is Invalid!"
+  "gui.team.injured": "INJURED"
 }

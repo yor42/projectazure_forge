@@ -13,16 +13,15 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.Ha
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 
 public class OriginiumGeneratorControllerTE extends ControllerTileEntity {
     public static final ControllerDefinition OriginiumGeneratorDefinition = new ControllerDefinition(new ResourceLocation(Constants.MODID, "originium_generator"), OriginiumGeneratorControllerTE.class);
-
-    public OriginiumGeneratorControllerTE(ControllerDefinition definition, BlockPos pos, BlockState state) {
-        super(definition, pos, state);
+    public OriginiumGeneratorControllerTE(ControllerDefinition definition, BlockPos blockpos, BlockState blockstate) {
+        super(definition, blockpos, blockstate);
     }
 
     public static void registerTE(){

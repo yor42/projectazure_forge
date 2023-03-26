@@ -1,10 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.companion;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

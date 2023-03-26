@@ -4,10 +4,9 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
-import java.util.function.Supplier;
 
 public class registerTE {
 
@@ -19,7 +18,7 @@ public class registerTE {
     public static final RegistryObject<BlockEntityType<TileEntityCrystalGrowthChamber>> CRYSTAL_GROWTH_CHAMBER = register("crystal_growth_chamber_te", TileEntityCrystalGrowthChamber::new, RegisterBlocks.CRYSTAL_GROWTH_CHAMBER);
     public static final RegistryObject<BlockEntityType<TileEntityPantry>> PANTRY = register("pantry_te", TileEntityPantry::new, RegisterBlocks.OAK_PANTRY, RegisterBlocks.CRIMSON_PANTRY, RegisterBlocks.JUNGLE_PANTRY, RegisterBlocks.ACACIA_PANTRY, RegisterBlocks.BIRCH_PANTRY, RegisterBlocks.SPRUCE_PANTRY, RegisterBlocks.WARPED_PANTRY, RegisterBlocks.DARK_OAK_PANTRY);
     @SafeVarargs
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<Block>... block){
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> factory, RegistryObject<Block>... block){
         //About Mojang's Data Fixer. Afaik Mod can't even use it. and its annotated to non null. KEKW
         //noinspection ConstantConditions
         return RegisterContainer.TILE_ENTITY.register(name, () -> BlockEntityType.Builder.of(factory, RegistryObject2Block(block)).build(null));

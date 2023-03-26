@@ -1,24 +1,24 @@
 package com.yor42.projectazure.gameobject.entity;
 
-import net.minecraft.block.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.pathfinding.*;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.level.pathfinder.Node;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.pathfinder.Target;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.NodeEvaluator;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.pathfinder.Target;
 
 public class CompanionSwimNodeProcessor extends net.minecraft.world.level.pathfinder.WalkNodeEvaluator {
 
@@ -97,7 +97,7 @@ public class CompanionSwimNodeProcessor extends net.minecraft.world.level.pathfi
         if (type != null) return type;
         Block block = blockstate.getBlock();
         Material material = blockstate.getMaterial();
-        if (blockstate.isAir(p_237238_0_, p_237238_1_)) {
+        if (blockstate.isAir()) {
             return BlockPathTypes.OPEN;
         } else if (!blockstate.is(BlockTags.TRAPDOORS) && !blockstate.is(Blocks.LILY_PAD)) {
             if (blockstate.is(Blocks.CACTUS)) {
@@ -126,7 +126,7 @@ public class CompanionSwimNodeProcessor extends net.minecraft.world.level.pathfi
                     return BlockPathTypes.RAIL;
                 } else if (block instanceof LeavesBlock) {
                     return BlockPathTypes.LEAVES;
-                } else if (!block.is(BlockTags.FENCES) && !block.is(BlockTags.WALLS) && (!(block instanceof FenceGateBlock) || blockstate.getValue(FenceGateBlock.OPEN))) {
+                } else if (!blockstate.is(BlockTags.FENCES) && !blockstate.is(BlockTags.WALLS) && (!(block instanceof FenceGateBlock) || blockstate.getValue(FenceGateBlock.OPEN))) {
                     return !blockstate.isPathfindable(p_237238_0_, p_237238_1_, PathComputationType.LAND) ? BlockPathTypes.BLOCKED : BlockPathTypes.OPEN;
                 } else {
                     return BlockPathTypes.FENCE;
@@ -137,9 +137,9 @@ public class CompanionSwimNodeProcessor extends net.minecraft.world.level.pathfi
         }
     }
 
-    private static boolean isBurningBlock(BlockState p_237233_0_) {
-        return p_237233_0_.is(BlockTags.FIRE) || p_237233_0_.is(Blocks.LAVA) || p_237233_0_.is(Blocks.MAGMA_BLOCK) || CampfireBlock.isLitCampfire(p_237233_0_);
-    }
+    // private static boolean isBurningBlock(BlockState p_237233_0_) {
+    //     return p_237233_0_.is(BlockTags.FIRE) || p_237233_0_.is(Blocks.LAVA) || p_237233_0_.is(Blocks.MAGMA_BLOCK) || CampfireBlock.isLitCampfire(p_237233_0_);
+    // }
 
     @Nullable
     private Node getWaterNode(int p_186328_1_, int p_186328_2_, int p_186328_3_) {

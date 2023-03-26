@@ -3,16 +3,17 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.server.level.ServerLevel;
 
+import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 
 public class CompanionUseShieldTask extends Behavior<AbstractEntityCompanion> {

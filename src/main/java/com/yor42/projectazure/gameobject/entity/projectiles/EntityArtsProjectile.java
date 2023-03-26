@@ -1,23 +1,24 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.gameobject.SMath;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
-import net.minecraft.world.level.Level;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -67,31 +68,31 @@ public class EntityArtsProjectile extends AbstractHurtingProjectile {
             for (int i2 = 0; i2 < 8; ++i2) {
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE, (double) blockPosIn.getX() + random.nextDouble(), (double) blockPosIn.getY() + 1.2D, (double) blockPosIn.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
             }
-            this.remove();
+            this.discard();
         }
     }
 
     @Override
-    public void remove() {
+    public void remove(Entity.RemovalReason removalreason) {
         this.playSound(registerSounds.CHIMERA_PROJECTILE_HIT, 1F, 0.8F + this.level.random.nextFloat() * 0.4F);
-        super.remove();
+        super.remove(removalreason);
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale(velocity);
         this.setDeltaMovement(vector3d);
-        float f = Mth.sqrt(getHorizontalDistanceSqr(vector3d));
-        this.yRot = (float)(Mth.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
-        this.xRot = (float)(Mth.atan2(vector3d.y, f) * (double)(180F / (float)Math.PI));
-        this.yRotO = this.yRot;
-        this.xRotO = this.xRot;
+        float f = (float)Math.sqrt(SMath.getHorizontalDistanceSqr(vector3d));
+        this.setYRot((float)(Mth.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI)));
+        this.setXRot((float)(Mth.atan2(vector3d.y, f) * (double)(180F / (float)Math.PI)));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
     }
 
     @Override
     public void tick() {
         super.tick();
         if(this.tickCount == 600 || this.isInWater()){
-            this.remove();
+            this.discard();
         }
     }
 
@@ -111,7 +112,7 @@ public class EntityArtsProjectile extends AbstractHurtingProjectile {
                 LivingTarget.addEffect(this.Effect);
             }
 
-            this.remove();
+            this.discard();
         }
     }
 

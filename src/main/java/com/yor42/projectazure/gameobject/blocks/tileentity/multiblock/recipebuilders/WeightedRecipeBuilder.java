@@ -6,7 +6,6 @@ import com.lowdragmc.lowdraglib.utils.DummyWorld;
 import com.lowdragmc.multiblocked.Multiblocked;
 import com.lowdragmc.multiblocked.api.capability.MultiblockCapability;
 import com.lowdragmc.multiblocked.api.recipe.*;
-import com.lowdragmc.multiblocked.api.recipe.ingredient.EntityIngredient;
 import com.lowdragmc.multiblocked.common.capability.*;
 import com.lowdragmc.multiblocked.common.recipe.conditions.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
@@ -18,13 +17,11 @@ import mekanism.api.chemical.gas.GasStack;
 import mekanism.api.chemical.infuse.InfusionStack;
 import mekanism.api.chemical.pigment.PigmentStack;
 import mekanism.api.chemical.slurry.SlurryStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.*;
@@ -36,7 +33,7 @@ public class WeightedRecipeBuilder {
     public final Map<MultiblockCapability<?>, ImmutableList.Builder<Content>> tickInputBuilder = new HashMap<>();
     public final Map<MultiblockCapability<?>, ImmutableList.Builder<Content>> outputBuilder = new HashMap<>();
     public final Map<MultiblockCapability<?>, ImmutableList.Builder<Content>> tickOutputBuilder = new HashMap<>();
-    public CompoundTag data = new CompoundTag();
+    public final Map<String, Object> data = new HashMap<>();
 
     public final List<RecipeCondition> conditions = new ArrayList<>();
     protected int duration;
@@ -68,7 +65,7 @@ public class WeightedRecipeBuilder {
             ImmutableList.Builder<Content> builder = ImmutableList.builder();
             copy.tickOutputBuilder.put(k, builder.addAll(v.build()));
         });
-        copy.data.merge(data);
+        copy.data.putAll(data);
         copy.conditions.addAll(conditions);
         copy.duration = this.duration;
         copy.fixedName = null;
@@ -82,8 +79,8 @@ public class WeightedRecipeBuilder {
         return this;
     }
 
-    public WeightedRecipeBuilder data(CompoundTag tag) {
-        this.data = tag;
+    public WeightedRecipeBuilder data(String key, Object object) {
+        this.data.put(key, object);
         return this;
     }
 
@@ -114,26 +111,26 @@ public class WeightedRecipeBuilder {
     }
 
     public <T> WeightedRecipeBuilder input(MultiblockCapability<T> capability, T... obj) {
-        (perTick ? tickInputBuilder : inputBuilder).computeIfAbsent(capability, c -> ImmutableList.builder()).addAll(Arrays.stream(obj).map(o->new Content(o, chance, null, slotName)).iterator());
+        (perTick ? tickInputBuilder : inputBuilder).computeIfAbsent(capability, c -> ImmutableList.builder()).addAll(Arrays.stream(obj).map(o->new Content(o, chance, slotName)).iterator());
         return this;
     }
 
     public <T> WeightedRecipeBuilder output(MultiblockCapability<T> capability, T... obj) {
-        (perTick ? tickOutputBuilder : outputBuilder).computeIfAbsent(capability, c -> ImmutableList.builder()).addAll(Arrays.stream(obj).map(o->new Content(o, chance, null, slotName)).iterator());
+        (perTick ? tickOutputBuilder : outputBuilder).computeIfAbsent(capability, c -> ImmutableList.builder()).addAll(Arrays.stream(obj).map(o->new Content(o, chance, slotName)).iterator());
         return this;
     }
 
     public <T> WeightedRecipeBuilder inputs(MultiblockCapability<T> capability, Object... obj) {
         (perTick ? tickInputBuilder : inputBuilder).computeIfAbsent(capability, c -> ImmutableList.builder()).addAll(Arrays.stream(obj)
                 .map(capability::of)
-                .map(o->new Content(o, chance, null, slotName)).iterator());
+                .map(o->new Content(o, chance, slotName)).iterator());
         return this;
     }
 
     public <T> WeightedRecipeBuilder outputs(MultiblockCapability<T> capability, Object... obj) {
         (perTick ? tickOutputBuilder : outputBuilder).computeIfAbsent(capability, c -> ImmutableList.builder()).addAll(Arrays.stream(obj)
                 .map(capability::of)
-                .map(o->new Content(o, chance, null, slotName)).iterator());
+                .map(o->new Content(o, chance, slotName)).iterator());
         return this;
     }
 
@@ -150,12 +147,12 @@ public class WeightedRecipeBuilder {
         return output(FEMultiblockCapability.CAP, forgeEnergy);
     }
 
-    public WeightedRecipeBuilder inputItems(Ingredient... inputs) {
+    public WeightedRecipeBuilder inputItems(ItemsIngredient... inputs) {
         return input(ItemMultiblockCapability.CAP, inputs);
     }
 
     public WeightedRecipeBuilder outputItems(ItemStack... outputs) {
-        return output(ItemMultiblockCapability.CAP, Arrays.stream(outputs).map(Ingredient::of).toArray(Ingredient[]::new));
+        return output(ItemMultiblockCapability.CAP, Arrays.stream(outputs).map(ItemsIngredient::new).toArray(ItemsIngredient[]::new));
     }
 
     public WeightedRecipeBuilder inputFluids(FluidStack... inputs) {
@@ -337,7 +334,7 @@ public class WeightedRecipeBuilder {
         for (Map.Entry<MultiblockCapability<?>, ImmutableList.Builder<Content>> entry : this.tickOutputBuilder.entrySet()) {
             tickOutputBuilder.put(entry.getKey(), entry.getValue().build());
         }
-        return new Recipe(fixedName == null ? UUID.randomUUID().toString() : fixedName, inputBuilder.build(), outputBuilder.build(), tickInputBuilder.build(), tickOutputBuilder.build(), ImmutableList.copyOf(conditions), data.isEmpty() ? new CompoundTag() : data.copy(), text, duration);
+        return new Recipe(fixedName == null ? UUID.randomUUID().toString() : fixedName, inputBuilder.build(), outputBuilder.build(), tickInputBuilder.build(), tickOutputBuilder.build(), ImmutableList.copyOf(conditions), data.isEmpty() ? Recipe.EMPTY : ImmutableMap.copyOf(data), text, duration);
     }
 
     public WeightedRandomRecipe buildWeighted() {
@@ -357,7 +354,7 @@ public class WeightedRecipeBuilder {
         for (Map.Entry<MultiblockCapability<?>, ImmutableList.Builder<Content>> entry : this.tickOutputBuilder.entrySet()) {
             tickOutputBuilder.put(entry.getKey(), entry.getValue().build());
         }
-        return new WeightedRandomRecipe(fixedName == null ? UUID.randomUUID().toString() : fixedName, inputBuilder.build(), outputBuilder.build(), tickInputBuilder.build(), tickOutputBuilder.build(), ImmutableList.copyOf(conditions), data.isEmpty() ? new CompoundTag() : data.copy(), text, duration);
+        return new WeightedRandomRecipe(fixedName == null ? UUID.randomUUID().toString() : fixedName, inputBuilder.build(), outputBuilder.build(), tickInputBuilder.build(), tickOutputBuilder.build(), ImmutableList.copyOf(conditions), data.isEmpty() ? Recipe.EMPTY : ImmutableMap.copyOf(data), text, duration);
     }
 
     public WeightedRecipeBuilder addCompanionOutput(EntityType<?extends AbstractEntityCompanion> type) {
@@ -395,7 +392,7 @@ public class WeightedRecipeBuilder {
         for (Map.Entry<MultiblockCapability<?>, ImmutableList.Builder<Content>> entry : this.tickOutputBuilder.entrySet()) {
             tickOutputBuilder.put(entry.getKey(), entry.getValue().build());
         }
-        return new RiftwayRecipes(fixedName == null ? UUID.randomUUID().toString() : fixedName, inputBuilder.build(), outputBuilder.build(), tickInputBuilder.build(), tickOutputBuilder.build(), ImmutableList.copyOf(conditions), data, text, duration);
+        return new RiftwayRecipes(fixedName == null ? UUID.randomUUID().toString() : fixedName, inputBuilder.build(), outputBuilder.build(), tickInputBuilder.build(), tickOutputBuilder.build(), ImmutableList.copyOf(conditions), data.isEmpty() ? Recipe.EMPTY : ImmutableMap.copyOf(data), text, duration);
     }
 
     public void buildAndRegisterRiftway() {

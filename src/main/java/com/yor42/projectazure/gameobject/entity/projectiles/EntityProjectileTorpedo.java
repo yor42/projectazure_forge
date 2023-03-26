@@ -1,24 +1,25 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.SMath;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerEntity;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -45,7 +46,7 @@ public class EntityProjectileTorpedo extends AbstractHurtingProjectile implement
     @OnlyIn(Dist.CLIENT)
     public EntityProjectileTorpedo(Level worldIn, double x, double y, double z, double motionXIn, double motionYIn, double motionZIn) {
         this(registerEntity.PROJECTILE_TORPEDO.get(), worldIn);
-        this.moveTo(x, y, z, this.yRot, this.xRot);
+        this.moveTo(x, y, z, this.getYRot(), this.getXRot());
         this.setDeltaMovement(motionXIn, motionYIn, motionZIn);
     }
 
@@ -114,18 +115,18 @@ public class EntityProjectileTorpedo extends AbstractHurtingProjectile implement
         Vec3 vector3d = this.getDeltaMovement();
 
         if (vector3d.lengthSqr() != 0.0D) {
-            float f = Mth.sqrt(Entity.getHorizontalDistanceSqr(vector3d));
-            this.yRot = (float)(Mth.atan2(vector3d.z, vector3d.x) * (double)(180F / (float)Math.PI)) + 90.0F;
+            float f = (float)Math.sqrt(SMath.getHorizontalDistanceSqr(vector3d));
+            this.setYRot((float)(Mth.atan2(vector3d.z, vector3d.x) * (double)(180F / (float)Math.PI)) + 90.0F);
 
-            while(this.xRot - this.xRotO >= 180.0F) {
+            while(this.getXRot() - this.xRotO >= 180.0F) {
                 this.xRotO += 360.0F;
             }
 
-            while(this.yRot - this.yRotO < -180.0F) {
+            while(this.getYRot() - this.yRotO < -180.0F) {
                 this.yRotO -= 360.0F;
             }
 
-            while(this.yRot - this.yRotO >= 180.0F) {
+            while(this.getYRot() - this.yRotO >= 180.0F) {
                 this.yRotO += 360.0F;
             }
         }
@@ -134,7 +135,7 @@ public class EntityProjectileTorpedo extends AbstractHurtingProjectile implement
     @Override
     protected void onHit(HitResult result) {
         explode();
-        this.remove();
+        this.discard();
     }
 
     @Override
@@ -157,7 +158,7 @@ public class EntityProjectileTorpedo extends AbstractHurtingProjectile implement
 
     private void selfDestruct(){
         this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, Explosion.BlockInteraction.BREAK);
-        this.remove();
+        this.discard();
     }
 
     @Override
