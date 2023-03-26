@@ -12,7 +12,6 @@ import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,9 +23,11 @@ public class SiliconeCrucibleTE extends ControllerTileEntity {
     public static final RecipeMap SILICONCRUCIBLE_RECIPEMAP;
     public static final ControllerDefinition DEF = new ControllerDefinition(new ResourceLocation(Constants.MODID, "siliconecrucible"), SiliconeCrucibleTE.class);
     private static final MBDGeoRenderer renderer = new MBDGeoRenderer("siliconecrucible", false);
-    public SiliconeCrucibleTE(ControllerDefinition definition, BlockPos blockpos, BlockState blockstate) {
-        super(definition, blockpos, blockstate);
+
+    public SiliconeCrucibleTE(ControllerDefinition definition, BlockPos pos, BlockState state) {
+        super(definition, pos, state);
     }
+
 
     public static void RegisterTE(){
         DEF.setRecipeMap(SILICONCRUCIBLE_RECIPEMAP);

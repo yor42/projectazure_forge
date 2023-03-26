@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.crafting.ingredients;
 
-import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
+import com.lowdragmc.multiblocked.api.recipe.ingredient.EntityIngredient;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

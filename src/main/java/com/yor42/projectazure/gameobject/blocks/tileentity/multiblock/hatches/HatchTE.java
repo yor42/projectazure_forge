@@ -13,11 +13,12 @@ import com.lowdragmc.multiblocked.api.tile.part.PartTileEntity;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -30,7 +31,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 //We do little bit of multiblock fuckery
-public class HatchTE extends PartTileEntity<PartDefinition> {
+public abstract class HatchTE extends PartTileEntity<PartDefinition> {
+
+    public HatchTE(PartDefinition definition, BlockPos pos, BlockState state, HatchType type) {
+        super(definition, pos, state);
+        this.type = type;
+    }
 
     public enum HatchType{
         FLUID,
@@ -39,20 +45,15 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
         ENTITY
     }
 
-    public static final PartDefinition ItemHatchDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "item_hatch"), (definition)->new HatchTE(definition, HatchType.ITEM));
-    public static final PartDefinition EnergyHatchDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "energy_hatch"),(definition)->new HatchTE(definition, HatchType.ENERGY));
-    public static final PartDefinition FluidHatchDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "fluid_hatch"),(definition)->new HatchTE(definition, HatchType.FLUID));
-    public static final PartDefinition EntityDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "entity_hatch"),(definition)->new HatchTE(definition, HatchType.ENTITY));
+    public static final PartDefinition ItemHatchDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "item_hatch"), HatchTE.ItemTE.class);
+    public static final PartDefinition EnergyHatchDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "energy_hatch"),HatchTE.EnergyTE.class);
+    public static final PartDefinition FluidHatchDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "fluid_hatch"),HatchTE.FluidTE.class);
+    public static final PartDefinition EntityDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "entity_hatch"),HatchTE.EntityTE.class);
 
-    private final HatchType type;
-
-
+    protected final HatchType type;
 
 
-    public HatchTE(PartDefinition definition, HatchType type) {
-        super(definition);
-        this.type = type;
-    }
+
 
     private final ItemStackHandler inventory = new ItemStackHandler(1);
     private final LazyOptional<ItemStackHandler> INVENTORY = LazyOptional.of(()->this.inventory);
@@ -65,22 +66,22 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
     @Override
     public <K> LazyOptional<K> getCapability(@Nonnull Capability<K> capability, @Nullable Direction facing) {
 
-        switch(this.type){
-            case ITEM:
-                if(capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+        switch (this.type) {
+            case ITEM -> {
+                if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
                     return INVENTORY.cast();
                 }
-                break;
-            case ENERGY:
-                if(capability == CapabilityEnergy.ENERGY){
+            }
+            case ENERGY -> {
+                if (capability == CapabilityEnergy.ENERGY) {
                     return BATTERY.cast();
                 }
-                break;
-            case FLUID:
-                if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+            }
+            case FLUID -> {
+                if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
                     return TANK.cast();
                 }
-                break;
+            }
         }
         return super.getCapability(capability, facing);
     }
@@ -92,46 +93,34 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
         return (new ModularUI(196, 166, this, PlayerEntity)).widget(tabContainer);
     }
 
-    protected void initTraitUI(TabContainer tabContainer, Player PlayerEntity) {
+    public void initTraitUI(TabContainer tabContainer, Player PlayerEntity) {
         WidgetGroup group = new WidgetGroup(20, 0, 176, 256);
 
-        String textureloc;
+        String textureloc = switch (this.type) {
+            case ITEM -> Constants.MODID + ":textures/gui/item_hatch.png";
+            default -> Constants.MODID + ":textures/gui/hatch_other.png";
+            case FLUID -> Constants.MODID + ":textures/gui/hatch_fluid.png";
+        };
 
-        switch (this.type){
-            case ITEM:
-                textureloc = Constants.MODID+":textures/gui/item_hatch.png";
-                break;
-            default:
-                textureloc = Constants.MODID+":textures/gui/hatch_other.png";
-                break;
-            case FLUID:
-                textureloc = Constants.MODID+":textures/gui/hatch_fluid.png";
-                break;
-        }
         tabContainer.addTab((new TabButton(0, tabContainer.containerGroup.widgets.size() * 20, 20, 20)).setTexture((new ResourceTexture("multiblocked:textures/gui/custom_gui_tab_button.png")).getSubTexture(0.0, 0.0, 1.0, 0.5), (new ResourceTexture("multiblocked:textures/gui/custom_gui_tab_button.png")).getSubTexture(0.0, 0.5, 1.0, 0.5)), group);
         group.addWidget(new ImageWidget(0, 0, 256, 256, new ResourceTexture(textureloc)));
 
-        switch (this.type){
-            case ITEM:
-                group.addWidget(new SlotWidget(this.inventory, 0, 79, 35, true, true));
-                break;
-            case ENERGY:
-                group.addWidget((new ProgressWidget(this::getProgress, 7, 37, 162, 14, new ResourceTexture(Constants.MODID+":textures/gui/hatch_energybar.png"))).setDynamicHoverTips(this::dynamicEnergyHoverTips));
-                break;
-            case FLUID:
-                group.addWidget((new TankWidget(this.tank, 61, 16,54, 54, true, true)));
-                break;
+        switch (this.type) {
+            case ITEM -> group.addWidget(new SlotWidget(this.inventory, 0, 79, 35, true, true));
+            case ENERGY ->
+                    group.addWidget((new ProgressWidget(this::getProgress, 7, 37, 162, 14, new ResourceTexture(Constants.MODID + ":textures/gui/hatch_energybar.png"))).setDynamicHoverTips(this::dynamicEnergyHoverTips));
+            case FLUID -> group.addWidget((new TankWidget(this.tank, 61, 16, 54, 54, true, true)));
         }
         
         int slot;
         for(slot = 0; slot < 3; ++slot) {
             for(int col = 0; col < 9; ++col) {
-                group.addWidget((new SlotWidget(PlayerEntity.inventory, col + (slot + 1) * 9, 7 + col * 18, 83 + slot * 18)).setLocationInfo(true, false));
+                group.addWidget((new SlotWidget(PlayerEntity.getInventory(), col + (slot + 1) * 9, 7 + col * 18, 83 + slot * 18)).setLocationInfo(true, false));
             }
         }
 
         for(slot = 0; slot < 9; ++slot) {
-            group.addWidget((new SlotWidget(PlayerEntity.inventory, slot, 7 + slot * 18, 141)).setLocationInfo(true, true));
+            group.addWidget((new SlotWidget(PlayerEntity.getInventory(), slot, 7 + slot * 18, 141)).setLocationInfo(true, true));
         }
 
     }
@@ -143,19 +132,18 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
         return LocalizationUtils.format("multiblocked.gui.trait.fe.progress", (int)((double)this.battery.getMaxEnergyStored() * progress), this.battery.getMaxEnergyStored());
     }
 
-    @Nonnull
+
     @Override
-    public CompoundTag save(@Nonnull CompoundTag compound) {
-        compound = super.save(compound);
+    public void saveAdditional(@Nonnull CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.put("inventory", this.inventory.serializeNBT());
         compound.put("tank", this.tank.writeToNBT(new CompoundTag()));
         compound.put("battery", this.battery.serializeNBT());
-        return compound;
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
-        super.load(state, compound);
+    public void load(@Nonnull CompoundTag compound) {
+        super.load(compound);
         this.inventory.deserializeNBT(compound.getCompound("inventory"));
         this.tank.readFromNBT(compound.getCompound("tank"));
         this.battery.deserializeNBT(compound.getCompound("battery"));
@@ -200,5 +188,28 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
 
     }
 
+    private class EnergyTE extends HatchTE{
+        public EnergyTE(PartDefinition definition, BlockPos pos, BlockState state) {
+            super(definition, pos, state, HatchType.ENERGY);
+        }
+    }
+
+    private class ItemTE extends HatchTE{
+        public ItemTE(PartDefinition definition, BlockPos pos, BlockState state) {
+            super(definition, pos, state, HatchType.ITEM);
+        }
+    }
+
+    private class FluidTE extends HatchTE{
+        public FluidTE(PartDefinition definition, BlockPos pos, BlockState state) {
+            super(definition, pos, state, HatchType.FLUID);
+        }
+    }
+
+    private class EntityTE extends HatchTE{
+        public EntityTE(PartDefinition definition, BlockPos pos, BlockState state) {
+            super(definition, pos, state, HatchType.ENTITY);
+        }
+    }
 
 }

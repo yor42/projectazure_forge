@@ -13,15 +13,15 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.Ha
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class AdvancedAlloySmelterControllerTE extends ControllerTileEntity {
     public static final ControllerDefinition SMELTRYDefinition = new ControllerDefinition(new ResourceLocation(Constants.MODID, "advanced_alloy_smelter"), AdvancedAlloySmelterControllerTE.class);
-    public AdvancedAlloySmelterControllerTE(ControllerDefinition definition, BlockPos blockpos, BlockState blockstate) {
-        super(definition, blockpos, blockstate);
+
+    public AdvancedAlloySmelterControllerTE(ControllerDefinition definition, BlockPos pos, BlockState state) {
+        super(definition, pos, state);
     }
 
     public static void registerTE(){

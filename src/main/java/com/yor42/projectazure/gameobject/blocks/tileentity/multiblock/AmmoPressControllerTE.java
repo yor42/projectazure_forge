@@ -14,17 +14,16 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.Ha
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-
-import static com.lowdragmc.multiblocked.api.block.CustomProperties.RotationState.Y_AXIS;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class AmmoPressControllerTE extends ControllerTileEntity {
     public static final ControllerDefinition AmmoPressDefinition = new ControllerDefinition(new ResourceLocation(Constants.MODID, "ammo_press"), AmmoPressControllerTE.class);
-    public AmmoPressControllerTE(ControllerDefinition definition, BlockPos blockpos, BlockState blockstate) {
-        super(definition, blockpos, blockstate);
+
+    public AmmoPressControllerTE(ControllerDefinition definition, BlockPos pos, BlockState state) {
+        super(definition, pos, state);
     }
 
     @Override
