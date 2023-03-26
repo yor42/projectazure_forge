@@ -19,8 +19,6 @@ import net.minecraft.server.level.ServerLevel;
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.LOOK_TARGET;
 

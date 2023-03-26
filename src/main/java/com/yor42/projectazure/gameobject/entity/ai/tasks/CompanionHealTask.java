@@ -97,7 +97,7 @@ public class CompanionHealTask extends Behavior<AbstractEntityCompanion> {
 
             ThrownPotion potionentity = new ThrownPotion(entity.getCommandSenderWorld(), entity);
             potionentity.setItem(PotionUtils.setPotion(potionStack, potion));
-            potionentity.setXRot(potionentity.getXRot() - -20.0F);
+            potionentity.setXRot(potionentity.getXRot() + 20.0F);
             potionentity.shoot(d0, d1 + (double) (f * 0.2F), d2, 0.75F, 8.0F);
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.WITCH_THROW, entity.getSoundSource(), 1.0F, 0.8F + entity.getRandom().nextFloat() * 0.4F);
             entity.swing(this.PotionHand, true);

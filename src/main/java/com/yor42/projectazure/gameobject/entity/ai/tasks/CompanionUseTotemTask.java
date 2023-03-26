@@ -14,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.TOTEM_INDEX;
-import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CompanionUseTotemTask extends Behavior<AbstractEntityCompanion> {
 
@@ -37,7 +36,7 @@ public class CompanionUseTotemTask extends Behavior<AbstractEntityCompanion> {
             ItemStack buffer = entity.getOffhandItem();
             this.previousSwitchIndex = entity.getItemSwapIndexOffHand();
             entity.getBrain().getMemory(TOTEM_INDEX.get()).ifPresent((index) -> {
-                entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(index));
+                entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(index));
                 entity.getInventory().setStackInSlot(index, buffer);
                 entity.setItemSwapIndexOffHand(index);
             });
@@ -64,13 +63,13 @@ public class CompanionUseTotemTask extends Behavior<AbstractEntityCompanion> {
     protected void stop(ServerLevel world, AbstractEntityCompanion entity, long p_212835_3_) {
         if (this.changedItemInHand) {
             ItemStack buffer = entity.getOffhandItem();
-            entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
+            entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
             entity.getInventory().setStackInSlot(entity.getItemSwapIndexOffHand(), buffer);
 
             if (this.previousSwitchIndex > -1) {
                 entity.setItemSwapIndexOffHand(this.previousSwitchIndex);
                 ItemStack buffer2 = entity.getOffhandItem();
-                entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
+                entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
                 entity.getInventory().setStackInSlot(entity.getItemSwapIndexOffHand(), buffer2);
             }
 

@@ -39,14 +39,14 @@ public class ItemThrowableKnife extends SwordItem {
                         });
                         if (j == 0) {
                             EntityThrownKnifeProjectile tridententity = new EntityThrownKnifeProjectile(PROJECTILE_THROWN_KNIFE.get(), playerentity, p_77615_2_, p_77615_1_);
-                            tridententity.shootFromRotation(playerentity, playerentity.xRot, playerentity.yRot, 0.0F, 2.5F + (float)j * 0.5F, 1.0F);
-                            if (playerentity.abilities.instabuild) {
+                            tridententity.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 2.5F + (float)j * 0.5F, 1.0F);
+                            if (playerentity.getAbilities().instabuild) {
                                 tridententity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                             }
 
                             p_77615_2_.addFreshEntity(tridententity);
-                            if (!playerentity.abilities.instabuild) {
-                                playerentity.inventory.removeItem(p_77615_1_);
+                            if (!playerentity.getAbilities().instabuild) {
+                                playerentity.getInventory().removeItem(p_77615_1_);
                             }
                         }
                     }

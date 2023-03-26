@@ -17,7 +17,6 @@ import net.minecraft.server.level.ServerLevel;
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 
 public class CompanionShipRangedAttackTask extends Behavior<AbstractEntityCompanion> {
 
@@ -25,7 +24,7 @@ public class CompanionShipRangedAttackTask extends Behavior<AbstractEntityCompan
     int torpedoAttackDelay;
 
     public CompanionShipRangedAttackTask() {
-        super(ImmutableMap.of(ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
+        super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
     }
 
     @Override
@@ -52,10 +51,10 @@ public class CompanionShipRangedAttackTask extends Behavior<AbstractEntityCompan
 
     @Override
     protected boolean canStillUse(@Nonnull ServerLevel p_212834_1_, @Nonnull AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
-        if(!p_212834_2_.getBrain().getMemory(ATTACK_TARGET).isPresent()){
+        if(!p_212834_2_.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isPresent()){
             return false;
         }
-        boolean withinrange = p_212834_2_.closerThan(p_212834_2_.getBrain().getMemory(ATTACK_TARGET).get(), p_212834_2_.getCannonRange()+2);
+        boolean withinrange = p_212834_2_.closerThan(p_212834_2_.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get(), p_212834_2_.getCannonRange()+2);
         return checkExtraStartConditions(p_212834_1_, p_212834_2_) && withinrange;
     }
 
@@ -68,7 +67,7 @@ public class CompanionShipRangedAttackTask extends Behavior<AbstractEntityCompan
     @Override
     protected void tick(ServerLevel p_212833_1_, AbstractEntityCompanion entity, long p_212833_3_) {
         if(entity instanceof EntityKansenBase) {
-            entity.getBrain().setMemory(ATTACK_TARGET, getAttackTarget(entity));
+            entity.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, getAttackTarget(entity));
             entity.lookAt(getAttackTarget(entity), 30, 30);
             if (--this.CannonAttackDelay == 0) {
                 ((EntityKansenBase) entity).AttackUsingCannon(getAttackTarget(entity));
@@ -86,7 +85,7 @@ public class CompanionShipRangedAttackTask extends Behavior<AbstractEntityCompan
             }
         }
 
-        if(entity.getBrain().getMemory(ATTACK_TARGET).map((target) ->target.isDeadOrDying() || target.removed).orElse(true)){
+        if(entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map((target) -> target.isDeadOrDying() || target.isRemoved()).orElse(true)){
             this.doStop(p_212833_1_, entity, p_212833_3_);
         }
     }

@@ -33,7 +33,7 @@ public class SawingSiliconeRecipe extends CustomRecipe {
             if(this.silicone.isEmpty() && stack.getItem() == RegisterItems.SILICONE.get()){
                 this.silicone = stack;
             }
-            else if(item instanceof ItemCraftTool && ModTags.Items.SAW.contains(item) && ((ItemCraftTool) item).getTier()>=2){
+            else if(item instanceof ItemCraftTool && stack.is(ModTags.Items.SAW) && ((ItemCraftTool) item).getTier()>=2){
                 this.saw =stack;
                 this.sawtier = i;
             }

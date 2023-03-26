@@ -30,7 +30,7 @@ public class CompanionProtectOwnerTask extends Behavior<AbstractEntityCompanion>
         LivingEntity owner = entity.getOwner();
         if(owner!=null){
 
-            if(this.onlyWhenVisible && !entity.getSensing().canSee(owner)){
+            if(this.onlyWhenVisible && !entity.getSensing().hasLineOfSight(owner)){
                 return false;
             }
 

@@ -34,16 +34,12 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
 
     @Override
     public RecipeType<PressingRecipe> getRecipeType() {
-        return new RecipeType<>(UID, PressingRecipe.class)
+        return new RecipeType<>(UID, PressingRecipe.class);
     }
 
     @Nonnull
     @Override
-    public String getTitle() {return "";}
-
-    @Nonnull
-    @Override
-    public Component getTitleAsTextComponent() {
+    public Component getTitle() {
         return new TranslatableComponent("recipe.pressing");
     }
 

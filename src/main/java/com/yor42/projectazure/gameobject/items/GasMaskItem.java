@@ -20,7 +20,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.util.text.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -191,13 +190,13 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
         if(p_77659_2_.isCrouching()){
             ItemStack filterstack = ItemStack.of(filters.getCompound(0));
             filters.remove(0);
-            int index = p_77659_2_.inventory.getFreeSlot();
+            int index = p_77659_2_.getInventory().getFreeSlot();
 
             if(index<0){
                 p_77659_2_.drop(filterstack, true, true);
             }
             else{
-                p_77659_2_.inventory.setItem(index, filterstack);
+                p_77659_2_.getInventory().setItem(index, filterstack);
             }
         }
         p_77659_2_.playSound(registerSounds.GASMASK_FILTER_REMOVE, 0.8F*(0.4F* MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));

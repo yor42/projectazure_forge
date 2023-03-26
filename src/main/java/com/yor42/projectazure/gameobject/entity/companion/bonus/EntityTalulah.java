@@ -296,8 +296,8 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public float getWorldSkillRange() {
-        return 2.5F;
+    public double getWorldSkillRange() {
+        return 2.5D;
     }
 
     @Override

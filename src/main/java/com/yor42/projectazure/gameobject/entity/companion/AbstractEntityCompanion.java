@@ -1125,7 +1125,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     }
                     this.getTeamUUID().ifPresent((team) -> Main.NETWORK.sendToServer(new EditTeamMemberPacket(team, this.getUUID(), EditTeamMemberPacket.ACTION.REMOVE)));
                 }
-                this.remove(false);
+                this.discard();
             }
         }
     }
@@ -1657,7 +1657,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     protected void hurtCurrentlyUsedShield(float damage) {
-        if (this.useItem.isShield(this)) {
+        if (this.useItem.is(Items.SHIELD)) {
             if (damage >= 3.0F) {
                 int i = (int) (1 + Math.floor(damage));
                 InteractionHand hand = this.getUsedItemHand();
@@ -1800,7 +1800,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     public void startUsingItem(@Nonnull InteractionHand hand) {
         ItemStack itemstack = this.getItemInHand(hand);
-        if (itemstack.isShield(this)) {
+        if (itemstack.is(Items.SHIELD)) {
             AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
             if(modifiableattributeinstance!=null) {
                 modifiableattributeinstance.removeModifier(USE_ITEM_SPEED_PENALTY);
@@ -2878,7 +2878,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         compoundnbt.putString("id", this.getEncodeId());
         this.saveWithoutId(compoundnbt);
         if (((IMixinPlayerEntity)p_213439_1_).setEntityonBack(compoundnbt)) {
-            this.remove();
+            this.discard();
             return true;
         } else {
             return false;

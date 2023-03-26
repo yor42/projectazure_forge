@@ -4,26 +4,25 @@ import com.google.common.collect.ImmutableMap;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.server.level.ServerLevel;
 
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
-import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
-
 public class CompanionUseShieldTask extends Behavior<AbstractEntityCompanion> {
     public CompanionUseShieldTask() {
-        super(ImmutableMap.of(ATTACK_TARGET, MemoryStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT));
     }
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel p_212832_1_, AbstractEntityCompanion companion) {
-        return companion.getOffhandItem().getItem().isShield(companion.getOffhandItem(), companion) && raiseShield(companion) && companion.getShieldCoolDown() == 0;
+        return companion.getOffhandItem().is(Items.SHIELD) && raiseShield(companion) && companion.getShieldCoolDown() == 0;
     }
 
     @Override
@@ -39,12 +38,12 @@ public class CompanionUseShieldTask extends Behavior<AbstractEntityCompanion> {
 
     @Override
     protected void start(ServerLevel p_212831_1_, AbstractEntityCompanion companion, long p_212831_3_) {
-        if (companion.getOffhandItem().getItem().isShield(companion.getOffhandItem(), companion))
+        if (companion.getOffhandItem().is(Items.SHIELD))
             companion.startUsingItem(InteractionHand.OFF_HAND);
     }
 
     protected boolean raiseShield(AbstractEntityCompanion companion) {
-        return companion.getBrain().getMemory(ATTACK_TARGET).map((target)->{
+        return companion.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map((target)->{
             if(companion.isSailing()){
                 return false;
             }

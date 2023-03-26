@@ -21,9 +21,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.FALL_BREAK_ITEM_INDEX;
-import static net.minecraft.fluid.Fluids.WATER;
-import static net.minecraft.item.Items.COBWEB;
-import staticnet.minecraft.world.item.Items.OFF_HAND;
 
 public class CompanionFallClutchTask extends Behavior<AbstractEntityCompanion> {
     @Nullable
@@ -33,7 +30,7 @@ public class CompanionFallClutchTask extends Behavior<AbstractEntityCompanion> {
     //DREAM CLUTCH
     public static Predicate<ItemStack> IS_FALL_BREAKER = (stack)->{
         boolean isButerWacket = FluidUtil.getFluidContained(stack).map((fluid)->fluid.getFluid() == WATER && fluid.getAmount()>=1000).orElse(false);
-        boolean fallbreakerBlock = stack.getItem() == COBWEB && stack.getItem() instanceof BoatItem;
+        boolean fallbreakerBlock = stack.is(Items.COBWEB) && stack.getItem() instanceof BoatItem;
         return isButerWacket || fallbreakerBlock;
     };
 
@@ -84,7 +81,7 @@ public class CompanionFallClutchTask extends Behavior<AbstractEntityCompanion> {
     protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion entity, long p_212835_3_) {
         if(entity.getItemSwapIndexOffHand()>-1) {
             ItemStack buffer = entity.getOffhandItem();
-            entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
+            entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
             entity.getInventory().setStackInSlot(entity.getItemSwapIndexOffHand(), buffer);
             entity.setItemSwapIndexOffHand(-1);
         }
@@ -110,7 +107,7 @@ public class CompanionFallClutchTask extends Behavior<AbstractEntityCompanion> {
 
     private void ChangeItem(int index, AbstractEntityCompanion entity){
         ItemStack Buffer = entity.getOffhandItem();
-        entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(index));
+        entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(index));
         entity.getInventory().setStackInSlot(index, Buffer);
         entity.setItemSwapIndexOffHand(index);
     }

@@ -38,8 +38,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 
-import static net.minecraft.util.Hand.MAIN_HAND;
-
 public class EntitySkullShatterer extends EntityGunUserBase implements IAknOp {
 
     protected static final EntityDataAccessor<Boolean> COSMETIC = SynchedEntityData.defineId(EntitySkullShatterer.class, EntityDataSerializers.BOOLEAN);
@@ -150,7 +148,7 @@ public class EntitySkullShatterer extends EntityGunUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){

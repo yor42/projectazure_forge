@@ -35,7 +35,6 @@ import java.util.Collections;
 
 import static com.yor42.projectazure.libs.enums.SERVANT_CLASSES.SHIELDER;
 import static com.yor42.projectazure.setup.register.RegisterItems.GAE_BOLG;
-import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
     public EntityMash(EntityType<? extends TamableAnimal> type, Level worldIn) {
@@ -79,7 +78,7 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
@@ -253,13 +252,13 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
     protected void customServerAiStep() {
         super.customServerAiStep();
         if(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map(LivingEntity::isDeadOrDying).orElse(true) && this.getMainHandItem().getItem() == GAE_BOLG.get()){
-            int swapindex = this.getItemSwapIndex(MAIN_HAND);
+            int swapindex = this.getItemSwapIndex(InteractionHand.MAIN_HAND);
             if(swapindex>-1){
-                this.setItemInHand(MAIN_HAND, this.getInventory().extractItem(swapindex, this.getInventory().getStackInSlot(swapindex).getCount(), false));
+                this.setItemInHand(InteractionHand.MAIN_HAND, this.getInventory().extractItem(swapindex, this.getInventory().getStackInSlot(swapindex).getCount(), false));
                 this.setItemSwapIndexMainHand(-1);
             }
             else{
-                this.setItemInHand(MAIN_HAND, ItemStack.EMPTY);
+                this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             }
         }
     }
@@ -279,7 +278,7 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         target.hurt(DamageSource.mobAttack(this),5);
-        target.knockback(0.2F, Mth.sin(this.yRot * ((float)Math.PI / 180F)), -Mth.cos(this.yRot * ((float)Math.PI / 180F)));
+        target.knockback(0.2F, Mth.sin(this.getYRot() * ((float)Math.PI / 180F)), -Mth.cos(this.getYRot() * ((float)Math.PI / 180F)));
     }
 
     public static AttributeSupplier.Builder MutableAttribute()

@@ -47,11 +47,7 @@ public class JEIRecipeCategoryBasicChemicalReaction implements IRecipeCategory<B
 
     @Nonnull
     @Override
-    public String getTitle() {return "";}
-
-    @Nonnull
-    @Override
-    public Component getTitleAsTextComponent() {
+    public Component getTitle() {
         return new TranslatableComponent("recipe.pressing");
     }
 

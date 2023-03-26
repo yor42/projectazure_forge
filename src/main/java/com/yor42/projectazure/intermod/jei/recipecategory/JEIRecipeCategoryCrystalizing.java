@@ -44,12 +44,7 @@ public class JEIRecipeCategoryCrystalizing implements IRecipeCategory<Crystalizi
     }
 
     @Override
-    public String getTitle() {
-        return "";
-    }
-
-    @Override
-    public Component getTitleAsTextComponent() {
+    public Component getTitle() {
         return new TranslatableComponent("recipe.crystalizing");
     }
 

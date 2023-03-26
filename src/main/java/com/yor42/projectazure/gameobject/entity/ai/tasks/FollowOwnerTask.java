@@ -15,22 +15,23 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
-import net.minecraft.util.IntRange;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_ORE;
-import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
 
 public class FollowOwnerTask extends Behavior<AbstractEntityCompanion> {
     public FollowOwnerTask() {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
     }
 
-    private static final IntRange followrange = new IntRange(1,2);
+    private static final UniformInt followrange = TimeUtil.rangeOfSeconds(1,2);
 
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerLevel world, AbstractEntityCompanion entity) {
@@ -43,7 +44,7 @@ public class FollowOwnerTask extends Behavior<AbstractEntityCompanion> {
             if(entity.distanceTo(entity.getOwner())>32){
                 this.tryToTeleportNearEntity(entity, entity.getOwner());
             }
-            BehaviorUtils.setWalkAndLookTargetMemories(entity, entity.getOwner(), 1, followrange.randomValue(new Random()));
+            BehaviorUtils.setWalkAndLookTargetMemories(entity, entity.getOwner(), 1, followrange.sample(new Random()));
         }
     }
 
@@ -72,9 +73,9 @@ public class FollowOwnerTask extends Behavior<AbstractEntityCompanion> {
         } else if (!this.isTeleportFriendlyBlock(ety, new BlockPos(x, y, z))) {
             return false;
         } else {
-            ety.moveTo((double)x + 0.5D, y, (double)z + 0.5D, ety.yRot, ety.xRot);
+            ety.moveTo((double)x + 0.5D, y, (double)z + 0.5D, ety.getYRot(), ety.getXRot());
             ety.getNavigation().stop();
-            Main.NETWORK.send(TRACKING_ENTITY.with(() -> ety), new spawnParticlePacket(ety, spawnParticlePacket.Particles.TELEPORT));
+            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> ety), new spawnParticlePacket(ety, spawnParticlePacket.Particles.TELEPORT));
             return true;
         }
     }

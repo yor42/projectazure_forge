@@ -12,7 +12,6 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.server.level.ServerLevel;
 
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 
 public class CompanionBowRangedAttackTask extends Behavior<AbstractEntityCompanion> {

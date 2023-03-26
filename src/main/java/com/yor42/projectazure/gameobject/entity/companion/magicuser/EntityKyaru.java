@@ -23,8 +23,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 
-import static net.minecraft.util.Hand.MAIN_HAND;
-
 public class EntityKyaru extends AbstractCompanionMagicUser {
     public EntityKyaru(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
@@ -98,7 +96,7 @@ public class EntityKyaru extends AbstractCompanionMagicUser {
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){

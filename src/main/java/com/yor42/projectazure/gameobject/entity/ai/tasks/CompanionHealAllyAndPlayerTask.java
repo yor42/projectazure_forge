@@ -17,7 +17,6 @@ import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ThrowablePotionItem;
-import net.minecraft.potion.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvent;
@@ -25,6 +24,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
@@ -33,12 +33,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.registerSounds.SYRINGE_INJECT;
-import static net.minecraft.potion.Effects.HEAL;
-import static net.minecraft.potion.Effects.REGENERATION;
-import staticnet.minecraft.world.effect.MobEffectsork.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
@@ -120,7 +118,7 @@ public class CompanionHealAllyAndPlayerTask extends Behavior<AbstractEntityCompa
                 else if(--this.rangedAttackTime <= 0) {
                     if (PotionItem instanceof ThrowablePotionItem) {
                         double d0 = entity.distanceToSqr(target.getX(), target.getY(), target.getZ());
-                        float f = Mth.sqrt(d0) / this.attackRadius;
+                        float f = (float)Math.sqrt(d0) / this.attackRadius;
                         this.throwPotion(entity, target, entity.getItemInHand(this.PotionHand));
                         entity.getItemInHand(this.PotionHand).shrink(1);
                         this.rangedAttackTime = Mth.floor(f * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin);
@@ -145,7 +143,7 @@ public class CompanionHealAllyAndPlayerTask extends Behavior<AbstractEntityCompa
                         }
 
                         target.playSound(soundevent, 0.8F+(0.4F* MathUtil.getRand().nextFloat()), 0.8F+(0.4F* MathUtil.getRand().nextFloat()));
-                        Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(()->target), new PlaySoundPacket(soundevent, SoundSource.PLAYERS, target.getX(),target.getY(),target.getZ(), 0.8F+(0.4F*MathUtil.rand.nextFloat()), 0.8F+(0.4F*MathUtil.rand.nextFloat())));
+                        Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(()->target), new PlaySoundPacket(soundevent, SoundSource.PLAYERS, target.getX(),target.getY(),target.getZ(), 0.8F+(0.4F*MathUtil.rand.nextFloat()), 0.8F+(0.4F*MathUtil.rand.nextFloat())));
                         entity.swing(this.PotionHand);
                         entity.getItemInHand(this.PotionHand).shrink(1);
                         this.rangedAttackTime = 20;
@@ -171,11 +169,11 @@ public class CompanionHealAllyAndPlayerTask extends Behavior<AbstractEntityCompa
         double d0 = target.getX() + vector3d.x - entity.getX();
         double d1 = target.getEyeY() - (double)1.1F - entity.getY();
         double d2 = target.getZ() + vector3d.z - entity.getZ();
-        float f = Mth.sqrt(d0 * d0 + d2 * d2);
+        float f = (float)Math.sqrt(d0 * d0 + d2 * d2);
 
         ThrownPotion potionentity = new ThrownPotion(entity.getCommandSenderWorld(), entity);
         potionentity.setItem(PotionUtils.setPotion(potionStack, potion));
-        potionentity.xRot -= -20.0F;
+        potionentity.setXRot(potionentity.getXRot() - 20.0F);
         potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.WITCH_THROW, entity.getSoundSource(), 1.0F, 0.8F + entity.getRandom().nextFloat() * 0.4F);
         entity.swing(this.PotionHand, true);
@@ -200,7 +198,7 @@ public class CompanionHealAllyAndPlayerTask extends Behavior<AbstractEntityCompa
                 for (MobEffectInstance effect : Effects) {
                     if (effect.getEffect().getCategory() == MobEffectCategory.HARMFUL) {
                         return Optional.empty();
-                    } else if (effect.getEffect() == HEAL || effect.getEffect() == REGENERATION) {
+                    } else if (effect.getEffect() == MobEffects.HEAL || effect.getEffect() == MobEffects.REGENERATION) {
                         return Optional.of(hand);
                     }
                 }

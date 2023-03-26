@@ -1,8 +1,11 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -34,9 +37,9 @@ public class ResultSlotStackHandler extends SlotItemHandler {
     }
 
     @Override
-    public ItemStack onTake(Player thePlayer, ItemStack stack) {
-        this.checkTakeAchievements(stack);
-        return super.onTake(thePlayer, stack);
+    public void onTake(Player player, ItemStack itemstack) {
+        this.checkTakeAchievements(itemstack);
+        super.onTake(player, itemstack);
     }
 
     /**
@@ -54,12 +57,12 @@ public class ResultSlotStackHandler extends SlotItemHandler {
     protected void checkTakeAchievements(ItemStack stack) {
         stack.onCraftedBy(this.player.level, this.player, this.removeCount);
         if (!this.player.level.isClientSide && this.container instanceof AbstractFurnaceBlockEntity) {
-            ((AbstractFurnaceBlockEntity)this.container).awardUsedRecipesAndPopExperience(this.player);
+            ((AbstractFurnaceBlockEntity)this.container).awardUsedRecipesAndPopExperience((ServerPlayer)this.player);
         }
 
         this.removeCount = 0;
         if(this.isSmelting) {
-            net.minecraftforge.fml.hooks.BasicEventHooks.firePlayerSmeltedEvent(this.player, stack);
+            MinecraftForge.EVENT_BUS.post(new PlayerEvent.ItemSmeltedEvent(this.player, stack));
         }
     }
 

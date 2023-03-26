@@ -25,8 +25,6 @@ import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.libs.utils.EntityUtils.EntityHasPlanes;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getPreparedPlane;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
-import staticnet.minecraft.world.entity.ai.memory.MemoryModuleTypee.LOOK_TARGET;
 
 public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion> {
 
@@ -38,7 +36,7 @@ public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion>
     private final int attackIntervalMin;
 
     public CompanionLaunchPlaneTasks(float maxAttackDistanceIn, int minDelayPerPlane, int maxDelayPerPlane) {
-        super(ImmutableMap.of(ATTACK_TARGET, MemoryStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT));
         this.attackRadius = maxAttackDistanceIn;
         this.attackIntervalMin = minDelayPerPlane;
         this.maxRangedAttackTime = maxDelayPerPlane;
@@ -54,7 +52,7 @@ public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion>
             boolean flag = entity.hasRigging();
             boolean canFire = entity.isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
             if (flag && canFire){
-                boolean flag2 =entity.getBrain().getMemory(ATTACK_TARGET).map((target)->entity.getSensing().canSee(target) && EntityHasPlanes(entity) && entity.wantsToAttack(target, entity)).orElse(false);
+                boolean flag2 =entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map((target)->entity.getSensing().hasLineOfSight(target) && EntityHasPlanes(entity) && entity.wantsToAttack(target, entity)).orElse(false);
 
                 return flag2;
             }
@@ -64,11 +62,11 @@ public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion>
 
     @Override
     protected void start(ServerLevel p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
-        if(!entity.getBrain().getMemory(ATTACK_TARGET).isPresent()){
+        if(!entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isPresent()){
             return;
         }
-        if(!entity.closerThan(entity.getBrain().getMemory(ATTACK_TARGET).get(), entity.getSpellRange())){
-            BehaviorUtils.setWalkAndLookTargetMemories(entity, entity.getBrain().getMemory(ATTACK_TARGET).get(), 1, (int) (entity.getPlaneRange()-2));
+        if(!entity.closerThan(entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get(), entity.getSpellRange())){
+            BehaviorUtils.setWalkAndLookTargetMemories(entity, entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get(), 1, (int) (entity.getPlaneRange()-2));
         }
         else {
             this.clearWalkTarget(entity);
@@ -79,9 +77,9 @@ public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion>
     protected void tick(@Nonnull ServerLevel p_212833_1_, @Nonnull AbstractEntityCompanion p_212833_2_, long p_212833_3_) {
         if(p_212833_2_ instanceof EntityKansenAircraftCarrier){
             EntityKansenAircraftCarrier entity = (EntityKansenAircraftCarrier) p_212833_2_;
-            entity.getBrain().getMemory(ATTACK_TARGET).ifPresent((target)->{
+            entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).ifPresent((target)->{
                 double d0 = entity.distanceToSqr(target.getX(), target.getY(), target.getZ());
-                boolean flag = entity.getSensing().canSee(target);
+                boolean flag = entity.getSensing().hasLineOfSight(target);
                 if (flag) {
                     ++this.seeTime;
                 } else {
@@ -89,7 +87,7 @@ public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion>
                 }
 
                 if (this.seeTime > 0) {
-                    entity.getBrain().setMemory(LOOK_TARGET, new EntityTracker(target, true));
+                    entity.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
                 }
 
                 if (entity.getRigging().getItem() instanceof ItemRiggingBase) {
@@ -111,10 +109,10 @@ public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion>
                                 if (planeEntity != null) {
                                     entity.LaunchPlane(planestack, planeEntity, target, hanger, hangerIndex);
                                 }
-                                float f = Mth.sqrt(d0) / this.attackRadius;
+                                float f = (float)Math.sqrt(d0) / this.attackRadius;
                                 this.PlaneDelay = Mth.floor(f * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) *entity.getPlanetoLaunch();
                             } else if (this.PlaneDelay < 0) {
-                                float f2 = Mth.sqrt(d0) / this.attackRadius;
+                                float f2 = (float)Math.sqrt(d0) / this.attackRadius;
                                 this.PlaneDelay = Mth.floor(f2 * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * entity.getPlanetoLaunch();
                             }
                         }
@@ -126,11 +124,11 @@ public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion>
 
     @Override
     protected boolean canStillUse(@Nonnull ServerLevel p_212834_1_, @Nonnull AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
-        if(!p_212834_2_.getBrain().getMemory(ATTACK_TARGET).isPresent()){
+        if(!p_212834_2_.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isPresent()){
             return false;
         }
 
-        return this.checkExtraStartConditions(p_212834_1_, p_212834_2_)&& p_212834_2_.closerThan(p_212834_2_.getBrain().getMemory(ATTACK_TARGET).get(), p_212834_2_.getPlaneRange());
+        return this.checkExtraStartConditions(p_212834_1_, p_212834_2_)&& p_212834_2_.closerThan(p_212834_2_.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get(), p_212834_2_.getPlaneRange());
     }
 
     @Override

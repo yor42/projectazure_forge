@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_INDEX;
-import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CompanionEatTask extends Behavior<AbstractEntityCompanion> {
 
@@ -51,7 +50,7 @@ public class CompanionEatTask extends Behavior<AbstractEntityCompanion> {
 
     private void ChangeItem(int index, AbstractEntityCompanion entity){
         ItemStack Buffer = entity.getOffhandItem();
-        entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(index));
+        entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(index));
         entity.getInventory().setStackInSlot(index, Buffer);
         entity.setItemSwapIndexOffHand(index);
     }
@@ -94,7 +93,7 @@ public class CompanionEatTask extends Behavior<AbstractEntityCompanion> {
         entity.stopUsingItem();
         if(entity.getItemSwapIndexOffHand()>-1) {
             ItemStack buffer = entity.getOffhandItem();
-            entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
+            entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
             entity.getInventory().setStackInSlot(entity.getItemSwapIndexOffHand(), buffer);
         }
         entity.setItemSwapIndexOffHand(-1);

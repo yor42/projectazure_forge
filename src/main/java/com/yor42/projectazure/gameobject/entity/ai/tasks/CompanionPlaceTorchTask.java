@@ -6,7 +6,6 @@ import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.item.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.ClipContext;
@@ -18,7 +17,6 @@ import net.minecraft.server.level.ServerLevel;
 import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.TORCH_INDEX;
-import static net.minecraft.util.Hand.OFF_HAND;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -82,7 +80,7 @@ public class CompanionPlaceTorchTask extends Behavior<AbstractEntityCompanion> {
     protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion entity, long p_212835_3_) {
         if(entity.getItemSwapIndexOffHand()>-1) {
             ItemStack buffer = entity.getOffhandItem();
-            entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
+            entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
             entity.getInventory().setStackInSlot(entity.getItemSwapIndexOffHand(), buffer);
             entity.setItemSwapIndexOffHand(-1);
         }
@@ -100,7 +98,7 @@ public class CompanionPlaceTorchTask extends Behavior<AbstractEntityCompanion> {
 
     private void ChangeItem(int index, AbstractEntityCompanion entity){
         ItemStack Buffer = entity.getOffhandItem();
-        entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(index));
+        entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(index));
         entity.getInventory().setStackInSlot(index, Buffer);
         entity.setItemSwapIndexOffHand(index);
     }

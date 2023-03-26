@@ -54,8 +54,8 @@ public class ItemClaymore extends SwordItem implements IAnimatable {
         super.inventoryTick(stack, p_77663_2_, entityIn, p_77663_4_, isSelected);
         if(entityIn instanceof Player){
             int claymorecount = 0;
-            for(int i = 0; i<((Player) entityIn).inventory.getContainerSize(); i++){
-                if(((Player) entityIn).inventory.getItem(i).getItem() == this && ((Player) entityIn).inventory.getItem(i) != stack){
+            for(int i = 0; i<((Player) entityIn).getInventory().getContainerSize(); i++){
+                if(((Player) entityIn).getInventory().getItem(i).getItem() == this && ((Player) entityIn).getInventory().getItem(i) != stack){
                     claymorecount+=1;
                 }
             }

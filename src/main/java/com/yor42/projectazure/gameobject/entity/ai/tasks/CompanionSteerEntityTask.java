@@ -13,13 +13,13 @@ import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.pathfinder.SwimNodeEvaluator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.server.level.ServerLevel;
 
 import static java.lang.Math.abs;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
 
 public class CompanionSteerEntityTask extends Behavior<AbstractEntityCompanion> {
 
@@ -50,7 +50,7 @@ public class CompanionSteerEntityTask extends Behavior<AbstractEntityCompanion> 
 
     @Override
     protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
-        p_212835_2_.getBrain().eraseMemory(LOOK_TARGET);
+        p_212835_2_.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CompanionSteerEntityTask extends Behavior<AbstractEntityCompanion> 
                     this.path = this.CreateBoatPath(world, entity, (Boat) vehicle, entity.getOwner().blockPosition());
                 }
                 controlBoat((Boat) vehicle, entity, this.path);
-                entity.getBrain().setMemory(LOOK_TARGET, new EntityTracker(entity.getOwner(), true));
+                entity.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(entity.getOwner(), true));
             }
         }
     }
@@ -102,10 +102,10 @@ public class CompanionSteerEntityTask extends Behavior<AbstractEntityCompanion> 
                     double d0 = boat.getX() - blockpos.getX();
                     double d1 = boat.getZ() - blockpos.getZ();
                     float f = 0.04F;
-                    float oldyaw = boat.yRot;
-                    boat.yRot = (float) (Mth.atan2(d1, d0) * (double) (180F / (float) Math.PI)) + 90.0F;
-                    boat.setDeltaMovement(boat.getDeltaMovement().add(Mth.sin(-boat.yRot * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(boat.yRot * ((float) Math.PI / 180F)) * f));
-                    float newyaw = boat.yRot;
+                    float oldyaw = boat.getYRot();
+                    boat.setYRot((float) (Mth.atan2(d1, d0) * (double) (180F / (float) Math.PI)) + 90.0F);
+                    boat.setDeltaMovement(boat.getDeltaMovement().add(Mth.sin(-boat.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(boat.getYRot() * ((float) Math.PI / 180F)) * f));
+                    float newyaw = boat.getYRot();
                     float x1 = (float) Math.sqrt(boat.getDeltaMovement().x()*boat.getDeltaMovement().x()+boat.getDeltaMovement().z()*boat.getDeltaMovement().z());
                     boat.setPaddleState(oldyaw - newyaw < -0 || x1>0.2, oldyaw - newyaw > 0 || x1>0.2);
                 }

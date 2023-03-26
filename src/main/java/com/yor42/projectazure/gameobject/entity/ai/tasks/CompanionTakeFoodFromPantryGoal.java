@@ -10,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
@@ -27,8 +28,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.*;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_ABSENT;
-import staticnet.minecraft.world.entity.ai.memory.MemoryStatuss.VALUE_PRESENT;
 
 public class CompanionTakeFoodFromPantryGoal extends Behavior<AbstractEntityCompanion> {
 
@@ -36,7 +35,7 @@ public class CompanionTakeFoodFromPantryGoal extends Behavior<AbstractEntityComp
     int emptyinvslot = -1;
 
     public CompanionTakeFoodFromPantryGoal() {
-        super(ImmutableMap.of(FOOD_PANTRY.get(), VALUE_PRESENT, FOOD_INDEX.get(), VALUE_ABSENT), 2400);
+        super(ImmutableMap.of(FOOD_PANTRY.get(), MemoryStatus.VALUE_PRESENT, FOOD_INDEX.get(), MemoryStatus.VALUE_ABSENT), 2400);
     }
 
     @Override

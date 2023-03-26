@@ -42,7 +42,7 @@ public class SledgeHammerModifier extends LootModifier {
         BlockState blockState = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         List<ItemStack> newLoot = new ArrayList<>();
 
-        if (tool != null && blockState != null && ModTags.Items.SLEDGEHAMMER.contains(tool.getItem()) && Main.CRUSHING_REGISTRY.isHammerable(blockState.getBlock())) {
+        if (tool != null && blockState != null && tool.is(ModTags.Items.SLEDGEHAMMER) && Main.CRUSHING_REGISTRY.isHammerable(blockState.getBlock())) {
             List<ItemStackWithChance> list = Main.CRUSHING_REGISTRY.getResult(blockState.getBlock());
             for (ItemStackWithChance stackWithChance : list) {
                 if (new Random().nextFloat() <= stackWithChance.getChance()) {

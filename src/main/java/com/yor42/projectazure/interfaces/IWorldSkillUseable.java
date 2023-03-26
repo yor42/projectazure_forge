@@ -10,7 +10,7 @@ public interface IWorldSkillUseable {
 
     boolean executeWorldSkill(ServerLevel world, BlockPos pos, AbstractEntityCompanion entity);
 
-    float getWorldSkillRange();
+    double getWorldSkillRange();
 
     boolean executeWorldSkillTick(ServerLevel world, BlockPos pos, AbstractEntityCompanion entity);
 

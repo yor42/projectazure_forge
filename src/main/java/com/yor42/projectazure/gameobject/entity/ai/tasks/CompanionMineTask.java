@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.sounds.SoundSource;
@@ -15,7 +16,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.Tags;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_ORE;
-import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class CompanionMineTask extends Behavior<AbstractEntityCompanion> {
 
@@ -51,7 +51,7 @@ public class CompanionMineTask extends Behavior<AbstractEntityCompanion> {
                 entity.level.destroyBlockProgress(entity.getId(), pos, i);
                 this.previousBreakProgress = i;
                 if (!entity.swinging) {
-                    entity.swing(MAIN_HAND);
+                    entity.swing(InteractionHand.MAIN_HAND);
                 }
             }
             if (this.breakingTime > 60.0F) {

@@ -67,7 +67,7 @@ public class ItemSyringe extends Item implements IItemDestroyable {
             player.playSound(SoundEvents.BREWING_STAND_BREW, 0.8F+(0.4F* MathUtil.rand.nextFloat()), 1.3F+(0.4F* MathUtil.rand.nextFloat()));
         }
 
-        if(!player.abilities.instabuild || player.isCrouching() && PotionUtils.getPotion(stack)!=Potions.EMPTY){
+        if(!player.getAbilities().instabuild || player.isCrouching() && PotionUtils.getPotion(stack)!=Potions.EMPTY){
             player.awardStat(Stats.ITEM_USED.get(this));
             stack.shrink(1);
             ItemStack returnstack = new ItemStack(RegisterItems.SYRINGE.get());
@@ -102,7 +102,7 @@ public class ItemSyringe extends Item implements IItemDestroyable {
     public void fillItemCategory(CreativeModeTab p_150895_1_, NonNullList<ItemStack> p_150895_2_) {
         if (this.allowdedIn(p_150895_1_)) {
             p_150895_2_.add(new ItemStack(this));
-            for(Potion potion : ForgeRegistries.POTION_TYPES) {
+            for(Potion potion : ForgeRegistries.POTIONS) {
                 if (potion != Potions.EMPTY) {
                     p_150895_2_.add(PotionUtils.setPotion(new ItemStack(this), potion));
                 }

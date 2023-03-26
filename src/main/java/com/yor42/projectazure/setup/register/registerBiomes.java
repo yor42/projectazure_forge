@@ -2,15 +2,12 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
+
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.StructureFeatures;
-import net.minecraft.data.worldgen.SurfaceBuilders;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.biome.*;
 import net.minecraft.world.level.biome.*;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.registries.DeferredRegister;
@@ -27,7 +24,7 @@ public class registerBiomes {
 
         MobSpawnSettings.Builder spawnbuilder = new MobSpawnSettings.Builder();
 
-        return (new Biome.BiomeBuilder()).precipitation(Biome.Precipitation.RAIN).biomeCategory(Biome.BiomeCategory.OCEAN).depth(-1.8F).scale(0.1F).temperature(0.5F).downfall(0.5F).specialEffects((new BiomeSpecialEffects.Builder()).waterColor(0x0a0091).waterFogColor(0x480066).fogColor(0x8a0037).skyColor(0x001a5b).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build()).mobSpawnSettings(spawnbuilder.build()).generationSettings(getOceanGenerationSettingsBuilder().build()).build();
+        return (new Biome.BiomeBuilder()).precipitation(Biome.Precipitation.RAIN).biomeCategory(Biome.BiomeCategory.OCEAN)/*.depth(-1.8F).scale(0.1F)*/.temperature(0.5F).downfall(0.5F).specialEffects((new BiomeSpecialEffects.Builder()).waterColor(0x0a0091).waterFogColor(0x480066).fogColor(0x8a0037).skyColor(0x001a5b).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build()).mobSpawnSettings(spawnbuilder.build()).generationSettings(getOceanGenerationSettingsBuilder().build()).build();
     }
 
     public static void addBiometoList(String BiomeID, Biome biome, int chance, BiomeManager.BiomeType climate) {
@@ -43,13 +40,14 @@ public class registerBiomes {
         BiomeList.add(new BiomeData(BiomeID, biome, chance, climate));
     }
     private static BiomeGenerationSettings.Builder getOceanGenerationSettingsBuilder() {
-        BiomeGenerationSettings.Builder biomegenerationsettings$builder = (new BiomeGenerationSettings.Builder()).surfaceBuilder(SurfaceBuilders.GRASS);
-        ConfiguredStructureFeature<?, ?> structurefeature = StructureFeatures.OCEAN_RUIN_COLD;
-        BiomeDefaultFeatures.addDefaultOverworldOceanStructures(biomegenerationsettings$builder);
-        biomegenerationsettings$builder.addStructureStart(structurefeature);
-        biomegenerationsettings$builder.addStructureStart(StructureFeatures.RUINED_PORTAL_OCEAN);
-        BiomeDefaultFeatures.addOceanCarvers(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addDefaultLakes(biomegenerationsettings$builder);
+        !
+        BiomeGenerationSettings.Builder biomegenerationsettings$builder = new BiomeGenerationSettings.Builder();//.surfaceBuilder(SurfaceBuilders.GRASS)
+        BiomeDefaultFeatures.addDefaultMonsterRoom(biomegenerationsettings$builder);
+        // net.minecraft.data.worldgen.placement.AquaticPlacements
+        // biomegenerationsettings$builder.addFeature(Decoration.LAKES, StructureFeatures.OCEAN_RUIN_COLD);
+        // biomegenerationsettings$builder.addFeature(Decoration.LAKES, StructureFeatures.RUINED_PORTAL_OCEAN);
+        BiomeDefaultFeatures.addDefaultCarversAndLakes(biomegenerationsettings$builder);
+
         BiomeDefaultFeatures.addDefaultMonsterRoom(biomegenerationsettings$builder);
         BiomeDefaultFeatures.addDefaultUndergroundVariety(biomegenerationsettings$builder);
         BiomeDefaultFeatures.addDefaultOres(biomegenerationsettings$builder);

@@ -56,7 +56,7 @@ public class CompanionInteractWithDoorTask extends InteractWithDoor {
         if (blockstate.is(BlockTags.WOODEN_DOORS)) {
             DoorBlock doorblock = (DoorBlock)blockstate.getBlock();
             if (!doorblock.isOpen(blockstate)) {
-                doorblock.setOpen(p_212831_1_, blockstate, blockpos, true);
+                doorblock.setOpen(p_212831_2_, p_212831_1_, blockstate, blockpos, true);
                 p_212831_2_.swing(InteractionHand.MAIN_HAND);
             }
 
@@ -68,7 +68,7 @@ public class CompanionInteractWithDoorTask extends InteractWithDoor {
         if (blockstate1.is(BlockTags.WOODEN_DOORS)) {
             DoorBlock doorblock1 = (DoorBlock)blockstate1.getBlock();
             if (!doorblock1.isOpen(blockstate1)) {
-                doorblock1.setOpen(p_212831_1_, blockstate1, blockpos1, true);
+                doorblock1.setOpen(p_212831_2_, p_212831_1_, blockstate1, blockpos1, true);
                 this.rememberDoorToClose(p_212831_1_, p_212831_2_, blockpos1);
                 p_212831_2_.swing(InteractionHand.MAIN_HAND);
             }
@@ -99,7 +99,7 @@ public class CompanionInteractWithDoorTask extends InteractWithDoor {
                             } else if (areOtherMobsComingThroughDoor(p_242294_0_, p_242294_1_, blockpos)) {
                                 iterator.remove();
                             } else {
-                                doorblock.setOpen(p_242294_0_, blockstate, blockpos, false);
+                                doorblock.setOpen(p_242294_1_, p_242294_0_, blockstate, blockpos, false);
                                 iterator.remove();
                             }
                         }
@@ -112,10 +112,10 @@ public class CompanionInteractWithDoorTask extends InteractWithDoor {
 
     private static boolean areOtherMobsComingThroughDoor(ServerLevel p_242295_0_, LivingEntity p_242295_1_, BlockPos p_242295_2_) {
         Brain<?> brain = p_242295_1_.getBrain();
-        return brain.hasMemoryValue(MemoryModuleType.LIVING_ENTITIES) && brain.getMemory(MemoryModuleType.LIVING_ENTITIES).get().stream().filter((p_242298_1_) -> {
+        return brain.hasMemoryValue(MemoryModuleType.NEAREST_LIVING_ENTITIES) && brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).get().stream().filter((p_242298_1_) -> {
             return p_242298_1_.getType() == p_242295_1_.getType();
         }).filter((p_242299_1_) -> {
-            return p_242295_2_.closerThan(p_242299_1_.position(), 2.0D);
+            return p_242295_2_.closerToCenterThan(p_242299_1_.position(), 2.0D);
         }).anyMatch((p_242297_2_) -> {
             return isMobComingThroughDoor(p_242295_0_, p_242297_2_, p_242295_2_);
         });
@@ -141,7 +141,7 @@ public class CompanionInteractWithDoorTask extends InteractWithDoor {
     }
 
     private static boolean isDoorTooFarAway(ServerLevel p_242296_0_, LivingEntity p_242296_1_, GlobalPos p_242296_2_) {
-        return p_242296_2_.dimension() != p_242296_0_.dimension() || !p_242296_2_.pos().closerThan(p_242296_1_.position(), 2.0D);
+        return p_242296_2_.dimension() != p_242296_0_.dimension() || !p_242296_2_.pos().closerToCenterThan(p_242296_1_.position(), 2.0D);
     }
 
     private void rememberDoorToClose(ServerLevel p_242301_1_, LivingEntity p_242301_2_, BlockPos p_242301_3_) {

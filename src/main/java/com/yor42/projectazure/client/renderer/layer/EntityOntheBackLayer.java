@@ -118,7 +118,7 @@ public class EntityOntheBackLayer<T extends Player> extends RenderLayer<T, Playe
         float f = Mth.wrapDegrees(target.getYRot() - source.getYRot());
         float f1 = Mth.clamp(f, -105.0F, 105.0F);
         target.yRotO += f1 - f;
-        target.setYRot(target.getYRot()+ f1 - f);
+        target.setYRot(target.getYRot() + f1 - f);
         target.setYHeadRot(target.getYRot());
     }
 }

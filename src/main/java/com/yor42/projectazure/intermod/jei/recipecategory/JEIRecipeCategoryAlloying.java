@@ -40,12 +40,7 @@ public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe
     }
 
     @Override
-    public String getTitle() {
-        return "";
-    }
-
-    @Override
-    public Component getTitleAsTextComponent() {
+    public Component getTitle() {
         return new TranslatableComponent("recipe.alloying");
     }
 

@@ -32,7 +32,6 @@ import java.util.List;
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
 import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded;
-import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -66,12 +65,12 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
     @Nonnull
     @Override
     public InteractionResultHolder<ItemStack> use(@Nonnull Level world, @Nonnull Player entity, @Nonnull InteractionHand hand) {
-        InteractionHand oppositehand = hand == MAIN_HAND? InteractionHand.OFF_HAND: MAIN_HAND;
+        InteractionHand oppositehand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
         if(entity.getItemInHand(oppositehand).getItem() instanceof ItemDefibPaddle) {
             if (entity.isCrouching()) {
                 ItemStack ChargerStack = ItemStack.EMPTY;
-                for (int i = 0; i < entity.inventory.getContainerSize(); i++) {
-                    ItemStack stack = entity.inventory.getItem(i);
+                for (int i = 0; i < entity.getInventory().getContainerSize(); i++) {
+                    ItemStack stack = entity.getInventory().getItem(i);
                     Item item = stack.getItem();
                     if (item instanceof ItemDefibCharger && ItemDefibCharger.isOn(stack) && ItemDefibCharger.getChargeProgress(stack)<100) {
                         if (stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(100, true) == 100).orElse(false)) {

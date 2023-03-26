@@ -18,7 +18,7 @@ public class CompanionMovetoTargetTask extends Behavior<AbstractEntityCompanion>
     private final AbstractEntityCompanion entity;
     private float closeEnoughDist = 0;
     public CompanionMovetoTargetTask(AbstractEntityCompanion entity, float speed) {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryStatus.REGISTERED));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.REGISTERED));
         this.speedModifier = speed;
         this.entity = entity;
     }

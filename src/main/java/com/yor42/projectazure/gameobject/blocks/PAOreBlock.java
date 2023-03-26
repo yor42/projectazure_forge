@@ -15,7 +15,7 @@ public class PAOreBlock extends OreBlock {
     private final enums.ResourceType resourceType;
 
     public PAOreBlock(String materialName, enums.ResourceType resourceType) {
-        super((BlockBehaviour.Properties.of(resourceType == enums.ResourceType.BLOCK? Material.METAL:Material.STONE).harvestLevel(2).sound(resourceType == enums.ResourceType.BLOCK? SoundType.METAL:SoundType.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
+        super((BlockBehaviour.Properties.of(resourceType == enums.ResourceType.BLOCK? Material.METAL:Material.STONE).friction(2).sound(resourceType == enums.ResourceType.BLOCK? SoundType.METAL:SoundType.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
         this.material = materialName;
         this.resourceType = resourceType;
     }

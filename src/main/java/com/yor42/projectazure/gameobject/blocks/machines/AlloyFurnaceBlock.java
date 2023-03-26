@@ -26,26 +26,19 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class AlloyFurnaceBlock extends AbstractMachineBlock {
 
     public AlloyFurnaceBlock() {
-        super((BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).lightLevel(RegisterBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
+        super((BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).friction(2).lightLevel(RegisterBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter world){
-        return new TileEntityAlloyFurnace();
+    public BlockEntity newBlockEntity(BlockPos blockpos, BlockState blockstate) {
+        return new TileEntityAlloyFurnace(blockpos, blockstate);
     }
 
     @Override

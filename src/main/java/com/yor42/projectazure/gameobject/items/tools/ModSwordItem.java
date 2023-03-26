@@ -45,9 +45,9 @@ public class ModSwordItem extends SwordItem {
             if(!entity.getUUID().equals(owner)){
                 stack.shrink(stack.getCount());
                 for(int i = 0; i < 5; ++i) {
-                    double d0 = random.nextGaussian() * 0.02D;
-                    double d1 = random.nextGaussian() * 0.02D;
-                    double d2 = random.nextGaussian() * 0.02D;
+                    double d0 = world.getRandom().nextGaussian() * 0.02D;
+                    double d1 = world.getRandom().nextGaussian() * 0.02D;
+                    double d2 = world.getRandom().nextGaussian() * 0.02D;
                     world.addParticle(ParticleTypes.END_ROD, entity.getRandomX(1.0D), entity.getRandomY(), entity.getRandomZ(1.0D), d0, d1, d2);
                 }
             }

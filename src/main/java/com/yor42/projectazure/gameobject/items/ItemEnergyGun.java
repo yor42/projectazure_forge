@@ -13,7 +13,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.*;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.text.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -210,7 +209,7 @@ public class ItemEnergyGun extends TimelessGunItem {
         int currentfiremode = tagCompound.getInt("CurrentFireMode");
         int previousfiremode = tagCompound.getInt("previousfiremode");
 
-        if(!(entity instanceof Player && ((Player) entity).abilities.instabuild)&&currentfiremode != 0){
+        if(!(entity instanceof Player && ((Player) entity).getAbilities().instabuild)&&currentfiremode != 0){
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energystorage)->{
                 if(energystorage.extractEnergy(this.idleenergyconsumption, false)<this.idleenergyconsumption){
                     tagCompound.putInt("CurrentFireMode", 0);

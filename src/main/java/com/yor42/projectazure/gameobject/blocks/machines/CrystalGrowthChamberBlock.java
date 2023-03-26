@@ -5,13 +5,10 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrow
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.network.NetworkHooks;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.network.NetworkHooks;
 
 public class CrystalGrowthChamberBlock extends AbstractMachineBlock {
     public CrystalGrowthChamberBlock(Properties properties) {
@@ -19,14 +16,8 @@ public class CrystalGrowthChamberBlock extends AbstractMachineBlock {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-        return new TileEntityCrystalGrowthChamber();
+    public BlockEntity newBlockEntity(BlockPos blockpos, BlockState blockstate) {
+        return new TileEntityCrystalGrowthChamber(blockpos, blockstate);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -12,12 +13,11 @@ import net.minecraft.server.level.ServerLevel;
 import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_WORLDSKILLABLE;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_PRESENT;
 
 public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
 
     public CompanionUseWorldSkill() {
-        super(ImmutableMap.of(NEAREST_WORLDSKILLABLE.get(), VALUE_PRESENT), Integer.MAX_VALUE);
+        super(ImmutableMap.of(NEAREST_WORLDSKILLABLE.get(), MemoryStatus.VALUE_PRESENT), Integer.MAX_VALUE);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
                 return false;
             }
 
-            return skillpos.get().closerThan(entity.position(), ((IWorldSkillUseable) entity).getWorldSkillRange());
+            return skillpos.get().closerToCenterThan(entity.position(), ((IWorldSkillUseable)entity).getWorldSkillRange());
         }
 
         return false;

@@ -223,7 +223,7 @@ public class EntityHaru extends AbstractSwordUserBase{
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        target.knockback(AttackCount==0?0.1F:0.3F, Mth.sin(this.yRot * ((float)Math.PI / 180F)), -Mth.cos(this.yRot * ((float)Math.PI / 180F)));
+        target.knockback(AttackCount==0?0.1F:0.3F, Mth.sin(this.getYRot() * ((float)Math.PI / 180F)), -Mth.cos(this.getYRot() * ((float)Math.PI / 180F)));
         target.hurt(DamageSource.mobAttack(this), damage);
     }
 

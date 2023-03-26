@@ -60,9 +60,9 @@ public class ItemContributorBonus extends Item {
             {
                 CompoundTag ItemInfo = list.getCompound(i);
                 ItemStack stack = ItemStack.of(ItemInfo);
-                int index = playerIn.inventory.getFreeSlot();
+                int index = playerIn.getInventory().getFreeSlot();
                 if(index>0){
-                    playerIn.inventory.setItem(index, stack);
+                    playerIn.getInventory().setItem(index, stack);
                 }
                 else{
                     ItemEntity entity = new ItemEntity(worldIn, playerIn.getX(), playerIn.getY(),playerIn.getZ(), stack);
