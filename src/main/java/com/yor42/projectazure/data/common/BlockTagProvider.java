@@ -19,7 +19,6 @@ public class BlockTagProvider extends BlockTagsProvider {
     @Override
     protected void addTags() {
         this.tag(ModTags.Blocks.ORES_ALUMINIUM).add(RegisterBlocks.BAUXITE_ORE.get());
-        this.tag(ModTags.Blocks.ORES_COPPER).add(RegisterBlocks.COPPER_ORE.get());
         this.tag(ModTags.Blocks.ORES_LEAD).add(RegisterBlocks.LEAD_ORE.get());
         this.tag(ModTags.Blocks.ORES_TIN).add(RegisterBlocks.TIN_ORE.get());
         this.tag(ModTags.Blocks.ORES_ZINC).add(RegisterBlocks.ZINC_ORE.get());
@@ -42,7 +41,7 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(ModTags.Blocks.BLOCK_INCANDESCENT_ALLOY).add(RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get());
         this.tag(ModTags.Blocks.BLOCK_MANGANESE).add(RegisterBlocks.MANGANESE_BLOCK.get());
 
-        this.tag(Tags.Blocks.ORES).add(RegisterBlocks.BAUXITE_ORE.get()).add(RegisterBlocks.COPPER_ORE.get()).add(RegisterBlocks.LEAD_ORE.get()).add(RegisterBlocks.TIN_ORE.get()).add(RegisterBlocks.ZINC_ORE.get()).add(RegisterBlocks.ORIROCK.get()).add(RegisterBlocks.RMA_7012_ORE.get()).add(RegisterBlocks.MANGANESE_ORE.get());
+        this.tag(Tags.Blocks.ORES).add(RegisterBlocks.BAUXITE_ORE.get()).add(RegisterBlocks.LEAD_ORE.get()).add(RegisterBlocks.TIN_ORE.get()).add(RegisterBlocks.ZINC_ORE.get()).add(RegisterBlocks.ORIROCK.get()).add(RegisterBlocks.RMA_7012_ORE.get()).add(RegisterBlocks.MANGANESE_ORE.get());
         this.tag(Tags.Blocks.STORAGE_BLOCKS).add(RegisterBlocks.ZINC_BLOCK.get()).add(RegisterBlocks.ALUMINIUM_BLOCK.get()).add(RegisterBlocks.COPPER_BLOCK.get()).add(RegisterBlocks.TIN_BLOCK.get()).add(RegisterBlocks.LEAD_BLOCK.get()).add(RegisterBlocks.BRONZE_BLOCK.get()).add(RegisterBlocks.RMA_7012_BLOCK.get()).add(RegisterBlocks.RMA_7024_BLOCK.get()).add(RegisterBlocks.D32_BLOCK.get()).add(RegisterBlocks.STEEL_BLOCK.get())
                 .add(RegisterBlocks.MANGANESE_BLOCK.get()).add(RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get());
     }
