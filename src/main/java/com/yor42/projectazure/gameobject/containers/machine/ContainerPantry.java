@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.blocks.PantryBlock;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -24,7 +23,7 @@ public class ContainerPantry extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
     private final Container inv;
 
-    public ContainerPantry(int p_i50105_2_, Inventory playerInv,Container inv, final ContainerLevelAccess access) {
+    public ContainerPantry(int p_i50105_2_, Inventory playerInv, Container inv, final ContainerLevelAccess access) {
         super(PANTRY_CONTAINER.get(), p_i50105_2_);
         this.access = access;
         this.inv = inv;
@@ -67,7 +66,7 @@ public class ContainerPantry extends AbstractContainerMenu {
         }
     }
 
-    public ContainerPantry(int i, Inventory inventory, FriendlyByteBuf buffer) {
+    public ContainerPantry(int i, Inventory inventory) {
         this(i, inventory,new SimpleContainer(54){
 
             @Override

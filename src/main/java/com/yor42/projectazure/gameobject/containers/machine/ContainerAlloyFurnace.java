@@ -19,7 +19,7 @@ public class ContainerAlloyFurnace extends AbstractContainerMenu {
 
     private final ContainerData field;
 
-    public ContainerAlloyFurnace(int id, Inventory inventory, FriendlyByteBuf buffer) {
+    public ContainerAlloyFurnace(int id, Inventory inventory) {
         this(id, inventory, new ItemStackHandler(4), new SimpleContainerData(4));
     }
 
@@ -75,7 +75,7 @@ public class ContainerAlloyFurnace extends AbstractContainerMenu {
 
                 slot.onQuickCraft(itemstack1, itemstack);
             } else if (index != 1 && index != 0 && index != 2) {
-                if (ForgeHooks.getBurnTime(itemstack1)>0) {
+                if (ForgeHooks.getBurnTime(itemstack1, null)>0) {
                     if (!this.moveItemStackTo(itemstack1, 2, 3, false)) {
                         return ItemStack.EMPTY;
                     }

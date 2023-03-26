@@ -23,7 +23,7 @@ public class ContainerCrystalGrowthChamber extends AbstractContainerMenu {
     private final ContainerData field;
     private final FluidStack waterTank, SolutionTank;
 
-    public ContainerCrystalGrowthChamber(int id, Inventory inventory, FriendlyByteBuf buffer){
+    public ContainerCrystalGrowthChamber(int id, Inventory inventory){
         this(id, inventory, new ItemStackHandler(7), new ContainerData() {
 
             final int[] values = buffer.readVarIntArray();

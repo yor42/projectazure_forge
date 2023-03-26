@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 public class ContainerPCRInventory extends AbstractContainerInventory {
 
-    public ContainerPCRInventory(int id, Inventory inventory, FriendlyByteBuf data) {
+    public ContainerPCRInventory(int id, Inventory inventory) {
         this(id, inventory, new ItemStackHandler(30), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 

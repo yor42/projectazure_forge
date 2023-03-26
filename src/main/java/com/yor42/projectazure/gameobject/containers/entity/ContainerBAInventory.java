@@ -28,7 +28,7 @@ public class ContainerBAInventory extends AbstractContainerInventory {
     private final ItemStackHandler AmmoStack;
 
 
-    public ContainerBAInventory(int ID, Inventory inventory, FriendlyByteBuf data) {
+    public ContainerBAInventory(int ID, Inventory inventory) {
         this(ID, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 

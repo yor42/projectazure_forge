@@ -100,7 +100,7 @@ public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements 
         this.cookTimeTotal = compoundtag.getInt("CookTimeTotal");
 
         //This is where forge kicks in
-        this.totalBurntime = ForgeHooks.getBurnTime(this.inventory.getStackInSlot(2), this.recipeType);
+        this.totalBurntime = ForgeHooks.getBurnTime(this.inventory.getStackInSlot(2), null);
         CompoundTag compoundnbt = compoundtag.getCompound("RecipesUsed");
 
         for(String s : compoundnbt.getAllKeys()) {

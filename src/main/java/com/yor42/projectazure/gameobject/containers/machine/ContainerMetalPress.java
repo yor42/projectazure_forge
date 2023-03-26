@@ -21,7 +21,7 @@ public class ContainerMetalPress extends AbstractContainerMenu {
 
     private final ContainerData field;
 
-    public ContainerMetalPress(int id, Inventory inventory, FriendlyByteBuf buffer) {
+    public ContainerMetalPress(int id, Inventory inventory) {
         this(id, inventory, new ItemStackHandler(3), new SimpleContainerData(4));
     }
 
@@ -79,7 +79,7 @@ public class ContainerMetalPress extends AbstractContainerMenu {
 
                 slot.onQuickCraft(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
-                if (itemstack1.getItem().is(ModTags.Items.EXTRUSION_MOLD)) {
+                if (itemstack1.is(ModTags.Items.EXTRUSION_MOLD)) {
                     if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -129,7 +129,7 @@ public class ContainerMetalPress extends AbstractContainerMenu {
 
         @Override
         public boolean mayPlace(@Nonnull ItemStack stack) {
-            return stack.getItem().is(ModTags.Items.EXTRUSION_MOLD);
+            return stack.is(ModTags.Items.EXTRUSION_MOLD);
         }
 
         @Override

@@ -20,7 +20,7 @@ public class ContainerBasicChemicalReactor extends AbstractContainerMenu {
     private final ContainerData field;
     private final FluidStack outputtank;
 
-    public ContainerBasicChemicalReactor(int id, Inventory inventory, FriendlyByteBuf buffer){
+    public ContainerBasicChemicalReactor(int id, Inventory inventory){
         this(id, inventory, new ItemStackHandler(3), new ContainerData() {
 
             final int[] values = buffer.readVarIntArray();
