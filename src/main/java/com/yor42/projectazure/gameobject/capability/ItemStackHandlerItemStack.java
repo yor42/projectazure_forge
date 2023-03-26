@@ -6,7 +6,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -48,7 +48,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
     public ItemStack getStackInSlot(int slot) {
         validateSlotIndex(slot);
         CompoundTag nbt = this.getContainerNBT();
-        ListTag tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
         CompoundTag itemTags = tagList.getCompound(slot);
         if(slot == itemTags.getInt("Slot"))
             return ItemStack.of(itemTags);
@@ -70,7 +70,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
     {
         validateSlotIndex(slot);
         CompoundTag nbt = this.getContainerNBT();
-        ListTag tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
         CompoundTag itemTags = tagList.getCompound(slot);
         if(slot == itemTags.getInt("Slot")){
             CompoundTag itemTag = new CompoundTag();
@@ -217,7 +217,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
 
     protected void validateSlotIndex(int slot)
     {
-        ListTag tagList = getContainerNBT().getList("Items", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = getContainerNBT().getList("Items", Tag.TAG_COMPOUND);
         if (slot>this.size || slot>=tagList.size())
             throw new RuntimeException("Slot " + slot + " not in valid range - [0," + Math.max(this.size, tagList.size()) + ")");
     }

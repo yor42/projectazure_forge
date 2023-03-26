@@ -1,16 +1,16 @@
 package com.yor42.projectazure.client.gui.container;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDroneDockingStation;
 import com.yor42.projectazure.libs.ItemFilterEntry;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,8 @@ public class GuiDroneDockingStation extends AbstractContainerScreen<ContainerDro
     }
 
     @Override
-    public void init(Minecraft p_231158_1_, int p_231158_2_, int p_231158_3_) {
-        super.init(p_231158_1_, p_231158_2_, p_231158_3_);
+    protected void init() {
+        super.init();
         this.filterID = new EditBox(this.font, this.leftPos+80, this.topPos+57, 91,18, new TextComponent("ID"));
         this.filterID.setTextColor(-1);
         this.filterID.setTextColorUneditable(-1);
@@ -49,10 +49,10 @@ public class GuiDroneDockingStation extends AbstractContainerScreen<ContainerDro
     protected void renderBg(PoseStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
 
         if(this.menu.getScreenMode() == ContainerDroneDockingStation.ScreenMode.EDITFILTER){
-            this.minecraft.getTextureManager().bind(BG_FILTEREDIT);
+            RenderSystem.setShaderTexture(0,BG_FILTEREDIT);
         }
         else{
-            this.minecraft.getTextureManager().bind(BG_NORMAL);
+            RenderSystem.setShaderTexture(0,BG_NORMAL);
         }
         this.blit(p_230450_1_, this.leftPos, this.topPos, 0,0, this.imageWidth, this.imageHeight);
     }

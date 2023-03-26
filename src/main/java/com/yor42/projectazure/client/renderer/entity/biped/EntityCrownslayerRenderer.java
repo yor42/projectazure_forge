@@ -1,15 +1,15 @@
 package com.yor42.projectazure.client.renderer.entity.biped;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.yor42.projectazure.client.model.entity.bonus.ModelCrownslayer;
 import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Vector3f;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 

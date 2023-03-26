@@ -8,11 +8,11 @@ import com.lowdragmc.multiblocked.api.gui.recipe.ContentWidget;
 import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.yor42.projectazure.gameobject.items.ItemCompanionSpawnEgg;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class CompanionContentWidget extends ContentWidget<EntityIngredient> {

@@ -26,7 +26,7 @@ public class ModelKnife extends AnimatedGeoModel<EntityThrownKnifeProjectile> {
     }
 
     @Override
-    public void setLivingAnimations(EntityThrownKnifeProjectile entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityThrownKnifeProjectile entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
     }
 }

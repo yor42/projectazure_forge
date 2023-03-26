@@ -31,8 +31,8 @@ public class KyaruModel extends GeoCompanionModel<EntityKyaru> {
     }
 
     @Override
-    public void setLivingAnimations(EntityKyaru entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityKyaru entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone Injured = this.getAnimationProcessor().getBone("Injured");

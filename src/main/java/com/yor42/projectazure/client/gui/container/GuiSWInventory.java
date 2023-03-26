@@ -1,14 +1,14 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerSWInventory;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -30,8 +30,8 @@ public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
 
     protected void renderLabels(PoseStack pMatrixStack, int pX, int pY) {
         this.font.draw(pMatrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 0xf5ba5f);
-        this.font.draw(pMatrixStack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY, 4210752);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.font.draw(pMatrixStack, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 4210752);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(pMatrixStack, 16, 15, 0, 251, this.getHPgauge(68), 5);
         this.blit(pMatrixStack, 41, 131, 0, 245, this.getEXPgauge(71), 3);
         int gaugepixel = this.getMoralegauge(70);
@@ -61,16 +61,16 @@ public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
         Button itembutton = new EntityStatusButton(this.host,this.leftPos + 76, this.topPos + 93, 14, 14, 242, 200, -14, 14, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
         Button attackbehaviorbutton = new EntityStatusButton(this.host, this.leftPos + 76, this.topPos + 109, 14, 14, 228, 228, 14, 14, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE, DEFENCE_TOOLTIP);
 
-        this.addButton(homebutton);
-        this.addButton(itembutton);
-        this.addButton(attackbehaviorbutton);
+        this.addRenderableWidget(homebutton);
+        this.addRenderableWidget(itembutton);
+        this.addRenderableWidget(attackbehaviorbutton);
     }
 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         matrixStack.pushPose();
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         matrixStack.popPose();
         this.renderEntity(this.leftPos+46, this.topPos+112, x, y);

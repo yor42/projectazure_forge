@@ -5,17 +5,17 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.AbstractContainerInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ClientUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.components.Button;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -50,7 +50,7 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
             }else{
                 tooltips.add(new TranslatableComponent("gui.tooltip.homemode.nohome").withStyle(ChatFormatting.GRAY));
             }
-            this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
+            this.renderComponentTooltip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
         };
 
         this.DEFENCE_TOOLTIP = (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
@@ -61,7 +61,7 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
             else{
                 tooltips.add(new TranslatableComponent("gui.tooltip.aggressive.off").withStyle(ChatFormatting.BLUE));
             }
-            this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
+            this.renderComponentTooltip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
         };
 
         this.ITEM_TOOLTIP = (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
@@ -72,7 +72,7 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
             else{
                 tooltips.add(new TranslatableComponent("gui.tooltip.itempickup.off").withStyle(ChatFormatting.BLUE));
             }
-            this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
+            this.renderComponentTooltip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
         };
     }
 

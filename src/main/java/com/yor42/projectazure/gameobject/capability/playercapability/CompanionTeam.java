@@ -5,7 +5,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -110,7 +110,7 @@ public class CompanionTeam {
         UUID TeamUUID = compound.getUUID("teamUUID");
         UUID OwnerUUID = compound.getUUID("ownerUUID");
         String ownerName = compound.getString("ownerName");
-        ListTag list = compound.getList("entries", Constants.NBT.TAG_COMPOUND);
+        ListTag list = compound.getList("entries", Tag.TAG_COMPOUND);
         ArrayList<UUID> entries = new ArrayList<UUID>();
         for(int i = 0; i < list.size(); i++){
             CompoundTag entry = list.getCompound(i);

@@ -28,7 +28,7 @@ public class nagatoModel extends GeoCompanionModel<EntityNagato> {
     }
 
     @Override
-    public void setLivingAnimations(EntityNagato entity, Integer uniqueID, @Nullable AnimationEvent customPredicate)
+    public void setCustomAnimations(EntityNagato entity, int uniqueID, @Nullable AnimationEvent customPredicate)
     {
 
         IBone head = this.getAnimationProcessor().getBone("Head");
@@ -44,7 +44,7 @@ public class nagatoModel extends GeoCompanionModel<EntityNagato> {
         IBone Injured = this.getAnimationProcessor().getBone("injured");
         IBone body = this.getAnimationProcessor().getBone("Body");
 
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
         if(entity.isDeadOrDying() || (entity.isCriticallyInjured() && entity.isSleeping())){
             NormalFace.setHidden(true);

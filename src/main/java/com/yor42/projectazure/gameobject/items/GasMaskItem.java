@@ -27,7 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -92,7 +92,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
 
         int damage=0, totaldamage=0;
 
-        ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        ListTag filters = compoundNBT.getList("filters", Tag.TAG_COMPOUND);
         for(int i = 0; i<filters.size(); i++){
             ItemStack filterstack = ItemStack.of(filters.getCompound(i));
             Item item = filterstack.getItem();
@@ -114,7 +114,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
         super.onArmorTick(stack, world, player);
         CompoundTag compoundNBT = stack.getOrCreateTag();
         boolean activefilter = false;
-        ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        ListTag filters = compoundNBT.getList("filters", Tag.TAG_COMPOUND);
         for(int i = 0; i<filters.size(); i++){
             ItemStack filterstack = ItemStack.of(filters.getCompound(i));
             if(ItemStackUtils.DamageItem(player.isUnderWater()?5F:1F, filterstack)){
@@ -148,7 +148,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.defaultBlendFunc();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        
         RenderSystem.disableAlphaTest();
         Minecraft.getInstance().getTextureManager().bind(ResourceUtils.ModResourceLocation("textures/misc/gasmaskblur.png"));
         Tesselator tessellator = Tesselator.getInstance();
@@ -162,14 +162,14 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.enableAlphaTest();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level p_77624_2_, List<Component> p_77624_3_, TooltipFlag p_77624_4_) {
         super.appendHoverText(stack, p_77624_2_, p_77624_3_, p_77624_4_);
         CompoundTag compoundNBT = stack.getOrCreateTag();
-        ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        ListTag filters = compoundNBT.getList("filters", Tag.TAG_COMPOUND);
         for(int i = 0; i<filters.size(); i++){
             ItemStack filterstack = ItemStack.of(filters.getCompound(i));
             Item filteritem = filterstack.getItem();
@@ -184,7 +184,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
     public InteractionResultHolder<ItemStack> use(Level p_77659_1_, Player p_77659_2_, InteractionHand p_77659_3_) {
         ItemStack stack = p_77659_2_.getItemInHand(p_77659_3_);
         CompoundTag compoundNBT = stack.getOrCreateTag();
-        ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        ListTag filters = compoundNBT.getList("filters", Tag.TAG_COMPOUND);
 
         if(filters.isEmpty()){
             return InteractionResultHolder.pass(stack);

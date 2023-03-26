@@ -1,19 +1,18 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.ReopenEntityInventoryPacket;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
 
 public class guiRiggingInventory extends AbstractContainerScreen<RiggingContainer> {
 
@@ -24,11 +23,6 @@ public class guiRiggingInventory extends AbstractContainerScreen<RiggingContaine
     public guiRiggingInventory(RiggingContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.riggingStack = screenContainer.riggingStack;
-    }
-
-    @Override
-    public void init(Minecraft minecraft, int width, int height) {
-        super.init(minecraft, width, height);
         this.inventoryLabelX = 9;
         this.inventoryLabelY = 100;
         this.titleLabelX = 11;
@@ -37,12 +31,13 @@ public class guiRiggingInventory extends AbstractContainerScreen<RiggingContaine
         this.imageHeight = 193;
     }
 
+
     @Override
     protected void init() {
         super.init();
         if (this.menu.previousEntityUUID != null) {
             ImageButton RiggingButton = new ImageButton(this.leftPos + 81, this.topPos + 6, 12, 12, 22, 193, 13, TEXTURE, action -> switchScreen());
-            this.addButton(RiggingButton);
+            this.addRenderableWidget(RiggingButton);
         }
     }
 
@@ -65,15 +60,15 @@ public class guiRiggingInventory extends AbstractContainerScreen<RiggingContaine
 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         this.renderSlotBackgrounds(matrixStack);
     }
 
     protected void renderLabels(PoseStack matrixStack, int x, int y) {
         //this.font.draw(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 14085119);
-        this.font.draw(matrixStack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY, 14085119);
+        this.font.draw(matrixStack, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 14085119);
     }
     private void renderSlotBackgrounds(PoseStack matrixStack){
         if(this.riggingStack.getItem() instanceof ItemRiggingBase) {

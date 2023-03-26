@@ -1,15 +1,13 @@
 package com.yor42.projectazure.client.gui.buttons;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
-
-import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.resources.ResourceLocation;
 
 public class EntityStatusButton extends Button {
 
@@ -51,9 +49,9 @@ public class EntityStatusButton extends Button {
 
     public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bind(this.resourceLocation);
+        RenderSystem.setShaderTexture(0,this.resourceLocation);
         int i = this.yTexStart;
-        if (this.isHovered()) {
+        if (this.isHovered) {
             i += this.yDiffTex;
         }
 
@@ -79,7 +77,7 @@ public class EntityStatusButton extends Button {
 
         RenderSystem.enableDepthTest();
         blit(p_230431_1_, this.x, this.y, (float)j, (float)i, this.width, this.height, this.textureWidth, this.textureHeight);
-        if (this.isHovered()) {
+        if (this.isHovered) {
             this.renderToolTip(p_230431_1_, p_230431_2_, p_230431_3_);
         }
 

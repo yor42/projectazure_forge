@@ -1,14 +1,15 @@
 package com.yor42.projectazure.client.gui.container;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerPCRInventory;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -28,7 +29,7 @@ public class GuiPCRInventory extends AbstractGUIScreen<ContainerPCRInventory> {
     @Override
     protected void renderLabels(PoseStack stack, int p_230451_2_, int p_230451_3_) {
         this.font.draw(stack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 0x40424f);
-        this.font.draw(stack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY, 0x40424f);
+        this.font.draw(stack, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 0x40424f);
 
         float renderscale = 0.7F;
         stack.pushPose();
@@ -68,7 +69,6 @@ public class GuiPCRInventory extends AbstractGUIScreen<ContainerPCRInventory> {
     }
 
     protected void rendergauges(PoseStack matrixStack, int mouseX, int mouseY) {
-        this.minecraft.getTextureManager().bind(TEXTURE);
     }
 
     protected void addButtons() {
@@ -76,15 +76,15 @@ public class GuiPCRInventory extends AbstractGUIScreen<ContainerPCRInventory> {
             Button itembutton = new EntityStatusButton(this.host,this.leftPos + 183, this.topPos + 89, 16, 16, 240, 32, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
             Button attackbehaviorbutton = new EntityStatusButton(this.host, this.leftPos + 183, this.topPos + 107, 16, 16, 240, 64, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE);
 
-            this.addButton(homebutton);
-            this.addButton(itembutton);
-            this.addButton(attackbehaviorbutton);
+            this.addRenderableWidget(homebutton);
+            this.addRenderableWidget(itembutton);
+            this.addRenderableWidget(attackbehaviorbutton);
     }
 
     @Override
     protected void renderBg(PoseStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
         p_230450_1_.pushPose();
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(p_230450_1_, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         p_230450_1_.popPose();
 

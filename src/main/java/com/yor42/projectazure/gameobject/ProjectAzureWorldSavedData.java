@@ -69,7 +69,7 @@ public class ProjectAzureWorldSavedData extends SavedData {
 
     @OnlyIn(Dist.CLIENT)
     public static void DeserializeandUpdateEntireClientList(CompoundTag compound){
-        ListTag teams = compound.getList("teams", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+        ListTag teams = compound.getList("teams", Tag.TAG_COMPOUND);
         TeamListCLIENT.clear();
         for(int i=0; i<teams.size(); i++){
             CompoundTag nbt = teams.getCompound(i);
@@ -99,7 +99,7 @@ public class ProjectAzureWorldSavedData extends SavedData {
 
     @Override
     public void load(CompoundTag p_76184_1_) {
-        ListTag teams = p_76184_1_.getList("teams", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+        ListTag teams = p_76184_1_.getList("teams", Tag.TAG_COMPOUND);
         for(int i=0; i<teams.size(); i++){
             CompoundTag nbt = teams.getCompound(i);
             this.TeamList.add(CompanionTeam.deserializeNBT(nbt));

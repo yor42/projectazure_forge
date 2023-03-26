@@ -31,9 +31,8 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
     }
 
     @Override
-    public void setLivingAnimations(EntityTalulah entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
-        IBone head = this.getAnimationProcessor().getBone("Head");
+    public void setCustomAnimations(EntityTalulah entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");

@@ -1,24 +1,19 @@
 package com.yor42.projectazure.client.gui.container;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerFGOInventory;
 import com.yor42.projectazure.interfaces.IFGOServant;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.*;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class GuiFGOInventory extends AbstractGUIScreen<ContainerFGOInventory> {
 
@@ -42,7 +37,7 @@ public class GuiFGOInventory extends AbstractGUIScreen<ContainerFGOInventory> {
 
     @Override
     protected void renderBg(PoseStack matrixStack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         matrixStack.pushPose();
         float renderscale = 0.5F;
@@ -55,14 +50,14 @@ public class GuiFGOInventory extends AbstractGUIScreen<ContainerFGOInventory> {
     }
 
     protected void rendergauges(PoseStack stack, int mouseX, int mouseY){
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(stack,this.leftPos+145, this.topPos+28, 0, 253, 50, 3);
         this.blit(stack,this.leftPos+145, this.topPos+28, 0, 250, (int)((this.host.getExp()/this.host.getMaxExp())*50), 3);
     }
 
     @Override
     protected void renderLabels(@Nonnull PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_) {
-        this.font.draw(p_230451_1_, this.inventory.getDisplayName(), 26,136.25F,0x212121);
+        this.font.draw(p_230451_1_, this.playerInventoryTitle, 26,136.25F,0x212121);
         this.font.draw(p_230451_1_, new TranslatableComponent("gui.servantinventory"), 81,79.25F,0x212121);
         this.font.draw(p_230451_1_, new TranslatableComponent("gui.servantprofile"), 81,4.25F,0x212121);
 
@@ -123,8 +118,8 @@ public class GuiFGOInventory extends AbstractGUIScreen<ContainerFGOInventory> {
             Button itembutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 31, 14, 14, 242, 28, -14,14, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
             Button attackbehaviorbutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 46, 14, 14, 242, 56, -14,14, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE);
 
-            this.addButton(homebutton);
-            this.addButton(itembutton);
-            this.addButton(attackbehaviorbutton);
+            this.addRenderableWidget(homebutton);
+            this.addRenderableWidget(itembutton);
+            this.addRenderableWidget(attackbehaviorbutton);
         }
     }

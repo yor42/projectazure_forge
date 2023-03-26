@@ -1,14 +1,15 @@
 package com.yor42.projectazure.client.gui.container;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerGFLInventory;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -34,7 +35,7 @@ public class GuiGFLInventory extends AbstractGUIScreen<ContainerGFLInventory> {
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         matrixStack.pushPose();
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         for(int l = 0; l<host.getSkillItemCount(); l++){
@@ -66,7 +67,7 @@ public class GuiGFLInventory extends AbstractGUIScreen<ContainerGFLInventory> {
         String AffectionString = String.format("%,.2f", this.host.getAffection())+"/"+this.host.getmaxAffection();
         int affectionwidth = (int) ((this.font.width(AffectionString)+8)*scalerate);
         this.font.draw(matrixStack, new TextComponent(AffectionString), (140-((float)affectionwidth/2))/scalerate, 77/scalerate, 0x242424);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, (int) (((133)-((float)affectionwidth/2))/scalerate), (int) (77/scalerate), 203, 72, 7, 7);
 
         int textwidth = (int) (this.font.width(this.host.getDisplayName().getString())*scalerate);
@@ -96,7 +97,7 @@ public class GuiGFLInventory extends AbstractGUIScreen<ContainerGFLInventory> {
         Button homebutton = new ImageButton(this.leftPos+1, this.topPos+64, 14,14, homeModeX, 188, 14,TEXTURE, action->switchBehavior());
         Button itembutton = new ImageButton(this.leftPos+16, this.topPos+64, 14,14, itemModeX, 216, 14,TEXTURE, action->switchItemBehavior());
 
-        this.addButton(homebutton);
-        this.addButton(itembutton);
+        this.addRenderableWidget(homebutton);
+        this.addRenderableWidget(itembutton);
     }
 }

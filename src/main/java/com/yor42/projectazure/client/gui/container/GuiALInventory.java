@@ -1,28 +1,20 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerALInventory;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.network.packets.ChangeContainerPacket;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.*;
+import net.minecraft.world.entity.player.Inventory;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
 
@@ -43,16 +35,12 @@ public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
         this.inventory = playerinventory;
         this.imageWidth = 176;
         this.imageHeight = 193;
-    }
-
-    @Override
-    public void init(Minecraft minecraft, int width, int height) {
-        super.init(minecraft, width, height);
         this.inventoryLabelX = 9;
         this.inventoryLabelY = 100;
         this.titleLabelX = 11;
         this.titleLabelY=9;
     }
+    
 
     private enums.ALAffection affectionValuetoLevel(){
         if(this.affection>=100.0D){
@@ -105,8 +93,8 @@ public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         matrixStack.pushPose();
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         this.blit(matrixStack, this.leftPos+this.imageWidth, this.topPos, 176, 104, 43, 90);
         matrixStack.popPose();
@@ -136,9 +124,9 @@ public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
         ImageButton ItemPickupButton = new ImageButton(this.leftPos+159,this.topPos+62,9,9,itemPickupX,43,9,TEXTURE,256,256,action->switchItemBehavior(), ITEM_TOOLTIP, TextComponent.EMPTY);
         ImageButton RiggingButton = new ImageButton(this.leftPos+98,this.topPos+6,12,12,14,193,13,TEXTURE,action->switchScreen());
 
-        this.addButton(ItemPickupButton);
-        this.addButton(FreeroamButton);
-        this.addButton(RiggingButton);
+        this.addRenderableWidget(ItemPickupButton);
+        this.addRenderableWidget(FreeroamButton);
+        this.addRenderableWidget(RiggingButton);
     }
 
     private void switchScreen() {
@@ -152,7 +140,7 @@ public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
 
     private void renderAffection(PoseStack matrixStack, int mousex, int mousey) {
         matrixStack.pushPose();
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         int textureY = 1;
         int textureX = 176;
 
@@ -194,14 +182,14 @@ public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
             double AffectionLimit = this.host.isOathed()? 200:100;
             tooltips.add(new TranslatableComponent("gui.current_affection_level").append(": ").append(new TranslatableComponent(this.affectionLevel.getName())).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color))));
             tooltips.add(new TranslatableComponent("gui.current_affection_value").append(": ").append(String.format("%.2f",this.affection)+"/"+AffectionLimit).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color))));
-            this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.leftPos, mousey-this.topPos, this.font);
+            this.renderComponentTooltip(matrixStack, tooltips, mousex-this.leftPos, mousey-this.topPos, this.font);
         }
         matrixStack.popPose();
     }
 
     private void renderMorale(PoseStack matrixStack, int mousex, int mousey) {
         matrixStack.pushPose();
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         int textureY = 13;
         int textureX = 176;
 
@@ -239,7 +227,7 @@ public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
             List<MutableComponent> tooltips = new ArrayList<>();
             tooltips.add(new TranslatableComponent("gui.current_morale_level").append(": ").append(new TranslatableComponent(morale.getName())).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color))));
             tooltips.add(new TranslatableComponent("gui.current_morale_value").append(": ").append(String.format("%.2f",this.morale)+"/150").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color))));
-            this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.leftPos, mousey-this.topPos, this.font);
+            this.renderComponentTooltip(matrixStack, tooltips, mousex-this.leftPos, mousey-this.topPos, this.font);
         }
         matrixStack.popPose();
     }

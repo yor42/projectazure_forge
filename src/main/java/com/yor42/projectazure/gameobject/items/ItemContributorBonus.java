@@ -18,7 +18,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +57,7 @@ public class ItemContributorBonus extends Item {
             }
         }
         if(compound.contains("inventory")){
-            ListTag list = compound.getList("inventory", Constants.NBT.TAG_COMPOUND);
+            ListTag list = compound.getList("inventory", Tag.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++)
             {
                 CompoundTag ItemInfo = list.getCompound(i);
@@ -99,7 +99,7 @@ public class ItemContributorBonus extends Item {
         }
         if(compound.contains("inventory")){
             tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip.content").withStyle(ChatFormatting.YELLOW));
-            ListTag list = compound.getList("inventory", Constants.NBT.TAG_COMPOUND);
+            ListTag list = compound.getList("inventory", Tag.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++) {
                 CompoundTag ItemInfo = list.getCompound(i);
                 ItemStack content = ItemStack.of(ItemInfo);

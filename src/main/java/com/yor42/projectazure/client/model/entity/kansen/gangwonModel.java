@@ -34,7 +34,7 @@ public class gangwonModel extends GeoCompanionModel<EntityGangwon> {
     }
 
     @Override
-    public void setLivingAnimations(EntityGangwon entity, Integer uniqueID, @Nullable AnimationEvent customPredicate)
+    public void setCustomAnimations(EntityGangwon entity, int uniqueID, @Nullable AnimationEvent customPredicate)
     {
 
         IBone head = this.getAnimationProcessor().getBone("Head");
@@ -50,7 +50,7 @@ public class gangwonModel extends GeoCompanionModel<EntityGangwon> {
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
         if(entity.isDeadOrDying() || entity.isCriticallyInjured()){
             faint.setHidden(false);

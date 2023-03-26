@@ -807,5 +807,9 @@
   "projectazure.codex.entry.primitive_originium_battery.description": "\"This is just an iron and copper rod shoved into originium prime! how does this even store power!?\"$(br)$(br)- Old Reunion movement Research note",
 
   "projectazure.codex.entry.pantry.title": "Pantry",
-  "projectazure.codex.entry.pantry.description": "Pantries are very similar to large chest, but smaller, and can only store foods.$(br)also, your companions can take food from pantries by their own.$(br)you can also use different types of wood for different design."
+  "projectazure.codex.entry.pantry.description": "Pantries are very similar to large chest, but smaller, and can only store foods.$(br)also, your companions can take food from pantries by their own.$(br)you can also use different types of wood for different design.",
+  "gui.tooltip.homepos": "Bed Location",
+  "gui.tooltip.aggressive.on": "This companion will attack hostile entity first",
+  "gui.tooltip.aggressive.off": "This companion won't attack hostile entity first",
+  "gui.team.injured": "INJURED"
 }

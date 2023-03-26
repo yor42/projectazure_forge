@@ -3,6 +3,8 @@ package com.yor42.projectazure.client.renderer.entity;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import com.tac.guns.client.render.IHeldAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
@@ -13,28 +15,27 @@ import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.mixin.WeaponPoseAccessor;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShieldItem;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -71,103 +72,64 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     @Nullable
     @Override
     protected ItemStack getArmorForBone(String boneName, T currentEntity) {
-        switch (boneName) {
-            case "armor_leftfoot":
-            case "armor_rightfoot":
-                return boots;
-            case "armor_leftleg":
-            case "armor_rightleg":
-            case "armor_leftleg2":
-            case "armor_rightleg2":
-                return leggings;
-            case "armor_rightarm":
-            case "armor_leftarm":
-            case "armor_body":
-            case "armor_chest":
-                return chestplate;
-            case "armor_head":
-                return helmet;
-            default:
-                return null;
-        }
+        return switch (boneName) {
+            case "armor_leftfoot", "armor_rightfoot" -> boots;
+            case "armor_leftleg", "armor_rightleg", "armor_leftleg2", "armor_rightleg2" -> leggings;
+            case "armor_rightarm", "armor_leftarm", "armor_body", "armor_chest" -> chestplate;
+            case "armor_head" -> helmet;
+            default -> null;
+        };
     }
 
     @Override
     protected ModelPart getArmorPartForBone(String name, HumanoidModel<?> armorModel) {
-        switch (name) {
-            case "armor_leftfoot":
-            case "armor_leftleg":
-            case "armor_leftleg2":
-                return armorModel.leftLeg;
-            case "armor_rightfoot":
-            case "armor_rightleg":
-            case "armor_rightleg2":
-                return armorModel.rightLeg;
-            case "armor_rightarm":
-                return armorModel.rightArm;
-            case "armor_leftarm":
-                return armorModel.leftArm;
-            case "armor_body":
-            case "armor_chest":
-                return armorModel.body;
-            case "armor_head":
-                return armorModel.head;
-            default:
-                return null;
-        }
+        return switch (name) {
+            case "armor_leftfoot", "armor_leftleg", "armor_leftleg2" -> armorModel.leftLeg;
+            case "armor_rightfoot", "armor_rightleg", "armor_rightleg2" -> armorModel.rightLeg;
+            case "armor_rightarm" -> armorModel.rightArm;
+            case "armor_leftarm" -> armorModel.leftArm;
+            case "armor_body", "armor_chest" -> armorModel.body;
+            case "armor_head" -> armorModel.head;
+            default -> null;
+        };
     }
 
     @Override
     protected EquipmentSlot getEquipmentSlotForArmorBone(String boneName, T currentEntity) {
-        switch (boneName) {
-            case "armor_leftfoot":
-            case "armor_rightfoot":
-                return EquipmentSlot.FEET;
-            case "armor_leftleg":
-            case "armor_rightleg":
-            case "armor_leftleg2":
-            case "armor_rightleg2":
-                return EquipmentSlot.LEGS;
-            case "armor_rightarm":
-                return !currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-            case "armor_leftarm":
-                return currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-            case "armor_body":
-            case "armor_chest":
-                return EquipmentSlot.CHEST;
-            case "armor_head":
-                return EquipmentSlot.HEAD;
-            default:
-                return null;
-        }
+        return switch (boneName) {
+            case "armor_leftfoot", "armor_rightfoot" -> EquipmentSlot.FEET;
+            case "armor_leftleg", "armor_rightleg", "armor_leftleg2", "armor_rightleg2" -> EquipmentSlot.LEGS;
+            case "armor_rightarm" -> !currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+            case "armor_leftarm" -> currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+            case "armor_body", "armor_chest" -> EquipmentSlot.CHEST;
+            case "armor_head" -> EquipmentSlot.HEAD;
+            default -> null;
+        };
     }
 
     @Override
     protected ItemStack getHeldItemForBone(String boneName, T currentEntity) {
-        switch (boneName) {
-            case "itemOffHand":
-                return currentEntity.isLeftHanded() ? mainHand : offHand;
-            case "itemMainHand":
-                return currentEntity.isLeftHanded() ? offHand : mainHand;
-        }
-        return null;
+        return switch (boneName) {
+            case "itemOffHand" ->
+                    currentEntity.getItemInHand(currentEntity.isLeftHanded() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND);
+            case "itemMainHand" ->
+                    currentEntity.getItemInHand(currentEntity.isLeftHanded() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+            default -> null;
+        };
     }
 
     @Override
     protected ItemTransforms.TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
-        switch (boneName) {
-            case "itemOffHand":
-            case "itemMainHand":
-                return ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
-            default:
-                return ItemTransforms.TransformType.NONE;
-        }
+        return switch (boneName) {
+            case "itemOffHand", "itemMainHand" -> ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
+            default -> ItemTransforms.TransformType.NONE;
+        };
     }
 
     @Override
-    protected void handleItemAndBlockBoneRendering(PoseStack stack, GeoBone bone, @Nullable ItemStack boneItem, @Nullable BlockState boneBlock, int packedLightIn) {
+    protected void handleItemAndBlockBoneRendering(PoseStack poseStack, GeoBone bone, @Nullable ItemStack boneItem, @Nullable BlockState boneBlock, int packedLight, int packedOverlay) {
         if(!this.currentEntityBeingRendered.isPassenger() && !this.currentEntityBeingRendered.isBeingPatted() && !this.currentEntityBeingRendered.islewded()) {
-            super.handleItemAndBlockBoneRendering(stack, bone, boneItem, boneBlock, packedLightIn);
+            super.handleItemAndBlockBoneRendering(poseStack, bone, boneItem, boneBlock, packedLight, packedOverlay);
         }
     }
 
@@ -187,7 +149,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     @Override
     protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
 
-        if (item != this.mainHand && item != this.offHand) {
+        if (item != currentEntity.getItemBySlot(EquipmentSlot.MAINHAND) && item != currentEntity.getItemBySlot(EquipmentSlot.OFFHAND)) {
             return;
         }
         IOverrideModel model = ModelOverrides.getModel(item);
@@ -196,8 +158,8 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             matrixStack.translate((bone.getPositionX() / 16) * -0.4F, (bone.getPositionY() / 16) * -0.4F, (bone.getPositionZ() / 16) * -0.4F);
         }
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
-        boolean shieldFlag = item.isShield(currentEntity) || item.getItem() instanceof ShieldItem;
-        if (item == this.mainHand) {
+        boolean shieldFlag = item.getUseAnimation() == UseAnim.BLOCK || item.getItem() instanceof ShieldItem;
+        if (item == currentEntity.getItemBySlot(EquipmentSlot.MAINHAND)) {
             if (shieldFlag) {
                 matrixStack.translate(0.0, 0.125, -0.25);
             }
@@ -215,7 +177,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
 
                 float leftHanded = currentEntity.isLeftHanded() ? -1.0F : 1.0F;
                 matrixStack.translate(0.0, 0.0, 0.05);
-                float angle = (float) (Mth.lerp(Minecraft.getInstance().getFrameTime(), currentEntity.xRotO, currentEntity.xRot) / 90.0);
+                float angle = (float) (Mth.lerp(Minecraft.getInstance().getFrameTime(), currentEntity.xRotO, currentEntity.getXRot()) / 90.0);
                 float angleAbs = Math.abs(angle);
                 float zoom = 1F;
                 AimPose targetPose = (double)angle > 0.0 ? ((WeaponPoseAccessor)pose).ongetDownPose() : ((WeaponPoseAccessor)pose).ongetUpPose();
@@ -321,37 +283,23 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     protected boolean shouldHideBone(String bone){
-        switch (bone){
-            default:
+        switch (bone) {
+            default -> {
                 return false;
-            case "cosmetic_leftfeet":
-            case "cosmetic_rightfeet":
-                return !(boots.getItem() == Items.AIR);
-            case "cosmetic_leftleg":
-            case "cosmetic_rightleg":
-            case "cosmetic_leftleg2":
-            case "cosmetic_rightleg2":
-            case "cosmetic_skirt":
-                return !(leggings.getItem() == Items.AIR);
-            case "cosmetic_body":
-            case "cosmetic_chest":
-            case "cosmetic_chest2":
-            case "cosmetic_chest3":
-            case "cosmetic_chest4":
-            case "cosmetic_leftarm":
-            case "Chest2":
-            case "cosmetic_waist":
-            case "cosmetic_rightarm":
-            case "cosmetic_lefthand":
-            case "cosmetic_righthand":
-                boolean val = (chestplate.getItem() == Items.AIR);
+            }
+            case "cosmetic_leftfeet", "cosmetic_rightfeet" -> {
+                return !(this.currentEntityBeingRendered.getItemBySlot(EquipmentSlot.FEET).getItem() == Items.AIR);
+            }
+            case "cosmetic_leftleg", "cosmetic_rightleg", "cosmetic_leftleg2", "cosmetic_rightleg2", "cosmetic_skirt" -> {
+                return !(this.currentEntityBeingRendered.getItemBySlot(EquipmentSlot.LEGS).getItem() == Items.AIR);
+            }
+            case "cosmetic_body", "cosmetic_chest", "cosmetic_chest2", "cosmetic_chest3", "cosmetic_chest4", "cosmetic_leftarm", "Chest2", "cosmetic_waist", "cosmetic_rightarm", "cosmetic_lefthand", "cosmetic_righthand" -> {
+                boolean val = (this.currentEntityBeingRendered.getItemBySlot(EquipmentSlot.CHEST).getItem() == Items.AIR);
                 return !val;
-            case "cosmetic_head":
-            case "cosmetic_head2":
-            case "cosmetic_head3":
-            case "cosmetic_head4":
-            case "cosmetic_head5":
-                return !(helmet.getItem() == Items.AIR);
+            }
+            case "cosmetic_head", "cosmetic_head2", "cosmetic_head3", "cosmetic_head4", "cosmetic_head5" -> {
+                return !(this.currentEntityBeingRendered.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR);
+            }
         }
     }
 
@@ -364,7 +312,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
 
         //Do not rotate model when companion is dead.
         if (entityLiving.isAutoSpinAttack()) {
-            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(-90.0F - entityLiving.xRot));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(-90.0F - entityLiving.getXRot()));
             matrixStackIn
                     .mulPose(Vector3f.YP.rotationDegrees(((float) entityLiving.tickCount + partialTicks) * -75.0F));
         } else if (pose == Pose.SLEEPING) {

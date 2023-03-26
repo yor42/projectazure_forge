@@ -1,18 +1,18 @@
 package com.yor42.projectazure.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.buttons.buttonStarterSelect;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -45,8 +45,8 @@ public class GuiALStarterSpawn extends Screen {
         this.y = (this.height - backgroundHeight) / 2;
         this.minecraft = minecraft;
         this.scrollBarFarLeft = this.x+13;
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         //this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         for(int index = 0; index < StarterList.length; index++) {
             int buttonHeight = 127;
@@ -110,8 +110,8 @@ public class GuiALStarterSpawn extends Screen {
     }
 
     private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 

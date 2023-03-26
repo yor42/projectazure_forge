@@ -31,8 +31,8 @@ public class ModelRecruitBeacon extends AnimatedGeoModel<TileEntityRecruitBeacon
     }
 
     @Override
-    public void setLivingAnimations(TileEntityRecruitBeacon entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(TileEntityRecruitBeacon entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone Light = this.getAnimationProcessor().getBone("light");
         if(this.LastLightSwitchTime == 0){
             this.LastLightSwitchTime = System.currentTimeMillis();

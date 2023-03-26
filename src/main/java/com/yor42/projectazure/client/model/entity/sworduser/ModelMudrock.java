@@ -30,8 +30,8 @@ public class ModelMudrock extends GeoCompanionModel<EntityMudrock> {
         return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/mudrock.animation.json");
     }
     @Override
-    public void setLivingAnimations(EntityMudrock entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityMudrock entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");

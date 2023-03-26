@@ -29,8 +29,8 @@ public class Z23Model extends GeoCompanionModel<EntityZ23> {
     }
 
     @Override
-    public void setLivingAnimations(EntityZ23 entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityZ23 entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");

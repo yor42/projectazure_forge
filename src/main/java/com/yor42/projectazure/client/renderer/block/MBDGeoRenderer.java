@@ -11,25 +11,25 @@ import com.lowdragmc.multiblocked.api.tile.IComponent;
 import com.lowdragmc.multiblocked.client.renderer.IMultiblockedRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import com.mojang.math.Vector3f;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -52,6 +52,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.resource.GeckoLibCache;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import software.bernie.geckolib3.util.RenderUtils;
 
 import javax.annotation.Nonnull;
@@ -61,6 +62,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+@Deprecated
 public class MBDGeoRenderer extends AnimatedGeoModel<MBDGeoRenderer.ComponentFactory> implements IMultiblockedRenderer, IGeoRenderer<MBDGeoRenderer.ComponentFactory> {
     public static final MBDGeoRenderer INSTANCE = new MBDGeoRenderer(null, false);
     private static final Set<String> particleTexture = new HashSet();
@@ -91,7 +93,7 @@ public class MBDGeoRenderer extends AnimatedGeoModel<MBDGeoRenderer.ComponentFac
         }
 
         GeoModel model = this.getModel(this.getModelLocation(this.itemFactory));
-        this.setLivingAnimations(this.itemFactory, this.getUniqueID(this.itemFactory));
+        this.setCustomAnimations(this.itemFactory, this.getInstanceId(this.itemFactory));
         matrixStack.pushPose();
         matrixStack.translate(0.0, 0.009999999776482582, 0.0);
         matrixStack.translate(0.5, 0.0, 0.5);
@@ -183,7 +185,8 @@ public class MBDGeoRenderer extends AnimatedGeoModel<MBDGeoRenderer.ComponentFac
             IComponent controller = (IComponent)te;
             ComponentFactory factory = (ComponentFactory)controller.getRendererObject();
             GeoModel model = this.getModel(this.getModelLocation(factory));
-            this.setLivingAnimations(factory, this.getUniqueID(factory));
+
+            this.setCustomAnimations(factory, this.getInstanceId(factory));
             stack.pushPose();
             stack.translate(0.0, 0.009999999776482582, 0.0);
             stack.translate(0.5, 0.0, 0.5);
@@ -235,11 +238,11 @@ public class MBDGeoRenderer extends AnimatedGeoModel<MBDGeoRenderer.ComponentFac
         }
 
         stack.pushPose();
-        RenderUtils.translate(bone, stack);
-        RenderUtils.moveToPivot(bone, stack);
-        RenderUtils.rotate(bone, stack);
-        RenderUtils.scale(bone, stack);
-        RenderUtils.moveBackFromPivot(bone, stack);
+        RenderUtils.translateMatrixToBone(stack, bone);
+        RenderUtils.translateToPivotPoint(stack, bone);
+        RenderUtils.rotateMatrixAroundBone(stack, bone);
+        RenderUtils.scaleMatrixForBone(stack, bone);
+        RenderUtils.translateAwayFromPivotPoint(stack, bone);
         Iterator var7;
         if (!bone.isHidden()) {
             for(var7 = bone.childCubes.iterator(); var7.hasNext(); stack.popPose()) {
@@ -311,7 +314,7 @@ public class MBDGeoRenderer extends AnimatedGeoModel<MBDGeoRenderer.ComponentFac
         public final MBDGeoRenderer renderer;
         public final AnimationFile animationFile;
         public String currentStatus;
-        private final AnimationFactory factory = new AnimationFactory(this);
+        private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
         public ComponentFactory(IComponent component, MBDGeoRenderer renderer) {
             this.component = component;

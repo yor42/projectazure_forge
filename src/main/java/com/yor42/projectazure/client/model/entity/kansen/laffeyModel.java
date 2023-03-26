@@ -28,8 +28,8 @@ public class laffeyModel extends GeoCompanionModel<EntityLaffey> {
     }
 
     @Override
-    public void setLivingAnimations(EntityLaffey entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityLaffey entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");

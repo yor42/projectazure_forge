@@ -29,7 +29,7 @@ public class RosmontisModel extends GeoCompanionModel<EntityRosmontis> {
     }
 
     @Override
-    public void setLivingAnimations(EntityRosmontis entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setCustomAnimations(EntityRosmontis entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
@@ -44,7 +44,7 @@ public class RosmontisModel extends GeoCompanionModel<EntityRosmontis> {
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
         if(entity.isDeadOrDying()){
             NormalFace.setHidden(true);

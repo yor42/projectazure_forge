@@ -4,8 +4,9 @@ import com.yor42.projectazure.client.model.entity.sworduser.ModelYato;
 import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.EntityYato;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Items;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 
 import javax.annotation.Nonnull;
@@ -21,7 +22,7 @@ public class EntityYatoRenderer extends GeoCompanionRenderer<EntityYato> {
     protected boolean shouldHideBone(String bone) {
 
         if(bone.contains("visor")){
-            return !(helmet.getItem() == Items.AIR);
+            return !(this.currentEntityBeingRendered.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR);
         }
 
         return super.shouldHideBone(bone);

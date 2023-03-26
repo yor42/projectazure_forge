@@ -2,7 +2,6 @@ package com.yor42.projectazure.client.renderer.entity.projectile;
 
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;

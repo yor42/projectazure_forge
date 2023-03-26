@@ -31,8 +31,8 @@ public class ModelYato extends GeoCompanionModel<EntityYato> {
     }
 
     @Override
-    public void setLivingAnimations(EntityYato entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityYato entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone visor1 = this.getAnimationProcessor().getBone("visor");
         IBone visor2 = this.getAnimationProcessor().getBone("visor2");
         IBone visor3 = this.getAnimationProcessor().getBone("visor3");

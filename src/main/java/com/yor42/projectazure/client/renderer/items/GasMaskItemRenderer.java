@@ -5,10 +5,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.items.GeoGasMaskItemModel;
 import com.yor42.projectazure.gameobject.items.GasMaskFilterItem;
 import com.yor42.projectazure.gameobject.items.GasMaskItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
@@ -24,7 +24,7 @@ public class GasMaskItemRenderer extends GeoItemRenderer<GasMaskItem> {
         if(bonename.contains("filter")) {
             CompoundTag compoundNBT = this.currentItemStack.getOrCreateTag();
             int index = Integer.parseInt(bonename.substring(bonename.length()-1))-1;
-            ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+            ListTag filters = compoundNBT.getList("filters", Tag.TAG_COMPOUND);
             if(index>=filters.size()){
                 bone.setHidden(true);
             }

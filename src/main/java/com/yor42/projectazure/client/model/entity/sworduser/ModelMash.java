@@ -29,8 +29,8 @@ public class ModelMash extends GeoCompanionModel<EntityMash> {
         return AnimationLocation("entity/sworduser/mash");
     }
     @Override
-    public void setLivingAnimations(EntityMash entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityMash entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone Injured = this.getAnimationProcessor().getBone("Injured");

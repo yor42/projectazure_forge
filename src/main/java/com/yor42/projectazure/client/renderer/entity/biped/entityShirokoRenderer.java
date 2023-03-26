@@ -4,9 +4,6 @@ import com.yor42.projectazure.client.model.entity.gunUser.ModelShiroko;
 import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.util.ResourceLocation;
-
-import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class entityShirokoRenderer extends GeoCompanionRenderer<EntityShiroko> {
 

@@ -5,10 +5,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.block.ModelRecruitBeacon;
 import com.yor42.projectazure.gameobject.blocks.machines.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
@@ -22,7 +22,7 @@ public class MachineRecruitBeaconRenderer extends GeoBlockRenderer<TileEntityRec
     private MultiBufferSource rtb;
     private ResourceLocation texture;
 
-    public MachineRecruitBeaconRenderer(BlockEntityRenderDispatcher rendererDispatcherIn) {
+    public MachineRecruitBeaconRenderer(BlockEntityRendererProvider.Context rendererDispatcherIn) {
         super(rendererDispatcherIn, new ModelRecruitBeacon());
     }
 

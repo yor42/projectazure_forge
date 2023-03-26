@@ -30,8 +30,8 @@ public class ModelHK416 extends GeoCompanionModel<EntityHK416> {
     }
 
     @Override
-    public void setLivingAnimations(EntityHK416 entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityHK416 entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone Injured = this.getAnimationProcessor().getBone("Injured");

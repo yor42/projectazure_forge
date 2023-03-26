@@ -4,7 +4,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.core.NonNullList;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -20,7 +20,7 @@ public class MultiInvStackHandlerItemStack extends MultiInvStackHandler {
             NonNullList<ItemStack> stacks = NonNullList.withSize(size, ItemStack.EMPTY);
             CompoundTag nbt = container.getOrCreateTag();
             if (nbt.contains("Inventory_" + id)) {
-                ListTag items = nbt.getCompound("Inventory_" + id).getList("Items", Constants.NBT.TAG_COMPOUND);
+                ListTag items = nbt.getCompound("Inventory_" + id).getList("Items", Tag.TAG_COMPOUND);
                 for (int i = 0; i < items.size(); i++) {
                     CompoundTag item = items.getCompound(i);
                     int slot = item.getInt("Slot");

@@ -1,15 +1,15 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerCLSInventory;
-import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -39,15 +39,15 @@ public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> im
 
         Button homebutton = new EntityStatusButton(this.host, this.leftPos+178, this.topPos+141, 14,14, homeModeX, 210, 14,0,TEXTURE, EntityStatusButton.ACTIONTYPES.FREEROAM, FREEROAM_TOOLTIP);
         Button itembutton = new EntityStatusButton(this.host, this.leftPos+193, this.topPos+141, 14,14, ItemPickupX, 210, 14,0,TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
-        this.addButton(homebutton);
-        this.addButton(itembutton);
+        this.addRenderableWidget(homebutton);
+        this.addRenderableWidget(itembutton);
     }
 
     @Override
     protected void renderLabels(PoseStack stack, int p_230451_2_, int p_230451_3_) {
         stack.pushPose();
         this.font.draw(stack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 0xe3eef4);
-        this.font.draw(stack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY, 0xe3eef4);
+        this.font.draw(stack, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 0xe3eef4);
         this.font.draw(stack, new TranslatableComponent("gui.ammostorage.title"), this.imageWidth+6, 10, 16777215);
         stack.popPose();
         stack.pushPose();
@@ -63,7 +63,7 @@ public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> im
     }
 
     private void renderValues(PoseStack matrixStack, int mouseX, int mouseY) {
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         int health = ((int)(40*(this.host.getHealth()/this.host.getMaxHealth())));
         this.blit(matrixStack, this.leftPos+27,this.topPos+35, 18, 244, health, 6);
         this.blit(matrixStack, this.leftPos+33,this.topPos+195, 58, 251, ((int)(72*(this.host.getExp()/this.host.getMaxExp()))), 5);
@@ -76,8 +76,8 @@ public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> im
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         matrixStack.pushPose();
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         this.blit(matrixStack, this.leftPos + this.imageWidth + 4, this.topPos + 9, 214, 0, 42, 87);
 

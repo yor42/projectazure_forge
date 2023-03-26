@@ -2,19 +2,18 @@ package com.yor42.projectazure.client.renderer.entity.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntitySpellBall;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntitySpellBall;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -30,7 +29,7 @@ public class EntitySpellBallRenderer extends EntityRenderer<EntitySpellBall> {
     public void render(EntitySpellBall entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         packedLightIn = LightTexture.pack(15, 15);
         matrixStackIn.pushPose();
-        float xrot = entityIn.xRot;
+        float xrot = entityIn.getXRot();
         float yrot = entityYaw;
         float zrot = this.entityRenderDispatcher.cameraOrientation().k() * this.entityRenderDispatcher.cameraOrientation().r();
         float vec = Math.max(1, Math.max(Math.max(Math.abs(xrot), Math.abs(yrot)), Math.abs(zrot)));

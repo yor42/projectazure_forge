@@ -1,34 +1,27 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ClientUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.text.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInventory> {
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/arknights_inventory.png");
@@ -55,7 +48,7 @@ public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInvento
 
 
     private void renderValues(PoseStack matrixStack, int mouseX, int mouseY) {
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         int affectionlv1_scaled = (int)(46*Math.min(this.companion.getAffection(), 100)/100);
         int affectionlv2_scaled = (int)(46*Math.min(this.companion.getAffection()-100, 100)/100);
         int morale_scaled = (int)(35*this.companion.getMorale()/150);
@@ -79,7 +72,7 @@ public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInvento
         if ((this.minecraft != null ? this.minecraft.level : null) != null) {
 
             this.fillGradient(matrixStack, 0, 0, this.width, this.height, 0xcbcbcbC0, 0xC06D6D6D);
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this, matrixStack));
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.ScreenEvent.BackgroundDrawnEvent(this, matrixStack));
         } else {
             this.renderDirtBackground(vOffset);
         }
@@ -87,7 +80,7 @@ public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInvento
     }
 
     protected void renderLabels(PoseStack matrixStack, int x, int y) {
-        this.font.draw(matrixStack, this.inventory.getDisplayName(), 5, 95, 16777215);
+        this.font.draw(matrixStack, this.playerInventoryTitle, 5, 95, 16777215);
         matrixStack.pushPose();
         float scalerate = 0.8F;
         matrixStack.scale(scalerate,scalerate,scalerate);
@@ -113,9 +106,8 @@ public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInvento
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         matrixStack.pushPose();
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.renderEntity(x, y);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         if(this.companion.getAmmoStorage().getSlots()>0) {
@@ -174,21 +166,21 @@ public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInvento
             else{
                 tooltips.add(new TranslatableComponent("gui.tooltip.homemode.nohome").withStyle(ChatFormatting.GRAY));
             }
-            this.renderWrappedToolTip(stack, tooltips, mousex, mousey, this.font);
+            this.renderComponentTooltip(stack, tooltips, mousex, mousey, this.font);
         }
         else if(this.isHovering(0,40,10,10, mousex, mousey)){
-            List<MutableComponent> tooltips = new ArrayList<>();
+            List<Component> tooltips = new ArrayList<>();
             if(this.companion.shouldPickupItem()){
                 tooltips.add(new TranslatableComponent("gui.tooltip.itempickup.on").withStyle(ChatFormatting.GREEN));
             }
             else{
                 tooltips.add(new TranslatableComponent("gui.tooltip.itempickup.off").withStyle(ChatFormatting.BLUE));
             }
-            this.renderWrappedToolTip(stack, tooltips, mousex, mousey, this.font);
+            this.renderComponentTooltip(stack, tooltips, mousex, mousey, this.font);
         }
 
-        this.addButton(HomeModeButton);
-        this.addButton(ItemPickupButton);
+        this.addRenderableWidget(HomeModeButton);
+        this.addRenderableWidget(ItemPickupButton);
     }
 
     private void renderEntity(int mousex, int mousey){

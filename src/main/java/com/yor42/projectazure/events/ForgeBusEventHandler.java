@@ -54,9 +54,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
@@ -67,8 +66,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -119,7 +116,7 @@ public class ForgeBusEventHandler {
 
         if(headItem instanceof GasMaskItem){
             CompoundTag compoundNBT = headstack.getOrCreateTag();
-            ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+            ListTag filters = compoundNBT.getList("filters", Tag.TAG_COMPOUND);
             for(int i = 0; i<filters.size(); i++){
                 ItemStack filterstack = ItemStack.of(filters.getCompound(i));
                 if(ItemStackUtils.isDestroyed(filterstack)){
@@ -193,7 +190,7 @@ public class ForgeBusEventHandler {
 
         if(headItem == RegisterItems.GASMASK.get()){
             CompoundTag compoundNBT = headstack.getOrCreateTag();
-            ListTag filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+            ListTag filters = compoundNBT.getList("filters", Tag.TAG_COMPOUND);
             for(int i = 0; i<filters.size(); i++){
                 ItemStack filterstack = ItemStack.of(filters.getCompound(i));
                 if(ItemStackUtils.isDestroyed(filterstack)){
@@ -214,11 +211,11 @@ public class ForgeBusEventHandler {
 
         Main.LOGGER.debug("Starting multiblock recipe registration.");
         try{
-            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("prime_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME), 1)).perTick(true).output(FEMultiblockCapability.CAP, 2000).duration(1200).buildAndRegister();
-            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("originite_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINITE), 1)).perTick(true).output(FEMultiblockCapability.CAP, 4000).duration(400).buildAndRegister();
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("prime_to_power").input(ItemMultiblockCapability.CAP, Ingredient.of(ModTags.Items.ORIGINIUM_PRIME)).perTick(true).output(FEMultiblockCapability.CAP, 2000).duration(1200).buildAndRegister();
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("originite_to_power").input(ItemMultiblockCapability.CAP, Ingredient.of(ModTags.Items.ORIGINITE)).perTick(true).output(FEMultiblockCapability.CAP, 4000).duration(400).buildAndRegister();
 
-            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(RegisterItems.AMBER_ORIGINIUM.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 8000).duration(500).buildAndRegister();
-            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_fuel_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(RegisterItems.AMBER_ORIGINIUM_FUEL_ROD.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 10000).duration(1000).buildAndRegister();
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_to_power").input(ItemMultiblockCapability.CAP, Ingredient.of(RegisterItems.AMBER_ORIGINIUM.get())).perTick(true).output(FEMultiblockCapability.CAP, 8000).duration(500).buildAndRegister();
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_fuel_to_power").input(ItemMultiblockCapability.CAP, Ingredient.of(RegisterItems.AMBER_ORIGINIUM_FUEL_ROD.get())).perTick(true).output(FEMultiblockCapability.CAP, 10000).duration(1000).buildAndRegister();
 
             AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("9mm")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS)))

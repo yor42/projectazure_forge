@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.capabilities.*;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -33,8 +33,7 @@ public class ProjectAzurePlayerCapability {
 
     public static final ResourceLocation CapabilityID = ModResourceLocation("capability_paplayer");
 
-    @CapabilityInject(ProjectAzurePlayerCapability.class)
-    public static final Capability<ProjectAzurePlayerCapability> PA_PLAYER_CAPABILITY = null;
+    public static final Capability<ProjectAzurePlayerCapability> PA_PLAYER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});;
 
     public ProjectAzurePlayerCapability(Player player){
         this.player = player;
@@ -116,7 +115,7 @@ public class ProjectAzurePlayerCapability {
     }
 
     public void deserializeNBT(CompoundTag compound){
-        ListTag entities = compound.getList("companions", Constants.NBT.TAG_COMPOUND);
+        ListTag entities = compound.getList("companions", Tag.TAG_COMPOUND);
         for(int i=0; i<entities.size(); i++){
             CompoundTag nbt = entities.getCompound(i);
             Level world = this.player.getCommandSenderWorld();

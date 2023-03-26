@@ -1,22 +1,20 @@
 package com.yor42.projectazure.client.gui.buttons;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
-
-import net.minecraft.client.gui.components.Button.OnPress;
 
 public class buttonStarterSelect extends ImageButton {
     private final ResourceLocation resourceLocation;
@@ -51,10 +49,9 @@ public class buttonStarterSelect extends ImageButton {
     public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         int logox, logoy;
 
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bind(this.resourceLocation);
+        RenderSystem.setShaderTexture(0,this.resourceLocation);
         int i = this.xTexStart;
-        if (this.isHovered()) {
+        if (this.isHovered) {
             i += this.xDiffText;
         }
 
@@ -118,7 +115,7 @@ public class buttonStarterSelect extends ImageButton {
         }
 
 
-        if (this.isHovered()) {
+        if (this.isHovered) {
             this.renderToolTip(matrixStack, mouseX, mouseY);
         }
 

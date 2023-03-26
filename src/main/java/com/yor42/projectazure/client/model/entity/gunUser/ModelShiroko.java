@@ -30,8 +30,8 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
     }
 
     @Override
-    public void setLivingAnimations(EntityShiroko entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityShiroko entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
         IBone Halo = this.getAnimationProcessor().getBone("Halo");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");

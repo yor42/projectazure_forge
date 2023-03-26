@@ -2,10 +2,7 @@ package com.yor42.projectazure.client.model.entity.misc;
 
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-
-import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.*;
 
@@ -25,8 +22,4 @@ public class modelProjectileTorpedo extends AnimatedGeoModel<EntityProjectileTor
         return ModResourceLocation("animations/entity/misc/projectiletorpedo.animation.json");
     }
 
-    @Override
-    public void setLivingAnimations(EntityProjectileTorpedo entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
-    }
 }

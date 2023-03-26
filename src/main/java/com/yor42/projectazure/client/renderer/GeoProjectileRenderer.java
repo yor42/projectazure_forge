@@ -1,18 +1,18 @@
 package com.yor42.projectazure.client.renderer;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import com.mojang.math.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -56,13 +56,13 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityIn));
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(
-                Mth.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 180.0F));
+                Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 180.0F));
         matrixStackIn.mulPose(Vector3f.ZP
-                .rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
-        Minecraft.getInstance().textureManager.bind(getTextureLocation(entityIn));
+                .rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
+        RenderSystem.setShaderTexture(0,getTextureLocation(entityIn));
         AnimationEvent<T> predicate = new AnimationEvent<T>(entityIn, 0, 0, partialTicks,
                 !entityIn.getDeltaMovement().equals(Vec3.ZERO), Collections.singletonList(entityModelData));
-        ((IAnimatableModel<T>) modelProvider).setLivingAnimations(entityIn, this.getUniqueID(entityIn), predicate);
+        ((IAnimatableModel<T>) modelProvider).setCustomAnimations(entityIn, this.getInstanceId(entityIn), predicate);
         Color renderColor = getRenderColor(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn);
         RenderType renderType = getRenderType(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn,
                 getTextureLocation(entityIn));

@@ -1,26 +1,48 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
+import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
+import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.network.packets.CreateTeamPacket;
+import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
+import com.yor42.projectazure.network.packets.RemoveTeamPacket;
+import com.yor42.projectazure.network.packets.TeamNameChangedPacket;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.util.text.*;
-
-import javax.annotation.Nullable;
-
-import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
-import static net.minecraft.util.text.TextFormatting.DARK_RED;
-import static net.minecraft.util.text.TextFormatting.Yimport net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.FormattedCharSequence;
 
-ELLOW;
+import javax.annotation.Nullable;
 
-public clasnet.minecraft.ChatFormatting   /*
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
+import static net.minecraft.ChatFormatting.DARK_RED;
+import static net.minecraft.ChatFormatting.YELLOW;
+
+
+public class GuiTeamFormation extends Screen{   /*
      * Part of class is based on SkillScreen from Dexterity.
      * Get the Source Code in github:
      * https://github.com/Rongmario/Dexterity/blob/master/src/main/java/zone/rong/dexterity/rpg/skill/client/SkillScreen.java
@@ -57,18 +79,19 @@ public clasnet.minecraft.ChatFormatting   /*
         this.name.tick();
         List<CompanionTeam> teams = this.player_teams;
 
+        assert this.minecraft != null;
+        assert this.minecraft.player != null;
         ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(this.minecraft.player);
         List<AbstractEntityCompanion> entities = capability.getCompanionList().stream().filter((entity) -> this.getEditingTeam().map((team)->team.getMembers().contains(entity.getUUID())).orElse(false)).collect(Collectors.toList());
 
         this.player_teams = ProjectAzureWorldSavedData.getPlayersTeamClient(this.minecraft.player);
-        if(teams.size()!=ProjectAzureWorldSavedData.getPlayersTeamClient(this.minecraft.player).size() || this.Entitycache.size()!=entities.size()){
+        if(teams.size()!= ProjectAzureWorldSavedData.getPlayersTeamClient(this.minecraft.player).size() || this.Entitycache.size()!=entities.size()){
             this.init();
         }
     }
 
     @Override
-    public void init(Minecraft p_231158_1_, int p_231158_2_, int p_231158_3_) {
-        super.init(p_231158_1_, p_231158_2_, p_231158_3_);
+    protected void init() {
         this.name = new EditBox(this.font, x + 9, y + 25, 109, 16, new TranslatableComponent("team.defaultteamname"));
         this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
         this.name.setTextColor(-1);
@@ -76,18 +99,13 @@ public clasnet.minecraft.ChatFormatting   /*
         this.name.setBordered(true);
         this.name.setMaxLength(35);
         this.name.setResponder(this::onNameChanged);
-        this.children.add(this.name);
-    }
-
-    @Override
-    protected void init() {
+        this.addWidget(this.name);
         this.notYetPopulated = true;
         this.backgroundWidth = this.Subscreen == 0? 248:155;
         this.backgroundHeight = this.Subscreen == 0?219:167;
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2;
-        this.buttons.clear();
-        this.children.clear();
+        this.clearWidgets();
         super.init();
         this.scrollBarTop = this.y + 24;
         this.lastScrollY = this.scrollBarTop;
@@ -172,10 +190,9 @@ public clasnet.minecraft.ChatFormatting   /*
             int i=-1;
             for (AbstractEntityCompanion entity : entities) {
                 Button button = new EntityButton(this.x+8, this.y+24+(27*++i), 121, 27, entity, (runnable)->this.addMeber(entity));
-                this.addButton(button);
+                this.addRenderableWidget(button);
             }
         }
-        this.resolveAndRenderButtons(matrixStack, mouseX, mouseY, partialTicks);
         this.notYetPopulated = false;
     }
 
@@ -185,7 +202,7 @@ public clasnet.minecraft.ChatFormatting   /*
             int scrollbarTop = this.scrollBarTop;
             this.lastScrollY = Math.min(maxy, Math.max(scrollbarTop, drop));
         }
-        this.minecraft.getTextureManager().bind(GuiTeamFormation.TEXTURE_SUBSCREEN);
+        RenderSystem.setShaderTexture(0,GuiTeamFormation.TEXTURE_SUBSCREEN);
         this.blit(stack, this.x + 135, this.lastScrollY, this.scrollbarClicked || entityCount<=5 ? 167 : 155, 0, 12, 20);
     }
 
@@ -199,7 +216,7 @@ public clasnet.minecraft.ChatFormatting   /*
                     if (this.notYetPopulated) {
                         //draw create team button here
                         Button button = new CreateButton(this.x + 126, this.y + 6 + 37 * i, 110, 37, new TranslatableComponent("gui.teamformation.createteam"), (runnable) -> this.addTeam());
-                        this.addButton(button);
+                        this.addRenderableWidget(button);
                     }
                 } else {
                     CompanionTeam team = this.player_teams.get(i+(5*this.TeamListPage));
@@ -210,7 +227,7 @@ public clasnet.minecraft.ChatFormatting   /*
                     this.minecraft.font.drawShadow(matrixStack, text, this.x + x, this.y + y, isSelected ? 0xFFFFFF00 : 0xFFFFFFFF);
                     if (this.notYetPopulated) {
                         Button button = new ImageButton(this.x + x + 96, this.y + y, 11, 11, 125, 0, 11, BUTTON_TEXTURE, (runnable) -> this.deleteTeam(team));
-                        this.addButton(button);
+                        this.addRenderableWidget(button);
                     }
                 }
                 i++;
@@ -228,9 +245,9 @@ public clasnet.minecraft.ChatFormatting   /*
                         AbstractEntityCompanion entity = entities.get(j);
                         if (this.notYetPopulated) {
                             Button button = new ImageButton(x, y, 14, 29, 0, 0, 29, BUTTON_TEXTURE, (runnable) -> this.removeMeber(entity));
-                            this.addButton(button);
+                            this.addRenderableWidget(button);
                         }
-                        this.minecraft.getTextureManager().bind(TEXTURE_MAINSCREEN);
+                        RenderSystem.setShaderTexture(0,TEXTURE_MAINSCREEN);
                         this.blit(matrixStack, x+14, y, 0, 219,97,29);
                         this.font.drawShadow(matrixStack, entity.getDisplayName(), x+18, y+4, 0xFFFFFF);
                         matrixStack.pushPose();
@@ -252,7 +269,7 @@ public clasnet.minecraft.ChatFormatting   /*
                         float textx =(float) (this.x+26)/renderscale;
                         float texty = (float) (this.y + 79.5 + (29 * j))/renderscale;
                         this.font.drawShadow(matrixStack, text, textx, texty, -1);
-                        this.font.drawShadow(matrixStack, new TextComponent("Lv.").withStyle(ChatFormatting.WHITE).append(new TextComponent(Integer.toString(entity.getLevel())).withStyle(ChatFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
+                        this.font.drawShadow(matrixStack, new TextComponent("Lv.").withStyle(ChatFormatting.WHITE).append(new TextComponent(Integer.toString(entity.getEntityLevel())).withStyle(ChatFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
                         matrixStack.popPose();
                         renderEntityInInventory(x+99, y+26, 14, mouseX, mouseY, entity);
                     }
@@ -260,7 +277,7 @@ public clasnet.minecraft.ChatFormatting   /*
                         if (this.notYetPopulated) {
                             //draw add member button here
                             Button button = new CreateButton(x, y, 111, 29, new TranslatableComponent("gui.teamformation.addmember"), true, (runnable) -> this.changeScreen(1));
-                            this.addButton(button);
+                            this.addRenderableWidget(button);
                         }
                     }
                 }
@@ -279,12 +296,12 @@ public clasnet.minecraft.ChatFormatting   /*
             if (this.notYetPopulated) {
                 if ((1 + this.TeamListPage) * 5 <= this.player_teams.size()) {
                     Button button = new ImageButton(x+8+textWidth+16, y-8, 16, 16, 141, 22, 17, BUTTON_TEXTURE, (runnable) -> this.Scrolldown());
-                    this.addButton(button);
+                    this.addRenderableWidget(button);
                 }
 
                 if (this.TeamListPage >0) {
                     Button button = new ImageButton(x, y-8, 16, 16, 125, 22, 16, BUTTON_TEXTURE, (runnable) -> this.Scrollup());
-                    this.addButton(button);
+                    this.addRenderableWidget(button);
                 }
             }
 
@@ -306,25 +323,6 @@ public clasnet.minecraft.ChatFormatting   /*
         }
         this.init();
     }
-
-    protected void resolveAndRenderButtons(PoseStack stack, int mouseX, int mouseY, float delta) {
-        int position = Math.floorDiv(this.lastScrollY - this.scrollBarTop, 5); // CORRECT - GETS THE 'INDEX"
-        for (int i = 0; i < this.buttons.size(); i++) {
-            AbstractWidget button = this.buttons.get(i);
-            if(button instanceof EntityButton) {
-                if (i < position || i > position + 6) {
-                    button.visible = false;
-                    button.active = false;
-                } else {
-                    button.visible = true;
-                    button.active = true;
-                    button.y = this.scrollBarTop + ((i - position) * 27);
-                    button.render(stack, mouseX, mouseY, delta);
-                }
-            }
-        }
-    }
-
     public void Scrollup(){
         this.TeamListPage--;
         this.init();
@@ -420,7 +418,7 @@ public clasnet.minecraft.ChatFormatting   /*
 
     private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation textureLocation = this.Subscreen==0? TEXTURE_MAINSCREEN:TEXTURE_SUBSCREEN;
-        this.minecraft.getTextureManager().bind(textureLocation);
+        RenderSystem.setShaderTexture(0,textureLocation);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
@@ -450,10 +448,10 @@ public clasnet.minecraft.ChatFormatting   /*
             int textWidth = font.width(ireorderingprocessor);
             int startX = (this.x+this.width/2) - (textWidth+20) / 2;
             if(this.hasBG){
-                this.blit(matrix, this.x, this.y, 14,this.isHovered()?29:0, 111,29);
+                this.blit(matrix, this.x, this.y, 14,this.isHovered?29:0, 111,29);
             }
-            font.drawShadow(matrix, this.getMessage(), startX+20, this.y + (this.height - 8) / 2, this.isHovered()?0xffff00:0xffffff);
-            minecraft.getTextureManager().bind(GuiTeamFormation.BUTTON_TEXTURE);
+            font.drawShadow(matrix, this.getMessage(), startX+20, this.y + (this.height - 8) / 2, this.isHovered?0xffff00:0xffffff);
+            RenderSystem.setShaderTexture(0,GuiTeamFormation.BUTTON_TEXTURE);
             this.blit(matrix, startX, this.y + (this.height - 16) / 2, 0,58, 16,16);
         }
     }
@@ -469,9 +467,9 @@ public clasnet.minecraft.ChatFormatting   /*
         public void renderButton(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
             Minecraft minecraft = Minecraft.getInstance();
             Font font = minecraft.font;
-            minecraft.getTextureManager().bind(GuiTeamFormation.TEXTURE_SUBSCREEN);
-            this.blit(matrix, this.x, this.y, 0,this.isHovered()?194:167, 121,27);
-            font.drawShadow(matrix, this.getMessage(), this.x+4, this.y + 4, this.isHovered()?0xffff00:0xffffff);
+            RenderSystem.setShaderTexture(0,GuiTeamFormation.TEXTURE_SUBSCREEN);
+            this.blit(matrix, this.x, this.y, 0,this.isHovered?194:167, 121,27);
+            font.drawShadow(matrix, this.getMessage(), this.x+4, this.y + 4, this.isHovered?0xffff00:0xffffff);
             matrix.pushPose();
             float renderscale = 0.8F;
             matrix.scale(renderscale,renderscale,renderscale);

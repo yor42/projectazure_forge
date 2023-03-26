@@ -1,16 +1,16 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerBasicChemicalReactor;
 import com.yor42.projectazure.libs.utils.RenderingUtils;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.vertex.Tesselator;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 
 public class GuiBasicChemicalReactor extends AbstractContainerScreen<ContainerBasicChemicalReactor> {
@@ -36,15 +36,15 @@ public class GuiBasicChemicalReactor extends AbstractContainerScreen<ContainerBa
         RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.leftPos+27,this.topPos+118+(32-height), 12, height);
         buffer.endBatch();
 
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos + 117, this.topPos + 26, 176, 31, 14, 34);
     }
 
     @Override
     protected void renderBg(PoseStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         int i = this.leftPos;
         int j = this.topPos;
         this.blit(p_230450_1_, i, j, 0, 0, this.imageWidth, this.imageHeight);

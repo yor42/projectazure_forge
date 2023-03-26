@@ -28,8 +28,8 @@ public class javelinModel extends GeoCompanionModel<EntityJavelin> {
     }
 
     @Override
-    public void setLivingAnimations(EntityJavelin entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityJavelin entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");

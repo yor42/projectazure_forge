@@ -7,8 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 
-import javax.annotation.Nullable;
-
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
@@ -31,8 +29,8 @@ public class ModelCrownslayer extends GeoCompanionModel<EntityCrownSlayer> {
     }
 
     @Override
-    public void setLivingAnimations(EntityCrownSlayer entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityCrownSlayer entity, int instanceId, AnimationEvent animationEvent) {
+        super.setCustomAnimations(entity, instanceId, animationEvent);
         IBone EarR = this.getAnimationProcessor().getBone("EarR");
         IBone EarL = this.getAnimationProcessor().getBone("EarL");
         IBone hood = this.getAnimationProcessor().getBone("hood");
@@ -190,5 +188,6 @@ public class ModelCrownslayer extends GeoCompanionModel<EntityCrownSlayer> {
             hood.setHidden(true);
         }
     }
+
 
 }

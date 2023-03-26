@@ -21,8 +21,8 @@ public class ModelSkullShatterer extends GeoCompanionModel<EntitySkullShatterer>
     }
 
     @Override
-    public void setLivingAnimations(EntitySkullShatterer entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntitySkullShatterer entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone EarR = this.getAnimationProcessor().getBone("earR");
         IBone EarL = this.getAnimationProcessor().getBone("earL");
         IBone hood = this.getAnimationProcessor().getBone("hood");

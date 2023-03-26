@@ -16,7 +16,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.util.text.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +57,7 @@ public class GasMaskFilterItem extends ItemDestroyable {
 
 
         CompoundTag compoundNBT = gasmask.getOrCreateTag();
-        ListTag list = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+        ListTag list = compoundNBT.getList("filters", Tag.TAG_COMPOUND);
         if(list.size()<2){
             list.add(filterstack.save(new CompoundTag()));
             compoundNBT.put("filters", list);

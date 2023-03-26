@@ -31,8 +31,8 @@ public class TexasModel extends GeoCompanionModel<EntityTexas> {
     }
 
     @Override
-    public void setLivingAnimations(EntityTexas entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(EntityTexas entity, int uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");

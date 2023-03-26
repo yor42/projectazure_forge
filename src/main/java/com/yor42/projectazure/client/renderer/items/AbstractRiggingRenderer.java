@@ -1,11 +1,11 @@
 package com.yor42.projectazure.client.renderer.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import com.mojang.math.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;

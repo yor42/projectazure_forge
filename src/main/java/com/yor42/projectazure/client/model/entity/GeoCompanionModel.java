@@ -11,13 +11,12 @@ import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.mixin.PathNavigatorAccessors;
 import com.yor42.projectazure.mixin.WeaponPoseAccessor;
-import net.minecraft.client.Minecraft;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.util.Mth;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.molang.MolangParser;
@@ -39,88 +38,81 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
 
     @Override
     public void setCustomAnimations(E animatable, int instanceId, AnimationEvent animationEvent) {
-        if(!Minecraft.getInstance().isPaused()) {
-            EntityModelData extraData = (EntityModelData) animationEvent.getExtraData();
-            IBone head = this.getAnimationProcessor().getBone("Head");
-            IBone body = this.getAnimationProcessor().getBone("Body");
-            IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
-            IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
-            IBone Chest = this.getAnimationProcessor().getBone("Chest");
-            float pitch = extraData.headPitch* ((float) Math.PI / 180F);
-            float yaw = extraData.netHeadYaw* ((float) Math.PI / 180F);
-            if (!(animatable.isBeingPatted() || animatable.isSleeping())) {
-                head.setRotationX(head.getRotationX()+pitch);
-                head.setRotationY(head.getRotationY()+yaw);
-            }
-
-            if (animatable.getOwner() != null && animatable.getVehicle() == animatable.getOwner()) {
-                body.setPositionZ(body.getPositionZ() - 15);
-                if (animatable.getOwner().isCrouching()) {
-                    body.setPositionZ(body.getPositionZ() + 8);
-                    body.setPositionY(body.getPositionY() - 4);
-                    body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI) * -1);
-                }
-            }else if (!(animatable.isBeingPatted() || animatable.islewded())) {
-                if (!animatable.isOrderedToSit()) {
-                    if(animatable.isHolding((item)->item.getItem() instanceof CrossbowItem)){
-                        InteractionHand CrossbowHand = animatable.getItemInHand(MAIN_HAND).getItem() instanceof CrossbowItem? MAIN_HAND:InteractionHand.OFF_HAND;
-                        boolean isMainhanded = CrossbowHand == MAIN_HAND;
-                        if(animatable.isChargingCrossbow()){
-                            AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, animatable, isMainhanded);
-                        }
-                        else{
-                            AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
-                        }
-                    }
-                    else if(animatable.isUsingItem() && animatable.isHolding((item)->item.getItem() instanceof BowItem)){
-                        boolean isLeftHanded = animatable.isLeftHanded();
-                        switch (animatable.getUsedItemHand()) {
-                            case OFF_HAND -> {
-                                if (isLeftHanded) {
-                                    animatebowRightArm(RightArm, LeftArm, pitch, yaw);
-                                } else {
-                                    animatebowLeftArm(RightArm, LeftArm, pitch, yaw);
-                                }
-                            }
-                            case MAIN_HAND -> {
-                                if (isLeftHanded) {
-                                    animatebowLeftArm(RightArm, LeftArm, pitch, yaw);
-                                } else {
-                                    animatebowRightArm(RightArm, LeftArm, pitch, yaw);
-                                }
-                            }
-                        }
-                    }
-                    else if(animatable.isHolding((item)->item.getItem() instanceof TimelessGunItem)){
-                        boolean isLeftHanded = animatable.isLeftHanded();
-                        InteractionHand hand = animatable.getItemInHand(MAIN_HAND).getItem() instanceof TimelessGunItem? MAIN_HAND: InteractionHand.OFF_HAND;
-                        ItemStack gunstack = animatable.getItemInHand(hand);
-                        TimelessGunItem gunItem = (TimelessGunItem) gunstack.getItem();
-                        GripType type = gunItem.getGun().getGeneral().getGripType();
-                        IHeldAnimation animation = type.getHeldAnimation();
-                        if(animation instanceof WeaponPose pose)
-                        {
-                            float zoom = 1F;
-                            this.applyPlayerModelRotation(pose, extraData.headPitch, isLeftHanded, LeftArm, RightArm,head, body, extraData.netHeadYaw, zoom);
-                        }
-                        else{
-                            boolean isLefthanded = animatable.isLeftHanded();
-                            IBone mainArm = isLefthanded ? LeftArm:RightArm;
-                            IBone secondaryArm = isLefthanded ? RightArm:LeftArm;
-                            if(hand == MAIN_HAND){
-                                mainArm.setRotationX((float)Math.toRadians(90+ extraData.headPitch));
-                                mainArm.setRotationY((float)Math.toRadians(extraData.netHeadYaw));
-                            }
-                            else{
-                                secondaryArm.setRotationX((float)Math.toRadians(90+ extraData.headPitch));
-                                secondaryArm.setRotationY((float)Math.toRadians(extraData.netHeadYaw));
-                            }
-                        }
-                    }
-                }
-            }
-            AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, animatable, animationEvent.getPartialTick());
+        super.setCustomAnimations(animatable, instanceId, animationEvent);
+        EntityModelData extraData = (EntityModelData) animationEvent.getExtraData();
+        IBone head = this.getAnimationProcessor().getBone("Head");
+        IBone body = this.getAnimationProcessor().getBone("Body");
+        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
+        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
+        IBone Chest = this.getAnimationProcessor().getBone("Chest");
+        float pitch = extraData.headPitch * ((float) Math.PI / 180F);
+        float yaw = extraData.netHeadYaw * ((float) Math.PI / 180F);
+        if (!(animatable.isBeingPatted() || animatable.isSleeping())) {
+            head.setRotationX(head.getRotationX() + pitch);
+            head.setRotationY(head.getRotationY() + yaw);
         }
+
+        if (animatable.getOwner() != null && animatable.getVehicle() == animatable.getOwner()) {
+            body.setPositionZ(body.getPositionZ() - 15);
+            if (animatable.getOwner().isCrouching()) {
+                body.setPositionZ(body.getPositionZ() + 8);
+                body.setPositionY(body.getPositionY() - 4);
+                body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI) * -1);
+            }
+        } else if (!(animatable.isBeingPatted() || animatable.islewded())) {
+            if (!animatable.isOrderedToSit()) {
+                if (animatable.isHolding((item) -> item.getItem() instanceof CrossbowItem)) {
+                    InteractionHand CrossbowHand = animatable.getItemInHand(MAIN_HAND).getItem() instanceof CrossbowItem ? MAIN_HAND : InteractionHand.OFF_HAND;
+                    boolean isMainhanded = CrossbowHand == MAIN_HAND;
+                    if (animatable.isChargingCrossbow()) {
+                        AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, animatable, isMainhanded);
+                    } else {
+                        AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
+                    }
+                } else if (animatable.isUsingItem() && animatable.isHolding((item) -> item.getItem() instanceof BowItem)) {
+                    boolean isLeftHanded = animatable.isLeftHanded();
+                    switch (animatable.getUsedItemHand()) {
+                        case OFF_HAND -> {
+                            if (isLeftHanded) {
+                                animatebowRightArm(RightArm, LeftArm, pitch, yaw);
+                            } else {
+                                animatebowLeftArm(RightArm, LeftArm, pitch, yaw);
+                            }
+                        }
+                        case MAIN_HAND -> {
+                            if (isLeftHanded) {
+                                animatebowLeftArm(RightArm, LeftArm, pitch, yaw);
+                            } else {
+                                animatebowRightArm(RightArm, LeftArm, pitch, yaw);
+                            }
+                        }
+                    }
+                } else if (animatable.isHolding((item) -> item.getItem() instanceof TimelessGunItem)) {
+                    boolean isLeftHanded = animatable.isLeftHanded();
+                    InteractionHand hand = animatable.getItemInHand(MAIN_HAND).getItem() instanceof TimelessGunItem ? MAIN_HAND : InteractionHand.OFF_HAND;
+                    ItemStack gunstack = animatable.getItemInHand(hand);
+                    TimelessGunItem gunItem = (TimelessGunItem) gunstack.getItem();
+                    GripType type = gunItem.getGun().getGeneral().getGripType();
+                    IHeldAnimation animation = type.getHeldAnimation();
+                    if (animation instanceof WeaponPose pose) {
+                        float zoom = 1F;
+                        this.applyPlayerModelRotation(pose, extraData.headPitch, isLeftHanded, LeftArm, RightArm, head, body, extraData.netHeadYaw, zoom);
+                    } else {
+                        boolean isLefthanded = animatable.isLeftHanded();
+                        IBone mainArm = isLefthanded ? LeftArm : RightArm;
+                        IBone secondaryArm = isLefthanded ? RightArm : LeftArm;
+                        if (hand == MAIN_HAND) {
+                            mainArm.setRotationX((float) Math.toRadians(90 + extraData.headPitch));
+                            mainArm.setRotationY((float) Math.toRadians(extraData.netHeadYaw));
+                        } else {
+                            secondaryArm.setRotationX((float) Math.toRadians(90 + extraData.headPitch));
+                            secondaryArm.setRotationY((float) Math.toRadians(extraData.netHeadYaw));
+                        }
+                    }
+                }
+            }
+        }
+        AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, animatable, animationEvent.getPartialTick());
     }
 
 

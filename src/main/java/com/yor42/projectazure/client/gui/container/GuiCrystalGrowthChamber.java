@@ -1,16 +1,16 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrowthChamber;
 import com.yor42.projectazure.libs.utils.RenderingUtils;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.vertex.Tesselator;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 
 public class GuiCrystalGrowthChamber extends AbstractContainerScreen<ContainerCrystalGrowthChamber> {
@@ -40,8 +40,8 @@ public class GuiCrystalGrowthChamber extends AbstractContainerScreen<ContainerCr
         RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.leftPos+58,this.topPos+26+(34-height), 16, height);
         buffer.endBatch();
 
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
 
         this.blit(matrixStack, this.leftPos + 57, this.topPos + 25, 176, 49, 18, 36);
         this.blit(matrixStack, this.leftPos + 11, this.topPos + 25, 176, 85, 18, 36);
@@ -61,8 +61,8 @@ public class GuiCrystalGrowthChamber extends AbstractContainerScreen<ContainerCr
 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         int b = this.menu.getprogressScaled(24);
         this.blit(matrixStack, this.leftPos + 80, this.topPos + 35, 176, 14, b, 17);

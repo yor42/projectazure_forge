@@ -28,7 +28,7 @@ public class AmiyaModel extends GeoCompanionModel<EntityAmiya> {
     }
 
     @Override
-    public void setLivingAnimations(EntityAmiya entity, Integer uniqueID, @Nullable AnimationEvent customPredicate)
+    public void setCustomAnimations(EntityAmiya entity, int uniqueID, @Nullable AnimationEvent customPredicate)
     {
 
         IBone head = this.getAnimationProcessor().getBone("Head");
@@ -47,7 +47,7 @@ public class AmiyaModel extends GeoCompanionModel<EntityAmiya> {
         IBone diamond = this.getAnimationProcessor().getBone("rangedattackdiamond");
 
         diamond.setHidden(!entity.isUsingSpell());
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
         if(entity.isDeadOrDying() || entity.isCriticallyInjured()){
             fainted.setHidden(false);

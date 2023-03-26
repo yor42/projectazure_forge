@@ -1,20 +1,20 @@
 package com.yor42.projectazure.client.gui.container;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.network.packets.StartRecruitPacket;
-import net.minecraft.client.gui.screens.inventory.MenuAccess;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 public class guiRecruitBeacon extends AbstractContainerScreen<ContainerRecruitBeacon> implements MenuAccess<ContainerRecruitBeacon> {
 
@@ -43,13 +43,13 @@ public class guiRecruitBeacon extends AbstractContainerScreen<ContainerRecruitBe
         Button button = new Button(this.leftPos+102,this.topPos+61,50,16,new TranslatableComponent("gui.machine.start"), (action)-> {
             Main.NETWORK.sendToServer(new StartRecruitPacket(this.container.getBlockPos()));
         });
-        this.addButton(button);
+        this.addRenderableWidget(button);
     }
 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        
+        RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         int p = this.container.getStoredPowerScaled(71);
