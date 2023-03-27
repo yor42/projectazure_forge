@@ -15,33 +15,17 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.setup.register.RegisterContainer.RECRUIT_BEACON_CONTAINER;
 
 public class ContainerRecruitBeacon extends AbstractContainerMenu {
 
-    private final ContainerData field;
+    @Nullable
+    private ContainerData field;
 
     public ContainerRecruitBeacon(int id, Inventory inventory) {
-this(id, inventory, new ItemStackHandler(5), new ContainerData() {
-
-    final int[] values = buffer.readVarIntArray();
-
-    @Override
-    public int get(int index) {
-        return values[index];
-    }
-
-    @Override
-    public void set(int index, int value) {
-        values[index] = value;
-    }
-
-    @Override
-    public int getCount() {
-        return values.length;
-    }
-});
+        super(RECRUIT_BEACON_CONTAINER.get(), id);
     }
 
     public ContainerRecruitBeacon(int id, Inventory inventory, ItemStackHandler Inventory, ContainerData field) {
@@ -115,17 +99,17 @@ this(id, inventory, new ItemStackHandler(5), new ContainerData() {
 
                 slot.onQuickCraft(itemstack1, itemstack);
             } else {
-                if (itemstack1.getItem() == RegisterItems.HEADHUNTING_PCB.get()) {
+                if (itemstack1.is(RegisterItems.HEADHUNTING_PCB.get())) {
                     if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem() == RegisterItems.ORUNDUM.get()) {
+                else if (itemstack1.is(RegisterItems.ORUNDUM.get())) {
                     if (!this.moveItemStackTo(itemstack1, 1, 3, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().is(Tags.Items.INGOTS_GOLD)) {
+                else if (itemstack1.is(Tags.Items.INGOTS_GOLD)) {
                     if (!this.moveItemStackTo(itemstack1, 3, 5, false)) {
                         return ItemStack.EMPTY;
                     }

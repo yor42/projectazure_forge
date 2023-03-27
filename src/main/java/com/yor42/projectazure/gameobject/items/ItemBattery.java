@@ -49,16 +49,16 @@ public class ItemBattery extends Item {
         return new ItemPowerCapabilityProvider(stack, this.capacity, this.maxin, this.maxout);
     }
 
-    @Override
-    public boolean showDurabilityBar(ItemStack stack) {
-        return true;
-    }
+    // @Override
+    // public boolean showDurabilityBar(ItemStack stack) {
+    //     return true;
+    // }
 
-    @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        int remainingBattery = stack.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
-        return (double) (this.capacity-remainingBattery)/this.capacity;
-    }
+    // @Override
+    // public double getDurabilityForDisplay(ItemStack stack) {
+    //     int remainingBattery = stack.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
+    //     return (double) (this.capacity-remainingBattery)/this.capacity;
+    // }
 
     @Override
     public void fillItemCategory(CreativeModeTab p_150895_1_, NonNullList<ItemStack> p_150895_2_) {

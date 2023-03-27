@@ -1,14 +1,14 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
+import javax.annotation.Nullable;
+
 import com.yor42.projectazure.gameobject.containers.slots.FuelSlotItemhandler;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
 import com.yor42.projectazure.setup.register.RegisterContainer;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
@@ -17,10 +17,11 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerAlloyFurnace extends AbstractContainerMenu {
 
-    private final ContainerData field;
+    @Nullable
+    private ContainerData field;
 
     public ContainerAlloyFurnace(int id, Inventory inventory) {
-        this(id, inventory, new ItemStackHandler(4), new SimpleContainerData(4));
+        super(RegisterContainer.ALLOY_FURNACE_CONTAINER.get(), id);
     }
 
     public ContainerAlloyFurnace(int id, Inventory inventory, ItemStackHandler machineInventory, ContainerData machineInfo){

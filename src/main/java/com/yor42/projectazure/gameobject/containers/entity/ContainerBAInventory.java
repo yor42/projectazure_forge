@@ -25,15 +25,16 @@ import static com.yor42.projectazure.setup.register.RegisterContainer.BA_CONTAIN
 
 public class ContainerBAInventory extends AbstractContainerInventory {
 
-    private final ItemStackHandler AmmoStack;
+    private ItemStackHandler AmmoStack;
 
 
     public ContainerBAInventory(int ID, Inventory inventory) {
-        this(ID, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
+        super(BA_CONTAINER.get(), ID, null);
     }
 
     public ContainerBAInventory(int ID, Inventory inventory, ItemStackHandler Inventory, IItemHandlerModifiable Equipments, ItemStackHandler Ammo, AbstractEntityCompanion companion) {
         super(BA_CONTAINER.get(), ID, companion);
+        
         this.AmmoStack = Ammo;
         //mainhand
         this.addSlot(new SlotItemHandler(Equipments, 0, 10, 30));

@@ -177,4 +177,14 @@ public class TransformingVertexBuilder implements VertexConsumer
                 out.accept(read());
         }
     }
+
+    @Override
+    public void defaultColor(int p_166901_, int p_166902_, int p_166903_, int p_166904_)
+    {
+    }
+
+    @Override
+    public void unsetDefaultColor()
+    {
+    }
 }

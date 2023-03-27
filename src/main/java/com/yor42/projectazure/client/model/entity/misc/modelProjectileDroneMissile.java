@@ -1,3 +1,4 @@
+package com.yor42.projectazure.client.model.entity.misc;
 // Made with Blockbench 4.6.5
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports

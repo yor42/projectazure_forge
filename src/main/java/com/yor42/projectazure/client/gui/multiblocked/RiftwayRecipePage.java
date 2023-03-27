@@ -47,13 +47,13 @@ public class RiftwayRecipePage extends PageWidget {
         tips.addWidget(new LabelWidget(10, 60, () -> I18n.get("gui.riftway_remainingtime")).setTextColor(0x00FF00));
         tips.addWidget(new LabelWidget(10, 70, () -> I18n.get(MathUtil.Tick2StringClock(recipe==null?0:recipe.duration-progress))).setTextColor(0x00FF00));
         this.addWidget(new SwitchWidget(77, 206, 23, 32, (cd, r) -> {
-            controller.asyncRecipeSearching = r;
+            controller.rendererObject = r;
             if (!cd.isRemote) {
                 controller.markAsDirty();
             }
         })
-                .setPressed(controller.asyncRecipeSearching)
-                .setSupplier(() -> controller.asyncRecipeSearching)
+                .setPressed((boolean)controller.rendererObject)
+                .setSupplier(() -> (boolean)controller.rendererObject)
                 .setTexture(resourceTexture.getSubTexture(233 / 256.0, 0 / 256.0, 23 / 256.0, 32 / 256.0),
                         resourceTexture.getSubTexture(233 / 256.0, 32 / 256.0, 23 / 256.0, 32 / 256.0))
                 .setHoverTooltips("Async/Sync recipes searching:",
@@ -84,7 +84,7 @@ public class RiftwayRecipePage extends PageWidget {
     }
 
     private double getFuelProgress() {
-        return (double) Math.min(this.fuelTime, this.controller.getDefinition().getRecipeMap().fuelThreshold) / (double) this.controller.getDefinition().getRecipeMap().fuelThreshold;
+        return (double) Math.min(this.fuelTime, this.controller.getDefinition().getRecipeMap().fuelRecipes.get(0).duration) / (double) this.controller.getDefinition().getRecipeMap().fuelRecipes.get(0).duration;
     }
 
     @Override

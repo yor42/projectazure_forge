@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 public abstract class AbstractContainerInventory extends AbstractContainerMenu {
 
+    @Nullable
     public final AbstractEntityCompanion companion;
     protected AbstractContainerInventory(@Nullable MenuType<?> p_i50105_1_, int p_i50105_2_, AbstractEntityCompanion companion) {
         super(p_i50105_1_, p_i50105_2_);
@@ -17,11 +18,17 @@ public abstract class AbstractContainerInventory extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(@Nonnull Player p_75145_1_) {
-        if (this.companion.isDeadOrDying()) {
-            return false;
-        } else {
-            return p_75145_1_.distanceToSqr(this.companion.getX() + 0.5D, this.companion.getY() + 0.5D, this.companion.getZ() + 0.5D) <= 64.0D;
+    public boolean stillValid(@Nonnull Player p_75145_1_)
+    {
+        if (companion != null)
+        {
+            if (this.companion.isDeadOrDying()) {
+                return false;
+            } else {
+                return p_75145_1_.distanceToSqr(this.companion.getX() + 0.5D, this.companion.getY() + 0.5D, this.companion.getZ() + 0.5D) <= 64.0D;
+            }
         }
+
+        return false;
     }
 }

@@ -30,38 +30,13 @@ import static com.yor42.projectazure.setup.register.RegisterContainer.RIGGING_IN
 
 public class RiggingContainer extends AbstractContainerMenu {
 
+    @Nullable
     public ItemStack riggingStack;
     @Nullable
     public UUID previousEntityUUID = null;
 
     public RiggingContainer(int id, Inventory playerInv) {
         super(RIGGING_INVENTORY.get(), id);
-        this.riggingStack = data.readItem();
-        try {
-            this.previousEntityUUID = data.readUUID();
-        }
-        catch (Exception ignored){
-        }
-
-
-
-        IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
-
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal()), i -> 7, i -> 34 + 18 * i, enums.SLOTTYPE.MAIN_GUN);
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal()), i -> 31 + 18 * i, i -> 34, enums.SLOTTYPE.SUB_GUN);
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.AA.ordinal()), i -> 151, i -> 34 + 18 * i, enums.SLOTTYPE.AA);
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.TORPEDO.ordinal()), i -> 30 + 18 * i, i -> 77, enums.SLOTTYPE.TORPEDO);
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.PLANE.ordinal()), i -> 30 + 18 * i, i -> 30, enums.SLOTTYPE.PLANE);
-
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new slotInventory(playerInv, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
-            }
-        }
-
-        for (int k = 0; k < 9; ++k) {
-            this.addSlot(new slotInventory(playerInv, k, 8 + k * 18, 168));
-        }
     }
 
     public RiggingContainer(int id, Inventory playerInv, ItemStack riggingStack, @Nullable UUID ownerID) {

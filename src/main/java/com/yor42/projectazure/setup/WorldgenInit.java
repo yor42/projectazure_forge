@@ -6,7 +6,9 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 
 import net.minecraft.core.Holder;
+import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -14,6 +16,8 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.registries.RegistryObject;
@@ -54,9 +58,8 @@ public class WorldgenInit {
     }
 
     public static void addOreSpawn(final BiomeLoadingEvent event, RuleTest rule, BlockState blockState, int veinSize, int minHeight, int maxHeight, int amount){
-        !
-        //event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(new PlacedFeature(null, List.of(null))));//.decorated(FeatureDecorator.RANGE.configured(new RangeDecoratorConfiguration(minHeight, 0, maxHeight))).squared().count(amount))
-    }//Feature.ORE, new OreConfiguration(rule, blockState, veinSize)).feature()
+        event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(new PlacedFeature(Holder.direct(new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(rule, blockState, veinSize))), List.of(RarityFilter.onAverageOnceEvery(2)))));
+    }
 
     private static BlockState getBlockDefaultState(RegistryObject<? extends Block> registryEntry){
         return registryEntry.get().defaultBlockState();

@@ -4,8 +4,11 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.SyncTeamListPacket;
+
+import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -14,8 +17,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +43,11 @@ public class ProjectAzureWorldSavedData extends SavedData {
         if(Main.isClient()){
             TeamListCLIENT = new ArrayList<>();
         }
+    }
+
+    public static ProjectAzureWorldSavedData load(CompoundTag compoundtag)
+    {
+        return new ProjectAzureWorldSavedData();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -93,18 +105,34 @@ public class ProjectAzureWorldSavedData extends SavedData {
         }
         return Optional.empty();
     }
-    public ProjectAzureWorldSavedData() {
-        super(ID);
-    }
 
     @Override
-    public void load(CompoundTag p_76184_1_) {
-        ListTag teams = p_76184_1_.getList("teams", Tag.TAG_COMPOUND);
-        for(int i=0; i<teams.size(); i++){
-            CompoundTag nbt = teams.getCompound(i);
-            this.TeamList.add(CompanionTeam.deserializeNBT(nbt));
+    public void save(File file)
+    {
+        if (this.isDirty())
+        {
+            CompoundTag compoundtag = new CompoundTag();
+            compoundtag.put("data", this.save(new CompoundTag()));
+            compoundtag.putInt("DataVersion", SharedConstants.getCurrentVersion().getWorldVersion());
+
+            ListTag teams = compoundtag.getList("teams", Tag.TAG_COMPOUND);
+            for(int i=0; i<teams.size(); i++){
+                CompoundTag nbt = teams.getCompound(i);
+                this.TeamList.add(CompanionTeam.deserializeNBT(nbt));
+            }
+            //this.SyncEntireTeamListClient();
+
+            try
+            {
+                NbtIo.writeCompressed(compoundtag, file);
+            }
+            catch (IOException ioexception)
+            {
+                Main.LOGGER.error("Could not save data {}", this, ioexception);
+            }
+
+            this.setDirty(false);
         }
-        //this.SyncEntireTeamListClient();
     }
 
     @Nonnull
@@ -224,10 +252,10 @@ public class ProjectAzureWorldSavedData extends SavedData {
     }
 
     public static ProjectAzureWorldSavedData getSaveddata(ServerLevel world){
-        ProjectAzureWorldSavedData storage = world.getDataStorage().get(ProjectAzureWorldSavedData::new, ID);
+        ProjectAzureWorldSavedData storage = world.getDataStorage().get(ProjectAzureWorldSavedData::load, ID);
         if(storage == null){
             storage = new ProjectAzureWorldSavedData();
-            world.getDataStorage().set(storage);
+            world.getDataStorage().set(ID, storage);
         }
         return storage;
     }

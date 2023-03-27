@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 public class ContainerSWInventory extends AbstractContainerInventory {
 
     public ContainerSWInventory(int id, Inventory inventory) {
-        this(id, inventory, new ItemStackHandler(16), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
+        super(RegisterContainer.SW_CONTAINER.get(), id, null);
     }
 
     public ContainerSWInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {

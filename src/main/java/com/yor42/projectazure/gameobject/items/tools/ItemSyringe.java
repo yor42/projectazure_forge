@@ -119,6 +119,6 @@ public class ItemSyringe extends Item implements IItemDestroyable {
 
     @Override
     public int getRepairAmount(ItemStack candidateItem) {
-        return  candidateItem.getItem().is(Tags.Items.INGOTS_IRON)? 1:0;
+        return  candidateItem.is(Tags.Items.INGOTS_IRON)? 1:0;
     }
 }

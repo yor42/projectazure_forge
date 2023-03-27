@@ -3,11 +3,21 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
+import net.minecraft.data.worldgen.StructureFeatures;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.GenerationStep.Decoration;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.registries.DeferredRegister;
@@ -40,25 +50,28 @@ public class registerBiomes {
         BiomeList.add(new BiomeData(BiomeID, biome, chance, climate));
     }
     private static BiomeGenerationSettings.Builder getOceanGenerationSettingsBuilder() {
-        !
-        BiomeGenerationSettings.Builder biomegenerationsettings$builder = new BiomeGenerationSettings.Builder();//.surfaceBuilder(SurfaceBuilders.GRASS)
-        BiomeDefaultFeatures.addDefaultMonsterRoom(biomegenerationsettings$builder);
-        // net.minecraft.data.worldgen.placement.AquaticPlacements
-        // biomegenerationsettings$builder.addFeature(Decoration.LAKES, StructureFeatures.OCEAN_RUIN_COLD);
-        // biomegenerationsettings$builder.addFeature(Decoration.LAKES, StructureFeatures.RUINED_PORTAL_OCEAN);
-        BiomeDefaultFeatures.addDefaultCarversAndLakes(biomegenerationsettings$builder);
+        BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder();//.surfaceBuilder(SurfaceBuilders.GRASS)
+        BiomeDefaultFeatures.addDefaultMonsterRoom(builder);
 
-        BiomeDefaultFeatures.addDefaultMonsterRoom(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addDefaultUndergroundVariety(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addDefaultOres(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addDefaultSoftDisks(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addWaterTrees(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addDefaultFlowers(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addDefaultGrass(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addDefaultMushrooms(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomegenerationsettings$builder);
-        BiomeDefaultFeatures.addDefaultSprings(biomegenerationsettings$builder);
-        return biomegenerationsettings$builder;
+        //net.minecraft.data.worldgen.placement.OrePlacements
+        // Holder<ConfiguredFeature<?, ?>> a = Holder.direct(new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(1, 1, 1, null)));
+        // builder.addFeature(Decoration.LAKES, Holder.direct(new PlacedFeature(null, List.of(RarityFilter.onAverageOnceEvery(2)))));
+        // builder.addFeature(Decoration.LAKES, StructureFeatures.OCEAN_RUIN_COLD);
+        // builder.addFeature(Decoration.LAKES, StructureFeatures.RUINED_PORTAL_OCEAN);
+
+        BiomeDefaultFeatures.addDefaultCarversAndLakes(builder);
+
+        BiomeDefaultFeatures.addDefaultMonsterRoom(builder);
+        BiomeDefaultFeatures.addDefaultUndergroundVariety(builder);
+        BiomeDefaultFeatures.addDefaultOres(builder);
+        BiomeDefaultFeatures.addDefaultSoftDisks(builder);
+        BiomeDefaultFeatures.addWaterTrees(builder);
+        BiomeDefaultFeatures.addDefaultFlowers(builder);
+        BiomeDefaultFeatures.addDefaultGrass(builder);
+        BiomeDefaultFeatures.addDefaultMushrooms(builder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(builder);
+        BiomeDefaultFeatures.addDefaultSprings(builder);
+        return builder;
     }
 
     public static void register(){

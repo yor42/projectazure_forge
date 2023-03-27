@@ -44,18 +44,21 @@ public class PantryBlock extends HorizontalDirectionalBlock implements SimpleWat
             if(world.getBlockState(pos.relative(state.getValue(FACING))).getMaterial() != Material.AIR){
                 return InteractionResult.FAIL;
             }
-            else{
-                if(!world.isClientSide()) {
-                    this.openGUI(pos, world, (ServerPlayer) p_225533_4_);
-                    return InteractionResult.SUCCESS;
-                }
+            else
+            {
+                this.openGUI(pos, world, (ServerPlayer) p_225533_4_);
+                return InteractionResult.SUCCESS;
             }
         }
         return super.use(state, world, pos, p_225533_4_, p_225533_5_, p_225533_6_);
     }
 
-    private void openGUI(BlockPos pos, Level world, ServerPlayer p_225533_4_){
-        NetworkHooks.openGui(p_225533_4_, new TileEntityPantry.ContainerProvider(world, pos, new TranslatableComponent(this.getDescriptionId())));
+    private void openGUI(BlockPos pos, Level world, ServerPlayer p_225533_4_)
+    {
+        if(!world.isClientSide())
+        {
+            NetworkHooks.openGui(p_225533_4_, new TileEntityPantry.ContainerProvider(world, pos, new TranslatableComponent(this.getDescriptionId())));
+        }
     }
 
     @Override

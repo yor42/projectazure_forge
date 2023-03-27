@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.setup.register.RegisterContainer;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -14,32 +13,17 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ContainerBasicChemicalReactor extends AbstractContainerMenu {
 
-    private final ContainerData field;
-    private final FluidStack outputtank;
+    @Nullable
+    private ContainerData field;
+    @Nullable
+    private FluidStack outputtank;
 
     public ContainerBasicChemicalReactor(int id, Inventory inventory){
-        this(id, inventory, new ItemStackHandler(3), new ContainerData() {
-
-            final int[] values = buffer.readVarIntArray();
-
-            @Override
-            public int get(int index) {
-                return values[index];
-            }
-
-            @Override
-            public void set(int index, int value) {
-                values[index] = value;
-            }
-
-            @Override
-            public int getCount() {
-                return values.length;
-            }
-        }, buffer.readFluidStack());
+        super(RegisterContainer.BASICCCHEMICALREACTOR.get(), id);
     }
 
     public ContainerBasicChemicalReactor(int id, Inventory inventory, ItemStackHandler itemStackHandler, ContainerData fields, FluidStack outputtank) {

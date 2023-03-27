@@ -15,34 +15,19 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.setup.register.RegisterContainer.GROWTH_CHAMBER_CONTAINER;
 
 public class ContainerCrystalGrowthChamber extends AbstractContainerMenu {
 
-    private final ContainerData field;
-    private final FluidStack waterTank, SolutionTank;
+    @Nullable
+    private ContainerData field;
+    @Nullable
+    private FluidStack waterTank, SolutionTank;
 
     public ContainerCrystalGrowthChamber(int id, Inventory inventory){
-        this(id, inventory, new ItemStackHandler(7), new ContainerData() {
-
-            final int[] values = buffer.readVarIntArray();
-
-            @Override
-            public int get(int index) {
-                return values[index];
-            }
-
-            @Override
-            public void set(int index, int value) {
-                values[index] = value;
-            }
-
-            @Override
-            public int getCount() {
-                return values.length;
-            }
-        }, buffer.readFluidStack(), buffer.readFluidStack());
+        super(GROWTH_CHAMBER_CONTAINER.get(), id);
     }
 
     public ContainerCrystalGrowthChamber(int id, Inventory inventory, ItemStackHandler itemStackHandler, ContainerData field, FluidStack waterTank, FluidStack solutionTank) {

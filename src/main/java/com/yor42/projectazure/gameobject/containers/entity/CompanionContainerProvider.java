@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 
 public class CompanionContainerProvider implements MenuProvider {
 
+    @Nullable
     private final AbstractEntityCompanion companion;
 
     public CompanionContainerProvider(AbstractEntityCompanion companion){

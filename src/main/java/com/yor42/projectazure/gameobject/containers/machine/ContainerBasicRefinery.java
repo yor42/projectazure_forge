@@ -19,36 +19,21 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.setup.register.RegisterContainer.BASIC_REFINERY_CONTAINER;
 
 
 public class ContainerBasicRefinery extends AbstractContainerMenu {
 
-    private final ContainerData field;
+    @Nullable
+    private ContainerData field;
 
-    public final FluidStack crudeoilstack, gasolinestack, dieselstack, fueloilstack;
+    @Nullable
+    public FluidStack crudeoilstack, gasolinestack, dieselstack, fueloilstack;
 
     public ContainerBasicRefinery(int id, Inventory inventory) {
-        this(id, inventory, new ItemStackHandler(10), new ContainerData() {
-
-            final int[] values = buffer.readVarIntArray();
-
-            @Override
-            public int get(int index) {
-                return values[index];
-            }
-
-            @Override
-            public void set(int index, int value) {
-                values[index] = value;
-            }
-
-            @Override
-            public int getCount() {
-                return values.length;
-            }
-        }, buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack());
+        super(BASIC_REFINERY_CONTAINER.get(), id);
     }
 
     public ContainerBasicRefinery(int id, Inventory inventory, ItemStackHandler Inventory, ContainerData field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {

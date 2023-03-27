@@ -13,7 +13,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
@@ -22,12 +21,14 @@ import javax.annotation.Nullable;
 public class ContainerALInventory extends AbstractContainerInventory {
 
     private static final EquipmentSlot[] EQUIPMENT = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
-    private final IItemHandler AmmoStack;
-    private final IItemHandler equipment;
+    @Nullable
+    private IItemHandler AmmoStack;
+    @Nullable
+    private IItemHandler equipment;
 
     //client
     public ContainerALInventory(int id, Inventory playerInventory) {
-        this(id, playerInventory, new ItemStackHandler(12),  new ItemStackHandler(1), new ItemStackHandler(6), new ItemStackHandler(8), (EntityKansenBase) playerInventory.player.level.getEntity(data.readInt()));
+        super(RegisterContainer.SHIP_CONTAINER.get(), id, null);
     }
 
     //constructor for actual use
