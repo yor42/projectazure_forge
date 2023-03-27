@@ -19,7 +19,7 @@ public class modelProjectileDroneMissile extends EntityModel<EntityMissileDroneM
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "missiledrone"), "main");
 	private final ModelPart Body;
 
-	public modelProjectileDroneMissile(ModelPart root) {
+	public modelProjectileDroneMissile() {
 		this.Body = createBodyLayer().bakeRoot();
 	}
 

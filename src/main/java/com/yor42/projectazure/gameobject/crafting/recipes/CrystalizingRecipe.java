@@ -20,7 +20,6 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.CRYSTALIZING;

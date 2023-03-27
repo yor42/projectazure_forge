@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.Main;
-
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Tier;

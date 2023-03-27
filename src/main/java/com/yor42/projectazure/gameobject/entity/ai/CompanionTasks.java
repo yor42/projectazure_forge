@@ -13,19 +13,15 @@ import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.schedule.Activity;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.util.TimeUtil;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.item.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,34 +31,6 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCann
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.world.entity.ai.memory.MemoryStatus.VALUE_PRESENT;
 import static net.minecraft.world.entity.schedule.Activity.*;
-
-import net.minecraft.world.entity.ai.behavior.AcquirePoi;
-import net.minecraft.world.entity.ai.behavior.BackUpIfTooClose;
-import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.entity.ai.behavior.DoNothing;
-import net.minecraft.world.entity.ai.behavior.EraseMemoryIf;
-import net.minecraft.world.entity.ai.behavior.GoToWantedItem;
-import net.minecraft.world.entity.ai.behavior.InsideBrownianWalk;
-import net.minecraft.world.entity.ai.behavior.InteractWith;
-import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
-import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
-import net.minecraft.world.entity.ai.behavior.RandomStroll;
-import net.minecraft.world.entity.ai.behavior.RunIf;
-import net.minecraft.world.entity.ai.behavior.RunOne;
-import net.minecraft.world.entity.ai.behavior.SetClosestHomeAsWalkTarget;
-import net.minecraft.world.entity.ai.behavior.SetEntityLookTarget;
-import net.minecraft.world.entity.ai.behavior.SetLookAndInteract;
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromLookTarget;
-import net.minecraft.world.entity.ai.behavior.SleepInBed;
-import net.minecraft.world.entity.ai.behavior.UpdateActivityFromSchedule;
-import net.minecraft.world.entity.ai.behavior.ValidateNearbyPoi;
-import net.minecraft.world.entity.ai.behavior.VillageBoundRandomStroll;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
 
 public class CompanionTasks {
 

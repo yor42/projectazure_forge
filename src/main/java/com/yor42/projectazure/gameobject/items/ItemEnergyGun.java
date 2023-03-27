@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class ItemEnergyGun extends TimelessGunItem {
 
@@ -133,7 +132,7 @@ public class ItemEnergyGun extends TimelessGunItem {
             });
             if (!tagCompound.getBoolean("IgnoreAmmo")) {
                 int ammoCount = tagCompound.getInt("AmmoCount");
-                tooltip.add((new TranslatableComponent("info.tac.ammo", ChatFormatting.GOLD.toString() + ammoCount + "/" + GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun))).withStyle(ChatFormatting.DARK_GRAY));
+                tooltip.add((new TranslatableComponent("info.tac.ammo", ChatFormatting.GOLD.toString() + ammoCount + "/" + GunModifierHelper.getAmmoCapacity(stack, modifiedGun))).withStyle(ChatFormatting.DARK_GRAY));
             }
         }
 
@@ -163,31 +162,21 @@ public class ItemEnergyGun extends TimelessGunItem {
         tooltip.add((new TranslatableComponent("info.tac.attachment_help", (new KeybindComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.YELLOW));
     }
 
-    public double getDurabilityForDisplay(ItemStack stack) {
-        Gun modifiedGun = this.getModifiedGun(stack);
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
         if(stack.getCapability(CapabilityEnergy.ENERGY).isPresent()&&doesIgnoreAmmo(stack)){
-            return stack.getCapability(CapabilityEnergy.ENERGY).map((energystorage)-> 1.0D - (double)energystorage.getEnergyStored() / (double)energystorage.getMaxEnergyStored()).orElse(super.getDurabilityForDisplay(stack));
+            return stack.getCapability(CapabilityEnergy.ENERGY).map((energystorage)-> (int)(13* (double)energystorage.getEnergyStored() / (double)energystorage.getMaxEnergyStored())).orElse(super.getBarWidth(stack));
         }
-        return super.getDurabilityForDisplay(stack);
+        return super.getBarWidth(stack);
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
-        if(stack.getCapability(CapabilityEnergy.ENERGY).isPresent()){
+    public boolean isBarVisible(ItemStack pStack) {
+        if(pStack.getCapability(CapabilityEnergy.ENERGY).isPresent()){
             return true;
         }
-        return super.showDurabilityBar(stack);
-    }
-
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
-        Gun modifiedGun = this.getModifiedGun(stack);
-        Item ammo = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
-        if(doesIgnoreAmmo(stack)) {
-            return Objects.requireNonNull(ChatFormatting.BLUE.getColor());
-        }
-        else{
-            return super.getRGBDurabilityForDisplay(stack);
-        }
+        return super.isBarVisible(pStack);
     }
 
     private static boolean doesIgnoreAmmo(ItemStack stack) {

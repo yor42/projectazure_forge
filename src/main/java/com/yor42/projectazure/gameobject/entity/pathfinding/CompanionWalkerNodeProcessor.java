@@ -1,13 +1,13 @@
 package com.yor42.projectazure.gameobject.entity.pathfinding;
 
-import net.minecraft.world.level.block.WoolCarpetBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.WoolCarpetBlock;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;

@@ -2,17 +2,18 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.BoatItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.FALL_BREAK_ITEM_INDEX;
+import static net.minecraft.world.level.material.Fluids.WATER;
 
 public class CompanionFallClutchTask extends Behavior<AbstractEntityCompanion> {
     @Nullable

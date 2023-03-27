@@ -1,7 +1,5 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
-import javax.annotation.Nullable;
-
 import com.yor42.projectazure.gameobject.containers.slots.FuelSlotItemhandler;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
 import com.yor42.projectazure.setup.register.RegisterContainer;
@@ -14,6 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+
+import javax.annotation.Nullable;
 
 public class ContainerAlloyFurnace extends AbstractContainerMenu {
 

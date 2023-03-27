@@ -4,12 +4,9 @@ import com.yor42.projectazure.gameobject.crafting.recipes.PressingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -60,13 +57,13 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     }
     //method above replaces following 2
     @Override
-    @SuppressWarnings("Deprecated")
+    @SuppressWarnings("Removal")
     public ResourceLocation getUid() {
         return UID;
     }
 
     @Override
-    @SuppressWarnings("Deprecated")
+    @SuppressWarnings("Removal")
     public Class<? extends PressingRecipe> getRecipeClass() {
         return PressingRecipe.class;
     }

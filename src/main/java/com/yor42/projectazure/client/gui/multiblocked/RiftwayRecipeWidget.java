@@ -1,23 +1,27 @@
 package com.yor42.projectazure.client.gui.multiblocked;
 
 import com.google.common.collect.ImmutableList;
+import com.lowdragmc.lowdraglib.LDLMod;
 import com.lowdragmc.lowdraglib.gui.texture.ColorRectTexture;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.jei.JEIPlugin;
-import com.lowdragmc.multiblocked.Multiblocked;
 import com.lowdragmc.multiblocked.api.capability.IO;
 import com.lowdragmc.multiblocked.api.capability.MultiblockCapability;
 import com.lowdragmc.multiblocked.api.recipe.Content;
 import com.lowdragmc.multiblocked.api.recipe.Recipe;
 import com.lowdragmc.multiblocked.api.recipe.RecipeCondition;
 import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
+import com.lowdragmc.multiblocked.jei.recipepage.RecipeMapCategory;
+import com.lowdragmc.multiblocked.jei.recipepage.RecipeMapFuelCategory;
+import com.lowdragmc.multiblocked.rei.recipepage.RecipeMapDisplayCategory;
+import com.lowdragmc.multiblocked.rei.recipepage.RecipeMapFuelDisplayCategory;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
+import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -38,7 +42,7 @@ public class RiftwayRecipeWidget extends WidgetGroup {
         this.recipeMap = recipeMap;
         this.recipe = recipe;
         setClientSideWidget();
-
+        IGuiTexture overlay = new ColorRectTexture(0x1f000000);
         inputs = new DraggableScrollableWidgetGroup(0, 0, 52, 52).setBackground(resourceTexture);
         outputs = new DraggableScrollableWidgetGroup(81, 0, 52, 52).setBackground(resourceTexture);
         this.addWidget(inputs);
@@ -46,19 +50,22 @@ public class RiftwayRecipeWidget extends WidgetGroup {
 
         this.addWidget(new ProgressWidget(progress, 56, 18, 21, 16, Progress).setFillDirection(ProgressTexture.FillDirection.LEFT_TO_RIGHT));
 
-        this.addWidget(new ButtonWidget(56, 18, 21, 16, IGuiTexture.EMPTY, cd -> {
-            if (Multiblocked.isJeiLoaded()) {
-                JEIPlugin.jeiRuntime.getRecipesGui().showCategories(Collections.singletonList(new ResourceLocation(Multiblocked.MODID, recipeMap.name)));
+        this.addWidget(new ButtonWidget(78, 27, 20, 20, IGuiTexture.EMPTY, cd -> {
+            if (LDLMod.isJeiLoaded()) {
+                JEIPlugin.jeiRuntime.getRecipesGui().showTypes(Collections.singletonList(RecipeMapCategory.TYPES.apply(recipeMap)));
+            } else if (LDLMod.isReiLoaded()) {
+                ViewSearchBuilder.builder().addCategory(RecipeMapDisplayCategory.CATEGORIES.apply(recipeMap)).open();
             }
-        }).setHoverTexture(dark));
-
+        }).setHoverTexture(overlay));
         if (recipeMap.isFuelRecipeMap()) {
-            this.addWidget(new ProgressWidget(fuel, 57, 32, 20, 20, recipeMap.fuelTexture).setFillDirection(ProgressTexture.FillDirection.DOWN_TO_UP));
-            this.addWidget(new ButtonWidget(57, 32, 20, 20, IGuiTexture.EMPTY, cd -> {
-                if (Multiblocked.isJeiLoaded()) {
-                    JEIPlugin.jeiRuntime.getRecipesGui().showCategories(Collections.singletonList(new ResourceLocation(Multiblocked.MODID, recipeMap.name + ".fuel")));
+            this.addWidget(new ProgressWidget(fuel, 78, 47, 20, 20, recipeMap.fuelTexture).setFillDirection(ProgressTexture.FillDirection.DOWN_TO_UP));
+            this.addWidget(new ButtonWidget(78, 47, 20, 20, IGuiTexture.EMPTY, cd -> {
+                if (LDLMod.isJeiLoaded()) {
+                    JEIPlugin.jeiRuntime.getRecipesGui().showTypes(Collections.singletonList(RecipeMapFuelCategory.TYPES.apply(recipeMap)));
+                } else if (LDLMod.isReiLoaded()) {
+                    ViewSearchBuilder.builder().addCategory(RecipeMapFuelDisplayCategory.CATEGORIES.apply(recipeMap)).open();
                 }
-            }).setHoverTexture(dark));
+            }).setHoverTexture(overlay));
         }
 
         if (recipe == null) return;

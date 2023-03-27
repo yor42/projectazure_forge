@@ -18,7 +18,7 @@ import java.util.*;
 @Mixin(SplashManager.class)
 public class MixinSplashManager {
 
-    @Inject(method = "apply(Ljava/util/List;Lnet/minecraft/resources/IResourceManager;Lnet/minecraft/profiler/IProfiler;)V", at = @At("HEAD"))
+    @Inject(method = "apply(Ljava/util/List;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"))
     private void onApply(List<String> p_212853_1_, ResourceManager p_212853_2_, ProfilerFiller p_212853_3_, CallbackInfo ci){
         p_212853_1_.addAll(addCustomSplashes());
     }

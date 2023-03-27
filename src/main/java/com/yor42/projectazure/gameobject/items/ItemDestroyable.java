@@ -20,12 +20,12 @@ public class ItemDestroyable extends Item implements IItemDestroyable {
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        return getCurrentDamage(stack) / (double)this.getMaxHP();
+    public int getBarWidth(ItemStack pStack) {
+        return (int) (13*getCurrentDamage(pStack) / (double)this.getMaxHP());
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack pStack) {
         return true;
     }
 }

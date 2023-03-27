@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.items.tools;
 import com.yor42.projectazure.client.renderer.items.ItemDefibPaddleRenderer;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
@@ -14,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.energy.CapabilityEnergy;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -28,6 +30,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
@@ -38,8 +41,19 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
     public static final String controllerName = "paddle_controller";
 
     public ItemDefibPaddle() {
-        super(new Properties().tab(PA_WEAPONS).setISTER(()->ItemDefibPaddleRenderer::new).stacksTo(1));
+        super(new Properties().tab(PA_WEAPONS));
         GeckoLibNetwork.registerSyncable(this);
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return new ItemDefibPaddleRenderer();
+            }
+        });
     }
 
     @Nonnull

@@ -1,8 +1,8 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.network.serverEvents;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;

@@ -2,13 +2,11 @@ package com.yor42.projectazure.gameobject.entity.ai.targetAI;
 
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 
 import java.util.EnumSet;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class DroneOwnerAttackedTargetGoal extends TargetGoal {
     private final AbstractEntityFollowingDrone Drone;

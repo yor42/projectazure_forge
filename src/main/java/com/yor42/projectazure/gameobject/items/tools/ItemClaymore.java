@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemClaymoreRenderer;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.IItemRenderProperties;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -21,6 +23,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.gameobject.items.materials.ModMaterials.CLAYMORE;
@@ -31,7 +34,18 @@ public class ItemClaymore extends SwordItem implements IAnimatable {
 
     public ItemClaymore() {
         //Haha unstackable claymore
-        super(CLAYMORE,1,-3.9F,new Item.Properties().stacksTo(1).tab(PA_WEAPONS).setISTER(()->ItemClaymoreRenderer::new));
+        super(CLAYMORE,1,-3.9F,new Item.Properties().stacksTo(1).tab(PA_WEAPONS));
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return new ItemClaymoreRenderer();
+            }
+        });
     }
 
     @Override

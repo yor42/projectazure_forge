@@ -2,15 +2,9 @@ package com.yor42.projectazure.client.model.equipments;
 
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class ModelMaingun127mm extends AnimatedGeoModel {
-    @Override
-    public void setLivingAnimations(IAnimatable o, Integer integer, AnimationEvent animationEvent) {
-
-    }
 
     @Override
     public ResourceLocation getModelLocation(Object o) {

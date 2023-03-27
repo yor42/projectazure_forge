@@ -2,17 +2,17 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.behavior.EntityTracker;
-import net.minecraft.server.level.ServerLevel;
 
 public class CompanionUseCrossbowTask extends Behavior<AbstractEntityCompanion> {
 
@@ -25,7 +25,7 @@ public class CompanionUseCrossbowTask extends Behavior<AbstractEntityCompanion> 
 
     protected boolean checkExtraStartConditions(ServerLevel p_212832_1_, AbstractEntityCompanion p_212832_2_) {
 
-        if(!p_212832_2_.isHolding(item -> item instanceof CrossbowItem) ){
+        if(!p_212832_2_.isHolding(item -> item.getItem() instanceof CrossbowItem) ){
             return false;
         }
         ItemStack crossbow = p_212832_2_.getItemInHand(ProjectileUtil.getWeaponHoldingHand(p_212832_2_, item -> item instanceof CrossbowItem));
@@ -53,7 +53,7 @@ public class CompanionUseCrossbowTask extends Behavior<AbstractEntityCompanion> 
             p_212835_2_.stopUsingItem();
         }
 
-        if (p_212835_2_.isHolding(item -> item instanceof CrossbowItem)) {
+        if (p_212835_2_.isHolding(item -> item.getItem() instanceof CrossbowItem)) {
             p_212835_2_.setChargingCrossbow(false);
             CrossbowItem.setCharged(p_212835_2_.getUseItem(), false);
         }
@@ -62,7 +62,7 @@ public class CompanionUseCrossbowTask extends Behavior<AbstractEntityCompanion> 
 
     private void crossbowAttack(AbstractEntityCompanion p_233888_1_, LivingEntity p_233888_2_) {
 
-        if(!p_233888_2_.isHolding(item -> item instanceof CrossbowItem) ){
+        if(!p_233888_2_.isHolding(item -> item.getItem() instanceof CrossbowItem) ){
             return;
         }
         ItemStack crossbow = p_233888_2_.getItemInHand(ProjectileUtil.getWeaponHoldingHand(p_233888_2_, item -> item instanceof CrossbowItem));

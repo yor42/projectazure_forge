@@ -1,7 +1,6 @@
 package com.yor42.projectazure.intermod.jei.recipecategory;
 
 import com.yor42.projectazure.gameobject.crafting.recipes.BasicChemicalReactionRecipe;
-import com.yor42.projectazure.gameobject.crafting.recipes.CrystalizingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import mezz.jei.api.constants.VanillaTypes;

@@ -52,6 +52,7 @@ import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib3.util.RenderUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -345,13 +346,13 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
                     }
 
                     for(int i=bonetree.size()-1; i>=0; i--){
-                        preparePositionRotationScale(bonetree.get(i), matrixStackIn);
+                        RenderUtils.prepMatrixForBone(matrixStackIn, bonetree.get(i));
                     }
                     matrixStackIn.translate(bone.getPivotX()/16, bone.getPivotY()/16, bone.getPivotZ()/16);
                     RenderType type = RenderType.entitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
                     GeoModel riggingmodel = modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null));
                     AnimationEvent itemEvent = new AnimationEvent(riggingBase, 0, 0, Minecraft.getInstance().getFrameTime(), false, Collections.singletonList(Rigging));
-                    modelRiggingProvider.setLivingAnimations(riggingBase, this.getUniqueID(riggingBase), itemEvent);
+                    modelRiggingProvider.setCustomAnimations(riggingBase, this.getInstanceId(riggingBase), itemEvent);
                     if(entitylivingbaseIn.tickCount%5==0) {
                         /*
                         riggingmodel.getBone("smoke").ifPresent((smokeloc) -> {
@@ -403,7 +404,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
                     }
 
                     for(int j=bonetree.size()-1; j>=0; j--){
-                        preparePositionRotationScale(bonetree.get(j), matrixStackIn);
+                        RenderUtils.prepMatrixForBone(matrixStackIn,bonetree.get(j));
                     }
 
                     matrixStackIn.translate(bone.getPivotX()/16, bone.getPivotY()/16, bone.getPivotZ()/16);

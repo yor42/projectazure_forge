@@ -1,24 +1,22 @@
 package com.yor42.projectazure.gameobject.entity;
 
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.level.material.FluidState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
-
-import javax.annotation.Nullable;
-
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
-import net.minecraft.world.level.pathfinder.NodeEvaluator;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.pathfinder.Target;
+
+import javax.annotation.Nullable;
 
 public class CompanionSwimNodeProcessor extends net.minecraft.world.level.pathfinder.WalkNodeEvaluator {
 

@@ -19,11 +19,6 @@ public abstract class MixinExperienceOrbEntity extends Entity {
     @Shadow
     private Player followingPlayer;
     private AbstractEntityCompanion followingCompanion;
-    @Shadow
-    private int followingTime;
-    @Shadow
-    public int tickCount;
-
     public MixinExperienceOrbEntity(EntityType<?> p_i48580_1_, Level p_i48580_2_) {
         super(p_i48580_1_, p_i48580_2_);
     }
@@ -31,12 +26,10 @@ public abstract class MixinExperienceOrbEntity extends Entity {
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci){
 
-        if (this.followingTime < this.tickCount - 20 + this.getId() % 100) {
+        if (this.tickCount % 100==0) {
             if (this.followingPlayer == null || this.followingPlayer.distanceToSqr(this) > 64.0D) {
                 this.followingCompanion = this.level.getNearestEntity(AbstractEntityCompanion.class, TargetingConditions.DEFAULT, null, this.getX(), this.getY(), this.getZ(), this.getBoundingBox().inflate(8));
             }
-
-            this.followingTime = this.tickCount;
         }
 
         if(this.followingCompanion==null){

@@ -10,7 +10,6 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentGun;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.MenuProvider;

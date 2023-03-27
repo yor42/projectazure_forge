@@ -4,20 +4,21 @@ import com.yor42.projectazure.gameobject.entity.ai.goals.DroneRangedAttackGoal;
 import com.yor42.projectazure.gameobject.entity.ai.targetAI.DroneOwnerAttackedTargetGoal;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import static com.yor42.projectazure.setup.register.RegisterItems.DRONE_BAMISSILE;
@@ -42,11 +43,11 @@ public class EntityMissileDrone extends AbstractEntityFollowingDrone {
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isFiring()){
-            event.getController().setAnimation(builder.addAnimation("body_fire", true));
+            event.getController().setAnimation(builder.addAnimation("body_fire", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(!(this.animationSpeed > -0.1F && this.animationSpeed < 0.1F)){
-            event.getController().setAnimation(builder.addAnimation("body_moveforward", true));
+            event.getController().setAnimation(builder.addAnimation("body_moveforward", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;
@@ -61,7 +62,7 @@ public class EntityMissileDrone extends AbstractEntityFollowingDrone {
         AnimationBuilder builder = new AnimationBuilder();
 
         if(!this.isOnGround()){
-            event.getController().setAnimation(builder.addAnimation("propeller_fly", true));
+            event.getController().setAnimation(builder.addAnimation("propeller_fly", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;

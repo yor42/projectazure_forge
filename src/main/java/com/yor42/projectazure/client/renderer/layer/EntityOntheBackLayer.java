@@ -6,6 +6,7 @@ import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
 import com.yor42.projectazure.libs.utils.ClientUtils;
+import com.yor42.projectazure.mixin.EntityRendererAccessors;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -34,7 +35,7 @@ public class EntityOntheBackLayer<T extends Player> extends RenderLayer<T, Playe
 
     public EntityOntheBackLayer(LivingEntityRenderer<T, PlayerModel<T>> p_i50926_1_) {
         super(p_i50926_1_);
-        this.dispatcher = p_i50926_1_.getDispatcher();
+        this.dispatcher = ((EntityRendererAccessors) p_i50926_1_).getEntityRenderDispatcher();
     }
 
     @Override
@@ -71,7 +72,6 @@ public class EntityOntheBackLayer<T extends Player> extends RenderLayer<T, Playe
         this.companion.yHeadRotO = playerheaddelta;
         matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
         //clampRotation(player, this.companion);
-        this.dispatcher.setRenderShadow(false);
         this.render(this.companion,player, 0, 0, 0, netHeadYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.popPose();
 
@@ -106,7 +106,7 @@ public class EntityOntheBackLayer<T extends Player> extends RenderLayer<T, Playe
             p_229084_1_.fillCrashReportCategory(crashreportcategory);
             CrashReportCategory crashreportcategory1 = crashreport.addCategory("Renderer details");
             crashreportcategory1.setDetail("Assigned renderer", entityrenderer);
-            crashreportcategory1.setDetail("Location", CrashReportCategory.formatLocation(p_229084_2_, p_229084_4_, p_229084_6_));
+            //crashreportcategory1.setDetail("Location", CrashReportCategory.formatLocation(p_229084_2_, p_229084_4_, p_229084_6_));
             crashreportcategory1.setDetail("Rotation", p_229084_8_);
             crashreportcategory1.setDetail("Delta", p_229084_9_);
             throw new ReportedException(crashreport);

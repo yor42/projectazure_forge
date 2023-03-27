@@ -1,9 +1,9 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
 

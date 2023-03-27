@@ -2,9 +2,6 @@ package com.yor42.projectazure.libs;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -28,12 +25,14 @@ public class ItemFilterEntry implements Predicate<ItemStack> {
 
         return new ItemFilterEntry(type, null, 0, 64);
     }
-
+    /*
     @Nonnull
     public static ItemFilterEntry createTagFromTag(String string){
         FilterType type = new FilterType(ItemTypes.TAG, string);
         return new ItemFilterEntry(type, null, 0, 64);
     }
+
+     */
 
 
     private ItemFilterEntry(@Nonnull FilterType item, @Nullable CompoundTag tag, int min, int max) {
@@ -123,7 +122,8 @@ public class ItemFilterEntry implements Predicate<ItemStack> {
 
     public enum ItemTypes{
 
-        ITEM((id)-> Ingredient.of(ForgeRegistries.ITEMS.getValue(new ResourceLocation(id)))),
+        ITEM((id)-> Ingredient.of(ForgeRegistries.ITEMS.getValue(new ResourceLocation(id))));
+        /*
         TAG((id)->{
             Tag<Item> tag = ItemTags.getAllTags().getTag(new ResourceLocation(id));
             if(tag == null){
@@ -131,6 +131,8 @@ public class ItemFilterEntry implements Predicate<ItemStack> {
             }
             return Ingredient.of(tag);
         });
+
+         */
 
         private final Function<String, Ingredient> IDtoIngredient;
         ItemTypes(Function<String, Ingredient> test){

@@ -19,6 +19,7 @@
     "WeaponPoseAccessor"
   ],
   "client": [
+    "EntityRendererAccessors",
     "MixinPlayerRenderer",
     "MixinSplashManager"
   ]

@@ -6,6 +6,7 @@ import com.yor42.projectazure.client.model.items.ModelDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.energy.CapabilityEnergy;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
@@ -22,7 +23,7 @@ public class ItemDefibChargerRenderer extends GeoItemRenderer<ItemDefibCharger> 
         AnimationController.addModelFetcher((IAnimatable object) -> {
             if (object instanceof ItemDefibCharger) {
                 ItemDefibCharger item = (ItemDefibCharger) object;
-                BlockEntityWithoutLevelRenderer renderer = item.getItemStackTileEntityRenderer();
+                BlockEntityWithoutLevelRenderer renderer = RenderProperties.get(item).getItemStackRenderer();
                 if (renderer instanceof GeoItemRenderer) {
                     return (IAnimatableModel<Object>) ((GeoItemRenderer<?>) renderer).getGeoModelProvider();
                 }
