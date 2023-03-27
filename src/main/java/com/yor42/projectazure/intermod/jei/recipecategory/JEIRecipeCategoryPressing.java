@@ -5,10 +5,13 @@ import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
@@ -23,6 +26,7 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     private final IDrawable icon;
     private final IDrawable background;
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_pressing");
+    public static RecipeType<PressingRecipe> RECIPE_TYPE = new RecipeType<>(UID, PressingRecipe.class);
 
     public JEIRecipeCategoryPressing(IGuiHelper guiHelper) {
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(RegisterBlocks.METAL_PRESS.get().asItem()));
@@ -30,11 +34,6 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/metal_press.png");
         this.background = guiHelper.createDrawable(TEXTURE, 4,4, 165, 75);
 
-    }
-
-    @Override
-    public RecipeType<PressingRecipe> getRecipeType() {
-        return new RecipeType<>(UID, PressingRecipe.class);
     }
 
     @Nonnull
@@ -56,29 +55,27 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     }
 
     @Override
+    public RecipeType<PressingRecipe> getRecipeType() {
+        return RECIPE_TYPE;
+    }
+    //method above replaces following 2
+    @Override
+    @SuppressWarnings("Deprecated")
     public ResourceLocation getUid() {
         return UID;
     }
 
     @Override
+    @SuppressWarnings("Deprecated")
     public Class<? extends PressingRecipe> getRecipeClass() {
         return PressingRecipe.class;
     }
 
     @Override
-    public void setIngredients(PressingRecipe pressingRecipe, IIngredients iIngredients) {
-        iIngredients.setInputIngredients(pressingRecipe.getIngredients());
-        iIngredients.setOutput(VanillaTypes.ITEM, pressingRecipe.getResultItem());
-    }
+    public void setRecipe(IRecipeLayoutBuilder builder, PressingRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 36,30).addIngredients(VanillaTypes.ITEM_STACK, recipe.getIngredientStack());
+        builder.addSlot(RecipeIngredientRole.CATALYST, 70,30).addIngredients(VanillaTypes.ITEM_STACK, recipe.getMold());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 111,30).addItemStack(recipe.getResultItem());
 
-    @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, PressingRecipe pressingRecipe, IIngredients iIngredients) {
-        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-
-        itemStacks.init(0, true, 36, 30);
-        itemStacks.init(1, true, 70, 30);
-        itemStacks.init(2, false, 111, 30);
-
-        itemStacks.set(iIngredients);
     }
 }

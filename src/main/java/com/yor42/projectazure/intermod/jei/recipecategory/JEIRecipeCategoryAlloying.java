@@ -4,11 +4,12 @@ import com.yor42.projectazure.gameobject.crafting.recipes.AlloyingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -20,15 +21,23 @@ public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe
     private final IDrawable icon;
     private final IDrawable background;
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_alloying");
+    public static final RecipeType<AlloyingRecipe> RECIPE_TYPE = new RecipeType<>(UID, AlloyingRecipe.class);
 
     public JEIRecipeCategoryAlloying(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegisterBlocks.ALLOY_FURNACE.get().asItem()));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(RegisterBlocks.ALLOY_FURNACE.get().asItem()));
 
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/alloy_furnace.png");
         this.background = guiHelper.createDrawable(TEXTURE, 4,4, 168, 75);
 
     }
 
+
+    @Override
+    public RecipeType<AlloyingRecipe> getRecipeType() {
+        return RECIPE_TYPE;
+    }
+
+    //method above replaces following 2
     @Override
     public ResourceLocation getUid() {
         return UID;
@@ -55,18 +64,9 @@ public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe
     }
 
     @Override
-    public void setIngredients(AlloyingRecipe alloyingRecipe, IIngredients iIngredients) {
-        iIngredients.setInputLists(VanillaTypes.ITEM, alloyingRecipe.getIngredientStack());
-        iIngredients.setOutput(VanillaTypes.ITEM, alloyingRecipe.getResultItem());
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, AlloyingRecipe alloyingRecipe, IIngredients iIngredients) {
-        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-        itemStacks.init(0, true, 42, 12);
-        itemStacks.init(1, true, 60, 12);
-        itemStacks.init(3, false, 110, 29);
-
-        itemStacks.set(iIngredients);
+    public void setRecipe(IRecipeLayoutBuilder builder, AlloyingRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 42,12).addIngredients(VanillaTypes.ITEM_STACK, recipe.getIngredientStack().get(0));
+        builder.addSlot(RecipeIngredientRole.INPUT, 60,12).addIngredients(VanillaTypes.ITEM_STACK, recipe.getIngredientStack().get(1));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 110,29).addIngredient(VanillaTypes.ITEM_STACK, recipe.getResultItem());
     }
 }

@@ -1,6 +1,10 @@
 package com.yor42.projectazure.intermod.jei;
 
 import com.yor42.projectazure.client.gui.container.*;
+import com.yor42.projectazure.gameobject.crafting.recipes.AlloyingRecipe;
+import com.yor42.projectazure.gameobject.crafting.recipes.BasicChemicalReactionRecipe;
+import com.yor42.projectazure.gameobject.crafting.recipes.CrystalizingRecipe;
+import com.yor42.projectazure.gameobject.crafting.recipes.PressingRecipe;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryBasicChemicalReaction;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryCrystalizing;
@@ -10,6 +14,7 @@ import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -20,6 +25,10 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
+import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
+import slimeknights.tconstruct.library.recipe.alloying.AlloyRecipe;
+import slimeknights.tconstruct.plugin.jei.TConstructJEIConstants;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -103,19 +112,27 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        assert Minecraft.getInstance().level != null;
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.PRESSING), JEIRecipeCategoryPressing.UID);
-        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.ALLOYING), JEIRecipeCategoryAlloying.UID);
-        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
-        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.BASIC_CHEMICAL_REACTION), JEIRecipeCategoryBasicChemicalReaction.UID);
+        List<PressingRecipe> PressingRecipes = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.PRESSING, PressingRecipe.class);
+        registration.addRecipes(JEIRecipeCategoryPressing.RECIPE_TYPE, PressingRecipes);
+
+        List<AlloyingRecipe> AlloyingRecipes = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.ALLOYING, AlloyingRecipe.class);
+        registration.addRecipes(JEIRecipeCategoryAlloying.RECIPE_TYPE, AlloyingRecipes);
+
+        List<CrystalizingRecipe> CrystalizingRecipe = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.CRYSTALIZING, CrystalizingRecipe.class);
+        registration.addRecipes(JEIRecipeCategoryCrystalizing.RECIPE_TYPE, CrystalizingRecipe);
+
+        List<BasicChemicalReactionRecipe> reactionrecipe = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.BASIC_CHEMICAL_REACTION, BasicChemicalReactionRecipe.class);
+        registration.addRecipes(JEIRecipeCategoryBasicChemicalReaction.RECIPE_TYPE, reactionrecipe);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(RegisterBlocks.METAL_PRESS.get().asItem()), JEIRecipeCategoryPressing.UID);
-        registration.addRecipeCatalyst(new ItemStack(RegisterBlocks.ALLOY_FURNACE.get().asItem()), JEIRecipeCategoryAlloying.UID);
-        registration.addRecipeCatalyst(new ItemStack(RegisterBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()), JEIRecipeCategoryCrystalizing.UID);
-        registration.addRecipeCatalyst(new ItemStack(RegisterBlocks.BASIC_CHEMICAL_REACTOR.get().asItem()), JEIRecipeCategoryBasicChemicalReaction.UID);
+        registration.addRecipeCatalyst(VanillaTypes.ITEM_STACK, new ItemStack(RegisterBlocks.METAL_PRESS.get().asItem()), JEIRecipeCategoryPressing.RECIPE_TYPE);
+        registration.addRecipeCatalyst(VanillaTypes.ITEM_STACK, new ItemStack(RegisterBlocks.ALLOY_FURNACE.get().asItem()), JEIRecipeCategoryAlloying.RECIPE_TYPE);
+        registration.addRecipeCatalyst(VanillaTypes.ITEM_STACK, new ItemStack(RegisterBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()), JEIRecipeCategoryCrystalizing.RECIPE_TYPE);
+        registration.addRecipeCatalyst(VanillaTypes.ITEM_STACK, new ItemStack(RegisterBlocks.BASIC_CHEMICAL_REACTOR.get().asItem()), JEIRecipeCategoryBasicChemicalReaction.RECIPE_TYPE);
     }
 
     @Override

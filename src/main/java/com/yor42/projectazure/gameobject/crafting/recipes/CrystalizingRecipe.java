@@ -21,6 +21,8 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.util.List;
+
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.CRYSTALIZING;
 
 public class CrystalizingRecipe implements Recipe<TileEntityCrystalGrowthChamber> {
@@ -78,7 +80,7 @@ public class CrystalizingRecipe implements Recipe<TileEntityCrystalGrowthChamber
 
     public NonNullList<ItemStack> getIngredientStack() {
         NonNullList<ItemStack> nonnulllist = NonNullList.create();
-        nonnulllist.add(this.seed.getItems()[0]);
+        nonnulllist.addAll(List.of(this.seed.getItems()));
         return nonnulllist;
     }
 

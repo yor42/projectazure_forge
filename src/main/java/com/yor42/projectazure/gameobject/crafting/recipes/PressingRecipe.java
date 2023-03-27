@@ -17,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 
 public class PressingRecipe implements Recipe<Container> {
@@ -64,6 +65,14 @@ public class PressingRecipe implements Recipe<Container> {
     @Override
     public ItemStack getResultItem() {
         return this.result;
+    }
+
+    public List<ItemStack> getIngredientStack() {
+        return List.of(this.ingredient.getItems());
+    }
+
+    public List<ItemStack> getMold() {
+        return List.of(this.mold.getItems());
     }
 
     @Override

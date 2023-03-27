@@ -20,6 +20,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -93,11 +94,17 @@ public class BasicChemicalReactionRecipe implements Recipe<Container>, Predicate
         return BASIC_CHEMICAL_REACTION;
     }
 
-    @Nonnull
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> list = Recipe.super.getIngredients();
         list.add(this.itemInput);
+        return list;
+    }
+
+    @Nonnull
+    public NonNullList<ItemStack> getIngredientStack() {
+        NonNullList<ItemStack> list = NonNullList.create();
+        list.addAll(List.of(this.itemInput.getItems()));
         return list;
     }
 
