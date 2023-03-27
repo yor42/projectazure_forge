@@ -200,13 +200,13 @@ public abstract class HatchTE extends PartTileEntity<PartDefinition> {
         }
     }
 
-    private class FluidTE extends HatchTE{
+    private static class FluidTE extends HatchTE{
         public FluidTE(PartDefinition definition, BlockPos pos, BlockState state) {
             super(definition, pos, state, HatchType.FLUID);
         }
     }
 
-    private class EntityTE extends HatchTE{
+    private static class EntityTE extends HatchTE{
         public EntityTE(PartDefinition definition, BlockPos pos, BlockState state) {
             super(definition, pos, state, HatchType.ENTITY);
         }
