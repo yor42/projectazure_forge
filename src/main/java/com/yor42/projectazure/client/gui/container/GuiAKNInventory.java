@@ -2,28 +2,16 @@ package com.yor42.projectazure.client.gui.container;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yor42.projectazure.Main;
+import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.libs.utils.ClientUtils;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInventory> {
+public class GuiAKNInventory extends AbstractGUIScreen<ContainerAKNInventory> {
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/arknights_inventory.png");
     private final AbstractEntityCompanion companion;
 
@@ -40,7 +28,6 @@ public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInvento
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderValues(matrixStack, mouseX, mouseY);
-        this.drawButtons(matrixStack, mouseX, mouseY);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
@@ -106,7 +93,7 @@ public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInvento
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         matrixStack.pushPose();
-        this.renderEntity(x, y);
+        this.renderEntity(48, 75, x, y);
         RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
@@ -127,73 +114,17 @@ public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInvento
         matrixStack.popPose();
     }
 
-    private void switchBehavior() {
-        if(Screen.hasShiftDown()){
-            this.companion.clearHomePos();
-        }
-        else {
-            this.companion.SwitchFreeRoamingStatus();
-        }
-    }
 
-    private void switchItemBehavior() {
-        this.companion.SwitchItemBehavior();
-    }
+    @Override
+    protected void addButtons() {
+        int homeModeX = this.companion.isFreeRoaming() ? 0 : 10;
+        int ItemPickupX = this.companion.shouldPickupItem() ? 0 : 10;
 
-    private void drawButtons(PoseStack stack, int mousex, int mousey) {
-
-        int homeModeX = this.companion.isFreeRoaming()? 0:10;
-        int ItemPickupX = this.companion.shouldPickupItem()? 0:10;
-
-        ImageButton HomeModeButton = new ImageButton(this.leftPos,this.topPos+51,10,10,homeModeX,200,10,TEXTURE, action->switchBehavior());
-        ImageButton ItemPickupButton = new ImageButton(this.leftPos,this.topPos+40,10,10,ItemPickupX,220,10,TEXTURE, action->switchItemBehavior());
-
-        if(this.isHovering(0,51,10,10, mousex, mousey)){
-            List<MutableComponent> tooltips = new ArrayList<>();
-            if(this.companion.isFreeRoaming()){
-                tooltips.add(new TranslatableComponent("gui.tooltip.freeroaming.on").withStyle(ChatFormatting.GREEN));
-            }
-            else{
-                tooltips.add(new TranslatableComponent("gui.tooltip.freeroaming.off").withStyle(ChatFormatting.BLUE));
-            }
-
-            if(this.companion.getHOMEPOS().isPresent()) {
-                Component shift = new TextComponent("[SHIFT]").withStyle(ChatFormatting.YELLOW);
-                BlockPos Home = this.companion.getHOMEPOS().get();
-                tooltips.add(new TranslatableComponent("gui.tooltip_homepos").append(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()).withStyle(ChatFormatting.BLUE));
-                tooltips.add(new TranslatableComponent("gui.tooltip.shifttoclearhome", shift).withStyle(ChatFormatting.GRAY));
-            }
-            else{
-                tooltips.add(new TranslatableComponent("gui.tooltip.homemode.nohome").withStyle(ChatFormatting.GRAY));
-            }
-            this.renderComponentTooltip(stack, tooltips, mousex, mousey, this.font);
-        }
-        else if(this.isHovering(0,40,10,10, mousex, mousey)){
-            List<Component> tooltips = new ArrayList<>();
-            if(this.companion.shouldPickupItem()){
-                tooltips.add(new TranslatableComponent("gui.tooltip.itempickup.on").withStyle(ChatFormatting.GREEN));
-            }
-            else{
-                tooltips.add(new TranslatableComponent("gui.tooltip.itempickup.off").withStyle(ChatFormatting.BLUE));
-            }
-            this.renderComponentTooltip(stack, tooltips, mousex, mousey, this.font);
-        }
+        EntityStatusButton HomeModeButton = new EntityStatusButton(this.host, this.leftPos, this.topPos + 51, 10, 10, homeModeX, 200, 10, 0, TEXTURE, EntityStatusButton.ACTIONTYPES.FREEROAM, FREEROAM_TOOLTIP);
+        EntityStatusButton ItemPickupButton = new EntityStatusButton(this.host, this.leftPos, this.topPos + 40, 10, 10, ItemPickupX, 220, 10, 0, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM , ITEM_TOOLTIP);
 
         this.addRenderableWidget(HomeModeButton);
         this.addRenderableWidget(ItemPickupButton);
-    }
-
-    private void renderEntity(int mousex, int mousey){
-        Entity entity = this.companion.getType().create(ClientUtils.getClientWorld());
-        if(entity instanceof AbstractEntityCompanion) {
-            entity.restoreFrom(this.companion);
-            int entityWidth = (int) entity.getBbWidth();
-            try {
-                renderEntityInInventory(this.leftPos + 48, this.topPos + 75, 30, mousex, mousey, (LivingEntity) entity);
-            } catch (Exception e) {
-                Main.LOGGER.error("Failed to render Entity!");
-            }
-        }
     }
 
 }

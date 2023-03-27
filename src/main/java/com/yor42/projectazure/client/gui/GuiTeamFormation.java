@@ -19,6 +19,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
@@ -36,7 +37,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static net.minecraft.ChatFormatting.DARK_RED;
 import static net.minecraft.ChatFormatting.YELLOW;
 
@@ -270,7 +270,7 @@ public class GuiTeamFormation extends Screen{   /*
                         this.font.drawShadow(matrixStack, text, textx, texty, -1);
                         this.font.drawShadow(matrixStack, new TextComponent("Lv.").withStyle(ChatFormatting.WHITE).append(new TextComponent(Integer.toString(entity.getEntityLevel())).withStyle(ChatFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
                         matrixStack.popPose();
-                        renderEntityInInventory(x+99, y+26, 14, mouseX, mouseY, entity);
+                        InventoryScreen.renderEntityInInventory(x+99, y+26, 14, mouseX+99, mouseY+26, entity);
                     }
                     else {
                         if (this.notYetPopulated) {
@@ -490,7 +490,7 @@ public class GuiTeamFormation extends Screen{   /*
             font.drawShadow(matrix, text, textx, texty, -1);
             font.drawShadow(matrix, new TextComponent("Lv.").withStyle(ChatFormatting.WHITE).append(new TextComponent(Integer.toString(entity.getEntityLevel())).withStyle(ChatFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
             matrix.popPose();
-            renderEntityInInventory(this.x+this.width-10, this.y+this.height-3, 11, mouseX, mouseY, this.entity);
+            InventoryScreen.renderEntityInInventory(this.x+this.width-10, this.y+this.height-3, 11, mouseX+this.width-10, mouseY+this.height-3, this.entity);
         }
     }
 }

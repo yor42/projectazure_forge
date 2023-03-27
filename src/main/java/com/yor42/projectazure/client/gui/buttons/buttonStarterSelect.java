@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -13,8 +14,6 @@ import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 
 public class buttonStarterSelect extends ImageButton {
     private final ResourceLocation resourceLocation;
@@ -103,7 +102,7 @@ public class buttonStarterSelect extends ImageButton {
 
                         int entityWidth = (int) entity.getBbWidth();
                         try {
-                            renderEntityInInventory(this.x+(this.width/2), this.y+this.height-5, 40, mouseX, mouseY, livingEntity);
+                            InventoryScreen.renderEntityInInventory(this.x+(this.width/2), this.y+this.height-5, 40, mouseX+(this.width/2F), mouseY+this.height-5, livingEntity);
                             return;
                         } catch (Exception e) {
                             Main.LOGGER.error("Failed to render Entity!");

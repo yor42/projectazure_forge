@@ -9,6 +9,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -21,8 +22,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 
 public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> extends AbstractContainerScreen<T> {
 
@@ -103,7 +102,7 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
         if(entity instanceof AbstractEntityCompanion) {
             entity.restoreFrom(this.host);
             try {
-                renderEntityInInventory(x, y, 30, mousex, mousey, (LivingEntity) entity);
+                InventoryScreen.renderEntityInInventory(this.leftPos+x, this.topPos+y, 30, mousex+x, mousey+y, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }

@@ -1,12 +1,16 @@
 package com.yor42.projectazure.libs.utils;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
@@ -29,6 +33,14 @@ import org.lwjgl.opengl.GL11;
  */
 
 public class RenderingUtils {
+
+    protected static final RenderStateShard.TransparencyStateShard TRANSLUCENT_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+    }, () -> {
+        RenderSystem.disableBlend();
+        RenderSystem.defaultBlendFunc();
+    });
     public static void drawRepeatedFluidSpriteGui(MultiBufferSource buffer, PoseStack stack, FluidStack fluid, float x, float y, float w, float h)
     {
         RenderType renderType = getGui(InventoryMenu.BLOCK_ATLAS);
@@ -41,11 +53,11 @@ public class RenderingUtils {
         return RenderType.create(
                 "gui_"+texture,
                 DefaultVertexFormat.POSITION_COLOR_TEX,
-                GL11.GL_QUADS,
-                256,
+                VertexFormat.Mode.QUADS,
+                256, false, false,
                 RenderType.CompositeState.builder()
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                        .setAlphaState(new RenderStateShard.AlphaStateShard(0.5F))
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .createCompositeState(false)
         );
     }
@@ -112,42 +124,4 @@ public class RenderingUtils {
         return Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(rl);
     }
 
-    public static void renderEntityInInventory(int x, int y, float scale, float mouseX, float mouseY, LivingEntity entity) {
-        float f = (float)Math.atan((x-mouseX) / 40.0F);
-        float f1 = (float)Math.atan((y-mouseY) / 40.0F);
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef((float)x, (float)y, 1050.0F);
-        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
-        PoseStack matrixstack = new PoseStack();
-        matrixstack.translate(0.0D, 0.0D, 1000.0D);
-        matrixstack.scale(scale, scale, scale);
-        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
-        quaternion.mul(quaternion1);
-        matrixstack.mulPose(quaternion);
-        float f2 = entity.yBodyRot;
-        float f3 = entity.getYRot();
-        float f4 = entity.getXRot();
-        float f5 = entity.yHeadRotO;
-        float f6 = entity.yHeadRot;
-        entity.yBodyRot = 180.0F + f * 20.0F;
-        entity.setYRot(180.0F + f * 40.0F);
-        entity.setXRot(-f1 * 20.0F);
-        entity.yHeadRot = entity.getYRot();
-        entity.yHeadRotO = entity.getYRot();
-        EntityRenderDispatcher entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
-        quaternion1.conj();
-        entityrenderermanager.overrideCameraOrientation(quaternion1);
-        entityrenderermanager.setRenderShadow(false);
-        MultiBufferSource.BufferSource irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
-        RenderSystem.runAsFancy(() -> entityrenderermanager.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880));
-        irendertypebuffer$impl.endBatch();
-        entityrenderermanager.setRenderShadow(true);
-        entity.yBodyRot = f2;
-        entity.setYRot(f3);
-        entity.setXRot(f4);
-        entity.yHeadRotO = f5;
-        entity.yHeadRot = f6;
-        RenderSystem.popMatrix();
-    }
 }

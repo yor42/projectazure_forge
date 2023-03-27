@@ -247,7 +247,6 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
 
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderMorale(matrixStack, mousex, mousey);
-        this.renderEntity(48, 70,mousex, mousey);
         //this.renderButton(matrixStack);
     }
 
@@ -263,6 +262,7 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
         }
         this.blit(matrixStack, this.leftPos +imageWidth, this.topPos, 176, 104, 43, 90);
         this.blit(matrixStack, this.leftPos +26, this.topPos+87, 176, 44, this.getEXPgauge(49), 2);
+        this.renderEntity(48, 70,x, y);
         matrixStack.popPose();
     }
 }
