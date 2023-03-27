@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:motor_basic"
+            "items": [
+              "projectazure:motor_basic"
+            ]
           }
         ]
       }

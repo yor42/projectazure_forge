@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:copper_iron_probe"
+            "items": [
+              "projectazure:copper_iron_probe"
+            ]
           }
         ]
       }

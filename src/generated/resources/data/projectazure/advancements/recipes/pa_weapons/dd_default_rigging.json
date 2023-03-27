@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:wisdomcube"
+            "items": [
+              "projectazure:wisdomcube"
+            ]
           }
         ]
       }
@@ -21,7 +23,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:motor_advanced"
+            "items": [
+              "projectazure:motor_advanced"
+            ]
           }
         ]
       }

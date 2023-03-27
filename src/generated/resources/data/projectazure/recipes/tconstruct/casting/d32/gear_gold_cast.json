@@ -14,7 +14,7 @@
   },
   "fluid": {
     "tag": "forge:molten_d32",
-    "amount": 576
+    "amount": 360
   },
   "result": {
     "tag": "forge:gears/d32"

@@ -45,7 +45,6 @@ public class RegisterBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
 
     public static final RegistryObject<Block> BAUXITE_ORE = registerMetalOre_Stone("aluminium");
-    public static final RegistryObject<Block> COPPER_ORE = registerMetalOre_Stone("copper");
     public static final RegistryObject<Block> PYROXENE_ORE = registerMetalOre_Stone("pyroxene");
     public static final RegistryObject<Block> TIN_ORE = registerMetalOre_Stone("tin");
     public static final RegistryObject<Block> LEAD_ORE = registerMetalOre_Stone("lead");

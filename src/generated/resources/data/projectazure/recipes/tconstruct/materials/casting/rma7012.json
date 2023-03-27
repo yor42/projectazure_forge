@@ -2,7 +2,7 @@
   "type": "tconstruct:material_fluid",
   "fluid": {
     "tag": "forge:molten_rma7012",
-    "amount": 144
+    "amount": 90
   },
   "temperature": 300,
   "output": "projectazure:rma7012"

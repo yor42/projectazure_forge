@@ -15,7 +15,7 @@
   "cast_consumed": true,
   "fluid": {
     "tag": "forge:molten_rma7024",
-    "amount": 72
+    "amount": 45
   },
   "result": {
     "tag": "forge:wires/rma70-24"

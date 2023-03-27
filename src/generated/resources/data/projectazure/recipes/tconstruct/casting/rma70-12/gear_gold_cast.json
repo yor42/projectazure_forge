@@ -14,7 +14,7 @@
   },
   "fluid": {
     "tag": "forge:molten_rma7012",
-    "amount": 576
+    "amount": 360
   },
   "result": {
     "tag": "forge:gears/rma70-12"

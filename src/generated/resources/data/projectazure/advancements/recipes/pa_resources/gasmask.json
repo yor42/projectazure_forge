@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:replacement_filter"
+            "items": [
+              "projectazure:replacement_filter"
+            ]
           }
         ]
       }

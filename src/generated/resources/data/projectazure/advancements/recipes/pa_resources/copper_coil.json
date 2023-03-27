@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:copper_wire"
+            "items": [
+              "projectazure:copper_wire"
+            ]
           }
         ]
       }
@@ -21,7 +23,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:iron_pipe"
+            "items": [
+              "projectazure:iron_pipe"
+            ]
           }
         ]
       }

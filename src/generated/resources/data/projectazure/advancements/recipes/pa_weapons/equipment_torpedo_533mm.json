@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:steel_pipe"
+            "items": [
+              "projectazure:steel_pipe"
+            ]
           }
         ]
       }
@@ -21,7 +23,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:mechanical_parts"
+            "items": [
+              "projectazure:mechanical_parts"
+            ]
           }
         ]
       }
@@ -31,7 +35,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:motor_primitive"
+            "items": [
+              "projectazure:motor_primitive"
+            ]
           }
         ]
       }

@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:incandescent_alloy_block"
+            "items": [
+              "projectazure:incandescent_alloy_block"
+            ]
           }
         ]
       }

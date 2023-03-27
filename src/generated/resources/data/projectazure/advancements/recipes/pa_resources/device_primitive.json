@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:motor_primitive"
+            "items": [
+              "projectazure:motor_primitive"
+            ]
           }
         ]
       }

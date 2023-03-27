@@ -31,7 +31,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:gunpowder_compound"
+            "items": [
+              "projectazure:gunpowder_compound"
+            ]
           }
         ]
       }

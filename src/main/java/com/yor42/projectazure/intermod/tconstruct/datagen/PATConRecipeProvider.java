@@ -95,8 +95,8 @@ public class PATConRecipeProvider extends RecipeProvider implements IMaterialRec
                 .setMaxLevel(maxLevel)
                 .setInput(item.get(), 1, amount)
                 .setSlots(slotType, 1)
-                .saveSalvage(con, new ResourceLocation(Constants.MODID, salvageFolder))
-                .save(con, new ResourceLocation(Constants.MODID, folder));
+                .saveSalvage(con, new ResourceLocation(Constants.MODID, salvageFolder+inc.getId().getPath()+"_salvage"))
+                .save(con, new ResourceLocation(Constants.MODID, folder+inc.getId().getPath()+"_recipe"));
     }
     //private static void registerMaterial(Consumer<IFinishedRecipe> consumer, TinkersRegistry.TinkersFluids fluid, )
 }

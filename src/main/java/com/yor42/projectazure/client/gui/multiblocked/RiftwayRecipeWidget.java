@@ -19,7 +19,6 @@ import com.lowdragmc.multiblocked.jei.recipepage.RecipeMapFuelCategory;
 import com.lowdragmc.multiblocked.rei.recipepage.RecipeMapDisplayCategory;
 import com.lowdragmc.multiblocked.rei.recipepage.RecipeMapFuelDisplayCategory;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
@@ -54,7 +53,7 @@ public class RiftwayRecipeWidget extends WidgetGroup {
             if (LDLMod.isJeiLoaded()) {
                 JEIPlugin.jeiRuntime.getRecipesGui().showTypes(Collections.singletonList(RecipeMapCategory.TYPES.apply(recipeMap)));
             } else if (LDLMod.isReiLoaded()) {
-                ViewSearchBuilder.builder().addCategory(RecipeMapDisplayCategory.CATEGORIES.apply(recipeMap)).open();
+                //ViewSearchBuilder.builder().addCategory(RecipeMapDisplayCategory.CATEGORIES.apply(recipeMap)).open();
             }
         }).setHoverTexture(overlay));
         if (recipeMap.isFuelRecipeMap()) {
@@ -63,7 +62,7 @@ public class RiftwayRecipeWidget extends WidgetGroup {
                 if (LDLMod.isJeiLoaded()) {
                     JEIPlugin.jeiRuntime.getRecipesGui().showTypes(Collections.singletonList(RecipeMapFuelCategory.TYPES.apply(recipeMap)));
                 } else if (LDLMod.isReiLoaded()) {
-                    ViewSearchBuilder.builder().addCategory(RecipeMapFuelDisplayCategory.CATEGORIES.apply(recipeMap)).open();
+                    //ViewSearchBuilder.builder().addCategory(RecipeMapFuelDisplayCategory.CATEGORIES.apply(recipeMap)).open();
                 }
             }).setHoverTexture(overlay));
         }

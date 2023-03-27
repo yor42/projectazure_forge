@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:dd_default_rigging"
+            "items": [
+              "projectazure:dd_default_rigging"
+            ]
           }
         ]
       }
@@ -21,7 +23,9 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:motor_advanced"
+            "items": [
+              "projectazure:motor_advanced"
+            ]
           }
         ]
       }
