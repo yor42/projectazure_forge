@@ -24,6 +24,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nullable;
@@ -126,7 +127,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         event.getController().transitionLengthTicks = 0;
         boolean flag = this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).getValue(ACTIVE);
         if(flag) {
-            event.getController().setAnimation(builder.addAnimation("work", true));
+            event.getController().setAnimation(builder.addAnimation("work", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
 

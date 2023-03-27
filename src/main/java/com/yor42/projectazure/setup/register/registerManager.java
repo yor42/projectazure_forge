@@ -30,6 +30,7 @@ public class registerManager {
         if(CompatibilityUtils.isTConLoaded()){
             TinkersRegistry.registerTinkers(eventbus);
         }
+        //DO NOT CHANGE THESE 2's PLACE
         RegisterBlocks.BLOCKS.register(eventbus);
         RegisterItems.ITEMS.register(eventbus);
         RegisterContainer.CONTAINER.register(eventbus);
