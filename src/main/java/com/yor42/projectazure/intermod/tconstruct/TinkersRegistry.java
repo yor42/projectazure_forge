@@ -9,7 +9,7 @@ import com.yor42.projectazure.libs.Constants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Items;
@@ -20,13 +20,15 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import slimeknights.mantle.registration.ModelFluidAttributes;
 import slimeknights.mantle.registration.object.FluidObject;
-import slimeknights.tconstruct.library.modifiers.IncrementalModifier;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
-import slimeknights.tconstruct.library.modifiers.SingleUseModifier;
+import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
+import slimeknights.tconstruct.library.modifiers.impl.SingleLevelModifier;
+import slimeknights.tconstruct.library.modifiers.util.ModifierDeferredRegister;
+import slimeknights.tconstruct.library.modifiers.util.StaticModifier;
 
 import java.util.function.Supplier;
 
@@ -55,7 +57,7 @@ public class TinkersRegistry {
         public final ResourceLocation TEXTURE_STILL;
         public final ResourceLocation TEXTURE_FLOW;
 
-        public final Tag.Named<Fluid> FluidTag;
+        public final TagKey<Fluid> FluidTag;
 
         public final RegistryObject<LiquidBlock> FLUID_BLOCK;
 
@@ -95,20 +97,20 @@ public class TinkersRegistry {
             return PROPERTIES;
         }
 
-        private static Tag.Named<Fluid> forge(String path) {
-            return FluidTags.bind(new ResourceLocation("forge", path).toString());
+        private static TagKey<Fluid> forge(String path) {
+            return FluidTags.create(new ResourceLocation("forge", path));
         }
     }
 
-    protected static final DeferredRegister<Modifier> MODIFIERS = DeferredRegister.create(Modifier.class, Constants.MODID);
+    protected static final ModifierDeferredRegister MODIFIERS = ModifierDeferredRegister.create(TConstruct.MOD_ID);
 
-    public static final RegistryObject<IncrementalModifier> ASSIMILATING = registerMod("assimilating", AssimilartingModifier::new);
-    public static final RegistryObject<IncrementalModifier> MYSTERY = registerMod("mystery", MysteryModifier::new);
+    public static final StaticModifier<AssimilartingModifier> ASSIMILATING = registerMod("assimilating", AssimilartingModifier::new);
+    public static final StaticModifier<MysteryModifier> MYSTERY = registerMod("mystery", MysteryModifier::new);
 
-    public static final RegistryObject<SingleUseModifier> ABSORBTION = registerMod("absorption", AbsorptionModifier::new);
+    public static final StaticModifier<AbsorptionModifier> ABSORBTION = registerMod("absorption", AbsorptionModifier::new);
 
 
-    private static <T extends Modifier>RegistryObject<T> registerMod(String id, Supplier<T> supplier){
+    private static <T extends Modifier> StaticModifier<T> registerMod(String id, Supplier<T> supplier){
         return MODIFIERS.register(id, supplier);
     }
 

@@ -3,6 +3,7 @@ package com.yor42.projectazure.intermod.tconstruct.datagen;
 import com.yor42.projectazure.intermod.tconstruct.TinkersRegistry;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.item.Tiers;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialStatsDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialTraitDataProvider;
@@ -27,10 +28,10 @@ public class PAMaterialProvider extends AbstractMaterialDataProvider {
 
     @Override
     protected void addMaterials() {
-        addMaterial(D32, 4,ORDER_GENERAL, false, 0xc2dbec);
-        addMaterial(RMA70_12, 2,ORDER_GENERAL, false, 0xe6c580);
-        addMaterial(RMA70_24, 3,ORDER_GENERAL, false, 0xd30003);
-        addMaterial(ORIROCK, 1,ORDER_GENERAL, true, 0x675f3e);
+        addMaterial(D32, 4,ORDER_GENERAL, false);
+        addMaterial(RMA70_12, 2,ORDER_GENERAL, false);
+        addMaterial(RMA70_24, 3,ORDER_GENERAL, false);
+        addMaterial(ORIROCK, 1,ORDER_GENERAL, true);
     }
 
     private static MaterialId makeMaterial(String name){
@@ -50,10 +51,10 @@ public class PAMaterialProvider extends AbstractMaterialDataProvider {
 
         @Override
         protected void addMaterialTraits() {
-            this.addDefaultTraits(D32, TinkerModifiers.lightweight.get());
-            this.addDefaultTraits(ORIROCK, TinkersRegistry.ABSORBTION.get(), TinkerModifiers.stonebound.get());
-            this.addDefaultTraits(RMA70_12, TinkerModifiers.conducting.get());
-            this.addDefaultTraits(RMA70_24, TinkerModifiers.conducting.get(), TinkerModifiers.sharpweight.get());
+            this.addDefaultTraits(D32, TinkerModifiers.lightspeed, TinkerModifiers.severing);
+            this.addDefaultTraits(ORIROCK, TinkersRegistry.ABSORBTION, TinkerModifiers.stonebound);
+            this.addDefaultTraits(RMA70_12, TinkerModifiers.conducting);
+            this.addDefaultTraits(RMA70_24, TinkerModifiers.piercing, TinkerModifiers.haste);
         }
 
         @Override
@@ -71,10 +72,10 @@ public class PAMaterialProvider extends AbstractMaterialDataProvider {
 
         @Override
         protected void addMaterialStats() {
-            this.addMaterialStats(D32, new HeadMaterialStats(1285, 3,4,2.5F), HandleMaterialStats.DEFAULT.withDurability(1.5F), ExtraMaterialStats.DEFAULT);
-            this.addMaterialStats(RMA70_12, new HeadMaterialStats(261, 5.5F, 2, 2.5F), HandleMaterialStats.DEFAULT.withDurability(0.9F), ExtraMaterialStats.DEFAULT);
-            this.addMaterialStats(RMA70_24, new HeadMaterialStats(592, 4F, 3, 4F), HandleMaterialStats.DEFAULT.withDurability(0.7F), ExtraMaterialStats.DEFAULT);
-            this.addMaterialStats(ORIROCK, new HeadMaterialStats(115, 5.0F, 1, 1.1F), HandleMaterialStats.DEFAULT.withDurability(0.8F), ExtraMaterialStats.DEFAULT);
+            this.addMaterialStats(D32, new HeadMaterialStats(1285, 3, Tiers.NETHERITE,2.5F), HandleMaterialStats.DEFAULT.withDurability(1.5F), ExtraMaterialStats.DEFAULT);
+            this.addMaterialStats(RMA70_12, new HeadMaterialStats(261, 5.5F, Tiers.IRON, 2.5F), HandleMaterialStats.DEFAULT.withDurability(0.9F), ExtraMaterialStats.DEFAULT);
+            this.addMaterialStats(RMA70_24, new HeadMaterialStats(592, 4F, Tiers.DIAMOND, 4F), HandleMaterialStats.DEFAULT.withDurability(0.7F), ExtraMaterialStats.DEFAULT);
+            this.addMaterialStats(ORIROCK, new HeadMaterialStats(115, 5.0F, Tiers.STONE, 1.1F), HandleMaterialStats.DEFAULT.withDurability(0.8F), ExtraMaterialStats.DEFAULT);
 
         }
 

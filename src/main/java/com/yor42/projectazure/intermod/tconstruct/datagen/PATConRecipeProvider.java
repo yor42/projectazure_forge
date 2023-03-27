@@ -7,6 +7,7 @@ import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.RegistryObject;
@@ -16,6 +17,7 @@ import slimeknights.tconstruct.library.data.recipe.ISmelteryRecipeHelper;
 import slimeknights.tconstruct.library.data.recipe.IToolRecipeHelper;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
+import slimeknights.tconstruct.library.modifiers.util.StaticModifier;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipeBuilder;
 import slimeknights.tconstruct.library.tools.SlotType;
@@ -41,7 +43,7 @@ public class PATConRecipeProvider extends RecipeProvider implements IMaterialRec
     private final String materials ="tconstruct/materials/";
 
     @Override
-    public void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         this.metalMelting(consumer, TinkersRegistry.MoltenD32.FLUID.get(), "d32", false, false, meltingfoler, false);
         this.metalTagCasting(consumer, TinkersRegistry.MoltenD32.OBJECT, "d32", castingfoler, true);
         this.metalMaterialRecipe(consumer, PAMaterialProvider.D32, materials, "d32", false);
@@ -66,39 +68,37 @@ public class PATConRecipeProvider extends RecipeProvider implements IMaterialRec
 
     }
 
-    private void modifier(Consumer<FinishedRecipe> con, RegistryObject<Modifier> mod, int maxLevel, RegistryObject<Item> item, int amount, float salvageChance, SlotType slotType, String folder, String salvageFolder)
+    private void modifier(Consumer<FinishedRecipe> con, StaticModifier<?> mod, int maxLevel, RegistryObject<Item> item, int amount, float salvageChance, SlotType slotType, String folder, String salvageFolder)
     {
-        ModifierRecipeBuilder.modifier(mod.get())
+        ModifierRecipeBuilder.modifier(mod)
                 .setMaxLevel(maxLevel)
                 .addInput(item.get(), amount)
-                .addSalvage(item.get(), salvageChance)
                 .setSlots(slotType, 1)
-                .buildSalvage(con, prefix(mod, salvageFolder))
-                .build(con, prefix(mod, folder));
+                .saveSalvage(con, new ResourceLocation(Constants.MODID, salvageFolder))
+                .save(con, new ResourceLocation(Constants.MODID, folder));
     }
 
-    private void upgrade(Consumer<FinishedRecipe> con, RegistryObject<Modifier> mod, int maxLevel, RegistryObject<Item> item, int amount, float salvageChance)
+    private void upgrade(Consumer<FinishedRecipe> con, StaticModifier<?> mod, int maxLevel, RegistryObject<Item> item, int amount, float salvageChance)
     {
         modifier(con, mod, maxLevel, item, amount, salvageChance, SlotType.UPGRADE, upgradefolder,
                 upgradesalvfolder);
     }
 
-    private void incUpgrade(Consumer<FinishedRecipe> con, RegistryObject<IncrementalModifier> inc,
+    private void incUpgrade(Consumer<FinishedRecipe> con, StaticModifier<?> inc,
                             int maxLevel, RegistryObject<Item> item, int amount, boolean fullSalvage)
     {
         incremental(con, inc, maxLevel, item, amount, fullSalvage, SlotType.UPGRADE, upgradefolder,
                 upgradesalvfolder);
     }
 
-    private void incremental(Consumer<FinishedRecipe> con, RegistryObject<IncrementalModifier> inc, int maxLevel, RegistryObject<Item> item, int amount, boolean fullSalvage, SlotType slotType, String folder, String salvageFolder)
+    private void incremental(Consumer<FinishedRecipe> con, StaticModifier<?> inc, int maxLevel, RegistryObject<Item> item, int amount, boolean fullSalvage, SlotType slotType, String folder, String salvageFolder)
     {
-        IncrementalModifierRecipeBuilder.modifier(inc.get())
+        IncrementalModifierRecipeBuilder.modifier(inc)
                 .setMaxLevel(maxLevel)
                 .setInput(item.get(), 1, amount)
-                .setSalvage(item.get(), fullSalvage)
                 .setSlots(slotType, 1)
-                .buildSalvage(con, prefix(inc, salvageFolder))
-                .build(con, prefix(inc, folder));
+                .saveSalvage(con, new ResourceLocation(Constants.MODID, salvageFolder))
+                .save(con, new ResourceLocation(Constants.MODID, folder));
     }
     //private static void registerMaterial(Consumer<IFinishedRecipe> consumer, TinkersRegistry.TinkersFluids fluid, )
 }
