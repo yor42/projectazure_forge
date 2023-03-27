@@ -1,18 +1,13 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
+import com.yor42.projectazure.interfaces.IHelmetOverlay;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
-import com.yor42.projectazure.intermod.curios.client.ICurioRenderer;
 import com.yor42.projectazure.intermod.curios.client.RenderGasMask;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -20,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -40,6 +36,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.item.GeoArmorItem;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -47,7 +44,7 @@ import java.util.List;
 import static com.yor42.projectazure.gameobject.items.materials.ModArmorMaterials.ArmorModMaterials.GASMASK;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
-public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem {
+public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem, IHelmetOverlay {
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public GasMaskItem(Properties builder) {
@@ -75,13 +72,12 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack p_150899_) {
         return true;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-
+    public int getBarWidth(ItemStack stack) {
         CompoundTag compoundNBT = stack.getOrCreateTag();
         if(!compoundNBT.contains("filters")){
             return 1;
@@ -103,7 +99,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
             return 1;
         }
 
-        return (double) damage/(double) totaldamage;
+        return (int) (13*(double) damage/(double) totaldamage);
     }
 
     @Override
@@ -137,29 +133,6 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
         if(entity instanceof Player) {
             this.onArmorTick(stack, entity.getCommandSenderWorld(), (Player) entity);
         }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void renderHelmetOverlay(ItemStack stack, Player player, int width, int height, float partialTicks) {
-        RenderSystem.disableDepthTest();
-        RenderSystem.depthMask(false);
-        RenderSystem.defaultBlendFunc();
-        
-        RenderSystem.disableAlphaTest();
-        Minecraft.getInstance().getTextureManager().bind(ResourceUtils.ModResourceLocation("textures/misc/gasmaskblur.png"));
-        Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuilder();
-        bufferbuilder.begin(7, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(0.0D, height, -90.0D).uv(0.0F, 1.0F).endVertex();
-        bufferbuilder.vertex(width, height, -90.0D).uv(1.0F, 1.0F).endVertex();
-        bufferbuilder.vertex(width, 0.0D, -90.0D).uv(1.0F, 0.0F).endVertex();
-        bufferbuilder.vertex(0.0D, 0.0D, -90.0D).uv(0.0F, 0.0F).endVertex();
-        tessellator.end();
-        RenderSystem.depthMask(true);
-        RenderSystem.enableDepthTest();
-        RenderSystem.enableAlphaTest();
-        
     }
 
     @Override
@@ -204,10 +177,8 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
         return InteractionResultHolder.success(stack);
     }
 
-    @Nullable
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public ICurioRenderer getSlotRenderer() {
-        return RenderGasMask.getInstance();
+    public ResourceLocation getOverlayTexture() {
+        return ClientUtils.GASMASKOVERLAY;
     }
 }

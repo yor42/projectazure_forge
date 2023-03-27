@@ -10,8 +10,12 @@ package com.yor42.projectazure.intermod.curios;
 
 import com.yor42.projectazure.gameobject.capability.CuriosCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.CuriosEnergyCapabilityProvider;
+import com.yor42.projectazure.interfaces.IHelmetOverlay;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -84,15 +88,8 @@ public class CuriosCompat {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void RenderCurioGameOverlay(RenderGameOverlayEvent.PreLayer event){
-        if(event.getOverlay() == ForgeIngameGui.HELMET_ELEMENT){
-
-            if(!Minecraft.getInstance().options.getCameraType().isFirstPerson()){
-                return;
-            }
-
-
-            CuriosApi.getCuriosHelper().getCuriosHandler(Minecraft.getInstance().player).ifPresent((cap)->{
+    public static void RenderCurioHelmetOverlay(LocalPlayer player){
+            CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent((cap)->{
                 Map<String, ICurioStacksHandler> curios = cap.getCurios();
                 ICurioStacksHandler curioStacksHandler = curios.get(SlotTypePreset.HEAD.getIdentifier());
                 if(curioStacksHandler == null){
@@ -101,15 +98,13 @@ public class CuriosCompat {
                 IDynamicStackHandler helmetstack = curioStacksHandler.getStacks();
                 for (int i = 0; i < helmetstack.getSlots(); i++) {
                     ItemStack stack = helmetstack.getStackInSlot(i);
-
-                    if(stack.isEmpty()){
-                        continue;
+                    Item item = stack.getItem();
+                    if(item instanceof IHelmetOverlay){
+                        ClientUtils.renderTextureOverlay(((IHelmetOverlay) item).getOverlayTexture(), 1.0F);
+                        break;
                     }
-
-                    stack.getItem().renderHelmetOverlay(stack, Minecraft.getInstance().player, event.getWindow().getGuiScaledWidth(), event.getWindow().getGuiScaledHeight(), event.getPartialTicks());
                 }
             });
-        }
 
     }
 

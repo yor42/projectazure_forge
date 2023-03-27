@@ -29,6 +29,11 @@ public class PACuriosCap implements ICurio {
     }
 
     @Override
+    public ItemStack getStack() {
+        return this.stack;
+    }
+
+    @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack) {
         this.getItem().curioOnEquip(slotContext.getWearer(), slotContext.getIndex(), prevStack);
     }
@@ -38,6 +43,7 @@ public class PACuriosCap implements ICurio {
         return true;
     }
 
+    /*
     @Override
     public boolean canRender(String identifier, int index, LivingEntity livingEntity) {
         Item item = this.stack.getItem();
@@ -61,6 +67,8 @@ public class PACuriosCap implements ICurio {
             ((ICurioItem) item).getSlotRenderer().render(this.stack, identifier, index, matrixStack, renderTypeBuffer, light, livingEntity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
         }
     }
+
+     */
 
     public ICurioItem getItem(){
         if(stack.getItem() instanceof ICurioItem){

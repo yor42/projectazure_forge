@@ -3,10 +3,10 @@ package com.yor42.projectazure.gameobject.items.tools;
 import com.yor42.projectazure.client.renderer.items.ItemDefibChargerRenderer;
 import com.yor42.projectazure.gameobject.items.ICurioItem;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
-import com.yor42.projectazure.intermod.curios.client.ICurioRenderer;
 import com.yor42.projectazure.intermod.curios.client.RenderDefib;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -25,6 +25,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -41,10 +42,12 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.setup.register.registerSounds.*;
@@ -56,8 +59,19 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
     public static final String controllerName = "defibcharger_controller";
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public ItemDefibCharger() {
-        super(new Item.Properties().tab(PA_WEAPONS).stacksTo(1).setISTER(()->ItemDefibChargerRenderer::new));
+        super(new Item.Properties().tab(PA_WEAPONS).stacksTo(1));
         GeckoLibNetwork.registerSyncable(this);
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return new ItemDefibChargerRenderer();
+            }
+        });
     }
 
     @Nullable
@@ -279,8 +293,4 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
         return super.getShareTag(stack);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public ICurioRenderer getSlotRenderer(){
-        return RenderDefib.getRendererInstance();
-    }
 }

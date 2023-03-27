@@ -21,6 +21,8 @@ import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzur
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityRailgunProjectile;
 import com.yor42.projectazure.gameobject.items.GasMaskItem;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
+import com.yor42.projectazure.intermod.curios.client.RenderDefib;
+import com.yor42.projectazure.intermod.curios.client.RenderGasMask;
 import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ClientUtils;
@@ -61,6 +63,7 @@ import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -205,6 +208,9 @@ public class Main
         GeoArmorRenderer.registerArmorRenderer(GasMaskItem.class, GasMaskRenderer::new);
 
         ClientRegisterManager.registerScreen();
+
+        CuriosRendererRegistry.register(RegisterItems.GASMASK.get(), RenderGasMask::new);
+        CuriosRendererRegistry.register(RegisterItems.DEFIB_CHARGER.get(), RenderDefib::new);
 
         //We do some reflect magic for gun here
         for (Field field : RegisterItems.class.getDeclaredFields()) {
