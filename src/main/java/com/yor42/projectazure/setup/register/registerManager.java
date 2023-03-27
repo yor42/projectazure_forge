@@ -20,7 +20,7 @@ public class registerManager {
         registerBiomes.register();
         registerPotionEffects.register();
         registerRecipes.register();
-        registerRecipes.Types.register();
+        //registerRecipes.Types.register();
         registerRecipes.Serializers.register();
         RegisterAI.register();
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -30,9 +30,10 @@ public class registerManager {
         if(CompatibilityUtils.isTConLoaded()){
             TinkersRegistry.registerTinkers(eventbus);
         }
-        //DO NOT CHANGE THESE 2's PLACE
+        //DO NOT CHANGE THESE 2's PLACE//
         RegisterBlocks.BLOCKS.register(eventbus);
         RegisterItems.ITEMS.register(eventbus);
+        registerRecipes.RECIPE_SERIALIZERS.register(eventbus);
         RegisterContainer.CONTAINER.register(eventbus);
         RegisterContainer.TILE_ENTITY.register(eventbus);
         RegisterAI.ACTIVITIES.register(eventbus);
@@ -40,7 +41,6 @@ public class registerManager {
         RegisterAI.SENSORS.register(eventbus);
         RegisterAI.SCHEDULES.register(eventbus);
         RegisterAI.POI.register(eventbus);
-        registerRecipes.RECIPE_SERIALIZERS.register(eventbus);
         registerPotionEffects.EFFECTS.register(eventbus);
     }
 
