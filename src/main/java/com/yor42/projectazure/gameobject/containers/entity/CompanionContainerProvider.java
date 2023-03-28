@@ -13,10 +13,10 @@ import javax.annotation.Nullable;
 
 public class CompanionContainerProvider implements MenuProvider {
 
-    @Nullable
+    @Nonnull
     private final AbstractEntityCompanion companion;
 
-    public CompanionContainerProvider(AbstractEntityCompanion companion){
+    public CompanionContainerProvider(@Nonnull AbstractEntityCompanion companion){
         this.companion = companion;
     }
 
