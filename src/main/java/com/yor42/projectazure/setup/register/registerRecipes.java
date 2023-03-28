@@ -23,14 +23,16 @@ public class registerRecipes {
 
     public static class Types{
         public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, Constants.MODID);
-        public static final RegistryObject<RecipeType<PressingRecipe>> PRESSING = register("pressing");
-        public static final RegistryObject<RecipeType<CrushingRecipe>> CRUSHING = register("crushing");
-        public static final RegistryObject<RecipeType<AlloyingRecipe>> ALLOYING = register("alloying");
-        public static final RegistryObject<RecipeType<CrystalizingRecipe>> CRYSTALIZING = register("crystalizing");
-        public static final RegistryObject<RecipeType<BasicChemicalReactionRecipe>> BASIC_CHEMICAL_REACTION = register("basic_chemicalreaction");
+        public static final RegistryObject<RecipeType<PressingRecipe>> PRESSING = (RegistryObject)register("pressing");
+        public static final RegistryObject<RecipeType<CrushingRecipe>> CRUSHING = (RegistryObject)register("crushing");
+        public static final RegistryObject<RecipeType<AlloyingRecipe>> ALLOYING = (RegistryObject)register("alloying");
+        public static final RegistryObject<RecipeType<CrystalizingRecipe>> CRYSTALIZING = (RegistryObject)register("crystalizing");
+        public static final RegistryObject<RecipeType<BasicChemicalReactionRecipe>> BASIC_CHEMICAL_REACTION = (RegistryObject)register("basic_chemicalreaction");
 
-        static <T extends Recipe<?>> RegistryObject<RecipeType<T>> register(String name) {
-            return RECIPE_TYPES.register(name, () -> new RecipeType<>() {
+        static RegistryObject<RecipeType> register(String name)
+        {
+            return RECIPE_TYPES.register(name, () -> new RecipeType<>()
+            {
                 @Override
                 public String toString() {
                     return Constants.MODID + ":" + name;
