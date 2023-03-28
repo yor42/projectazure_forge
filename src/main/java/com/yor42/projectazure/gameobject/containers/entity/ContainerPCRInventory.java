@@ -15,10 +15,6 @@ import javax.annotation.Nonnull;
 
 public class ContainerPCRInventory extends AbstractContainerInventory {
 
-    public ContainerPCRInventory(int id, Inventory inventory) {
-        super(RegisterContainer.PCR_CONTAINER.get(), id, null);
-    }
-
     public ContainerPCRInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(RegisterContainer.PCR_CONTAINER.get(), id, companion);
 

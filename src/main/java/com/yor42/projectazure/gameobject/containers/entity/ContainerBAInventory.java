@@ -27,11 +27,6 @@ public class ContainerBAInventory extends AbstractContainerInventory {
 
     private ItemStackHandler AmmoStack;
 
-
-    public ContainerBAInventory(int ID, Inventory inventory) {
-        super(BA_CONTAINER.get(), ID, null);
-    }
-
     public ContainerBAInventory(int ID, Inventory inventory, ItemStackHandler Inventory, IItemHandlerModifiable Equipments, ItemStackHandler Ammo, AbstractEntityCompanion companion) {
         super(BA_CONTAINER.get(), ID, companion);
         

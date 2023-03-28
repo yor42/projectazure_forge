@@ -18,11 +18,6 @@ import javax.annotation.Nonnull;
 
 public class ContainerGFLInventory extends AbstractContainerInventory {
 
-    public ContainerGFLInventory(int id, Inventory inventory) {
-        super(RegisterContainer.GFL_CONTAINER.get(), id, null);
-    }
-
-
     public ContainerGFLInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(RegisterContainer.GFL_CONTAINER.get(), id, companion);
         //ZA HANDO

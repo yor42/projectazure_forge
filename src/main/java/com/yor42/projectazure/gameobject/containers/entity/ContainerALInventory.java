@@ -27,11 +27,6 @@ public class ContainerALInventory extends AbstractContainerInventory {
     @Nullable
     private IItemHandler equipment;
 
-    //client
-    public ContainerALInventory(int id, Inventory playerInventory) {
-        super(RegisterContainer.SHIP_CONTAINER.get(), id, null);
-    }
-
     //constructor for actual use
     public ContainerALInventory(int id, Inventory playerInventory, IItemHandler Inventory, IItemHandler Rigging, IItemHandler Equipments, IItemHandler AmmoStorage, @Nullable EntityKansenBase entity) {
         super(RegisterContainer.SHIP_CONTAINER.get(), id, entity);

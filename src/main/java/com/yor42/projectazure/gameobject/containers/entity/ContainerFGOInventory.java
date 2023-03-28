@@ -16,10 +16,6 @@ import javax.annotation.Nonnull;
 
 public class ContainerFGOInventory extends AbstractContainerInventory {
 
-    public ContainerFGOInventory(int id, Inventory inventory) {
-        super(RegisterContainer.FGO_CONTAINER.get(), id, null);
-    }
-
     public ContainerFGOInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(RegisterContainer.FGO_CONTAINER.get(), id, companion);
 

@@ -18,10 +18,6 @@ import javax.annotation.Nonnull;
 
 public class ContainerSWInventory extends AbstractContainerInventory {
 
-    public ContainerSWInventory(int id, Inventory inventory) {
-        super(RegisterContainer.SW_CONTAINER.get(), id, null);
-    }
-
     public ContainerSWInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(RegisterContainer.SW_CONTAINER.get(), id, companion);
         //ZA HANDO

@@ -17,9 +17,6 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 public class ContainerCLSInventory extends AbstractContainerInventory {
-    public ContainerCLSInventory(int id, Inventory inventory) {
-        super(RegisterContainer.CLS_CONTAINER.get(), id, null);
-    }
     public ContainerCLSInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(RegisterContainer.CLS_CONTAINER.get(), id, companion);
         //ZA HANDO
@@ -57,6 +54,7 @@ public class ContainerCLSInventory extends AbstractContainerInventory {
             this.addSlot(new SlotItemHandler(entityInventory, 12 + l, 7, 58 + l * 18) {
                 @Override
                 public boolean mayPlace(@Nonnull ItemStack stack) {
+                    assert ContainerCLSInventory.this.companion != null;
                     return ContainerCLSInventory.this.companion.isSkillItem(stack);
                 }
             });
@@ -77,10 +75,11 @@ public class ContainerCLSInventory extends AbstractContainerInventory {
         this(id, inventory, new ItemStackHandler(16), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(buffer.readInt()));
     }
 
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    @Nonnull
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             int i = 6;
