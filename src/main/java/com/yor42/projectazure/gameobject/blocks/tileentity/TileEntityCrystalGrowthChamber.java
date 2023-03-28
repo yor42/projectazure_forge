@@ -101,7 +101,7 @@ public class TileEntityCrystalGrowthChamber extends BaseContainerBlockEntity imp
 
     public TileEntityCrystalGrowthChamber(BlockPos blockpos, BlockState blockstate) {
         super(CRYSTAL_GROWTH_CHAMBER.get(), blockpos, blockstate);
-        this.recipeType = registerRecipes.Types.CRYSTALIZING;
+        this.recipeType = registerRecipes.Types.CRYSTALIZING.get();
     }
 
     @Nonnull

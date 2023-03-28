@@ -82,7 +82,7 @@ public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements 
     };
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
-    protected final RecipeType<AlloyingRecipe> recipeType = registerRecipes.Types.ALLOYING;
+    protected final RecipeType<AlloyingRecipe> recipeType = registerRecipes.Types.ALLOYING.get();
 
     public TileEntityAlloyFurnace(BlockPos blockpos, BlockState blockstate) {
         super(registerTE.ALLOY_FURNACE.get(), blockpos, blockstate);

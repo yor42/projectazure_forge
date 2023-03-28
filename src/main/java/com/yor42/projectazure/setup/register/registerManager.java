@@ -2,6 +2,7 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.intermod.tconstruct.TinkersRegistry;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -20,7 +21,7 @@ public class registerManager {
         registerBiomes.register();
         registerPotionEffects.register();
         registerRecipes.register();
-        //registerRecipes.Types.register();
+        registerRecipes.Types.register();
         registerRecipes.Serializers.register();
         RegisterAI.register();
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -33,7 +34,8 @@ public class registerManager {
         //DO NOT CHANGE THESE 2's PLACE//
         RegisterBlocks.BLOCKS.register(eventbus);
         RegisterItems.ITEMS.register(eventbus);
-        registerRecipes.RECIPE_SERIALIZERS.register(eventbus);
+        registerRecipes.Types.RECIPE_TYPES.register(eventbus);
+        registerRecipes.Serializers.RECIPE_SERIALIZERS.register(eventbus);
         RegisterContainer.CONTAINER.register(eventbus);
         RegisterContainer.TILE_ENTITY.register(eventbus);
         RegisterAI.ACTIVITIES.register(eventbus);

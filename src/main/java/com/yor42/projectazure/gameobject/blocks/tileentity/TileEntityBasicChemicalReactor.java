@@ -110,7 +110,7 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
         };
         this.powerConsumption = 150;
         this.energyStorage.setMaxEnergy(15000);
-        this.recipeType = registerRecipes.Types.BASIC_CHEMICAL_REACTION;
+        this.recipeType = registerRecipes.Types.BASIC_CHEMICAL_REACTION.get();
     }
 
     @Override

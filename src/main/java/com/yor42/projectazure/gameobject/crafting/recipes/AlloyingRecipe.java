@@ -117,7 +117,7 @@ public class AlloyingRecipe implements Recipe<Container> {
     @Nonnull
     @Override
     public RecipeType<?> getType() {
-        return registerRecipes.Types.ALLOYING;
+        return registerRecipes.Types.ALLOYING.get();
     }
 
     public int getProcessTick() {

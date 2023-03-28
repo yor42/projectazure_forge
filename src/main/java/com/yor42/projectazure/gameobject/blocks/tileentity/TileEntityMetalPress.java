@@ -76,7 +76,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
 
     public TileEntityMetalPress(BlockPos blockpos, BlockState blockstate) {
         super(registerTE.METAL_PRESS.get(), blockpos, blockstate);
-        this.recipeType = registerRecipes.Types.PRESSING;
+        this.recipeType = registerRecipes.Types.PRESSING.get();
         this.powerConsumption = 100;
         this.inventory.setSize(3);
         this.energyStorage.setMaxEnergy(15000);
