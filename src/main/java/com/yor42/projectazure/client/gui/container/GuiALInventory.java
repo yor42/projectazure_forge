@@ -27,10 +27,10 @@ public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
 
     public GuiALInventory(ContainerALInventory container, Inventory playerinventory, Component titleIn) {
         super(container, playerinventory, titleIn);
-        if(container.companion != null) {
-            this.affection = this.host.getAffection();
-            this.morale = this.host.getMorale();
-        }
+
+        this.affection = this.host.getAffection();
+        this.morale = this.host.getMorale();
+
         this.affectionLevel = this.affectionValuetoLevel();
         this.inventory = playerinventory;
         this.imageWidth = 176;

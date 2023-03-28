@@ -98,7 +98,7 @@ public class GuiTeamFormation extends Screen{   /*
         this.name.setBordered(true);
         this.name.setMaxLength(35);
         this.name.setResponder(this::onNameChanged);
-        this.addWidget(this.name);
+        this.addRenderableWidget(this.name);
         this.notYetPopulated = true;
         this.backgroundWidth = this.Subscreen == 0? 248:155;
         this.backgroundHeight = this.Subscreen == 0?219:167;

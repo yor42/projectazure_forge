@@ -25,14 +25,13 @@ import java.util.List;
 
 public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> extends AbstractContainerScreen<T> {
 
-    protected final AbstractEntityCompanion host;
+    protected AbstractEntityCompanion host = AbstractEntityCompanion.SELECT_ABSTRACTENTITYCOMPANION;
 
     protected final Button.OnTooltip FREEROAM_TOOLTIP;
     protected final Button.OnTooltip DEFENCE_TOOLTIP;
     protected final Button.OnTooltip ITEM_TOOLTIP;
     public AbstractGUIScreen(T p_i51105_1_, Inventory p_i51105_2_, Component p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
-        this.host = p_i51105_1_.companion;
         this.FREEROAM_TOOLTIP =  (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
             List<MutableComponent> tooltips = new ArrayList<>();
 

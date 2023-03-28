@@ -24,7 +24,6 @@ public class GuiInitialSpawnSetSelection extends Screen {
     public static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/button_initialspawnselection.png");
     private final int backgroundWidth = 256;
     private final int backgroundHeight = 173;
-    private boolean ispopulated = false;
     private final InteractionHand hand;
     private int x, y;
 
@@ -43,7 +42,6 @@ public class GuiInitialSpawnSetSelection extends Screen {
         super.init();
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2;
-        this.ispopulated = false;
     }
 
     private void selectSpawnSet(byte id){
@@ -63,23 +61,17 @@ public class GuiInitialSpawnSetSelection extends Screen {
 
     @Override
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.drawBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-    }
-
-    private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShaderTexture(0,TEXTURE);
         Component text = new TranslatableComponent("gui.initialspawnsetselect.selectpath");
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         float width = (float) this.font.width(text)/2;
         this.font.draw(matrixStack, text, this.x+128-width, this.y+40, 0xffee90);
-        if(!this.ispopulated) {
-            int buttonwidth = 58;
-            int buttonheight = 49;
-            this.addWidget(new ImageButton(this.x + 42, this.y + 62, buttonwidth, buttonheight, 0, 0, buttonheight, BUTTON_TEXTURE, (runnable) -> this.selectSpawnSet((byte) 0)));
-            this.addWidget(new ImageButton(this.x + 150, this.y + 62, buttonwidth, buttonheight, 58, 0, buttonheight, BUTTON_TEXTURE, (runnable) -> this.selectSpawnSet((byte) 1)));
-            this.ispopulated = true;
-        }
 
+        int buttonwidth = 58;
+        int buttonheight = 49;
+        this.addRenderableWidget(new ImageButton(this.x + 42, this.y + 62, buttonwidth, buttonheight, 0, 0, buttonheight, BUTTON_TEXTURE, (runnable) -> this.selectSpawnSet((byte) 0)));
+        this.addRenderableWidget(new ImageButton(this.x + 150, this.y + 62, buttonwidth, buttonheight, 58, 0, buttonheight, BUTTON_TEXTURE, (runnable) -> this.selectSpawnSet((byte) 1)));
+
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 }

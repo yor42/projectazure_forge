@@ -184,6 +184,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     private boolean onPlayersBack = false;
 
+    //Client Field
+    public static AbstractEntityCompanion SELECT_ABSTRACTENTITYCOMPANION;
+
     public float getSpellRange() {
         return 5;
     }
@@ -3336,7 +3339,12 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return InteractionResult.FAIL;
     }
     protected InteractionResult openInventory(Player player){
-        if (!this.level.isClientSide) {
+        if (this.level.isClientSide)
+        {
+            SELECT_ABSTRACTENTITYCOMPANION = this;
+        }
+        else
+        {
             NetworkHooks.openGui((ServerPlayer) player, new CompanionContainerProvider(this), buf -> buf.writeInt(this.getId()));
         }
         this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
