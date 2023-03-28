@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.setup.register.RegisterFluids;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -31,8 +32,26 @@ public class ContainerBasicRefinery extends AbstractContainerMenu {
     @Nullable
     public FluidStack crudeoilstack, gasolinestack, dieselstack, fueloilstack;
 
-    public ContainerBasicRefinery(int id, Inventory inventory) {
-        super(BASIC_REFINERY_CONTAINER.get(), id);
+    public ContainerBasicRefinery(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, new ItemStackHandler(10), new ContainerData() {
+
+            final int[] values = buffer.readVarIntArray();
+
+            @Override
+            public int get(int index) {
+                return values[index];
+            }
+
+            @Override
+            public void set(int index, int value) {
+                values[index] = value;
+            }
+
+            @Override
+            public int getCount() {
+                return values.length;
+            }
+        }, buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack());
     }
 
     public ContainerBasicRefinery(int id, Inventory inventory, ItemStackHandler Inventory, ContainerData field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {

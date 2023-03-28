@@ -819,5 +819,6 @@
   "entity.status.retreat": "Retreating",
   "message.commandstick.entity_pantrypos_invalid": "Registered Pantry position %s is Invalid!",
   "team.defaultteamname": "New Team",
-  "equiment.empty": "EMPTY"
+  "equiment.empty": "EMPTY",
+  "gui.rigginginventory": "Rigging Equipments"
 }

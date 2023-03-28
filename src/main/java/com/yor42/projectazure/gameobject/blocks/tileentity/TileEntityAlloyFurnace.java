@@ -45,33 +45,21 @@ public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements 
     private int cookTimeTotal;
     protected final ContainerData machineInfo = new ContainerData() {
         public int get(int index) {
-            switch(index) {
-                case 0:
-                    return TileEntityAlloyFurnace.this.burnTime;
-                case 1:
-                    return TileEntityAlloyFurnace.this.totalBurntime;
-                case 2:
-                    return TileEntityAlloyFurnace.this.cookTime;
-                case 3:
-                    return TileEntityAlloyFurnace.this.cookTimeTotal;
-                default:
-                    return 0;
-            }
+            return switch (index) {
+                case 0 -> TileEntityAlloyFurnace.this.burnTime;
+                case 1 -> TileEntityAlloyFurnace.this.totalBurntime;
+                case 2 -> TileEntityAlloyFurnace.this.cookTime;
+                case 3 -> TileEntityAlloyFurnace.this.cookTimeTotal;
+                default -> 0;
+            };
         }
 
         public void set(int index, int value) {
-            switch(index) {
-                case 0:
-                    TileEntityAlloyFurnace.this.burnTime = value;
-                    break;
-                case 1:
-                    TileEntityAlloyFurnace.this.totalBurntime = value;
-                    break;
-                case 2:
-                    TileEntityAlloyFurnace.this.cookTime = value;
-                    break;
-                case 3:
-                    TileEntityAlloyFurnace.this.cookTimeTotal = value;
+            switch (index) {
+                case 0 -> TileEntityAlloyFurnace.this.burnTime = value;
+                case 1 -> TileEntityAlloyFurnace.this.totalBurntime = value;
+                case 2 -> TileEntityAlloyFurnace.this.cookTime = value;
+                case 3 -> TileEntityAlloyFurnace.this.cookTimeTotal = value;
             }
 
         }
@@ -322,5 +310,6 @@ public class TileEntityAlloyFurnace extends BaseContainerBlockEntity implements 
     }
 
     public void encodeExtraData(FriendlyByteBuf buffer) {
+
     }
 }

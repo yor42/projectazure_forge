@@ -4,6 +4,7 @@ import com.tac.guns.item.AmmoItem;
 import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.MenuProvider;
@@ -86,6 +87,10 @@ public class ContainerBAInventory extends AbstractContainerInventory {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 8 + k * 18, 168));
         }
+    }
+
+    public ContainerBAInventory(int id, Inventory inventory, FriendlyByteBuf data) {
+        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 
     @Nonnull

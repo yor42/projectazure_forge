@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.gameobject.items.ItemResource;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -21,13 +22,11 @@ import static com.yor42.projectazure.setup.register.RegisterContainer.GROWTH_CHA
 public class ContainerCrystalGrowthChamber extends AbstractContainerMenu {
 
     @Nullable
-    private ContainerData field;
+    private final ContainerData field;
     @Nullable
-    private FluidStack waterTank, SolutionTank;
-
-    public ContainerCrystalGrowthChamber(int id, Inventory inventory){
-        super(GROWTH_CHAMBER_CONTAINER.get(), id);
-    }
+    private final FluidStack waterTank;
+    @Nullable
+    private final FluidStack SolutionTank;
 
     public ContainerCrystalGrowthChamber(int id, Inventory inventory, ItemStackHandler itemStackHandler, ContainerData field, FluidStack waterTank, FluidStack solutionTank) {
         super(GROWTH_CHAMBER_CONTAINER.get(), id);
@@ -62,6 +61,28 @@ public class ContainerCrystalGrowthChamber extends AbstractContainerMenu {
         }
 
         this.addDataSlots(this.field);
+    }
+
+    public ContainerCrystalGrowthChamber(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, new ItemStackHandler(7), new ContainerData() {
+
+            final int[] values = buffer.readVarIntArray();
+
+            @Override
+            public int get(int index) {
+                return values[index];
+            }
+
+            @Override
+            public void set(int index, int value) {
+                values[index] = value;
+            }
+
+            @Override
+            public int getCount() {
+                return values.length;
+            }
+        }, buffer.readFluidStack(), buffer.readFluidStack());
     }
 
     public FluidStack getWaterTank() {

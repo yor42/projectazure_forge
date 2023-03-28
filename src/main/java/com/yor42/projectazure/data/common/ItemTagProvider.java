@@ -14,6 +14,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -175,6 +176,10 @@ public class ItemTagProvider extends ItemTagsProvider {
                 RegisterItems.INGOT_RMA7012.get(),RegisterItems.INGOT_RMA7024.get(), RegisterItems.INGOT_INCANDESCENT_ALLOY.get(), RegisterItems.PYROXENE.get());
 
         this.tag(ItemTags.MUSIC_DISCS).add(RegisterItems.DISC_CC5.get(), RegisterItems.DISC_DRAGONHEARTED.get(), RegisterItems.DISC_FRIDAYNIGHT.get(), RegisterItems.DISC_REVENGE.get(), RegisterItems.DISC_FALLEN_KINGDOM.get(), RegisterItems.DISC_TAKE_BACK_THE_NIGHT.get(), RegisterItems.DISC_FIND_THE_PIECES.get());
+
+        this.tag(ModTags.Items.CURIOS_BACK).add(RegisterItems.DEFIB_CHARGER.get(), RegisterItems.EXCALIBUR_SHEATH.get());
+        this.tag(ModTags.Items.CURIOS_HEAD).add(RegisterItems.GASMASK.get());
+        this.tag(ModTags.Items.CURIOS_RING).add(RegisterItems.OATHRING.get());
     }
 
     protected void copyItems(TagKey<Item> from, TagKey<Item> to) {

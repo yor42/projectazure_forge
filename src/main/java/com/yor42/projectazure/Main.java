@@ -64,7 +64,6 @@ import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
-
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;

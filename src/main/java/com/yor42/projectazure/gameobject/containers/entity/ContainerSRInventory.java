@@ -2,12 +2,14 @@ package com.yor42.projectazure.gameobject.containers.entity;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterContainer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
@@ -42,6 +44,11 @@ public class ContainerSRInventory extends AbstractContainerInventory{
             this.addSlot(new Slot(inventory, k, 7 + k * 18, 209));
         }
     }
+
+    public ContainerSRInventory(int id, Inventory inventory, FriendlyByteBuf data) {
+        this(id, inventory, new ItemStackHandler(30), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
+    }
+
     @Nonnull
     public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;

@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.containers.machine;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
 import com.yor42.projectazure.setup.register.RegisterContainer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -20,10 +21,6 @@ public class ContainerMetalPress extends AbstractContainerMenu {
 
     @Nullable
     private ContainerData field;
-
-    public ContainerMetalPress(int id, Inventory inventory) {
-        super(RegisterContainer.METAL_PRESS_CONTAINER.get(), id);
-    }
 
     public ContainerMetalPress(int id, Inventory inventory, ItemStackHandler Inventory, ContainerData field) {
         super(RegisterContainer.METAL_PRESS_CONTAINER.get(), id);
@@ -46,6 +43,25 @@ public class ContainerMetalPress extends AbstractContainerMenu {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 8 + k * 18, 142));
         }
+    }
+
+    public ContainerMetalPress(int id, Inventory inventory, FriendlyByteBuf buf) {
+        this(id, inventory, new ItemStackHandler(3), new ContainerData() {
+            @Override
+            public int get(int pIndex) {
+                return 0;
+            }
+
+            @Override
+            public void set(int pIndex, int pValue) {
+
+            }
+
+            @Override
+            public int getCount() {
+                return 4;
+            }
+        });
     }
 
     public ContainerData getField() {

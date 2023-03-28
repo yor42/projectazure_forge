@@ -10,6 +10,7 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentGun;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.MenuProvider;
@@ -60,6 +61,10 @@ public class RiggingContainer extends AbstractContainerMenu {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new slotInventory(playerInv, k, 8 + k * 18, 168));
         }
+    }
+
+    public RiggingContainer(int id, Inventory inventory, FriendlyByteBuf data) {
+        this(id, inventory, data.readItem(), data.readUUID());
     }
 
     public ItemStack quickMoveStack(Player playerIn, int index) {

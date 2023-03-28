@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.containers.machine;
 import com.yor42.projectazure.gameobject.containers.slots.FuelSlotItemhandler;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
 import com.yor42.projectazure.setup.register.RegisterContainer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -20,8 +21,23 @@ public class ContainerAlloyFurnace extends AbstractContainerMenu {
     @Nullable
     private ContainerData field;
 
-    public ContainerAlloyFurnace(int id, Inventory inventory) {
-        super(RegisterContainer.ALLOY_FURNACE_CONTAINER.get(), id);
+    public ContainerAlloyFurnace(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, new ItemStackHandler(4), new ContainerData() {
+            @Override
+            public int get(int pIndex) {
+                return 0;
+            }
+
+            @Override
+            public void set(int pIndex, int pValue) {
+
+            }
+
+            @Override
+            public int getCount() {
+                return 4;
+            }
+        });
     }
 
     public ContainerAlloyFurnace(int id, Inventory inventory, ItemStackHandler machineInventory, ContainerData machineInfo){

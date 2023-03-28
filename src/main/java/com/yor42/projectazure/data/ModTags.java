@@ -204,9 +204,16 @@ public class ModTags {
         public static final TagKey<Item> CIRCUITS_ADVANCED = forge("circuits/advanced");
 
         public static final TagKey<Item> CIRCUITS_CRYSTALLINE = forge("circuits/crystalline");
+        public static final TagKey<Item> CURIOS_BACK = curios("back");
+        public static final TagKey<Item> CURIOS_HEAD = curios("head");
+        public static final TagKey<Item> CURIOS_RING = curios("ring");
 
         private static TagKey<Item> forge(String path) {
             return ItemTags.create(new ResourceLocation("forge", path));
+        }
+
+        private static TagKey<Item> curios(String path) {
+            return ItemTags.create(new ResourceLocation("curios", path));
         }
 
         private static TagKey<Item> mod(String path) {

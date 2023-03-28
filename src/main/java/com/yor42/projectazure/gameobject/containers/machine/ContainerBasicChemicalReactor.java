@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.setup.register.RegisterContainer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -49,6 +50,28 @@ public class ContainerBasicChemicalReactor extends AbstractContainerMenu {
         }
 
         this.addDataSlots(this.field);
+    }
+
+    public ContainerBasicChemicalReactor(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, new ItemStackHandler(3), new ContainerData() {
+
+            final int[] values = buffer.readVarIntArray();
+
+            @Override
+            public int get(int index) {
+                return values[index];
+            }
+
+            @Override
+            public void set(int index, int value) {
+                values[index] = value;
+            }
+
+            @Override
+            public int getCount() {
+                return values.length;
+            }
+        }, buffer.readFluidStack());
     }
 
     @Override
