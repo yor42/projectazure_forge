@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
-
+@SuppressWarnings("removal")
 public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe> {
 
     private final IDrawable icon;
@@ -71,7 +71,7 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, PressingRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 36,30).addIngredients(VanillaTypes.ITEM_STACK, recipe.getIngredientStack());
-        builder.addSlot(RecipeIngredientRole.CATALYST, 70,30).addIngredients(VanillaTypes.ITEM_STACK, recipe.getMold());
+        builder.addSlot(RecipeIngredientRole.INPUT, 70,30).addIngredients(VanillaTypes.ITEM_STACK, recipe.getMold());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 111,30).addItemStack(recipe.getResultItem());
 
     }
