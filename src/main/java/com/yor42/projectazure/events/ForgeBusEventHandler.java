@@ -570,6 +570,6 @@ public class ForgeBusEventHandler {
         if (recipes.isEmpty()) {
             return;
         }
-        Main.CRUSHING_REGISTRY.setRecipes(filterRecipes(recipes, CrushingRecipe.class, registerRecipes.Types.CRUSHING));
+        Main.CRUSHING_REGISTRY.setRecipes(filterRecipes(recipes, CrushingRecipe.class, registerRecipes.Types.CRUSHING.get()));
     }
 }

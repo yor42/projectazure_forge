@@ -87,7 +87,7 @@ public class PressingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeType<?> getType() {
-        return registerRecipes.Types.PRESSING;
+        return registerRecipes.Types.PRESSING.get();
     }
 
 

@@ -96,7 +96,7 @@ public class CrystalizingRecipe implements Recipe<TileEntityCrystalGrowthChamber
 
     @Override
     public RecipeType<?> getType() {
-        return registerRecipes.Types.CRYSTALIZING;
+        return registerRecipes.Types.CRYSTALIZING.get();
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrystalizingRecipe>{

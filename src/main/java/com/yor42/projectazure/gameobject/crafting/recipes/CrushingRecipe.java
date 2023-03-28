@@ -98,7 +98,7 @@ public class CrushingRecipe implements Recipe<Container> {
     @Nonnull
     @Override
     public RecipeType<?> getType() {
-        return registerRecipes.Types.CRUSHING;
+        return registerRecipes.Types.CRUSHING.get();
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrushingRecipe>{

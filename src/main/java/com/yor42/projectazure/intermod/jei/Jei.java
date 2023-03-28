@@ -16,10 +16,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
-import mezz.jei.api.registration.IGuiHandlerRegistration;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
@@ -111,16 +108,16 @@ public class Jei implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         assert Minecraft.getInstance().level != null;
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-        List<PressingRecipe> PressingRecipes = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.PRESSING, PressingRecipe.class);
+        List<PressingRecipe> PressingRecipes = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.PRESSING.get(), PressingRecipe.class);
         registration.addRecipes(JEIRecipeCategoryPressing.RECIPE_TYPE, PressingRecipes);
 
-        List<AlloyingRecipe> AlloyingRecipes = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.ALLOYING, AlloyingRecipe.class);
+        List<AlloyingRecipe> AlloyingRecipes = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.ALLOYING.get(), AlloyingRecipe.class);
         registration.addRecipes(JEIRecipeCategoryAlloying.RECIPE_TYPE, AlloyingRecipes);
 
-        List<CrystalizingRecipe> CrystalizingRecipe = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.CRYSTALIZING, CrystalizingRecipe.class);
+        List<CrystalizingRecipe> CrystalizingRecipe = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.CRYSTALIZING.get(), CrystalizingRecipe.class);
         registration.addRecipes(JEIRecipeCategoryCrystalizing.RECIPE_TYPE, CrystalizingRecipe);
 
-        List<BasicChemicalReactionRecipe> reactionrecipe = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.BASIC_CHEMICAL_REACTION, BasicChemicalReactionRecipe.class);
+        List<BasicChemicalReactionRecipe> reactionrecipe = RecipeHelper.getJEIRecipes(recipeManager, registerRecipes.Types.BASIC_CHEMICAL_REACTION.get(), BasicChemicalReactionRecipe.class);
         registration.addRecipes(JEIRecipeCategoryBasicChemicalReaction.RECIPE_TYPE, reactionrecipe);
     }
 

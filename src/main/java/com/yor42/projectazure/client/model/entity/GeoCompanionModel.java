@@ -40,7 +40,7 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
     @Override
     public void setCustomAnimations(E animatable, int instanceId, AnimationEvent animationEvent) {
         super.setCustomAnimations(animatable, instanceId, animationEvent);
-        EntityModelData extraData = (EntityModelData) animationEvent.getExtraData();
+        EntityModelData extraData = (EntityModelData) animationEvent.getExtraDataOfType(EntityModelData.class).get(0);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone body = this.getAnimationProcessor().getBone("Body");
         IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");

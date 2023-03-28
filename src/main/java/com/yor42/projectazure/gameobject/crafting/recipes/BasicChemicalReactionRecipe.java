@@ -91,7 +91,7 @@ public class BasicChemicalReactionRecipe implements Recipe<Container>, Predicate
 
     @Override
     public RecipeType<?> getType() {
-        return BASIC_CHEMICAL_REACTION;
+        return BASIC_CHEMICAL_REACTION.get();
     }
 
     @Override

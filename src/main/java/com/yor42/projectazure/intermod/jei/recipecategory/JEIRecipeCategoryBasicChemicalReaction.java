@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-
+@SuppressWarnings("removal")
 public class JEIRecipeCategoryBasicChemicalReaction implements IRecipeCategory<BasicChemicalReactionRecipe> {
 
     private final IDrawable icon;
