@@ -50,7 +50,7 @@ import static com.yor42.projectazure.gameobject.items.GeoGunItem.ANIM_FIRE;
 public class ModBusEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void playerLogin(PlayerEvent.PlayerLoggedInEvent event){
+    public void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getPlayer().level.isClientSide) {
 
             CompoundTag playerData = event.getPlayer().getPersistentData();
@@ -86,28 +86,25 @@ public class ModBusEventHandler {
                 NonNullList<Item> stacks = NonNullList.create();
                 if (isDev) {
                     stacks.addAll(ItemCompanionSpawnEgg.MAP.values());
-                }
-                else if(isAoichi){
+                } else if (isAoichi) {
                     stacks.add(RegisterItems.SPAWN_MUDROCK.get());
                     stacks.add(RegisterItems.SPAWN_ROSMONTIS.get());
-                }else if(isNecrom){
+                } else if (isNecrom) {
                     stacks.add(RegisterItems.SPAWN_AMIYA.get());
-                }
-                else if(isGilagmesh){
+                } else if (isGilagmesh) {
                     stacks.add(RegisterItems.SPAWN_ARTORIA.get());
                     stacks.add(RegisterItems.SPAWN_SHIKI.get());
                     stacks.add(RegisterItems.SPAWN_SCATHATH.get());
-                }
-                else if(isGuri){
+                } else if (isGuri) {
                     stacks.add(RegisterItems.SPAWN_W.get());
                 }
 
-                if(!stacks.isEmpty()){
-                    ItemStack stack = new ItemStack(isDev? RegisterItems.DEVELOPER_BONUS.get(): RegisterItems.CONTRIBUTOR_BONUS.get());
+                if (!stacks.isEmpty()) {
+                    ItemStack stack = new ItemStack(isDev ? RegisterItems.DEVELOPER_BONUS.get() : RegisterItems.CONTRIBUTOR_BONUS.get());
                     CompoundTag compound = stack.getOrCreateTag();
                     compound.putUUID("owner", player.getUUID());
                     ListTag stackList = new ListTag();
-                    for(Item item:stacks){
+                    for (Item item : stacks) {
                         CompoundTag itemTag = new CompoundTag();
                         new ItemStack(item).save(itemTag);
                         stackList.add(itemTag);
@@ -122,12 +119,12 @@ public class ModBusEventHandler {
             ServerPlayer serverplayer = (ServerPlayer) event.getPlayer();
             ProjectAzureWorldSavedData.getSaveddata(serverplayer.getLevel()).SyncEntireTeamListtoPlayer(serverplayer);
 
-            for(Tag inbt : playerData.getList("PRJA:passengers", Tag.TAG_COMPOUND)){
-                if(inbt instanceof CompoundTag){
+            for (Tag inbt : playerData.getList("PRJA:passengers", Tag.TAG_COMPOUND)) {
+                if (inbt instanceof CompoundTag) {
                     CompoundTag compoundNBT = (CompoundTag) inbt;
                     Entity entity1 = EntityType.loadEntityRecursive(compoundNBT.getCompound("Entity"), serverplayer.getLevel(), (p_217885_1_) -> !serverplayer.getLevel().addWithUUID(p_217885_1_) ? null : p_217885_1_);
 
-                    if(entity1 == null){
+                    if (entity1 == null) {
                         continue;
                     }
 
@@ -138,11 +135,6 @@ public class ModBusEventHandler {
 
         }
 
-    }
-
-    @SubscribeEvent
-    public void PlayerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
-        ProjectAzureWorldSavedData.TeamListCLIENT.clear();
     }
 
     @SubscribeEvent
