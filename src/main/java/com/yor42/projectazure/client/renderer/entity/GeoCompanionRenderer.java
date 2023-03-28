@@ -49,6 +49,7 @@ import java.util.Objects;
 
 public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & IAnimatable> extends ExtendedGeoEntityRenderer<T> {
 
+
     /*
      * This Part of class is based on ExampleExtendedRendererEntityRenderer from Geckolib.
      * Get the Source Code in github:
@@ -246,6 +247,16 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     @Override
     public void renderEarly(T animatable, PoseStack stackIn, float ticks, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
+    }
+
+    @Override
+    public float getWidthScale(T animatable) {
+        return 0.4F;
+    }
+
+    @Override
+    public float getHeightScale(T entity) {
+        return 0.4F;
     }
 
     @Override
