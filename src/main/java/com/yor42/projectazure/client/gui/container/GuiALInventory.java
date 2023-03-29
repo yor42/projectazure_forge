@@ -86,7 +86,7 @@ public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
     public void render(PoseStack matrixstacck, int mouseX, int mousey, float partialticks) {
         this.renderBackground(matrixstacck);
         super.render(matrixstacck, mouseX, mousey, partialticks);
-        this.renderEntity(this.leftPos+110, this.topPos+105,mouseX, mousey);
+        this.renderEntity(110, 105,mouseX, mousey);
         this.renderTooltip(matrixstacck, mouseX, mousey);
     }
 

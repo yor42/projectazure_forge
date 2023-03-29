@@ -88,6 +88,6 @@ public class GuiPCRInventory extends AbstractGUIScreen<ContainerPCRInventory> {
         this.blit(p_230450_1_, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         p_230450_1_.popPose();
 
-        this.renderEntity(this.leftPos + 55, this.topPos + 74,p_230450_3_, p_230450_4_);
+        this.renderEntity(55, 74,p_230450_3_, p_230450_4_);
     }
 }

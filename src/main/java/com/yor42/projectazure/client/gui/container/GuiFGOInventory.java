@@ -30,7 +30,7 @@ public class GuiFGOInventory extends AbstractGUIScreen<ContainerFGOInventory> {
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderEntity(this.leftPos + 39, this.topPos + 101,mouseX, mouseY);
+        this.renderEntity(39, 101,mouseX, mouseY);
         this.rendergauges(matrixStack, mouseX, mouseY);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }

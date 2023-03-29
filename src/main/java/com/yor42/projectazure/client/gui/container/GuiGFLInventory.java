@@ -54,7 +54,7 @@ public class GuiGFLInventory extends AbstractGUIScreen<ContainerGFLInventory> {
         this.blit(matrixStack, (int) ((this.leftPos+43)/renderscale), (int) ((this.topPos+98)/renderscale), 236, 11, 9, 9);
         this.blit(matrixStack, (int) ((this.leftPos+67)/renderscale), (int) ((this.topPos+98)/renderscale), 246, 11, 9, 9);
         matrixStack.popPose();
-        this.renderEntity(this.leftPos + 46, this.topPos + 75, x, y);
+        this.renderEntity(46, 75, x, y);
     }
 
     @Override
