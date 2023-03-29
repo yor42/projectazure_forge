@@ -73,13 +73,12 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     @Nullable
     @Override
     protected ItemStack getArmorForBone(String boneName, T currentEntity) {
-        return switch (boneName) {
-            case "armor_leftfoot", "armor_rightfoot" -> boots;
-            case "armor_leftleg", "armor_rightleg", "armor_leftleg2", "armor_rightleg2" -> leggings;
-            case "armor_rightarm", "armor_leftarm", "armor_body", "armor_chest" -> chestplate;
-            case "armor_head" -> helmet;
-            default -> null;
-        };
+        return currentEntity.getItemBySlot(switch (boneName) {
+            case "armor_leftfoot", "armor_rightfoot" -> EquipmentSlot.FEET;
+            case "armor_leftleg", "armor_rightleg", "armor_leftleg2", "armor_rightleg2" -> EquipmentSlot.LEGS;
+            case "armor_head" -> EquipmentSlot.HEAD;
+            default -> EquipmentSlot.CHEST;
+        });
     }
 
     @Override
@@ -222,6 +221,11 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     @Override
     protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
 
+    }
+
+    @Override
+    public RenderType getRenderType(T animatable, float partialTick, PoseStack poseStack, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight, ResourceLocation texture) {
+        return RenderType.entityCutoutNoCull(texture);
     }
 
     @Override

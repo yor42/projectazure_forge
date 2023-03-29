@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.resources.ResourceLocation;
@@ -58,34 +59,32 @@ public class buttonStarterSelect extends ImageButton {
         blit(matrixStack, this.x, this.y, (float)i, (float)yTexStart, this.width, this.height, 256, 256);
 
 
-
-        switch (this.index){
-            case 0:
+        switch (this.index) {
+            case 0 -> {
                 logox = 109;
                 logoy = 127;
-                break;
-
-            case 1:
+            }
+            case 1 -> {
                 logox = 163;
                 logoy = 181;
-                break;
-
-            case 2:
+            }
+            case 2 -> {
                 logox = 55;
                 logoy = 127;
-                break;
-            case 3:
+            }
+            case 3 -> {
                 logox = 163;
                 logoy = 127;
-                break;
-
-            default:
+            }
+            default -> {
                 logox = 1;
                 logoy = 127;
-                break;
+            }
         }
 
-        /** Cache of entities for each entity type */
+        /**
+         * Cache of entities for each entity type
+         * **/
         final Map<EntityType<?>,Entity> ENTITY_MAP = new HashMap<>();
 
         blit(matrixStack, this.x+2, this.y+2, logox, logoy, 53, 53, 256, 256);
@@ -97,12 +96,10 @@ public class buttonStarterSelect extends ImageButton {
 
                     entity = ENTITY_MAP.computeIfAbsent(this.entityType, t -> t.create(world));
 
-                    if (entity instanceof LivingEntity) {
-                        LivingEntity livingEntity = (LivingEntity) entity;
+                    if (entity instanceof LivingEntity livingEntity) {
 
-                        int entityWidth = (int) entity.getBbWidth();
                         try {
-                            InventoryScreen.renderEntityInInventory(this.x+(this.width/2), this.y+this.height-5, 40, mouseX+(this.width/2F), mouseY+this.height-5, livingEntity);
+                            InventoryScreen.renderEntityInInventory(this.x+(this.width/2), this.y+this.height-5, 40, this.x+(this.width/2F)-mouseX, this.y+this.height-5-mouseY, livingEntity);
                             return;
                         } catch (Exception e) {
                             Main.LOGGER.error("Failed to render Entity!");

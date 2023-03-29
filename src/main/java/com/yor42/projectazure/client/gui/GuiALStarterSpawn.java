@@ -30,8 +30,6 @@ public class GuiALStarterSpawn extends Screen {
 
     private int x, y;
 
-    private int scrollBarFarLeft, lastScrollX;
-
     private final int buttonWidth = 59;
 
     public GuiALStarterSpawn(Component titleIn) {
@@ -43,29 +41,17 @@ public class GuiALStarterSpawn extends Screen {
         super.init();
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2;
-        this.minecraft = minecraft;
-        this.scrollBarFarLeft = this.x+13;
         
         RenderSystem.setShaderTexture(0,TEXTURE);
-        //this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         for(int index = 0; index < StarterList.length; index++) {
             int buttonHeight = 127;
-            if (this.notYetPopulated) {
                 int finalIndex = index;
                 Button button = createButton(this.x+9+(index * buttonWidth), this.y+26, buttonWidth, buttonHeight, index, StarterList[index], (action) -> {
                     Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex));
                     this.onClose();
                 });
                 this.addRenderableWidget(button);
-                        //createButton(entityList[index], this.scrollBarFarLeft + (++index * buttonHeight), this.y+26, buttonWidth, buttonHeight, new TranslationTextComponent("gui.selectstarter.select"+index), action -> Main.LOGGER.info("Player tried to spawn starter. but guess what. this doesnt do shit!"));
-            } /*else {
-                Button button = (Button) this.buttons.get(index);
-                //button.setMessage(getSkillEntryFormattedText(skill, entry.getValue()));
-                button.x = this.scrollBarFarLeft + (index * buttonHeight);
-                button.y = this.y+26;
-            }*/
         }
-        this.notYetPopulated = false;
     }
 
     @Override
@@ -76,8 +62,8 @@ public class GuiALStarterSpawn extends Screen {
     @Override
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.drawBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.drawForegroundLayer(matrixStack, mouseX, mouseY, partialTicks);
         this.renderButtons(matrixStack,mouseX, mouseY, partialTicks);
     }
@@ -112,21 +98,12 @@ public class GuiALStarterSpawn extends Screen {
     }
 
     private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        
         RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     private void drawForegroundLayer(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         drawString(matrixStack, this.font, new TranslatableComponent("gui.selectstarter.title"), this.x+18, this.y+10, 14085119);
-    }
-
-    public int getBackgroundLeft(){
-        return this.x;
-    }
-
-    public int getBackgroundTop(){
-        return this.y;
     }
 
     @Override
