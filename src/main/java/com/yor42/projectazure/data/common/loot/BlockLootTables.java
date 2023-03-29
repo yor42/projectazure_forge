@@ -41,6 +41,14 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLoot {
         this.dropSelf(RegisterBlocks.RMA_7012_ORE_DEEPSLATE.get());
         this.dropSelf(RegisterBlocks.MANGANESE_ORE_DEEPSLATE.get());
 
+        this.dropSelf(RegisterBlocks.RAW_LEAD_BLOCK.get());
+        this.dropSelf(RegisterBlocks.RAW_ZINC_BLOCK.get());
+        this.dropSelf(RegisterBlocks.RAW_RMA_7012_BLOCK.get());
+        this.dropSelf(RegisterBlocks.RAW_ZINC_BLOCK.get());
+        this.dropSelf(RegisterBlocks.RAW_MANGANESE_BLOCK.get());
+        this.dropSelf(RegisterBlocks.RAW_BAUXITE_BLOCK.get());
+        this.dropSelf(RegisterBlocks.RAW_TIN_BLOCK.get());
+
         this.dropSelf(RegisterBlocks.BASIC_CHEMICAL_REACTOR.get());
 
         this.dropSelf(RegisterBlocks.BRASS_BLOCK.get());

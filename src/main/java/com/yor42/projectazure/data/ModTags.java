@@ -52,6 +52,12 @@ public class ModTags {
         public static final TagKey<Block> BLOCK_STEEL = forge("storage_blocks/steel");
         public static final TagKey<Block> BLOCK_INCANDESCENT_ALLOY = forge("storage_blocks/incandescent_alloy");
         public static final TagKey<Block> BLOCK_MANGANESE = forge("storage_blocks/manganese");
+        public static final TagKey<Block> BLOCK_RAW_ALUMINIUM = forge("storage_blocks/raw_aluminium");
+        public static final TagKey<Block> BLOCK_RAW_TIN = forge("storage_blocks/raw_tin");
+        public static final TagKey<Block> BLOCK_RAW_LEAD = forge("storage_blocks/raw_lead");
+        public static final TagKey<Block> BLOCK_RAW_ZINC = forge("storage_blocks/raw_zinc");
+        public static final TagKey<Block> BLOCK_RAW_RMA7012 = forge("storage_blocks/raw_rma70-12");
+        public static final TagKey<Block> BLOCK_RAW_MANGANESE = forge("storage_blocks/raw_manganese");
 
         private static TagKey<Block> forge(String path) {
             return BlockTags.create(new ResourceLocation("forge", path));
@@ -171,7 +177,6 @@ public class ModTags {
         public static final TagKey<Item> EXPLOSIVE_COMPOUND = forge("explosive");
 
         public static final TagKey<Item> ORES_ALUMINIUM = forge("ores/aluminium");
-        public static final TagKey<Item> ORES_COPPER = forge("ores/copper");
         public static final TagKey<Item> ORES_TIN = forge("ores/tin");
         public static final TagKey<Item> ORES_LEAD = forge("ores/lead");
         public static final TagKey<Item> ORES_ZINC = forge("ores/zinc");
@@ -179,11 +184,18 @@ public class ModTags {
         public static final TagKey<Item> ORES_RMA7012 = forge("ores/rma70-12");
         public static final TagKey<Item> ORES_MANGANESE = forge("ores/manganese");
         public static final TagKey<Item> ORES_PYROXENE = forge("ores/pyroxene");
+
+        public static final TagKey<Item> RAW_ALUMINIUM = forge("raw_materials/aluminium");
+        public static final TagKey<Item> RAW_TIN = forge("raw_materials/tin");
+        public static final TagKey<Item> RAW_LEAD = forge("raw_materials/lead");
+        public static final TagKey<Item> RAW_ZINC = forge("raw_materials/zinc");
+        public static final TagKey<Item> RAW_RMA7012 = forge("raw_materials/rma70-12");
+        public static final TagKey<Item> RAW_MANGANESE = forge("raw_materials/manganese");
+
         public static final TagKey<Item> WIRE_COPPER = forge("wires/copper");
 
         public static final TagKey<Item> ORIGINITE = forge("gems/originite");
         public static final TagKey<Item> ORIGINIUM_PRIME = forge("gems/originium");
-        //public static final ITag.INamedTag<Item> ORES_ZINC = forge("ores/zinc");
 
         public static final TagKey<Item> MORTAR = forge("tools/mortar");
         public static final TagKey<Item> CUTTER = forge("tools/cutter");

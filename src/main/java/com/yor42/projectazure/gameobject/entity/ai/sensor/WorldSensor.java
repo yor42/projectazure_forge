@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.yor42.projectazure.libs.enums.ResourceBlockType.*;
+import static com.yor42.projectazure.libs.enums.TaskBlockType.*;
 import static net.minecraft.world.level.block.FarmBlock.MOISTURE;
 
 public class WorldSensor extends Sensor<AbstractEntityCompanion> {
@@ -44,9 +44,9 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
             brain.eraseMemory(RegisterAI.NEAREST_WORLDSKILLABLE.get());
             brain.eraseMemory(RegisterAI.NEAREST_BONEMEALABLE.get());
 
-            List<Pair<BlockPos, enums.ResourceBlockType>> blocklist = UpdateBlockList(world, entity).stream().filter((entry) -> {
+            List<Pair<BlockPos, enums.TaskBlockType>> blocklist = UpdateBlockList(world, entity).stream().filter((entry) -> {
                 BlockPos pos = entry.getFirst();
-                enums.ResourceBlockType type = entry.getSecond();
+                enums.TaskBlockType type = entry.getSecond();
                 Path path = entity.getNavigation().createPath(pos, type == ORE? 4:1);
                 return path != null && path.canReach();
             }).sorted(Comparator.comparingDouble((entry) -> entity.distanceToSqr(Vec3.atCenterOf(entry.getFirst())))).collect(Collectors.toList());
@@ -71,11 +71,11 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
         }
     }
 
-    private List<Pair<BlockPos, enums.ResourceBlockType>> UpdateBlockList(@Nonnull ServerLevel world, @Nonnull AbstractEntityCompanion host){
+    private List<Pair<BlockPos, enums.TaskBlockType>> UpdateBlockList(@Nonnull ServerLevel world, @Nonnull AbstractEntityCompanion host){
 
         int diameter = 10;
         int height = 10;
-        ArrayList<Pair<BlockPos, enums.ResourceBlockType>> BlockList = new ArrayList<>();
+        ArrayList<Pair<BlockPos, enums.TaskBlockType>> BlockList = new ArrayList<>();
         BlockPos pos = new BlockPos(host.blockPosition().getX()-(diameter/2), Math.max(host.blockPosition().getY()-(height/2), 0), host.blockPosition().getZ()-(diameter/2));
         int size = diameter*diameter*height;
         Block block;
@@ -98,7 +98,7 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
         return BlockList;
     }
 
-    private Optional<enums.ResourceBlockType> getResourceType(AbstractEntityCompanion host, ServerLevel worldIn, BlockPos pos) {
+    private Optional<enums.TaskBlockType> getResourceType(AbstractEntityCompanion host, ServerLevel worldIn, BlockPos pos) {
         BlockState state = worldIn.getBlockState(pos);
         Block block = state.getBlock();
         BlockState stateBelow = worldIn.getBlockState(pos.below());
@@ -133,7 +133,7 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
             }
         }
         else if(blockbelow == Blocks.FARMLAND && state.getValue(MOISTURE)>0 && state.getMaterial() == Material.AIR){
-            return Optional.of(enums.ResourceBlockType.CROP_PLANTABLE);
+            return Optional.of(enums.TaskBlockType.CROP_PLANTABLE);
         }
         else if(block instanceof CropBlock){
             if(!((CropBlock) block).isMaxAge(state)){

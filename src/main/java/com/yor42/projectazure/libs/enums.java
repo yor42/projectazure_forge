@@ -377,7 +377,7 @@ public class enums {
         }
     }
 
-    public enum ResourceBlockType{
+    public enum TaskBlockType {
         ORE,
         CROP_HARVESTABLE,
         CROP_BONEMEALABLE,
@@ -385,13 +385,8 @@ public class enums {
         WORLDSKILL
     }
 
-    public enum ResourceType {
-        GEAR("gear"),
-        INGOT("ingot"),
-        PLATE("plate"),
-        DUST("dust"),
-        WIRE("wire"),
-        NUGGET("nugget"),
+    public enum ResourceBlockType {
+        RAW_ORE_BLOCK("raw_block", net.minecraft.world.level.material.Material.STONE, SoundType.STONE),
         ORE("ore", net.minecraft.world.level.material.Material.STONE, SoundType.STONE),
         DEEPSLATE_ORE("deepslate_ore", net.minecraft.world.level.material.Material.STONE, SoundType.DEEPSLATE),
         METAL_BLOCK("block", net.minecraft.world.level.material.Material.METAL, SoundType.METAL);
@@ -402,13 +397,50 @@ public class enums {
         @Nullable
         private final SoundType soundType;
 
-        ResourceType(String name){
+        ResourceBlockType(String name, net.minecraft.world.level.material.@org.jetbrains.annotations.Nullable Material material, @org.jetbrains.annotations.Nullable SoundType soundType){
+            this.name = name;
+            this.material = material;
+            this.soundType = soundType;
+        }
+
+        @Nullable
+        public net.minecraft.world.level.material.Material getMaterial() {
+            return material;
+        }
+
+
+        @Nullable
+        public SoundType getSoundType() {
+            return soundType;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+    }
+
+    public enum ResourceItemType {
+        GEAR("gear"),
+        INGOT("ingot"),
+        PLATE("plate"),
+        RAW_ORE("raw"),
+        DUST("dust"),
+        WIRE("wire"),
+        NUGGET("nugget");
+
+        private final String name;
+        @Nullable
+        private final net.minecraft.world.level.material.Material material;
+        @Nullable
+        private final SoundType soundType;
+
+        ResourceItemType(String name){
             this.name = name;
             this.material = null;
             this.soundType = null;
         }
 
-        ResourceType(String name, net.minecraft.world.level.material.@org.jetbrains.annotations.Nullable Material material, @org.jetbrains.annotations.Nullable SoundType soundType){
+        ResourceItemType(String name, net.minecraft.world.level.material.@org.jetbrains.annotations.Nullable Material material, @org.jetbrains.annotations.Nullable SoundType soundType){
             this.name = name;
             this.material = material;
             this.soundType = soundType;

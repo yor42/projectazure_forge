@@ -59,6 +59,15 @@ public class ItemTagProvider extends ItemTagsProvider {
         copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);
 
+        this.tag(ModTags.Items.RAW_LEAD).add(RegisterItems.RAW_LEAD.get());
+        this.tag(ModTags.Items.RAW_ZINC).add(RegisterItems.RAW_ZINC.get());
+        this.tag(ModTags.Items.RAW_ALUMINIUM).add(RegisterItems.RAW_ALUMINIUM.get());
+        this.tag(ModTags.Items.RAW_RMA7012).add(RegisterItems.RAW_RMA7012.get());
+        this.tag(ModTags.Items.RAW_TIN).add(RegisterItems.RAW_TIN.get());
+        this.tag(ModTags.Items.RAW_MANGANESE).add(RegisterItems.RAW_MAGANESE.get());
+
+        this.tag(Tags.Items.RAW_MATERIALS).add(RegisterItems.RAW_LEAD.get(), RegisterItems.RAW_ZINC.get(), RegisterItems.RAW_ALUMINIUM.get(), RegisterItems.RAW_RMA7012.get(), RegisterItems.RAW_TIN.get());
+
         this.tag(ModTags.Items.INGOT_ALUMINIUM).add(RegisterItems.INGOT_ALUMINIUM.get());
         this.tag(ModTags.Items.INGOT_TIN).add(RegisterItems.INGOT_TIN.get());
         this.tag(ModTags.Items.INGOT_BRONZE).add(RegisterItems.INGOT_BRONZE.get());

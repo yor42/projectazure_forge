@@ -14,23 +14,16 @@ import java.util.Objects;
 public class PAOreBlock extends OreBlock {
 
     private final String material;
-    private final enums.ResourceType resourceType;
+    private final enums.ResourceBlockType resourceType;
 
-    public PAOreBlock(String materialName, enums.ResourceType resourceType) {
+    public PAOreBlock(String materialName, enums.ResourceBlockType resourceType) {
         super((BlockBehaviour.Properties.of(Objects.requireNonNull(resourceType.getMaterial())).friction(2).sound(Objects.requireNonNull(resourceType.getSoundType())).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
         this.material = materialName;
         this.resourceType = resourceType;
     }
 
-    public PAOreBlock(String materialName, enums.ResourceType resourceType, Block.Properties properties) {
-        super(properties);
-        this.material = materialName;
-        this.resourceType = resourceType;
-    }
-
-
     @Override
     public MutableComponent getName() {
-        return new TranslatableComponent(material).append(" ").append(new TranslatableComponent(resourceType.getName()));
+        return new TranslatableComponent(resourceType.getName(), new TranslatableComponent(material));
     }
 }

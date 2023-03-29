@@ -105,7 +105,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         createHammerRecipes(consumer, Blocks.COBBLESTONE, Blocks.GRAVEL, "gravel");
         createHammerRecipes(consumer, Blocks.GRAVEL, Blocks.SAND, "sand");
         createHammerRecipes(consumer, RegisterBlocks.COBBLED_ORIROCK.get(), RegisterItems.DUST_ORIROCK.get(), 4, "orirock_from_cobble");
-        createHammerRecipes(consumer, ModTags.Items.ORES_COPPER, RegisterItems.DUST_COPPER.get(), 2, "copper");
+        createHammerRecipes(consumer, Tags.Items.ORES_COPPER, RegisterItems.DUST_COPPER.get(), 2, "copper");
         createHammerRecipes(consumer, ModTags.Items.ORES_ALUMINIUM, RegisterItems.DUST_ALUMINIUM.get(), 2, "aluminium");
         createHammerRecipes(consumer, ModTags.Items.ORES_LEAD, RegisterItems.DUST_LEAD.get(), 2, "lead");
         createHammerRecipes(consumer, ModTags.Items.ORES_TIN, RegisterItems.DUST_TIN.get(), 2, "tin");

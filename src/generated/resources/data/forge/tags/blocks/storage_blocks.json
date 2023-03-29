@@ -12,6 +12,12 @@
     "projectazure:d32steel_block",
     "projectazure:steel_block",
     "projectazure:manganese_block",
-    "projectazure:incandescent_alloy_block"
+    "projectazure:incandescent_alloy_block",
+    "projectazure:raw_manganese_block",
+    "projectazure:raw_aluminium_block",
+    "projectazure:raw_zinc_block",
+    "projectazure:raw_lead_block",
+    "projectazure:raw_tin_block",
+    "projectazure:raw_rma7012_block"
   ]
 }

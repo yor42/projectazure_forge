@@ -658,14 +658,15 @@
   "plane.torpedo_bomber": "어뢰폭격기",
   "plane.dive_bomber": "급강하폭격기",
 
-  "ingot": "주괴",
-  "plate": "판",
-  "dust": "가루",
-  "wire": "전선",
-  "nugget": "조각",
-  "ore": "광석",
-  "gear": "기어",
-  "block": "블럭",
+  "ingot": "%s괴",
+  "plate": "%s 판",
+  "dust": "%s 가루",
+  "wire": "%s 전선",
+  "nugget": "%s 조각",
+  "ore": "%s 광석",
+  "gear": "%s 기어",
+  "block": "%s 블럭",
+  "raw": "Raw %s",
 
   "brass": "황동",
   "copper": "구리",
@@ -807,5 +808,19 @@
   "projectazure.codex.entry.primitive_originium_battery.description": "\"이건 그냥 오리지늄에 쇠하고 구리막대기 끼워 놓은거잖아! 이게 무슨 감자냐? 그리고 이게 작동은 왜 되는건데!?\"$(br)$(br)- 낡은 리유니온 연구 노트",
 
   "projectazure.codex.entry.pantry.title": "식품 저장고",
-  "projectazure.codex.entry.pantry.description": "식품 저장고는 큰 상자와 매우 유사하지만, 음식만 담을 수 있고, 더 작습니다.$(br)또한 동료들은 여기서 자유롭게 음식을 가져갈 수 있으며,$(br)사용하는 나무 종류별로 다른 디자인이 나옵니다."
+  "projectazure.codex.entry.pantry.description": "식품 저장고는 큰 상자와 매우 유사하지만, 음식만 담을 수 있고, 더 작습니다.$(br)또한 동료들은 여기서 자유롭게 음식을 가져갈 수 있으며,$(br)사용하는 나무 종류별로 다른 디자인이 나옵니다.",
+
+  "gui.tooltip.homepos": "Bed Location",
+  "gui.tooltip.aggressive.on": "This companion will attack hostile entity first",
+  "gui.tooltip.aggressive.off": "This companion won't attack hostile entity first",
+  "gui.team.injured": "INJURED",
+  "message.companion.bedmissing": "Companion %s Does not have valid bed!",
+  "message.commandstick.entity_bedpos_differentdimension": "Registered bed %s is in different dimension!",
+  "message.commandstick.entity_bedpos_invalid": "Registered Bed Position %s is invalid!",
+  "entity.status.sleeping": "Sleeping",
+  "entity.status.retreat": "Retreating",
+  "message.commandstick.entity_pantrypos_invalid": "Registered Pantry position %s is Invalid!",
+  "team.defaultteamname": "New Team",
+  "equiment.empty": "EMPTY",
+  "gui.rigginginventory": "Rigging Equipments"
 }

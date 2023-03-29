@@ -47,74 +47,81 @@ public class RegisterItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
 
     //Resources
-    public static final RegistryObject<Item> INGOT_LEAD = registerResource("lead", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_TIN = registerResource("tin", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_ALUMINIUM = registerResource("aluminium", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_BRONZE = registerResource("bronze", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_ZINC = registerResource("zinc", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_STEEL = registerResource("steel", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_BRASS = registerResource("brass", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_RMA7024 = registerResource("rma7024", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_RMA7012 = registerResource("rma7012", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_D32 = registerResource("d32steel", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.INGOT);
-    public static final RegistryObject<Item> INGOT_MANGANESE = registerResource("manganese", enums.ResourceType.INGOT);
+    public static final RegistryObject<Item> INGOT_LEAD = registerResource("lead", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_TIN = registerResource("tin", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_ALUMINIUM = registerResource("aluminium", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_BRONZE = registerResource("bronze", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_ZINC = registerResource("zinc", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_STEEL = registerResource("steel", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_BRASS = registerResource("brass", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_RMA7024 = registerResource("rma7024", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_RMA7012 = registerResource("rma7012", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_D32 = registerResource("d32steel", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceItemType.INGOT);
+    public static final RegistryObject<Item> INGOT_MANGANESE = registerResource("manganese", enums.ResourceItemType.INGOT);
 
-    public static final RegistryObject<Item> GEAR_BRONZE = registerResource("bronze", enums.ResourceType.GEAR);
-    public static final RegistryObject<Item> GEAR_STEEL = registerResource("steel", enums.ResourceType.GEAR);
-    public static final RegistryObject<Item> GEAR_IRON = registerResource("iron", enums.ResourceType.GEAR);
-    public static final RegistryObject<Item> DUST_COPPER = registerResource("copper", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_LEAD = registerResource("lead", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_TIN = registerResource("tin", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_ALUMINIUM = registerResource("aluminium", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_BRONZE = registerResource("bronze", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_ZINC = registerResource("zinc", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_IRON = registerResource("iron", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_COAL = registerResource("coal", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_STEEL = registerResource("steel", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_BRASS = registerResource("brass", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_GOLD = registerResource("gold", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_ORIROCK = registerResource("orirock", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_ORIGINIUM = registerResource("originium", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_NETHER_QUARTZ = registerResource("quartz", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_RMA7024 = registerResource("rma7024", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_RMA7012 = registerResource("rma7012",  enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_D32 = registerResource("d32steel", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.DUST);
-    public static final RegistryObject<Item> DUST_MANGANESE = registerResource("manganese", enums.ResourceType.DUST);
+    public static final RegistryObject<Item> RAW_LEAD = registerResource("lead", enums.ResourceItemType.RAW_ORE);
+    public static final RegistryObject<Item> RAW_TIN = registerResource("tin", enums.ResourceItemType.RAW_ORE);
+    public static final RegistryObject<Item> RAW_ALUMINIUM = registerResource("aluminium", enums.ResourceItemType.RAW_ORE);
+    public static final RegistryObject<Item> RAW_ZINC = registerResource("zinc", enums.ResourceItemType.RAW_ORE);
+    public static final RegistryObject<Item> RAW_RMA7012 = registerResource("rma7012", enums.ResourceItemType.RAW_ORE);
+    public static final RegistryObject<Item> RAW_MAGANESE = registerResource("manganese", enums.ResourceItemType.RAW_ORE);
 
-    public static final RegistryObject<Item> PLATE_COPPER = registerResource("copper", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_LEAD = registerResource("lead", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_TIN = registerResource("tin", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_ALUMINIUM = registerResource("aluminium", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_BRONZE = registerResource("bronze", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_ZINC = registerResource("zinc", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_IRON = registerResource("iron", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_GOLD = registerResource("gold", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_STEEL = registerResource("steel", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_BRASS = registerResource("brass", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_RMA7024 = registerResource("rma7024", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_RMA7012 = registerResource("rma7012", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_D32 = registerResource("d32steel", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.PLATE);
-    public static final RegistryObject<Item> PLATE_MANGANESE = registerResource("manganese", enums.ResourceType.PLATE);
+    public static final RegistryObject<Item> GEAR_BRONZE = registerResource("bronze", enums.ResourceItemType.GEAR);
+    public static final RegistryObject<Item> GEAR_STEEL = registerResource("steel", enums.ResourceItemType.GEAR);
+    public static final RegistryObject<Item> GEAR_IRON = registerResource("iron", enums.ResourceItemType.GEAR);
+    public static final RegistryObject<Item> DUST_COPPER = registerResource("copper", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_LEAD = registerResource("lead", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_TIN = registerResource("tin", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_ALUMINIUM = registerResource("aluminium", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_BRONZE = registerResource("bronze", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_ZINC = registerResource("zinc", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_IRON = registerResource("iron", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_COAL = registerResource("coal", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_STEEL = registerResource("steel", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_BRASS = registerResource("brass", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_GOLD = registerResource("gold", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_ORIROCK = registerResource("orirock", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_ORIGINIUM = registerResource("originium", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_NETHER_QUARTZ = registerResource("quartz", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_RMA7024 = registerResource("rma7024", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_RMA7012 = registerResource("rma7012",  enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_D32 = registerResource("d32steel", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceItemType.DUST);
+    public static final RegistryObject<Item> DUST_MANGANESE = registerResource("manganese", enums.ResourceItemType.DUST);
 
-    public static final RegistryObject<Item> NUGGET_COPPER = registerResource("copper", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_LEAD = registerResource("lead", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_TIN = registerResource("tin", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_BRONZE = registerResource("bronze", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_ZINC = registerResource("zinc", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_STEEL = registerResource("steel", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_BRASS = registerResource("brass", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_RMA7024 = registerResource("rma7024", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_RMA7012 = registerResource("rma7012", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_D32 = registerResource("d32steel", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.NUGGET);
-    public static final RegistryObject<Item> NUGGET_MANGANESE = registerResource("manganese", enums.ResourceType.NUGGET);
+    public static final RegistryObject<Item> PLATE_COPPER = registerResource("copper", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_LEAD = registerResource("lead", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_TIN = registerResource("tin", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_ALUMINIUM = registerResource("aluminium", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_BRONZE = registerResource("bronze", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_ZINC = registerResource("zinc", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_IRON = registerResource("iron", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_GOLD = registerResource("gold", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_STEEL = registerResource("steel", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_BRASS = registerResource("brass", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_RMA7024 = registerResource("rma7024", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_RMA7012 = registerResource("rma7012", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_D32 = registerResource("d32steel", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceItemType.PLATE);
+    public static final RegistryObject<Item> PLATE_MANGANESE = registerResource("manganese", enums.ResourceItemType.PLATE);
+
+    public static final RegistryObject<Item> NUGGET_COPPER = registerResource("copper", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_LEAD = registerResource("lead", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_TIN = registerResource("tin", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_BRONZE = registerResource("bronze", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_ZINC = registerResource("zinc", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_STEEL = registerResource("steel", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_BRASS = registerResource("brass", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_RMA7024 = registerResource("rma7024", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_RMA7012 = registerResource("rma7012", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_D32 = registerResource("d32steel", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceItemType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_MANGANESE = registerResource("manganese", enums.ResourceItemType.NUGGET);
 
     //Electronic Stuff
-    public static final RegistryObject<Item> COPPER_WIRE = register("copper_wire", () -> new ItemResource("copper", enums.ResourceType.WIRE));
-    public static final RegistryObject<Item> GOLD_WIRE = register("gold_wire", () -> new ItemResource("gold", enums.ResourceType.WIRE));
+    public static final RegistryObject<Item> COPPER_WIRE = register("copper_wire", () -> new ItemResource("copper", enums.ResourceItemType.WIRE));
+    public static final RegistryObject<Item> GOLD_WIRE = register("gold_wire", () -> new ItemResource("gold", enums.ResourceItemType.WIRE));
     public static final RegistryObject<Item> IRON_PIPE = register("iron_pipe", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> STEEL_PIPE = register("steel_pipe", () -> new Item(new Item.Properties()
@@ -814,7 +821,7 @@ public class RegisterItems {
     public static final RegistryObject<Item> CONTRIBUTOR_BONUS = register("contributor_bonus", () -> new ItemContributorBonus(new Item.Properties()));
 
 
-    public static RegistryObject<Item> registerResource(String id, enums.ResourceType type){
+    public static RegistryObject<Item> registerResource(String id, enums.ResourceItemType type){
         return register_withTexturename(type.getName()+"_"+id, type.getName()+"_"+id, () -> new ItemResource(id, type));
     }
 

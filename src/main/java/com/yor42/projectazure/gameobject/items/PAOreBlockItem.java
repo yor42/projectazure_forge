@@ -13,17 +13,17 @@ import static com.yor42.projectazure.Main.PA_RESOURCES;
 public class PAOreBlockItem extends BlockItem {
 
     private final String material;
-    private final enums.ResourceType resourceType;
+    private final enums.ResourceBlockType resourceType;
 
     public PAOreBlockItem(Block blockIn, String materialName){
-        this(blockIn, materialName, enums.ResourceType.ORE, new Item.Properties().tab(PA_RESOURCES));
+        this(blockIn, materialName, enums.ResourceBlockType.ORE, new Item.Properties().tab(PA_RESOURCES));
     }
 
-    public PAOreBlockItem(Block blockIn, String materialName, enums.ResourceType resourceType){
+    public PAOreBlockItem(Block blockIn, String materialName, enums.ResourceBlockType resourceType){
         this(blockIn, materialName, resourceType, new Item.Properties().tab(PA_RESOURCES));
     }
 
-    public PAOreBlockItem(Block blockIn, String materialName, enums.ResourceType resourceType, Properties builder) {
+    public PAOreBlockItem(Block blockIn, String materialName, enums.ResourceBlockType resourceType, Properties builder) {
         super(blockIn, builder);
         this.material = materialName;
         this.resourceType = resourceType;

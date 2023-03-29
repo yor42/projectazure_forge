@@ -137,7 +137,7 @@ public class ContainerCrystalGrowthChamber extends AbstractContainerMenu {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem() instanceof ItemResource && ((ItemResource) itemstack1.getItem()).getResourceType() == enums.ResourceType.DUST) {
+                else if (itemstack1.getItem() instanceof ItemResource && ((ItemResource) itemstack1.getItem()).getResourceType() == enums.ResourceItemType.DUST) {
                     if (!this.moveItemStackTo(itemstack1, 1, 4, false)) {
                         return ItemStack.EMPTY;
                     }

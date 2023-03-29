@@ -5,30 +5,31 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
 
 public class ItemResource extends Item {
 
     private final String material;
-    private final enums.ResourceType resourceType;
+    private final enums.ResourceItemType resourceItemType;
 
-    public ItemResource(String materialName, enums.ResourceType resourceType){
-        this(materialName, resourceType, new Item.Properties().tab(PA_RESOURCES));
+    public ItemResource(String materialName, enums.ResourceItemType resourceItemType){
+        this(materialName, resourceItemType, new Item.Properties().tab(PA_RESOURCES));
     }
 
-    public ItemResource(String materialName, enums.ResourceType resourceType, Properties properties) {
+    public ItemResource(String materialName, enums.ResourceItemType resourceItemType, Properties properties) {
         super(properties);
         this.material = materialName;
-        this.resourceType = resourceType;
+        this.resourceItemType = resourceItemType;
     }
 
-    public enums.ResourceType getResourceType(){
-        return this.resourceType;
+    public enums.ResourceItemType getResourceType(){
+        return this.resourceItemType;
     }
 
     @Override
-    public Component getName(ItemStack stack) {
-        return new TranslatableComponent(material).append(" ").append(new TranslatableComponent(resourceType.getName()));
+    public @NotNull Component getName(@NotNull ItemStack stack) {
+        return new TranslatableComponent(resourceItemType.getName(), new TranslatableComponent(material));
     }
 }

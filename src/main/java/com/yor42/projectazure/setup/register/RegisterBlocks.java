@@ -60,6 +60,13 @@ public class RegisterBlocks {
     public static final RegistryObject<Block> RMA_7012_ORE_DEEPSLATE = registerMetalOre_Deepslate("rma7012");
     public static final RegistryObject<Block> MANGANESE_ORE_DEEPSLATE = registerMetalOre_Deepslate("manganese");
 
+    public static final RegistryObject<Block> RAW_BAUXITE_BLOCK = registerRawBlock("aluminium");
+    public static final RegistryObject<Block> RAW_TIN_BLOCK = registerRawBlock("tin");
+    public static final RegistryObject<Block> RAW_LEAD_BLOCK = registerRawBlock("lead");
+    public static final RegistryObject<Block> RAW_ZINC_BLOCK = registerRawBlock("zinc");
+    public static final RegistryObject<Block> RAW_RMA_7012_BLOCK = registerRawBlock("rma7012");
+    public static final RegistryObject<Block> RAW_MANGANESE_BLOCK = registerRawBlock("manganese");
+
     public static final RegistryObject<Block> ALUMINIUM_BLOCK = registerMaterialBlock("aluminium");
     public static final RegistryObject<Block> COPPER_BLOCK = registerMaterialBlock("copper");
     public static final RegistryObject<Block> TIN_BLOCK = registerMaterialBlock("tin");
@@ -182,22 +189,26 @@ public class RegisterBlocks {
     }
 
     private static RegistryObject<Block> registerMetalOre_Deepslate(String materialName){
-        return registerMaterialBlock("ore_deepslate_"+materialName, materialName, enums.ResourceType.DEEPSLATE_ORE);
+        return registerMaterialBlock("ore_deepslate_"+materialName, materialName, enums.ResourceBlockType.DEEPSLATE_ORE);
     }
 
+
+    private static RegistryObject<Block> registerRawBlock(String materialName){
+        return registerMaterialBlock("raw_"+materialName+"_block", materialName, enums.ResourceBlockType.RAW_ORE_BLOCK);
+    }
     private static RegistryObject<Block> registerMetalOre(String materialName){
         return registerMetalOre("ore_"+materialName, materialName);
     }
 
     private static RegistryObject<Block> registerMaterialBlock(String materialName){
-        return registerMaterialBlock(materialName+"_block", materialName, enums.ResourceType.METAL_BLOCK);
+        return registerMaterialBlock(materialName+"_block", materialName, enums.ResourceBlockType.METAL_BLOCK);
     }
 
     private static RegistryObject<Block> registerMetalOre(String registryName, String materialName){
-        return registerMaterialBlock(registryName, materialName, enums.ResourceType.ORE);
+        return registerMaterialBlock(registryName, materialName, enums.ResourceBlockType.ORE);
     }
 
-    private static RegistryObject<Block> registerMaterialBlock(String registryName, String materialName, enums.ResourceType type){
+    private static RegistryObject<Block> registerMaterialBlock(String registryName, String materialName, enums.ResourceBlockType type){
         RegistryObject<Block> ret = register_noItem(registryName, () -> new PAOreBlock(materialName, type));
         SIMPLEBLOCKLIST.add(ret);
         RegisterItems.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName, type));
@@ -205,7 +216,7 @@ public class RegisterBlocks {
         return ret;
     }
 
-    private static RegistryObject<Block> registerMaterialOre(String registryName, String materialName, enums.ResourceType type){
+    private static RegistryObject<Block> registerMaterialOre(String registryName, String materialName, enums.ResourceBlockType type){
         RegistryObject<Block> ret = register_noItem(registryName, () -> new PAOreBlock(materialName, type));
         SIMPLEBLOCKLIST.add(ret);
         RegisterItems.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName, type));

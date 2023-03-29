@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:raw_lead",
+    "projectazure:raw_zinc",
+    "projectazure:raw_aluminium",
+    "projectazure:raw_rma7012",
+    "projectazure:raw_tin"
+  ]
+}
