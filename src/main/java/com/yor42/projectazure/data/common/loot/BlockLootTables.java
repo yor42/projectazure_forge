@@ -20,6 +20,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BlockLootTables extends net.minecraft.data.loot.BlockLoot {
@@ -109,7 +110,7 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLoot {
     @Override
     protected Iterable<Block> getKnownBlocks() {
         return ForgeRegistries.BLOCKS.getValues().stream()
-                .filter(block -> Constants.MODID.equals(block.getRegistryName().getNamespace()) && !(block instanceof BlockComponent))
+                .filter(block -> Constants.MODID.equals(Objects.requireNonNull(block.getRegistryName()).getNamespace()) && !(block instanceof BlockComponent))
                 .collect(Collectors.toSet());
     }
 }

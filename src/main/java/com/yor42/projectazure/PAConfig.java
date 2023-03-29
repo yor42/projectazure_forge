@@ -226,47 +226,65 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue Star_6_MinTime;
         public final ForgeConfigSpec.IntValue Star_6_MaxTime;
 
-        public final ForgeConfigSpec.BooleanValue ENABLE_COPPER;
-        public final ForgeConfigSpec.IntValue COPPER_VEINSIZE;
-        public final ForgeConfigSpec.IntValue COPPER_VEINSPERCHUNK;
-        public final ForgeConfigSpec.IntValue COPPER_MINHEIGHT;
-        public final ForgeConfigSpec.IntValue COPPER_MAXHEIGHT;
-
         public final ForgeConfigSpec.BooleanValue ENABLE_ZINC;
         public final ForgeConfigSpec.IntValue ZINC_VEINSIZE;
         public final ForgeConfigSpec.IntValue ZINC_VEINSPERCHUNK;
         public final ForgeConfigSpec.IntValue ZINC_MINHEIGHT;
         public final ForgeConfigSpec.IntValue ZINC_MAXHEIGHT;
+        public final ForgeConfigSpec.IntValue ZINC_VEINSIZE_DEEP;
+        public final ForgeConfigSpec.IntValue ZINC_VEINSPERCHUNK_DEEP;
+        public final ForgeConfigSpec.IntValue ZINC_MINHEIGHT_DEEP;
+        public final ForgeConfigSpec.IntValue ZINC_MAXHEIGHT_DEEP;
 
         public final ForgeConfigSpec.BooleanValue ENABLE_RMA7012;
         public final ForgeConfigSpec.IntValue RMA7012_VEINSIZE;
         public final ForgeConfigSpec.IntValue RMA7012_VEINSPERCHUNK;
         public final ForgeConfigSpec.IntValue RMA7012_MINHEIGHT;
         public final ForgeConfigSpec.IntValue RMA7012_MAXHEIGHT;
+        public final ForgeConfigSpec.IntValue RMA7012_VEINSIZE_DEEP;
+        public final ForgeConfigSpec.IntValue RMA7012_VEINSPERCHUNK_DEEP;
+        public final ForgeConfigSpec.IntValue RMA7012_MINHEIGHT_DEEP;
+        public final ForgeConfigSpec.IntValue RMA7012_MAXHEIGHT_DEEP;
 
         public final ForgeConfigSpec.BooleanValue ENABLE_MANGANESE;
         public final ForgeConfigSpec.IntValue MANGANESE_VEINSIZE;
         public final ForgeConfigSpec.IntValue MANGANESE_VEINSPERCHUNK;
         public final ForgeConfigSpec.IntValue MANGANESE_MINHEIGHT;
         public final ForgeConfigSpec.IntValue MANGANESE_MAXHEIGHT;
+        public final ForgeConfigSpec.IntValue MANGANESE_VEINSIZE_DEEP;
+        public final ForgeConfigSpec.IntValue MANGANESE_VEINSPERCHUNK_DEEP;
+        public final ForgeConfigSpec.IntValue MANGANESE_MINHEIGHT_DEEP;
+        public final ForgeConfigSpec.IntValue MANGANESE_MAXHEIGHT_DEEP;
 
         public final ForgeConfigSpec.BooleanValue ENABLE_PYROXENE;
         public final ForgeConfigSpec.IntValue PYROXENE_VEINSIZE;
         public final ForgeConfigSpec.IntValue PYROXENE_VEINSPERCHUNK;
         public final ForgeConfigSpec.IntValue PYROXENE_MINHEIGHT;
         public final ForgeConfigSpec.IntValue PYROXENE_MAXHEIGHT;
+        public final ForgeConfigSpec.IntValue PYROXENE_VEINSIZE_DEEP;
+        public final ForgeConfigSpec.IntValue PYROXENE_VEINSPERCHUNK_DEEP;
+        public final ForgeConfigSpec.IntValue PYROXENE_MINHEIGHT_DEEP;
+        public final ForgeConfigSpec.IntValue PYROXENE_MAXHEIGHT_DEEP;
 
         public final ForgeConfigSpec.BooleanValue ENABLE_TIN;
         public final ForgeConfigSpec.IntValue TIN_VEINSIZE;
         public final ForgeConfigSpec.IntValue TIN_VEINSPERCHUNK;
         public final ForgeConfigSpec.IntValue TIN_MINHEIGHT;
         public final ForgeConfigSpec.IntValue TIN_MAXHEIGHT;
+        public final ForgeConfigSpec.IntValue TIN_VEINSIZE_DEEP;
+        public final ForgeConfigSpec.IntValue TIN_VEINSPERCHUNK_DEEP;
+        public final ForgeConfigSpec.IntValue TIN_MINHEIGHT_DEEP;
+        public final ForgeConfigSpec.IntValue TIN_MAXHEIGHT_DEEP;
 
         public final ForgeConfigSpec.BooleanValue ENABLE_LEAD;
         public final ForgeConfigSpec.IntValue LEAD_VEINSIZE;
         public final ForgeConfigSpec.IntValue LEAD_VEINSPERCHUNK;
         public final ForgeConfigSpec.IntValue LEAD_MINHEIGHT;
         public final ForgeConfigSpec.IntValue LEAD_MAXHEIGHT;
+        public final ForgeConfigSpec.IntValue LEAD_VEINSIZE_DEEP;
+        public final ForgeConfigSpec.IntValue LEAD_VEINSPERCHUNK_DEEP;
+        public final ForgeConfigSpec.IntValue LEAD_MINHEIGHT_DEEP;
+        public final ForgeConfigSpec.IntValue LEAD_MAXHEIGHT_DEEP;
 
         public final ForgeConfigSpec.BooleanValue ENABLE_ORIROCK;
         public final ForgeConfigSpec.IntValue ORIROCK_VEINSIZE;
@@ -516,53 +534,72 @@ public class PAConfig {
             BeaconFindSpawnPositionTries = builder.defineInRange("How many tries should Recruit beacon try to find spawn position of entity before returning machine's own position?", 5, 1, 20);
 
             builder.pop().push("Worldgen").comment("Options about worldgen like ores");
-            ENABLE_COPPER = builder.define("Enable Copper Generation", true);
-            COPPER_VEINSPERCHUNK = builder.defineInRange("Count of copper vein in single chunk", 8,0,128);
-            COPPER_VEINSIZE = builder.defineInRange("Size of Copper vein", 4,0,512);
-            COPPER_MINHEIGHT = builder.defineInRange("Minimum Y axis value that copper can generate", 0,0,256);
-            COPPER_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that copper can generate", 60,0,256);
 
             ENABLE_ZINC = builder.define("Enable Zinc Generation", true);
-            ZINC_VEINSPERCHUNK = builder.defineInRange("Count of Zinc vein in single chunk", 3,0,128);
-            ZINC_VEINSIZE = builder.defineInRange("Size of Zinc vein", 5,0,512);
-            ZINC_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Zinc can generate", 0,0,256);
-            ZINC_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Zinc can generate", 40,0,256);
+            ZINC_VEINSPERCHUNK = builder.defineInRange("Count of Zinc vein in single chunk", 3,-64,128);
+            ZINC_VEINSIZE = builder.defineInRange("Size of Zinc vein", 5,-64,512);
+            ZINC_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Zinc can generate", 0,-64,256);
+            ZINC_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Zinc can generate", 40,-64,256);
+            ZINC_VEINSPERCHUNK_DEEP = builder.defineInRange("Count of Zinc vein in single chunk below y:0", 3,-64,128);
+            ZINC_VEINSIZE_DEEP = builder.defineInRange("Size of Zinc vein below y:0", 3,-64,512);
+            ZINC_MINHEIGHT_DEEP = builder.defineInRange("Minimum Y axis value that Zinc can generate below y:0", -10,-64,256);
+            ZINC_MAXHEIGHT_DEEP = builder.defineInRange("Maximum Y axis value that Zinc can generate below y:0", 0,-64,256);
 
             ENABLE_RMA7012 = builder.define("Enable RMA7012 Generation", true);
-            RMA7012_VEINSPERCHUNK = builder.defineInRange("Count of RMA7012 vein in single chunk", 6,0,128);
-            RMA7012_VEINSIZE = builder.defineInRange("Size of RMA7012 vein", 4,0,512);
-            RMA7012_MINHEIGHT = builder.defineInRange("Minimum Y axis value that RMA7012 can generate", 0,0,256);
-            RMA7012_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that RMA7012 can generate", 40,0,256);
+            RMA7012_VEINSPERCHUNK = builder.defineInRange("Count of RMA7012 vein in single chunk", 6,-64,128);
+            RMA7012_VEINSIZE = builder.defineInRange("Size of RMA7012 vein", 4,-64,512);
+            RMA7012_MINHEIGHT = builder.defineInRange("Minimum Y axis value that RMA7012 can generate", 0,-64,256);
+            RMA7012_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that RMA7012 can generate", 40,-64,256);
+            RMA7012_VEINSPERCHUNK_DEEP = builder.defineInRange("Count of RMA7012 vein in single chunk below y:0", 3,-64,128);
+            RMA7012_VEINSIZE_DEEP = builder.defineInRange("Size of RMA7012 vein below y:0", 12,-64,512);
+            RMA7012_MINHEIGHT_DEEP = builder.defineInRange("Minimum Y axis value that RMA7012 can generate below y:0", -32,-64,256);
+            RMA7012_MAXHEIGHT_DEEP = builder.defineInRange("Maximum Y axis value that RMA7012 can generate below y:0", -18,-64,256);
 
             ENABLE_MANGANESE = builder.define("Enable MANGANESE Generation", true);
-            MANGANESE_VEINSPERCHUNK = builder.defineInRange("Count of MANGANESE vein in single chunk", 8,0,128);
-            MANGANESE_VEINSIZE = builder.defineInRange("Size of MANGANESE vein", 3,0,512);
-            MANGANESE_MINHEIGHT = builder.defineInRange("Minimum Y axis value that MANGANESE can generate", 20,0,256);
-            MANGANESE_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that MANGANESE can generate", 60,0,256);
+            MANGANESE_VEINSPERCHUNK = builder.defineInRange("Count of MANGANESE vein in single chunk", 8,-64,128);
+            MANGANESE_VEINSIZE = builder.defineInRange("Size of MANGANESE vein", 3,-64,512);
+            MANGANESE_MINHEIGHT = builder.defineInRange("Minimum Y axis value that MANGANESE can generate", 20,-64,256);
+            MANGANESE_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that MANGANESE can generate", 60,-64,256);
+            MANGANESE_VEINSPERCHUNK_DEEP = builder.defineInRange("Count of MANGANESE vein in single chunk below y:0", 13,-64,128);
+            MANGANESE_VEINSIZE_DEEP = builder.defineInRange("Size of MANGANESE vein below y:0", 3,-64,512);
+            MANGANESE_MINHEIGHT_DEEP = builder.defineInRange("Minimum Y axis value that MANGANESE can generate below y:0", -50,-64,256);
+            MANGANESE_MAXHEIGHT_DEEP = builder.defineInRange("Maximum Y axis value that MANGANESE can generate below y:0", 20,-64,256);
 
             ENABLE_PYROXENE = builder.define("Enable PYROXENE Generation", true);
-            PYROXENE_VEINSPERCHUNK = builder.defineInRange("Count of PYROXENE vein in single chunk", 6,0,128);
-            PYROXENE_VEINSIZE = builder.defineInRange("Size of PYROXENE vein", 2,0,512);
-            PYROXENE_MINHEIGHT = builder.defineInRange("Minimum Y axis value that PYROXENE can generate", 0,0,256);
-            PYROXENE_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that PYROXENE can generate", 10,0,256);
+            PYROXENE_VEINSPERCHUNK = builder.defineInRange("Count of PYROXENE vein in single chunk", 6,-64,128);
+            PYROXENE_VEINSIZE = builder.defineInRange("Size of PYROXENE vein", 2,-64,512);
+            PYROXENE_MINHEIGHT = builder.defineInRange("Minimum Y axis value that PYROXENE can generate", 0,-64,256);
+            PYROXENE_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that PYROXENE can generate", 10,-64,256);
+            PYROXENE_VEINSPERCHUNK_DEEP = builder.defineInRange("Count of PYROXENE vein in single chunk below y:0", 6,-64,128);
+            PYROXENE_VEINSIZE_DEEP = builder.defineInRange("Size of PYROXENE vein below y:0", 13,-64,512);
+            PYROXENE_MINHEIGHT_DEEP = builder.defineInRange("Minimum Y axis value that PYROXENE can generate below y:0", -10,-64,256);
+            PYROXENE_MAXHEIGHT_DEEP = builder.defineInRange("Maximum Y axis value that PYROXENE can generate below y:0", 0,-64,256);
 
             ENABLE_TIN = builder.define("Enable Tin Generation", true);
-            TIN_VEINSPERCHUNK = builder.defineInRange("Count of Tin vein in single chunk", 4,0,128);
-            TIN_VEINSIZE = builder.defineInRange("Size of Tin vein", 7,0,512);
-            TIN_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Tin can generate", 0,0,256);
-            TIN_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Tin can generate", 60,0,256);
+            TIN_VEINSPERCHUNK = builder.defineInRange("Count of Tin vein in single chunk", 4,-64,128);
+            TIN_VEINSIZE = builder.defineInRange("Size of Tin vein", 7,-64,512);
+            TIN_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Tin can generate", 0,-64,256);
+            TIN_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Tin can generate", 60,-64,256);
+            TIN_VEINSIZE_DEEP = builder.defineInRange("Size of Tin vein below y:0", 30,-64,512);
+            TIN_VEINSPERCHUNK_DEEP = builder.defineInRange("Count of Tin vein in single chunk", 2,-64,128);
+            TIN_MINHEIGHT_DEEP = builder.defineInRange("Minimum Y axis value that Tin can generate below y:0", -40,-64,256);
+            TIN_MAXHEIGHT_DEEP = builder.defineInRange("Maximum Y axis value that Tin can generate below y:0", -20,-64,256);
 
             ENABLE_LEAD = builder.define("Enable Lead Generation", true);
-            LEAD_VEINSPERCHUNK = builder.defineInRange("Count of Lead vein in single chunk", 4,0,128);
-            LEAD_VEINSIZE = builder.defineInRange("Size of Lead vein", 4,0,512);
-            LEAD_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Lead can generate", 5,0,256);
-            LEAD_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Lead can generate", 40,0,256);
+            LEAD_VEINSPERCHUNK = builder.defineInRange("Count of Lead vein in single chunk", 4,-64,128);
+            LEAD_VEINSIZE = builder.defineInRange("Size of Lead vein", 4,-64,512);
+            LEAD_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Lead can generate", 0,-64,256);
+            LEAD_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Lead can generate", 40,-64,256);
+            LEAD_VEINSPERCHUNK_DEEP = builder.defineInRange("Count of Lead vein in single chunk below y:0", 6,-64,128);
+            LEAD_VEINSIZE_DEEP = builder.defineInRange("Size of Lead vein below y:0", 10,-64,512);
+            LEAD_MINHEIGHT_DEEP = builder.defineInRange("Minimum Y axis value that Lead can generate below y:0", -63,-64,256);
+            LEAD_MAXHEIGHT_DEEP = builder.defineInRange("Maximum Y axis value that Lead can generate below y:0", -30,-64,256);
 
             ENABLE_ORIROCK = builder.define("Enable Orirock Generation", true);
-            ORIROCK_VEINSPERCHUNK = builder.defineInRange("Count of Orirock vein in single chunk", 4,0,128);
-            ORIROCK_VEINSIZE = builder.defineInRange("Size of Orirock vein", 40,0,512);
-            ORIROCK_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Orirock can generate", 0,0,256);
-            ORIROCK_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Orirock can generate", 50,0,256);
+            ORIROCK_VEINSPERCHUNK = builder.defineInRange("Count of Orirock vein in single chunk", 4,-64,128);
+            ORIROCK_VEINSIZE = builder.defineInRange("Size of Orirock vein", 40,-64,512);
+            ORIROCK_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Orirock can generate", 0,-64,256);
+            ORIROCK_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Orirock can generate", 50,-64,256);
 
             builder.pop().push("Debug");
             RedStonePoweredMachines = builder.define("Make Machines can be powered with redstone", false);
