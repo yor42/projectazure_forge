@@ -12,7 +12,7 @@
 			}
 		},
 		"working": {
-			"loop": "hold_on_last_frame",
+			"loop": true,
 			"animation_length": 21.5,
 			"bones": {
 				"emissive_molten_silicon": {

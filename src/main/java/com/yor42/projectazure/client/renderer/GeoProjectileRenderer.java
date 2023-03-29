@@ -25,6 +25,7 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.AnimationUtils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 
@@ -50,8 +51,8 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
     }
 
     @Override
-    public void render(T entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-                       MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(@Nonnull T entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
+                       @Nonnull MultiBufferSource bufferIn, int packedLightIn) {
         EntityModelData entityModelData = new EntityModelData();
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityIn));
         matrixStackIn.pushPose();

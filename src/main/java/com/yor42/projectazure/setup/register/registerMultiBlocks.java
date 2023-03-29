@@ -13,6 +13,8 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
+import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -74,12 +77,28 @@ public class registerMultiBlocks {
         } catch (Exception var9) {
             Main.LOGGER.error("error while loading the resource {}", location.toString());
         }
-        return null;
+        return new JsonObject();
     }
 
     public static JsonObject readTrait(String name) {
         JsonObject object = readTrait(ResourceUtils.ModResourceLocation("traits/"+name));
         return object == null? new JsonObject():object;
+    }
+
+    public static CompoundTag readUI(ResourceLocation location) {
+        try {
+            String file = String.format("/assets/%s/%s.mbdui", location.getNamespace(), location.getPath());
+            InputStream inputstream = ResourceLocation.class.getResourceAsStream(file);
+            CompoundTag tag = NbtIo.read(new DataInputStream(inputstream));
+            return tag;
+        } catch (Exception var9) {
+            Main.LOGGER.error("error while loading the UI {}", location.toString());
+        }
+        return new CompoundTag();
+    }
+
+    public static CompoundTag readUI(String name) {
+        return readUI(ResourceUtils.ModResourceLocation("uis/"+name));
     }
 
     public static void register(){}

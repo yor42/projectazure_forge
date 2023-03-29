@@ -5,6 +5,7 @@
       "cIO": 1,
       "gIO": 1,
       "mIO": 1,
+      "slotName": "output",
       "x": 79,
       "y": 54,
       "autoIO": false
@@ -13,6 +14,7 @@
       "cIO": 0,
       "gIO": 2,
       "mIO": 0,
+      "slotName": "input",
       "x": 79,
       "y": 95,
       "autoIO": false
@@ -23,6 +25,7 @@
     "gIO": 2,
     "x": 82,
     "y": 75,
+    "slotName": "recipeprogress",
     "width": 12,
     "height": 18,
     "texture": "projectazure:textures/gui/vertical_gauge.png",
@@ -33,6 +36,7 @@
     "gIO": 2,
     "x": 7,
     "y": 14,
+    "slotName": "energy",
     "width": 14,
     "height": 130,
     "texture": "projectazure:textures/gui/vertical_energybar.png",

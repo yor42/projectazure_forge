@@ -22,11 +22,10 @@ public abstract class AbstractRiggingRenderer<T extends ItemRiggingBase> extends
         super.render(animatable, stack, bufferIn, packedLightIn, itemStack);
         Item item = itemStack.getItem();
 
-        if(!(item instanceof ItemRiggingBase)){
+        if(!(item instanceof ItemRiggingBase rigging)){
             return;
         }
 
-        ItemRiggingBase rigging = (ItemRiggingBase) item;
         stack.pushPose();
         GeoModel riggingmodel = modelProvider.getModel(modelProvider.getModelLocation(animatable));
         riggingmodel.getBone("rigging").ifPresent((bone)->{

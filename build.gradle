@@ -142,6 +142,14 @@ repositories {
         maven { url "https://maven.shedaniel.me" }
     }
 
+    maven {
+        // saps.dev Maven (KubeJS and Rhino)
+        url = "https://maven.saps.dev/minecraft"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
+
     //Curios
     maven {
         url = "https://maven.theillusivec4.top/"
@@ -181,7 +189,6 @@ dependencies {
     //Multiblocked
     implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:${minecraft_version}-${ldlib_version}")
     implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:${minecraft_version}-${mbd_version}")
-
     //Curios
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api")
@@ -192,6 +199,8 @@ dependencies {
     // JEI
     implementation fg.deobf('curse.maven:architectury-419699:4384391')
     implementation fg.deobf('curse.maven:clothconfig-348521:3972426')
+    implementation fg.deobf('curse.maven:kubejs-238086:4377177')
+    implementation fg.deobf('curse.maven:rhino-416294:4069880')
 
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     //implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")

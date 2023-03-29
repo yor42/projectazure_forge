@@ -11,17 +11,19 @@ import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
 import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
+import com.yor42.projectazure.mixin.MixinComponentDefinitionAccessor;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 
 import static com.yor42.projectazure.setup.register.registerMultiBlocks.readTrait;
+import static com.yor42.projectazure.setup.register.registerMultiBlocks.readUI;
 
 public class SiliconeCrucibleTE extends ControllerTileEntity {
 
     public static final RecipeMap SILICONCRUCIBLE_RECIPEMAP;
-    public static final ControllerDefinition DEF = new ControllerDefinition(new ResourceLocation(Constants.MODID, "siliconecrucible"), SiliconeCrucibleTE.class);
+    public static final ControllerDefinition DEF = new ControllerDefinition(new ResourceLocation(Constants.MODID, "siliconecrucible"), ControllerTileEntity.class);
     private static final MBDGeoRenderer renderer = new MBDGeoRenderer("siliconecrucible", false);
 
     public SiliconeCrucibleTE(ControllerDefinition definition, BlockPos pos, BlockState state) {
@@ -35,8 +37,9 @@ public class SiliconeCrucibleTE extends ControllerTileEntity {
         DEF.getBaseStatus().setRenderer(ResourceUtils.getMBDBlockModel("silicone_crucible"));
         DEF.getIdleStatus().setRenderer(renderer);
         DEF.getWorkingStatus().setRenderer(renderer);
-        DEF.getSuspendStatus().setRenderer(renderer);
         DEF.traits = readTrait("siliconcrucible");
+        DEF.getSuspendStatus().setRenderer(renderer);
+        //((MixinComponentDefinitionAccessor)DEF).setUi(readUI("siliconcrucible"));
         DEF.properties.isOpaque = false;
         DEF.properties.tabGroup = "pa_machines";
         RecipeMap.register(DEF.getRecipeMap());

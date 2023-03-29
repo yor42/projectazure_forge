@@ -16,18 +16,16 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
+
 import static com.yor42.projectazure.libs.Constants.StarterList;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiALStarterSpawn extends Screen {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/rainbow_cube_gui.png");
-
-    private boolean notYetPopulated = true;
-
     private final int backgroundWidth = 253;
     private final int backgroundHeight = 162;
-
     private int x, y;
 
     private final int buttonWidth = 59;
@@ -106,6 +104,7 @@ public class GuiALStarterSpawn extends Screen {
         drawString(matrixStack, this.font, new TranslatableComponent("gui.selectstarter.title"), this.x+18, this.y+10, 14085119);
     }
 
+    @Nonnull
     @Override
     public Component getNarrationMessage() {
         return new TextComponent("Hello World");
