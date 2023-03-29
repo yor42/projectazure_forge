@@ -109,6 +109,8 @@ public class BasicChemicalReactionRecipe implements Recipe<Container>, Predicate
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<BasicChemicalReactionRecipe>{
+
+        //Thank you korewa_Li for debug
         @Override
         public BasicChemicalReactionRecipe fromJson(@Nonnull ResourceLocation recipeId, JsonObject json) {
 
@@ -130,7 +132,7 @@ public class BasicChemicalReactionRecipe implements Recipe<Container>, Predicate
         @Nullable
         @Override
         public BasicChemicalReactionRecipe fromNetwork(@Nonnull ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            FluidStack output =buffer.readFluidStack();
+            FluidStack output = buffer.readFluidStack();
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             int time = buffer.readInt();
             return new BasicChemicalReactionRecipe(recipeId, output, ingredient, time);
@@ -138,7 +140,7 @@ public class BasicChemicalReactionRecipe implements Recipe<Container>, Predicate
 
         @Override
         public void toNetwork(@Nonnull FriendlyByteBuf buffer, BasicChemicalReactionRecipe recipe) {
-            recipe.output.writeToPacket(buffer);
+            buffer.writeFluidStack(recipe.output);
             recipe.itemInput.toNetwork(buffer);
             buffer.writeInt(recipe.getProcesstime());
         }
