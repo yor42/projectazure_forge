@@ -27,12 +27,6 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLoot {
 
     @Override
     protected void addTables() {
-        this.dropSelf(RegisterBlocks.BAUXITE_ORE.get());
-        this.dropSelf(RegisterBlocks.TIN_ORE.get());
-        this.dropSelf(RegisterBlocks.LEAD_ORE.get());
-        this.dropSelf(RegisterBlocks.ZINC_ORE.get());
-        this.dropSelf(RegisterBlocks.RMA_7012_ORE.get());
-        this.dropSelf(RegisterBlocks.MANGANESE_ORE.get());
 
         this.dropSelf(RegisterBlocks.BAUXITE_ORE_DEEPSLATE.get());
         this.dropSelf(RegisterBlocks.TIN_ORE_DEEPSLATE.get());
@@ -92,6 +86,20 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLoot {
         this.add(RegisterBlocks.ORIROCK.get(), (orirock) -> createSilkTouchDispatchTable(orirock, applyExplosionCondition(orirock, LootItem.lootTableItem(RegisterItems.ORIGINITE.get()).when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).otherwise(LootItem.lootTableItem(RegisterBlocks.COBBLED_ORIROCK.get())))));
         this.add(RegisterBlocks.PYROXENE_ORE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.PYROXENE.get()));
         this.add(RegisterBlocks.PYROXENE_ORE_DEEPSLATE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.PYROXENE.get()));
+
+        this.add(RegisterBlocks.BAUXITE_ORE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_ALUMINIUM.get()));
+        this.add(RegisterBlocks.BAUXITE_ORE_DEEPSLATE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_ALUMINIUM.get()));
+        this.add(RegisterBlocks.TIN_ORE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_TIN.get()));
+        this.add(RegisterBlocks.TIN_ORE_DEEPSLATE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_TIN.get()));
+        this.add(RegisterBlocks.LEAD_ORE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_LEAD.get()));
+        this.add(RegisterBlocks.LEAD_ORE_DEEPSLATE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_LEAD.get()));
+        this.add(RegisterBlocks.ZINC_ORE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_ZINC.get()));
+        this.add(RegisterBlocks.ZINC_ORE_DEEPSLATE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_ZINC.get()));
+        this.add(RegisterBlocks.RMA_7012_ORE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_RMA7012.get()));
+        this.add(RegisterBlocks.RMA_7012_ORE_DEEPSLATE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_RMA7012.get()));
+        this.add(RegisterBlocks.MANGANESE_ORE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_MAGANESE.get()));
+        this.add(RegisterBlocks.MANGANESE_ORE_DEEPSLATE.get(), (p_218568_0_) -> createOreDrop(p_218568_0_, RegisterItems.RAW_MAGANESE.get()));
+
     }
     protected static LootTable.Builder onlyWithHammerDoubling(ItemLike item) {
         return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(WITH_SLEDGEHAMMER).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 2.1F))).add(LootItem.lootTableItem(item)));

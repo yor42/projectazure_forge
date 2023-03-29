@@ -49,40 +49,24 @@ public class TileEntityBasicChemicalReactor extends AbstractAnimatedTileEntityMa
     private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
-            switch (index) {
-                case 0:
-                    return TileEntityBasicChemicalReactor.this.ProcessTime;
-                case 1:
-                    return TileEntityBasicChemicalReactor.this.totalProcessTime;
-                case 2:
-                    return TileEntityBasicChemicalReactor.this.energyStorage.getEnergyStored();
-                case 3:
-                    return TileEntityBasicChemicalReactor.this.energyStorage.getMaxEnergyStored();
-                case 4:
-                    return TileEntityBasicChemicalReactor.this.OutputTank.getFluidAmount();
-                case 5:
-                    return TileEntityBasicChemicalReactor.this.OutputTank.getCapacity();
-
-                default:
-                    return 0;
-            }
+            return switch (index) {
+                case 0 -> TileEntityBasicChemicalReactor.this.ProcessTime;
+                case 1 -> TileEntityBasicChemicalReactor.this.totalProcessTime;
+                case 2 -> TileEntityBasicChemicalReactor.this.energyStorage.getEnergyStored();
+                case 3 -> TileEntityBasicChemicalReactor.this.energyStorage.getMaxEnergyStored();
+                case 4 -> TileEntityBasicChemicalReactor.this.OutputTank.getFluidAmount();
+                case 5 -> TileEntityBasicChemicalReactor.this.OutputTank.getCapacity();
+                default -> 0;
+            };
         }
 
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 0:
-                    TileEntityBasicChemicalReactor.this.ProcessTime = value;
-                    break;
-                case 1:
-                    TileEntityBasicChemicalReactor.this.totalProcessTime = value;
-                    break;
-                case 2:
-                    TileEntityBasicChemicalReactor.this.energyStorage.setEnergy(value);
-                    break;
-                case 3:
-                    TileEntityBasicChemicalReactor.this.energyStorage.setMaxEnergy(value);
-                    break;
+                case 0 -> TileEntityBasicChemicalReactor.this.ProcessTime = value;
+                case 1 -> TileEntityBasicChemicalReactor.this.totalProcessTime = value;
+                case 2 -> TileEntityBasicChemicalReactor.this.energyStorage.setEnergy(value);
+                case 3 -> TileEntityBasicChemicalReactor.this.energyStorage.setMaxEnergy(value);
             }
         }
 

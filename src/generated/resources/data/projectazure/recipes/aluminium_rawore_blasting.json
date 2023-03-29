@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "tag": "forge:storage_blocks/aluminium"
+  },
+  "result": "projectazure:ingot_aluminium",
+  "experience": 0.5,
+  "cookingtime": 100
+}

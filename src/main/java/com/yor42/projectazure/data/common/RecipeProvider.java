@@ -84,7 +84,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
     private void generateMetalRecipes(@Nonnull Consumer<FinishedRecipe> consumer){
         BuildMetalRecipe(consumer, 0.5F, new Metals("tin", RegisterItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).rawOre(RegisterItems.RAW_TIN.get(), ModTags.Items.RAW_TIN).rawOreBlock(RegisterBlocks.RAW_TIN_BLOCK.get(), ModTags.Items.BLOCK_RAW_TIN).block(RegisterBlocks.TIN_BLOCK.get(), ModTags.Items.BLOCK_TIN).ore(RegisterBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(RegisterItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(RegisterItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN).nugget(RegisterItems.NUGGET_TIN.get(), ModTags.Items.NUGGET_TIN));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("lead", RegisterItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).rawOre(RegisterItems.RAW_LEAD.get(), ModTags.Items.RAW_TIN).rawOreBlock(RegisterBlocks.RAW_LEAD_BLOCK.get(), ModTags.Items.BLOCK_RAW_TIN).block(RegisterBlocks.LEAD_BLOCK.get(), ModTags.Items.BLOCK_LEAD).ore(RegisterBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(RegisterItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD).plates(RegisterItems.PLATE_LEAD.get(), ModTags.Items.PLATE_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("lead", RegisterItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).rawOre(RegisterItems.RAW_LEAD.get(), ModTags.Items.RAW_TIN).rawOreBlock(RegisterBlocks.RAW_LEAD_BLOCK.get(), ModTags.Items.BLOCK_RAW_LEAD).block(RegisterBlocks.LEAD_BLOCK.get(), ModTags.Items.BLOCK_LEAD).ore(RegisterBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(RegisterItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD).plates(RegisterItems.PLATE_LEAD.get(), ModTags.Items.PLATE_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD));
         BuildMetalRecipe(consumer, 0.5F, new Metals("bronze", RegisterItems.INGOT_BRONZE.get(), ModTags.Items.INGOT_BRONZE).block(RegisterBlocks.BRONZE_BLOCK.get(), ModTags.Items.BLOCK_BRONZE).dust(RegisterItems.DUST_BRONZE.get(), ModTags.Items.DUST_BRONZE).plates(RegisterItems.PLATE_BRONZE.get(), ModTags.Items.PLATE_BRONZE).gear(RegisterItems.GEAR_BRONZE.get(), ModTags.Items.GEAR_BRONZE).nugget(RegisterItems.NUGGET_BRONZE.get(), ModTags.Items.NUGGET_BRONZE));
         BuildMetalRecipe(consumer, 0.5F, new Metals("aluminium", RegisterItems.INGOT_ALUMINIUM.get(), ModTags.Items.INGOT_ALUMINIUM).rawOre(RegisterItems.RAW_ALUMINIUM.get(), ModTags.Items.RAW_ALUMINIUM).rawOreBlock(RegisterBlocks.RAW_BAUXITE_BLOCK.get(), ModTags.Items.BLOCK_RAW_ALUMINIUM).block(RegisterBlocks.ALUMINIUM_BLOCK.get(), ModTags.Items.BLOCK_ALUMINIUM).ore(RegisterBlocks.BAUXITE_ORE.get().asItem(), ModTags.Items.ORES_ALUMINIUM).dust(RegisterItems.DUST_ALUMINIUM.get(), ModTags.Items.DUST_ALUMINIUM).plates(RegisterItems.PLATE_ALUMINIUM.get(), ModTags.Items.PLATE_ALUMINIUM));
         BuildMetalRecipe(consumer, 0.5F, new Metals("steel", RegisterItems.INGOT_STEEL.get(), ModTags.Items.INGOT_STEEL).block(RegisterBlocks.STEEL_BLOCK.get(), ModTags.Items.BLOCK_STEEL).dust(RegisterItems.DUST_STEEL.get(), ModTags.Items.DUST_STEEL).plates(RegisterItems.PLATE_STEEL.get(), ModTags.Items.PLATE_STEEL).gear(RegisterItems.GEAR_STEEL.get(), ModTags.Items.GEAR_STEEL).nugget(RegisterItems.NUGGET_STEEL.get(), ModTags.Items.NUGGET_STEEL));
@@ -2168,8 +2168,6 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                     .unlockedBy("has_item", has(metal.oreTag))
                     .save(consumer, ResourceUtils.ModResourceLocation(metal.name + "_ore_smelting"));
         }
-        InventoryChangeTrigger.TriggerInstance hasRawOreBlock = has(metal.rawOreBlockTag);
-        InventoryChangeTrigger.TriggerInstance hasRawOre = has(metal.rawOreBlock);
         InventoryChangeTrigger.TriggerInstance hasIngot = has(metal.ingotTag);
         InventoryChangeTrigger.TriggerInstance hasPlate = has(metal.plateTag);
 
@@ -2238,18 +2236,18 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                     .save(consumer, ResourceUtils.ModResourceLocation(metal.name + "_rawore_smelting"));
         }
 
-        if (metal.rawOre != null && metal.rawOreBlock != null) {
+        if (metal.rawOre != null && metal.rawOreBlockTag != null) {
             ShapelessRecipeBuilder.shapeless(metal.rawOre, 9)
                     .requires(metal.rawOreBlockTag)
-                    .unlockedBy("has_item", hasRawOreBlock)
+                    .unlockedBy("has_item", has(metal.rawOreBlockTag))
                     .save(consumer);
             ShapedRecipeBuilder.shaped(metal.rawOreBlock)
                     .define('#', metal.rawOreTag)
                     .pattern("###")
                     .pattern("###")
                     .pattern("###")
-                    .unlockedBy("has_item", hasRawOre)
-                    .save(consumer, new ResourceLocation(metal.rawOre.asItem().getRegistryName() + "_from_nuggets"));
+                    .unlockedBy("has_item", has(metal.rawOreTag))
+                    .save(consumer, new ResourceLocation(metal.rawOreBlock.asItem().getRegistryName() + "_from_rawore"));
         }
 
         if (metal.plate != null) {

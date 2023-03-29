@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "tag": "forge:storage_blocks/raw_manganese"
+  },
+  "result": "projectazure:ingot_manganese",
+  "experience": 0.5,
+  "cookingtime": 100
+}

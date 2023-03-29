@@ -1,8 +1,13 @@
 {
   "type": "minecraft:blasting",
-  "ingredient": {
-    "tag": "forge:dusts/lead"
-  },
+  "ingredient": [
+    {
+      "tag": "forge:storage_blocks/raw_lead"
+    },
+    {
+      "tag": "forge:dusts/lead"
+    }
+  ],
   "result": "projectazure:ingot_lead",
   "experience": 0.5,
   "cookingtime": 100
