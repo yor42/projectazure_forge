@@ -73,6 +73,6 @@ public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
         RenderSystem.setShaderTexture(0,TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         matrixStack.popPose();
-        this.renderEntity(this.leftPos+46, this.topPos+112, x, y);
+        this.renderEntity(46, 112, x, y);
     }
 }

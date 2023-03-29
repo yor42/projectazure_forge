@@ -85,7 +85,7 @@ public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> im
         for(int l = 0; l<this.host.getSkillItemCount(); l++){
             //this.blit(matrixStack, this.leftPos-21, this.topPos+57+(19*l), 41, 0, 238, 18);
         }
-        this.renderEntity(this.leftPos + 100, this.topPos + 80,mouseX, mouseY);
+        this.renderEntity(100, 80, mouseX, mouseY);
         matrixStack.popPose();
     }
 }

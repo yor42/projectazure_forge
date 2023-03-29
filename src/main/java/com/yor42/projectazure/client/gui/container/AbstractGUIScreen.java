@@ -97,11 +97,13 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
 
     @OnlyIn(Dist.CLIENT)
     protected void renderEntity(int x, int y, int mousex, int mousey){
+        int i = (this.width - this.imageWidth) / 2;
+        int j = (this.height - this.imageHeight) / 2;
         Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
         if(entity instanceof AbstractEntityCompanion) {
             entity.restoreFrom(this.host);
             try {
-                InventoryScreen.renderEntityInInventory(this.leftPos+x, this.topPos+y, 30, mousex+x, mousey+y, (LivingEntity) entity);
+                InventoryScreen.renderEntityInInventory(this.leftPos+x, this.topPos+y, 30, (float)(i + 51) - mousex, (float)(j + 75 - 50) - mousey, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }
