@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "tag": "forge:storage_blocks/raw_tin"
+  },
+  "result": "projectazure:ingot_tin",
+  "experience": 0.5,
+  "cookingtime": 100
+}

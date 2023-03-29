@@ -58,7 +58,6 @@ public class ModTags {
         public static final TagKey<Block> BLOCK_RAW_ZINC = forge("storage_blocks/raw_zinc");
         public static final TagKey<Block> BLOCK_RAW_RMA7012 = forge("storage_blocks/raw_rma70-12");
         public static final TagKey<Block> BLOCK_RAW_MANGANESE = forge("storage_blocks/raw_manganese");
-
         private static TagKey<Block> forge(String path) {
             return BlockTags.create(new ResourceLocation("forge", path));
         }
@@ -154,6 +153,12 @@ public class ModTags {
         public static final TagKey<Item> BLOCK_STEEL = forge("storage_blocks/steel");
         public static final TagKey<Item> BLOCK_MANGANESE = forge("storage_blocks/manganese");
         public static final TagKey<Item> BLOCK_INCANDESCENT_ALLOY = forge("storage_blocks/incandescent_alloy");
+        public static final TagKey<Item> BLOCK_RAW_TIN = forge("storage_blocks/raw_tin");
+        public static final TagKey<Item> BLOCK_RAW_LEAD = forge("storage_blocks/raw_lead");
+        public static final TagKey<Item> BLOCK_RAW_ZINC = forge("storage_blocks/raw_zinc");
+        public static final TagKey<Item> BLOCK_RAW_RMA7012 = forge("storage_blocks/raw_rma70-12");
+        public static final TagKey<Item> BLOCK_RAW_MANGANESE = forge("storage_blocks/raw_manganese");
+        public static final TagKey<Item> BLOCK_RAW_ALUMINIUM = forge("storage_blocks/aluminium");
 
         public static final TagKey<Item> MATERIAL_ALUMINIUM = forge("aluminium");
         public static final TagKey<Item> MATERIAL_COPPER = forge("copper");

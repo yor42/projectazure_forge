@@ -55,6 +55,12 @@ public class ItemTagProvider extends ItemTagsProvider {
         copy(ModTags.Blocks.BLOCK_STEEL, ModTags.Items.BLOCK_STEEL);
         copy(ModTags.Blocks.BLOCK_MANGANESE, ModTags.Items.BLOCK_MANGANESE);
         copy(ModTags.Blocks.BLOCK_INCANDESCENT_ALLOY, ModTags.Items.BLOCK_INCANDESCENT_ALLOY);
+        copy(ModTags.Blocks.BLOCK_RAW_TIN, ModTags.Items.BLOCK_RAW_TIN);
+        copy(ModTags.Blocks.BLOCK_RAW_LEAD, ModTags.Items.BLOCK_RAW_LEAD);
+        copy(ModTags.Blocks.BLOCK_RAW_ZINC, ModTags.Items.BLOCK_RAW_ZINC);
+        copy(ModTags.Blocks.BLOCK_RAW_RMA7012, ModTags.Items.BLOCK_RAW_RMA7012);
+        copy(ModTags.Blocks.BLOCK_RAW_MANGANESE, ModTags.Items.BLOCK_RAW_MANGANESE);
+        copy(ModTags.Blocks.BLOCK_RAW_ALUMINIUM, ModTags.Items.BLOCK_RAW_ALUMINIUM);
 
         copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);

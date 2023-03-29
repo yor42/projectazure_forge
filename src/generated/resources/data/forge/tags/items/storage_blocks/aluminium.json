@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "projectazure:aluminium_block"
+    "projectazure:aluminium_block",
+    "projectazure:raw_aluminium_block"
   ]
 }
