@@ -2160,7 +2160,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
     }
 
     private void BuildMetalRecipe(Consumer<FinishedRecipe> consumer, float smeltingXp, Metals metal) {
-        if (metal.ore != null) {
+        if (metal.oreTag != null) {
             SimpleCookingRecipeBuilder.blasting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 100)
                     .unlockedBy("has_item", has(metal.oreTag))
                     .save(consumer, ResourceUtils.ModResourceLocation(metal.name + "_ore_blasting"));

@@ -6,10 +6,12 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BlockModelProvider extends net.minecraftforge.client.model.generators.BlockStateProvider {
 
@@ -28,8 +30,14 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
             simpleBlock(block.get());
         }
 
-
-
         slabBlock((SlabBlock) RegisterBlocks.MACHINE_FRAME_SLAB.get(), new ResourceLocation(Constants.MODID, "block/machine_frame"), new ResourceLocation(Constants.MODID, "block/machine_frame"));
+    }
+
+    private String name(Block block) {
+        return Objects.requireNonNull(block.getRegistryName()).getPath();
+    }
+
+    public ModelFile cubeOverlay(Block block) {
+        return models().cubeAll(name(block), blockTexture(block));
     }
 }

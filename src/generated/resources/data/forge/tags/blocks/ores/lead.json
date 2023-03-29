@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "projectazure:ore_stone_lead"
+    "projectazure:ore_stone_lead",
+    "projectazure:ore_deepslate_lead"
   ]
 }

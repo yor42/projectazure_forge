@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "projectazure:ore_stone_aluminium"
+    "projectazure:ore_stone_aluminium",
+    "projectazure:ore_deepslate_aluminium"
   ]
 }

@@ -52,6 +52,14 @@ public class RegisterBlocks {
     public static final RegistryObject<Block> RMA_7012_ORE = registerMetalOre_Stone("rma7012");
     public static final RegistryObject<Block> MANGANESE_ORE = registerMetalOre_Stone("manganese");
 
+    public static final RegistryObject<Block> BAUXITE_ORE_DEEPSLATE = registerMetalOre_Deepslate("aluminium");
+    public static final RegistryObject<Block> PYROXENE_ORE_DEEPSLATE = registerMetalOre_Deepslate("pyroxene");
+    public static final RegistryObject<Block> TIN_ORE_DEEPSLATE = registerMetalOre_Deepslate("tin");
+    public static final RegistryObject<Block> LEAD_ORE_DEEPSLATE = registerMetalOre_Deepslate("lead");
+    public static final RegistryObject<Block> ZINC_ORE_DEEPSLATE = registerMetalOre_Deepslate("zinc");
+    public static final RegistryObject<Block> RMA_7012_ORE_DEEPSLATE = registerMetalOre_Deepslate("rma7012");
+    public static final RegistryObject<Block> MANGANESE_ORE_DEEPSLATE = registerMetalOre_Deepslate("manganese");
+
     public static final RegistryObject<Block> ALUMINIUM_BLOCK = registerMaterialBlock("aluminium");
     public static final RegistryObject<Block> COPPER_BLOCK = registerMaterialBlock("copper");
     public static final RegistryObject<Block> TIN_BLOCK = registerMaterialBlock("tin");
@@ -173,12 +181,16 @@ public class RegisterBlocks {
         return registerMetalOre("ore_stone_"+materialName, materialName);
     }
 
+    private static RegistryObject<Block> registerMetalOre_Deepslate(String materialName){
+        return registerMaterialBlock("ore_deepslate_"+materialName, materialName, enums.ResourceType.DEEPSLATE_ORE);
+    }
+
     private static RegistryObject<Block> registerMetalOre(String materialName){
         return registerMetalOre("ore_"+materialName, materialName);
     }
 
     private static RegistryObject<Block> registerMaterialBlock(String materialName){
-        return registerMaterialBlock(materialName+"_block", materialName, enums.ResourceType.BLOCK);
+        return registerMaterialBlock(materialName+"_block", materialName, enums.ResourceType.METAL_BLOCK);
     }
 
     private static RegistryObject<Block> registerMetalOre(String registryName, String materialName){

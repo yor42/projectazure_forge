@@ -10,6 +10,7 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.SoundType;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -39,11 +40,6 @@ public class enums {
             return stack.getItem() instanceof ItemEquipmentBase && ((ItemEquipmentBase)stack.getItem()).getSlot() == this;
         }
 
-    }
-
-    public enum MELEE_ATTACK_TYPE{
-        KNOCKBACK,
-        DAMAGE
     }
 
     public enum PLANE_TYPE{
@@ -191,14 +187,11 @@ public class enums {
         }
 
         public float getDamage(DamageType type) {
-            switch (type){
-                default:
-                    return this.damage_rigging*getDamageVariation();
-                case ENTITY:
-                    return this.damage_entity*getDamageVariation();
-                case COMPONENT:
-                    return this.damage_component*getDamageVariation();
-            }
+            return switch (type) {
+                default -> this.damage_rigging * getDamageVariation();
+                case ENTITY -> this.damage_entity * getDamageVariation();
+                case COMPONENT -> this.damage_component * getDamageVariation();
+            };
         }
 
         private float getDamageVariation(){
@@ -398,14 +391,38 @@ public class enums {
         PLATE("plate"),
         DUST("dust"),
         WIRE("wire"),
-        ORE("ore"),
-        BLOCK("block"),
-        NUGGET("nugget");
+        NUGGET("nugget"),
+        ORE("ore", net.minecraft.world.level.material.Material.STONE, SoundType.STONE),
+        DEEPSLATE_ORE("deepslate_ore", net.minecraft.world.level.material.Material.STONE, SoundType.DEEPSLATE),
+        METAL_BLOCK("block", net.minecraft.world.level.material.Material.METAL, SoundType.METAL);
 
         private final String name;
+        @Nullable
+        private final net.minecraft.world.level.material.Material material;
+        @Nullable
+        private final SoundType soundType;
 
         ResourceType(String name){
             this.name = name;
+            this.material = null;
+            this.soundType = null;
+        }
+
+        ResourceType(String name, net.minecraft.world.level.material.@org.jetbrains.annotations.Nullable Material material, @org.jetbrains.annotations.Nullable SoundType soundType){
+            this.name = name;
+            this.material = material;
+            this.soundType = soundType;
+        }
+
+        @Nullable
+        public net.minecraft.world.level.material.Material getMaterial() {
+            return material;
+        }
+
+
+        @Nullable
+        public SoundType getSoundType() {
+            return soundType;
         }
 
         public String getName() {

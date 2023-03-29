@@ -9,13 +9,15 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
+import java.util.Objects;
+
 public class PAOreBlock extends OreBlock {
 
     private final String material;
     private final enums.ResourceType resourceType;
 
     public PAOreBlock(String materialName, enums.ResourceType resourceType) {
-        super((BlockBehaviour.Properties.of(resourceType == enums.ResourceType.BLOCK? Material.METAL:Material.STONE).friction(2).sound(resourceType == enums.ResourceType.BLOCK? SoundType.METAL:SoundType.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
+        super((BlockBehaviour.Properties.of(Objects.requireNonNull(resourceType.getMaterial())).friction(2).sound(Objects.requireNonNull(resourceType.getSoundType())).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
         this.material = materialName;
         this.resourceType = resourceType;
     }

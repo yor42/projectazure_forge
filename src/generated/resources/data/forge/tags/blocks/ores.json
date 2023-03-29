@@ -7,6 +7,13 @@
     "projectazure:ore_stone_zinc",
     "projectazure:orirock",
     "projectazure:ore_stone_rma7012",
-    "projectazure:ore_stone_manganese"
+    "projectazure:ore_stone_manganese",
+    "projectazure:ore_deepslate_aluminium",
+    "projectazure:ore_deepslate_lead",
+    "projectazure:ore_deepslate_tin",
+    "projectazure:ore_deepslate_zinc",
+    "projectazure:orirock",
+    "projectazure:ore_deepslate_rma7012",
+    "projectazure:ore_deepslate_manganese"
   ]
 }

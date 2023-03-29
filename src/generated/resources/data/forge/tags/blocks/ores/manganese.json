@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "projectazure:ore_stone_manganese"
+    "projectazure:ore_stone_manganese",
+    "projectazure:ore_deepslate_manganese"
   ]
 }
