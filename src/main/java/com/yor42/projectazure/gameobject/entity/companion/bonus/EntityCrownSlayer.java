@@ -307,7 +307,7 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
     @Override
     public InteractionResult interactAt(@Nonnull Player player, @Nonnull Vec3 vec, @Nonnull InteractionHand hand) {
 
-        if(this.isOwnedBy(player)&&!this.getCommandSenderWorld().isClientSide() && player.getItemInHand(hand).isEmpty() && player.isCrouching()&&this.distanceTo(player)<=2){
+        if(this.isOwnedBy(player)&&!this.getLevel().isClientSide() && player.getItemInHand(hand).isEmpty() && player.isCrouching()&&this.distanceTo(player)<=2){
             Vec3 PlayerLook = player.getViewVector(1.0F).normalize();
             float eyeHeight = (float) this.getEyeY();
 

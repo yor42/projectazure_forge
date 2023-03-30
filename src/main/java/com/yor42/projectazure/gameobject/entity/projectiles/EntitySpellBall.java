@@ -68,7 +68,7 @@ public class EntitySpellBall extends AbstractHurtingProjectile {
         BlockPos blockPosIn = this.blockPosition();
         Random random = new Random();
         super.onHit(result);
-        if(!this.getCommandSenderWorld().getBlockState(blockPosIn).isPathfindable(this.getCommandSenderWorld(), blockPosIn, PathComputationType.AIR)) {
+        if(!this.getLevel().getBlockState(blockPosIn).isPathfindable(this.getLevel(), blockPosIn, PathComputationType.AIR)) {
             for (int i2 = 0; i2 < 8; ++i2) {
                 this.level.addParticle(ParticleTypes.PORTAL, (double) blockPosIn.getX() + random.nextDouble(), (double) blockPosIn.getY() + 1.2D, (double) blockPosIn.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
             }
@@ -81,7 +81,7 @@ public class EntitySpellBall extends AbstractHurtingProjectile {
     protected void onHitBlock(BlockHitResult p_230299_1_) {
         BlockPos blockPosIn = this.blockPosition();
         Random random = new Random();
-        if(!this.getCommandSenderWorld().getBlockState(blockPosIn).isPathfindable(this.getCommandSenderWorld(), blockPosIn, PathComputationType.AIR)) {
+        if(!this.getLevel().getBlockState(blockPosIn).isPathfindable(this.getLevel(), blockPosIn, PathComputationType.AIR)) {
             for (int i2 = 0; i2 < 8; ++i2) {
                 this.level.addParticle(ParticleTypes.PORTAL, (double) blockPosIn.getX() + random.nextDouble(), (double) blockPosIn.getY() + 1.2D, (double) blockPosIn.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
             }

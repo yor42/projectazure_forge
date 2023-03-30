@@ -93,7 +93,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        if(!this.getCommandSenderWorld().isClientSide() && this.tickCount%200 == 0) {
+        if(!this.getLevel().isClientSide() && this.tickCount%200 == 0) {
             if (!this.gaveSheath && this.getAffection()>90){
 
                 if(this.getOwner() instanceof Player){

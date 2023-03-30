@@ -37,7 +37,7 @@ public class EntityCausalBlackhole extends Entity {
     }
 
     public static void SpawnAroundTarget(ServerLevel world, AbstractEntityCompanion entityCompanion, LivingEntity target){
-        EntityCausalBlackhole blackhole = new EntityCausalBlackhole(entityCompanion.getCommandSenderWorld(), entityCompanion);
+        EntityCausalBlackhole blackhole = new EntityCausalBlackhole(entityCompanion.getLevel(), entityCompanion);
 
         double x = target.getX()-4+(8* MathUtil.getRand().nextDouble());
         double y = target.getY()+(2* MathUtil.getRand().nextDouble());
@@ -58,12 +58,12 @@ public class EntityCausalBlackhole extends Entity {
         if(this.tickCount>= life){
             this.discard();
         }
-        if(!this.getCommandSenderWorld().isClientSide()) {
-            this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D, 8, 8)).stream().filter((entity) -> {
+        if(!this.getLevel().isClientSide()) {
+            this.getLevel().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D, 8, 8)).stream().filter((entity) -> {
                 if(entity instanceof Player && ((Player) entity).isCreative() || entity.getUUID().equals(this.owner)){
                     return false;
                 }
-                Entity Owner = ((ServerLevel)this.getCommandSenderWorld()).getEntity(this.owner);
+                Entity Owner = ((ServerLevel)this.getLevel()).getEntity(this.owner);
 
                 if(Owner == null){
                     return true;

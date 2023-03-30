@@ -288,7 +288,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
         if(currentspelldelay == 0 &&hasSkillpoint){
             this.targets.clear();
             this.targets.add(target);
-            this.getCommandSenderWorld().getEntities(target, target.getBoundingBox().inflate(5, 2, 5), (canditate)-> canditate instanceof LivingEntity && !this.isAlly((LivingEntity) canditate)).forEach((entity)-> this.targets.add((LivingEntity) entity));
+            this.getLevel().getEntities(target, target.getBoundingBox().inflate(5, 2, 5), (canditate)-> canditate instanceof LivingEntity && !this.isAlly((LivingEntity) canditate)).forEach((entity)-> this.targets.add((LivingEntity) entity));
             return !this.targets.isEmpty() && this.getTalentedWeaponList().contains(this.getOffhandItem().getItem());
         }
         return false;
@@ -311,7 +311,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             while(index<count){
                 if(index<this.targets.size()){
                     LivingEntity tgt = this.targets.get(index);
-                    EntityFallingSword sword = new EntityFallingSword(this, tgt.getX(0.5), this.getY()+15, tgt.getZ(0.5), this.getCommandSenderWorld());
+                    EntityFallingSword sword = new EntityFallingSword(this, tgt.getX(0.5), this.getY()+15, tgt.getZ(0.5), this.getLevel());
                     sword.shoot(0, -20, 0,2, 0.5F);
                     this.projectiles.add(sword);
                 }
@@ -319,7 +319,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
                     float randomx = (float) ((target.getX(0.5)-5)+(MathUtil.getRand().nextFloat()*10));
                     float randomy = (float) (target.getY()+15);
                     float randomz = (float) ((target.getZ(0.5)-5)+(MathUtil.getRand().nextFloat()*10));
-                    EntityFallingSword sword = new EntityFallingSword(this, randomx, randomy, randomz, this.getCommandSenderWorld());
+                    EntityFallingSword sword = new EntityFallingSword(this, randomx, randomy, randomz, this.getLevel());
                     sword.shoot(0, -20, 0,2, 0.5F);
                     this.projectiles.add(sword);
                 }
@@ -329,7 +329,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
         else if(Timer >= 27){
             int index = Timer-27;
             if(index<this.projectiles.size()){
-                this.getCommandSenderWorld().addFreshEntity(this.projectiles.get(index));
+                this.getLevel().addFreshEntity(this.projectiles.get(index));
             }
             else{
                 this.projectiles.clear();

@@ -81,16 +81,16 @@ public class FollowOwnerTask extends Behavior<AbstractEntityCompanion> {
     }
 
     private boolean isTeleportFriendlyBlock(AbstractEntityCompanion ety, BlockPos pos) {
-        BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(ety.getCommandSenderWorld(), pos.mutable());
+        BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(ety.getLevel(), pos.mutable());
         if (pathnodetype != BlockPathTypes.WALKABLE) {
             return false;
         } else {
-            BlockState blockstate = ety.getCommandSenderWorld().getBlockState(pos.below());
+            BlockState blockstate = ety.getLevel().getBlockState(pos.below());
             if (blockstate.getBlock() instanceof LeavesBlock) {
                 return false;
             } else {
                 BlockPos blockpos = pos.subtract(ety.blockPosition());
-                return ety.getCommandSenderWorld().noCollision(ety, ety.getBoundingBox().move(blockpos));
+                return ety.getLevel().noCollision(ety, ety.getBoundingBox().move(blockpos));
             }
         }
     }

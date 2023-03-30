@@ -278,7 +278,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
             }
             else if(this.getSkillPoints()>=6 && this.getOwner()!=null){
                 this.HealTarget.clear();
-                this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().inflate(5, 2, 5), (entity) -> entity instanceof LivingEntity && this.isAlly((LivingEntity) entity) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F)).forEach((candidate)-> this.HealTarget.add((LivingEntity)candidate));
+                this.getLevel().getEntities(this, this.getBoundingBox().inflate(5, 2, 5), (entity) -> entity instanceof LivingEntity && this.isAlly((LivingEntity) entity) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F)).forEach((candidate)-> this.HealTarget.add((LivingEntity)candidate));
 
                 return !HealTarget.isEmpty();
             }
@@ -323,7 +323,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
                     this.addMorale(-1);
                     this.playSound(registerSounds.NEARL_TALK_SKILL, this.getSoundVolume(), this.getVoicePitch());
                     this.playSound(registerSounds.NEARL_HEAL, 0.8F+(this.random.nextFloat()*0.4F), 0.8F+(this.random.nextFloat()*0.4F));
-                    this.getCommandSenderWorld().playSound(null, entity2heal.blockPosition(), registerSounds.HEAL_BOOST, SoundSource.NEUTRAL, 0.8F+(this.random.nextFloat()*0.4F), 0.8F+(this.random.nextFloat()*0.4F));
+                    this.getLevel().playSound(null, entity2heal.blockPosition(), registerSounds.HEAL_BOOST, SoundSource.NEUTRAL, 0.8F+(this.random.nextFloat()*0.4F), 0.8F+(this.random.nextFloat()*0.4F));
                 }
                 return true;
             }

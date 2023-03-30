@@ -223,10 +223,10 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
             double y = target.getY(0.5) - (this.getY(0.7));
             double z = target.getZ() - (this.getZ());
 
-            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this, 8F, new MobEffectInstance(registerPotionEffects.FROSTBITE_REGISTRY.get(), 100, 1));
+            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getLevel(), this, 8F, new MobEffectInstance(registerPotionEffects.FROSTBITE_REGISTRY.get(), 100, 1));
             projectile.shoot(x,y,z, 1.1F, 0.05F);
             projectile.setPos(this.getX(), this.getY()+1, this.getZ());
-            this.getCommandSenderWorld().addFreshEntity(projectile);
+            this.getLevel().addFreshEntity(projectile);
 
             this.playSound(registerSounds.CHIMERA_PROJECTILE_LAUNCH, 1F, 0.8F + this.level.random.nextFloat() * 0.4F);
             this.addExp(0.2F);

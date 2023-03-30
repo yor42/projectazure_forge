@@ -187,7 +187,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public ItemStack getRigging(){
-        if(this.getCommandSenderWorld().isClientSide()) {
+        if(this.getLevel().isClientSide()) {
             return this.entityData.get(ITEM_RIGGING);
         }
         else{
@@ -372,9 +372,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                         Ammostack.shrink(1);
                         Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));
 
-                        if(RiggingItem instanceof ItemRiggingBase && !this.getCommandSenderWorld().isClientSide()) {
+                        if(RiggingItem instanceof ItemRiggingBase && !this.getLevel().isClientSide()) {
                             ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;
-                            final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerLevel) this.getCommandSenderWorld());
+                            final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerLevel) this.getLevel());
                             final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, CONTROLLER_NAME);
                             Pair<String, Integer> animationpair = riggingBase.getFireAnimationname(cannonType, slotindex);
                             if (animationpair != null) {
@@ -424,9 +424,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             ItemStackUtils.useAmmo(torpedostack);
             setEquipmentDelay(torpedostack);
 
-            if(RiggingItem instanceof ItemRiggingBase && !this.getCommandSenderWorld().isClientSide()) {
+            if(RiggingItem instanceof ItemRiggingBase && !this.getLevel().isClientSide()) {
                 ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;
-                final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerLevel) this.getCommandSenderWorld());
+                final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerLevel) this.getLevel());
                 final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, CONTROLLER_NAME);
                 Pair<String, Integer> animationpair = riggingBase.getFireAnimationname(slottype, index);
                 if (animationpair != null) {

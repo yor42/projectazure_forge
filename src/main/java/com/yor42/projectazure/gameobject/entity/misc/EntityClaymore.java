@@ -67,7 +67,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     @Nullable
     public Entity getOwner() {
-        if(!this.getCommandSenderWorld().isClientSide()) {
+        if(!this.getLevel().isClientSide()) {
             try {
                 UUID uuid = this.getOwnerId();
                 return uuid == null ? null : ((ServerLevel)this.level).getEntity(this.getOwnerId());
@@ -81,11 +81,11 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
     @Override
     public void tick() {
         super.tick();
-        if(!this.getCommandSenderWorld().isClientSide()){
+        if(!this.getLevel().isClientSide()){
 
             if(this.tickCount == 5){
                 this.playSound(registerSounds.CLAYMORE_IMPACT, 1.0F, 0.8F+(0.4F*this.getRandom().nextFloat()));
-                List<LivingEntity> entitylist = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2));
+                List<LivingEntity> entitylist = this.getLevel().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2));
                 for(LivingEntity entity:entitylist){
                     if(entity == this){
                         continue;
@@ -115,8 +115,8 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
                             }
                         }
                         if(!isStored){
-                            ItemEntity entity = new ItemEntity(this.getCommandSenderWorld(), this.getOwner().getX(), this.getOwner().getY(), this.getOwner().getZ(), stack);
-                            this.getCommandSenderWorld().addFreshEntity(entity);
+                            ItemEntity entity = new ItemEntity(this.getLevel(), this.getOwner().getX(), this.getOwner().getY(), this.getOwner().getZ(), stack);
+                            this.getLevel().addFreshEntity(entity);
                         }
                     }
                 }
