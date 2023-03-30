@@ -201,6 +201,7 @@ dependencies {
     implementation fg.deobf('curse.maven:clothconfig-348521:3972426')
     implementation fg.deobf('curse.maven:kubejs-238086:4377177')
     implementation fg.deobf('curse.maven:rhino-416294:4069880')
+    implementation fg.deobf('curse.maven:jei-238222:4434393')
 
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     //implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
