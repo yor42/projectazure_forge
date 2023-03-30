@@ -349,7 +349,6 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     public void renderonLayer(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
-
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
     }
 

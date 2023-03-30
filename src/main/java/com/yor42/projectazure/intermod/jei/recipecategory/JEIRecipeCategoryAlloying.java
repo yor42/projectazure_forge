@@ -15,6 +15,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
 @SuppressWarnings("removal")
 public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe> {
 
@@ -33,7 +35,7 @@ public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe
 
 
     @Override
-    public RecipeType<AlloyingRecipe> getRecipeType() {
+    public @NotNull RecipeType<AlloyingRecipe> getRecipeType() {
         return RECIPE_TYPE;
     }
 
@@ -44,27 +46,27 @@ public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe
     }
 
     @Override
-    public Class<? extends AlloyingRecipe> getRecipeClass() {
+    public @NotNull Class<? extends AlloyingRecipe> getRecipeClass() {
         return AlloyingRecipe.class;
     }
 
     @Override
-    public Component getTitle() {
+    public @NotNull Component getTitle() {
         return new TranslatableComponent("recipe.alloying");
     }
 
     @Override
-    public IDrawable getBackground() {
+    public @NotNull IDrawable getBackground() {
         return this.background;
     }
 
     @Override
-    public IDrawable getIcon() {
+    public @NotNull IDrawable getIcon() {
         return this.icon;
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, AlloyingRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, AlloyingRecipe recipe, @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 42,12).addIngredients(VanillaTypes.ITEM_STACK, recipe.getIngredientStack().get(0));
         builder.addSlot(RecipeIngredientRole.INPUT, 60,12).addIngredients(VanillaTypes.ITEM_STACK, recipe.getIngredientStack().get(1));
         builder.addSlot(RecipeIngredientRole.OUTPUT, 110,29).addIngredient(VanillaTypes.ITEM_STACK, recipe.getResultItem());

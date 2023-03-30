@@ -2,6 +2,7 @@ package com.yor42.projectazure.setup.register;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.lowdragmc.lowdraglib.utils.FileUtility;
 import com.lowdragmc.multiblocked.Multiblocked;
 import com.lowdragmc.multiblocked.api.definition.ComponentDefinition;
@@ -25,6 +26,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -70,35 +72,26 @@ public class registerMultiBlocks {
     }
 
     public static JsonObject readTrait(ResourceLocation location) {
-        try {
-            InputStream inputstream = ResourceLocation.class.getResourceAsStream(String.format("/assets/%s/%s.json", location.getNamespace(), location.getPath()));
-            JsonObject config = FileUtility.jsonParser.parse(new InputStreamReader(inputstream)).getAsJsonObject();
-            return config.has("traits")? config.getAsJsonObject("traits"): config;
-        } catch (Exception var9) {
-            Main.LOGGER.error("error while loading the resource {}", location.toString());
+        InputStream inputstream = Main.class.getResourceAsStream(String.format("/assets/%s/traits/%s.json", location.getNamespace(), location.getPath()));
+        if(inputstream==null){
+            return new JsonObject();
         }
-        return new JsonObject();
-    }
-
-    public static JsonObject readTrait(String name) {
-        JsonObject object = readTrait(ResourceUtils.ModResourceLocation("traits/"+name));
-        return object == null? new JsonObject():object;
+        JsonObject config = JsonParser.parseReader(new InputStreamReader(inputstream)).getAsJsonObject();
+        return config.has("traits")? config.getAsJsonObject("traits"): config;
     }
 
     public static CompoundTag readUI(ResourceLocation location) {
         try {
-            String file = String.format("/assets/%s/%s.mbdui", location.getNamespace(), location.getPath());
-            InputStream inputstream = ResourceLocation.class.getResourceAsStream(file);
-            CompoundTag tag = NbtIo.read(new DataInputStream(inputstream));
-            return tag;
-        } catch (Exception var9) {
+            String file = String.format("/assets/%s/uis/%s.mbdui", location.getNamespace(), location.getPath());
+            InputStream inputstream = Main.class.getResourceAsStream(file);
+            if(inputstream == null){
+                return null;
+            }
+            return NbtIo.read(new DataInputStream(inputstream));
+        } catch (IOException var9) {
             Main.LOGGER.error("error while loading the UI {}", location.toString());
         }
-        return new CompoundTag();
-    }
-
-    public static CompoundTag readUI(String name) {
-        return readUI(ResourceUtils.ModResourceLocation("uis/"+name));
+        return null;
     }
 
     public static void register(){}

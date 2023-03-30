@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.renderer.layer;
 
+import com.lowdragmc.lowdraglib.utils.DummyWorld;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
@@ -28,7 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 
 @OnlyIn(Dist.CLIENT)
-public class EntityOntheBackLayer<T extends Player> extends RenderLayer<T, PlayerModel<T>> {
+public class  EntityOntheBackLayer<T extends Player> extends RenderLayer<T, PlayerModel<T>> {
 
     private AbstractEntityCompanion companion = null;
     private final EntityRenderDispatcher dispatcher;

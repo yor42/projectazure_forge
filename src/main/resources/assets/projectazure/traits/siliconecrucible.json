@@ -42,7 +42,7 @@
     "texture": "projectazure:textures/gui/vertical_energybar.png",
     "fillDirection": "DOWN_TO_UP",
     "capacity": 10000,
-    "maxReceive": 500,
-    "maxExtract": 500
+    "maxReceive": 2000,
+    "maxExtract": 2000
   }
 }

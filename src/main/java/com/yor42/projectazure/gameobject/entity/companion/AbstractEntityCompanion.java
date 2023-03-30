@@ -2387,7 +2387,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
         if(this.getOwner() != null && this.getOwner() instanceof Player && this.isAlive()&&this.tickCount%100==0){
             ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((Player) this.getOwner());
-            if(!cap.getCompanionList().contains(this)){
+            if(!cap.isDupe(this)){
                 cap.addCompanion(this);
             }
         }
@@ -3014,7 +3014,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.setTame(true);
         this.setOwnerUUID(player.getUUID());
         ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(player);
-        capability.addCompanion(this);
+        if(!capability.isDupe(this)) {
+            capability.addCompanion(this);
+        }
         //Triggering Tame Animal goal at the beginning of the world doesn't feel right. :d
     }
     @Override
