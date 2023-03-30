@@ -41,7 +41,6 @@ public class TileEntityPantry extends BlockEntity implements Container {
         super(registerTE.PANTRY.get(), blockpos, blockstate);
     }
 
-    @Nonnull
     @Override
     public void saveAdditional(CompoundTag compoundtag) {
         super.saveAdditional(compoundtag);
