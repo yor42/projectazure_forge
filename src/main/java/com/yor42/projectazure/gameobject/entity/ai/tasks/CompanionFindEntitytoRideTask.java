@@ -62,7 +62,7 @@ public class CompanionFindEntitytoRideTask extends Behavior<AbstractEntityCompan
                     }
                 }
             }
-            List<Entity> entitylist = entity.getCommandSenderWorld().getEntities(entity, entity.getBoundingBox().expandTowards(new Vec3(10, 5, 10)), (candidate)->{
+            List<Entity> entitylist = entity.getLevel().getEntities(entity, entity.getBoundingBox().expandTowards(new Vec3(10, 5, 10)), (candidate)->{
                 if(candidate.getClass() != cls){
                     return false;
                 }

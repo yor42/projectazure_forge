@@ -188,7 +188,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
 
     @Override
     public void curioTick(LivingEntity entity, int index, ItemStack stack) {
-        this.handleCharge(stack, entity, entity.getCommandSenderWorld());
+        this.handleCharge(stack, entity, entity.getLevel());
     }
 
     public static boolean isOn(@Nonnull ItemStack stack){

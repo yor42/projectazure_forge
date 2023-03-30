@@ -34,7 +34,7 @@ public class ReopenEntityInventoryPacket {
         ctx.get().enqueueWork(() -> {
             final ServerPlayer playerEntity = ctx.get().getSender();
             if(playerEntity != null) {
-                final Level world = playerEntity.getCommandSenderWorld();
+                final Level world = playerEntity.getLevel();
                 Entity entity = ((ServerLevel) world).getEntity(msg.entityUUID);
 
 

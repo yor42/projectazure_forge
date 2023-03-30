@@ -117,7 +117,7 @@ public class ProjectAzurePlayerCapability {
         ListTag entities = compound.getList("companions", Tag.TAG_COMPOUND);
         for(int i=0; i<entities.size(); i++){
             CompoundTag nbt = entities.getCompound(i);
-            Level world = this.player.getCommandSenderWorld();
+            Level world = this.player.getLevel();
             if(!world.isClientSide()){
                 ServerLevel server = (ServerLevel) world;
                 Entity entity = server.getEntity(nbt.getUUID("UUID"));

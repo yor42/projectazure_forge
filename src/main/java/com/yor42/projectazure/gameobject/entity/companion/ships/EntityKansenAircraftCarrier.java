@@ -25,7 +25,7 @@ public abstract class EntityKansenAircraftCarrier extends EntityKansenBase {
         plane.setPayloads(planestack.getOrCreateTag().getInt("armDelay") <= 0);
         plane.setMaxOperativetime(getPlaneFuel(planestack));
         plane.setTarget(target);
-        this.getCommandSenderWorld().addFreshEntity(plane);
+        this.getLevel().addFreshEntity(plane);
         hanger.setStackInSlot(hangerIndex, ItemStack.EMPTY);
         this.startPlayingShipAttackAnim();
     }

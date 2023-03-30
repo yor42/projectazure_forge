@@ -67,7 +67,7 @@ public class EntityCannonPelllet extends AbstractHurtingProjectile {
             return;
         }
         BlockPos blockPosIn = this.blockPosition();
-        if(this.getCommandSenderWorld().getBlockState(blockPosIn).isPathfindable(this.getCommandSenderWorld(), blockPosIn, PathComputationType.AIR)) {
+        if(this.getLevel().getBlockState(blockPosIn).isPathfindable(this.getLevel(), blockPosIn, PathComputationType.AIR)) {
             return;
         }
 
@@ -108,7 +108,7 @@ public class EntityCannonPelllet extends AbstractHurtingProjectile {
     public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
         if(p_70097_2_>=8) {
             if (this.properties != null && this.properties.getCategory().ShouldDamageMultipleComponent()) {
-                this.getCommandSenderWorld().explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2.0F, Explosion.BlockInteraction.DESTROY);
+                this.getLevel().explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2.0F, Explosion.BlockInteraction.DESTROY);
             } else {
                 this.discard();
             }

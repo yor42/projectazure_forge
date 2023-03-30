@@ -31,7 +31,7 @@ public class ItemExcaliburSheath extends Item implements ICurioItem {
 
     @Override
     public void curioTick(LivingEntity holder, int index, ItemStack stack) {
-        applyRegen(holder.getCommandSenderWorld(), holder, stack);
+        applyRegen(holder.getLevel(), holder, stack);
     }
 
     private static void applyRegen(Level world, LivingEntity holder, ItemStack stack){

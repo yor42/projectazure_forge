@@ -149,7 +149,7 @@ public abstract class AbstractEntityFollowingDrone extends PathfinderMob impleme
 
         if (this.isOwner(player)) {
             if (player.isShiftKeyDown()) {
-                this.serializePlane(this.getCommandSenderWorld());
+                this.serializePlane(this.getLevel());
                 return InteractionResult.SUCCESS;
             }
         }
@@ -170,7 +170,7 @@ public abstract class AbstractEntityFollowingDrone extends PathfinderMob impleme
 
     public void serializePlane(Level world) {
         if (!world.isClientSide()) {
-            ItemEntity entity = new ItemEntity(this.getCommandSenderWorld(), this.getX(), this.getY(), this.getZ(), turnPlanetoItemStack());
+            ItemEntity entity = new ItemEntity(this.getLevel(), this.getX(), this.getY(), this.getZ(), turnPlanetoItemStack());
             world.addFreshEntity(entity);
             this.remove(RemovalReason.DISCARDED);
         }
@@ -233,12 +233,12 @@ public abstract class AbstractEntityFollowingDrone extends PathfinderMob impleme
         }
 
         if(this.isInWater()){
-            this.serializePlane(this.getCommandSenderWorld());
+            this.serializePlane(this.getLevel());
         }
     }
     public Optional<Entity> getOwner(){
-        if(!this.getCommandSenderWorld().isClientSide() && this.getOwnerUUID().isPresent()){
-            return Optional.ofNullable(((ServerLevel)this.getCommandSenderWorld()).getEntity(this.getOwnerUUID().get()));
+        if(!this.getLevel().isClientSide() && this.getOwnerUUID().isPresent()){
+            return Optional.ofNullable(((ServerLevel)this.getLevel()).getEntity(this.getOwnerUUID().get()));
         }
         return Optional.empty();
     }
@@ -319,7 +319,7 @@ public abstract class AbstractEntityFollowingDrone extends PathfinderMob impleme
         public boolean canUse() {
             if (AbstractEntityFollowingDrone.this.getOwner().isPresent() && AbstractEntityFollowingDrone.this.getOwner().get() instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity) AbstractEntityFollowingDrone.this.getOwner().get();
-                return !livingentity.isSpectator() && livingentity.getCommandSenderWorld() == AbstractEntityFollowingDrone.this.getCommandSenderWorld() && !(AbstractEntityFollowingDrone.this.distanceToSqr(livingentity) < 16);
+                return !livingentity.isSpectator() && livingentity.getLevel() == AbstractEntityFollowingDrone.this.getLevel() && !(AbstractEntityFollowingDrone.this.distanceToSqr(livingentity) < 16);
             }
             return false;
         }
@@ -390,16 +390,16 @@ public abstract class AbstractEntityFollowingDrone extends PathfinderMob impleme
         }
 
         private boolean isTeleportFriendlyBlock(BlockPos pos) {
-            BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(AbstractEntityFollowingDrone.this.getCommandSenderWorld(), pos.mutable());
+            BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(AbstractEntityFollowingDrone.this.getLevel(), pos.mutable());
             if (pathnodetype != BlockPathTypes.WALKABLE) {
                 return false;
             } else {
-                BlockState blockstate = AbstractEntityFollowingDrone.this.getCommandSenderWorld().getBlockState(pos.below());
+                BlockState blockstate = AbstractEntityFollowingDrone.this.getLevel().getBlockState(pos.below());
                 if (blockstate.getBlock() instanceof LeavesBlock) {
                     return false;
                 } else {
                     BlockPos blockpos = pos.subtract(AbstractEntityFollowingDrone.this.blockPosition());
-                    return AbstractEntityFollowingDrone.this.getCommandSenderWorld().noCollision(AbstractEntityFollowingDrone.this, AbstractEntityFollowingDrone.this.getBoundingBox().move(blockpos));
+                    return AbstractEntityFollowingDrone.this.getLevel().noCollision(AbstractEntityFollowingDrone.this, AbstractEntityFollowingDrone.this.getBoundingBox().move(blockpos));
                 }
             }
         }

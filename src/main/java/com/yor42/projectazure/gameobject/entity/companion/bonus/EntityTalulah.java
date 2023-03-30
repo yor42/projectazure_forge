@@ -271,7 +271,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         BlockEntity te = world.getBlockEntity(pos);
         if(te instanceof AbstractFurnaceBlockEntity furnace){
             RecipeType<? extends AbstractCookingRecipe> recipe = ((FurnaceAccessors) furnace).getRecipeType();
-            Optional<Recipe<AbstractFurnaceBlockEntity>> output = this.getCommandSenderWorld().getRecipeManager().getRecipeFor((RecipeType)recipe, furnace, this.getCommandSenderWorld());
+            Optional<Recipe<AbstractFurnaceBlockEntity>> output = this.getLevel().getRecipeManager().getRecipeFor((RecipeType)recipe, furnace, this.getLevel());
             if(output.isEmpty())
                 return false;
             ItemStack fuelstack = furnace.getItem(1);

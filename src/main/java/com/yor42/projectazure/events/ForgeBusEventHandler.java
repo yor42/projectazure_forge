@@ -135,7 +135,7 @@ public class ForgeBusEventHandler {
     public static void onEXPEvent(@Nonnull PlayerXpEvent.XpChange event){
         Player player1 = event.getPlayer();
 
-        if(player1.getCommandSenderWorld().isClientSide()){
+        if(player1.getLevel().isClientSide()){
             return;
         }
 

@@ -94,7 +94,7 @@ public class EntityMissileDrone extends AbstractEntityFollowingDrone {
         double y = target.getY() - (0.5D + this.getY(0.5D));
         double z = target.getZ() - (this.getZ());
 
-        EntityMissileDroneMissile droneMissile = DRONE_MISSILE.get().create(this.getCommandSenderWorld());
+        EntityMissileDroneMissile droneMissile = DRONE_MISSILE.get().create(this.getLevel());
         if(droneMissile != null){
             droneMissile.shoot(this, target, x,y,z);
             this.setFiringTick(this.getFireingTick());

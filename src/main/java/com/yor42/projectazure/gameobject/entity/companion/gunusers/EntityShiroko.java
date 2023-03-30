@@ -211,10 +211,10 @@ public class EntityShiroko extends EntityGunUserBase {
 
         ItemStack stack = this.getSkillItem(0);
         if(stack.getItem() instanceof ItemMissleDrone && this.getTarget() != null){
-            AbstractEntityFollowingDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getCommandSenderWorld(), stack, this);
+            AbstractEntityFollowingDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getLevel(), stack, this);
             if(drone != null){
                 drone.setTarget(this.getTarget());
-                this.getCommandSenderWorld().addFreshEntity(drone);
+                this.getLevel().addFreshEntity(drone);
                 stack.shrink(1);
                 return true;
             }

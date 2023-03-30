@@ -84,12 +84,12 @@ public class EntityInteractionPacket {
                         case ATTACK:
                             ((AbstractEntityCompanion) entity).setShouldAttackFirst(msg.value);
                             break;
-                        case PAT:
-                            ((AbstractEntityCompanion) entity).beingpatted((Player) world.getEntity(msg.playerUUID));
-                            break;
-                        case ECCI:
-                            ((AbstractEntityCompanion) entity).startqinteraction();
-                            break;
+                        // case PAT:
+                        //     ((AbstractEntityCompanion) entity).beingpatted((Player) world.getEntity(msg.playerUUID));
+                        //     break;
+                        // case ECCI:
+                        //     ((AbstractEntityCompanion) entity).startqinteraction();
+                        //     break;
                         case STOP_RIDING:
                             entity.stopRiding();
                             if(msg.pos != null) {
@@ -109,10 +109,10 @@ public class EntityInteractionPacket {
     public enum EntityBehaviorType {
         SIT(Boolean.class),
         HOMEMODE(BlockPos.class),
-        PAT(Integer.class),
+        // PAT(Integer.class),
         HEAL(Boolean.class),
         ITEMPICKUP(Boolean.class),
-        ECCI(Integer.class),
+        // ECCI(Integer.class),
         ATTACK(Boolean.class),
         STOP_RIDING(Integer.class);
 

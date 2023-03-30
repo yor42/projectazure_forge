@@ -105,7 +105,7 @@ public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion>
                                 }
                                 EntityType<? extends AbstractEntityPlanes> planetype = ((ItemEquipmentPlaneBase) planestack.getItem()).getEntityType();
 
-                                AbstractEntityPlanes planeEntity = planetype.create(entity.getCommandSenderWorld());
+                                AbstractEntityPlanes planeEntity = planetype.create(entity.getLevel());
                                 if (planeEntity != null) {
                                     entity.LaunchPlane(planestack, planeEntity, target, hanger, hangerIndex);
                                 }

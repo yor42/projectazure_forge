@@ -170,7 +170,7 @@ public class CompanionHealAllyAndPlayerTask extends Behavior<AbstractEntityCompa
         double d2 = target.getZ() + vector3d.z - entity.getZ();
         float f = (float)Math.sqrt(d0 * d0 + d2 * d2);
 
-        ThrownPotion potionentity = new ThrownPotion(entity.getCommandSenderWorld(), entity);
+        ThrownPotion potionentity = new ThrownPotion(entity.getLevel(), entity);
         potionentity.setItem(PotionUtils.setPotion(potionStack, potion));
         potionentity.setXRot(potionentity.getXRot() - 20.0F);
         potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);

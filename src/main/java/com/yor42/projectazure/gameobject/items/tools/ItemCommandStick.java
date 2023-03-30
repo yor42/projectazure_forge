@@ -53,7 +53,7 @@ public class ItemCommandStick extends Item {
                     CompoundTag NBTTag = holdingStack.getOrCreateTag();
                     BlockState state = world.getBlockState(pos);
                     Block block = state.getBlock();
-                    ResourceKey<Level> dim = player.getCommandSenderWorld().dimension();
+                    ResourceKey<Level> dim = player.getLevel().dimension();
                     if (state.isBed(world, pos, null) && dim == Level.OVERWORLD) {
                         pos = block instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
                         NBTTag.putInt("X", pos.getX());

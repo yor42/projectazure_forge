@@ -142,7 +142,7 @@ public class ModBusEventHandler {
         ItemStack gunstack = event.getStack();
         Item gunItem = gunstack.getItem();
         Player player = event.getPlayer();
-        Level world = event.getPlayer().getCommandSenderWorld();
+        Level world = event.getPlayer().getLevel();
         if(gunItem instanceof ItemEnergyGun){
             ItemEnergyGun energygun = (ItemEnergyGun) gunItem;
             if(gunstack.getCapability(CapabilityEnergy.ENERGY).map((energyhandler)-> energyhandler.extractEnergy(energygun.getEnergyperShot(), true) < ((ItemEnergyGun) gunItem).getEnergyperShot()).orElse(true)){

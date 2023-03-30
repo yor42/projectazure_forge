@@ -80,7 +80,7 @@ public class DroneReturntoOwnerGoal extends Goal {
                     }
                 }
                 if(!ItemInserted){
-                    this.entity.serializePlane(this.entity.getCommandSenderWorld());
+                    this.entity.serializePlane(this.entity.getLevel());
                 }
             }
         }

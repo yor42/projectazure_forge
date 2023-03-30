@@ -127,7 +127,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
     @Override
     public void curioTick(LivingEntity entity, int index, ItemStack stack) {
         if(entity instanceof Player) {
-            this.onArmorTick(stack, entity.getCommandSenderWorld(), (Player) entity);
+            this.onArmorTick(stack, entity.getLevel(), (Player) entity);
         }
     }
 

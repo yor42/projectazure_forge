@@ -47,7 +47,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
         double d1 = (double)blockpos.getY() + 0.5D;
         double d2 = (double)blockpos.getZ() + 0.5D;
         this.moveTo(d0, d1, d2, this.getYRot(), this.getXRot());
-        shooter.getCommandSenderWorld().addFreshEntity(this);
+        shooter.getLevel().addFreshEntity(this);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
             this.discard();
         }
 
-        if(!this.getCommandSenderWorld().isClientSide()){
+        if(!this.getLevel().isClientSide()){
 
             if(this.targetEntity != null){
                 Vec3 motion = this.getDeltaMovement();
@@ -140,7 +140,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
             }
 
             if(!this.targetEntity.isAlive()){
-                this.getCommandSenderWorld().explode(this, this.getX(), this.getY(), this.getZ(), 0, Explosion.BlockInteraction.NONE);
+                this.getLevel().explode(this, this.getX(), this.getY(), this.getZ(), 0, Explosion.BlockInteraction.NONE);
                 this.discard();
             }
 
@@ -162,7 +162,7 @@ public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
          */
 
         ProjectileUtil.rotateTowardsMovement(this, 0.5F);
-        if(this.getCommandSenderWorld().isClientSide()){
+        if(this.getLevel().isClientSide()){
             this.level.addParticle(ParticleTypes.FLAME, this.getX() - vector3d.x, this.getY() - vector3d.y + 0.15D, this.getZ() - vector3d.z, 0.0D, 0.0D, 0.0D);
         }
     }

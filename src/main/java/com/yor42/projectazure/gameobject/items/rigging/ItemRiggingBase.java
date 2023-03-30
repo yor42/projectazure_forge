@@ -359,7 +359,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
                             double x = smokeloc.getWorldPosition().x;
                             double y = smokeloc.getWorldPosition().y;
                             double z = smokeloc.getWorldPosition().z;
-                            entitylivingbaseIn.getCommandSenderWorld().addParticle(ParticleTypes.SMOKE,
+                            entitylivingbaseIn.getLevel().addParticle(ParticleTypes.SMOKE,
                                     x,
                                     y,
                                     z, 0, 0, 0);

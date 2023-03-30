@@ -31,10 +31,10 @@ public class ItemBandage extends ItemBaseTooltip {
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        if (player.getHealth() < player.getMaxHealth() && count % 20 == 0 && !player.getCommandSenderWorld().isClientSide) {
+        if (player.getHealth() < player.getMaxHealth() && count % 20 == 0 && !player.getLevel().isClientSide) {
             player.heal(1.0f);
             stack.hurtAndBreak(1, player, (entity) -> entity.broadcastBreakEvent(player.getUsedItemHand()));
-            player.getCommandSenderWorld().playSound(null, player.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1.0f, 1.0f);
+            player.getLevel().playSound(null, player.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.PLAYERS, 1.0f, 1.0f);
         }
     }
 
