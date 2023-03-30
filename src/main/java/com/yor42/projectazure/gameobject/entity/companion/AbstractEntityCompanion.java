@@ -44,7 +44,6 @@ import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.BlockUtil;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.DeleteHomePacket;
 import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
@@ -154,10 +153,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
-import static com.yor42.projectazure.libs.utils.BlockUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_PANTRY;
 import static com.yor42.projectazure.setup.register.RegisterAI.KILLED_ENTITY;
@@ -214,27 +211,15 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
         @Override
         public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-            EquipmentSlot slottype;
+            EquipmentSlot slottype = switch (slot) {
+                case 1 -> EquipmentSlot.OFFHAND;
+                case 2 -> EquipmentSlot.HEAD;
+                case 3 -> EquipmentSlot.CHEST;
+                case 4 -> EquipmentSlot.LEGS;
+                case 5 -> EquipmentSlot.FEET;
+                default -> EquipmentSlot.MAINHAND;
+            };
 
-            switch (slot) {
-                case 1:
-                    slottype = EquipmentSlot.OFFHAND;
-                    break;
-                case 2:
-                    slottype = EquipmentSlot.HEAD;
-                    break;
-                case 3:
-                    slottype = EquipmentSlot.CHEST;
-                    break;
-                case 4:
-                    slottype = EquipmentSlot.LEGS;
-                    break;
-                case 5:
-                    slottype = EquipmentSlot.FEET;
-                    break;
-                default:
-                    slottype = EquipmentSlot.MAINHAND;
-            }
             AbstractEntityCompanion.this.setItemSlot(slottype, stack);
         }
 
@@ -246,27 +231,15 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            EquipmentSlot slottype;
+            EquipmentSlot slottype = switch (slot) {
+                case 1 -> EquipmentSlot.OFFHAND;
+                case 2 -> EquipmentSlot.HEAD;
+                case 3 -> EquipmentSlot.CHEST;
+                case 4 -> EquipmentSlot.LEGS;
+                case 5 -> EquipmentSlot.FEET;
+                default -> EquipmentSlot.MAINHAND;
+            };
 
-            switch (slot) {
-                case 1:
-                    slottype = EquipmentSlot.OFFHAND;
-                    break;
-                case 2:
-                    slottype = EquipmentSlot.HEAD;
-                    break;
-                case 3:
-                    slottype = EquipmentSlot.CHEST;
-                    break;
-                case 4:
-                    slottype = EquipmentSlot.LEGS;
-                    break;
-                case 5:
-                    slottype = EquipmentSlot.FEET;
-                    break;
-                default:
-                    slottype = EquipmentSlot.MAINHAND;
-            }
             return AbstractEntityCompanion.this.getItemBySlot(slottype);
         }
 
@@ -343,26 +316,23 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
         @Override
         public int getSlotLimit(int slot) {
-            switch (slot){
-                case 0:
-                case 1:
-                    return 64;
-                default:
-                    return 1;
-            }
+            return switch (slot) {
+                case 0, 1 -> 64;
+                default -> 1;
+            };
         }
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            switch(slot){
-                case 0:
-                case 1:
+            switch (slot) {
+                case 0, 1 -> {
                     return true;
-                default:
-                    if(stack.getItem() instanceof ArmorItem) {
-                        return stack.canEquip(EQUIPMENTSLOTS[slot-2], AbstractEntityCompanion.this);
-                    }
-                    else return false;
+                }
+                default -> {
+                    if (stack.getItem() instanceof ArmorItem) {
+                        return stack.canEquip(EQUIPMENTSLOTS[slot - 2], AbstractEntityCompanion.this);
+                    } else return false;
+                }
             }
         }
     };
@@ -413,7 +383,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Nullable
     public BlockPos RECRUIT_BEACON_POS;
     private final MoveControl SwimController;
-    private final MoveControl MoveController;
+    private final MoveControl GroundMoveController;
     protected final WaterBoundPathNavigation swimmingNav;
     private final GroundPathNavigation groundNav;
     protected CompanionFoodStats foodStats = new CompanionFoodStats();
@@ -423,22 +393,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public int StartedMeleeAttackTimeStamp = -1;
     public int AttackCount = 0;
     public int StartedSpellAttackTimeStamp = -1;
-    /*
-    public static final IDataSerializer<CompanionPose> POSESERIALIZER = new IDataSerializer<CompanionPose>() {
-        public void write(PacketBuffer pBuffer, CompanionPose pValue) {
-            pBuffer.writeEnum(pValue);
-        }
-
-        public CompanionPose read(PacketBuffer pBuffer) {
-            return pBuffer.readEnum(CompanionPose.class);
-        }
-
-        public CompanionPose copy(CompanionPose pValue) {
-            return pValue;
-        }
-    };
-
-     */
 
     //I'd really like to get off from datamanager's wild ride.
     protected static final EntityDataAccessor<Integer> SPELLDELAY = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
@@ -492,7 +446,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel p_146743_, AgeableMob p_146744_) {
+    public AgeableMob getBreedOffspring(@Nonnull ServerLevel p_146743_, @Nonnull AgeableMob p_146744_) {
         return null;
     }
 
@@ -540,7 +494,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.swimmingNav = new CompanionSwimPathNavigator(this, worldIn);
         this.groundNav = new CompanionGroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimMovementController(this);
-        this.MoveController = new CompanionDefaultMovementController(this);
+        this.GroundMoveController = new CompanionDefaultMovementController(this);
 
 
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
@@ -585,7 +539,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         }
 
         if(target instanceof AbstractEntityFollowingDrone){
-            if(!((AbstractEntityFollowingDrone) target).getOwner().isPresent()){
+            if(((AbstractEntityFollowingDrone) target).getOwner().isEmpty()){
                 return false;
             }
 
@@ -940,35 +894,32 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
         CompoundTag NBT = compound.getCompound("status");
 
-        switch (NBT.getString("status")){
-            case "resting":{
+        switch (NBT.getString("status")) {
+            case "resting" -> {
                 this.getBrain().setActiveActivityIfPossible(REST);
                 this.setFreeRoaming(true);
-                break;
             }
-            case "sitting":{
+            case "sitting" -> {
                 this.setOrderedToSit(true);
                 this.getEntityData().set(ISFREEROAMING, false);
-                break;
             }
-            case "idle":{
+            case "idle" -> {
                 this.setResting();
                 this.getEntityData().set(ISFREEROAMING, true);
                 this.getBrain().setMemory(RegisterAI.RESTING.get(), true);
-                break;
             }
-            case "waiting":{
+            case "waiting" -> {
                 BlockPos blockpos = new BlockPos(NBT.getDouble("waitpointx"), NBT.getDouble("waitpointy"), NBT.getDouble("waitpointz"));
                 ResourceLocation resource = new ResourceLocation(NBT.getString("waitpointDim"));
                 ResourceKey<Level> registrykey = ResourceKey.create(Registry.DIMENSION_REGISTRY, resource);
                 this.getEntityData().set(ISFREEROAMING, true);
                 GlobalPos pos = GlobalPos.of(registrykey, blockpos);
                 this.getBrain().setMemory(RegisterAI.WAIT_POINT.get(), pos);
-                break;
             }
-            default:
+            default -> {
                 this.setFollowingOwner();
                 this.getEntityData().set(ISFREEROAMING, false);
+            }
         }
 
         this.getEntityData().set(TeamUUID, compound.hasUUID("team")? Optional.of(compound.getUUID("team")):Optional.empty());
@@ -1155,7 +1106,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     @Override
-    public void awardKillScore(Entity p_191956_1_, int p_191956_2_, DamageSource p_191956_3_) {
+    public void awardKillScore(@Nonnull Entity p_191956_1_, int p_191956_2_, @Nonnull DamageSource p_191956_3_) {
         this.getBrain().setMemoryWithExpiry(RegisterAI.KILLED_ENTITY.get(), true, 600);
         super.awardKillScore(p_191956_1_, p_191956_2_, p_191956_3_);
     }
@@ -1310,7 +1261,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isInHomeRange(BlockPos Startpos){
-        if(this.getHomeDistance() == -1.0f || !this.getHOMEPOS().isPresent()){
+        if(this.getHomeDistance() == -1.0f || this.getHOMEPOS().isEmpty()){
             return false;
         }
         else{
@@ -1339,11 +1290,10 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     public void AttackUsingGun(ItemStack gun) {
 
-        if (!(gun.getItem() instanceof GunItem)) {
+        if (!(gun.getItem() instanceof GunItem item)) {
             return;
         }
 
-        GunItem item = (GunItem) gun.getItem();
         Gun modifiedGun = item.getModifiedGun(gun);
         if (modifiedGun != null) {
             int count = modifiedGun.getGeneral().getProjectileAmount();
@@ -1691,14 +1641,15 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     @Override
-    public void remove(RemovalReason p_146834_) {
-        this.removeEntityFromTeam(null);
+    public void remove(@Nonnull RemovalReason p_146834_) {
+        if(p_146834_ == RemovalReason.KILLED) {
+            this.removeEntityFromTeam(null);
+        }
         super.remove(p_146834_);
     }
 
     public void removeEntityFromTeam(@Nullable AbstractEntityCompanion replacement){
-        if(this.getOwner() instanceof Player){
-            Player player = (Player) this.getOwner();
+        if(this.getOwner() instanceof Player player){
             ProjectAzurePlayerCapability.getCapability(player).removeCompanion(this);
         }
         if(!this.getLevel().isClientSide()){
@@ -1707,8 +1658,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.removeTeam();
 
         if (replacement != null) {
-            if(this.getOwner() instanceof Player) {
-                Player player = (Player) this.getOwner();
+            if(this.getOwner() instanceof Player player) {
                 ProjectAzurePlayerCapability.getCapability(player).addCompanion(replacement);
             }
             if(!this.getLevel().isClientSide()){
@@ -1718,7 +1668,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@Nonnull DamageSource source, float amount) {
         if(this.getVehicle() != null && source.getEntity() == this.getVehicle() || source == DamageSource.IN_WALL) {
             return false;
         }
@@ -1758,7 +1708,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     protected Vec3 WanderRNG() {
 
-        if (!this.getStayCenterPos().isPresent()){
+        if (this.getStayCenterPos().isEmpty()){
             this.setStayCenterPos(this.blockPosition());
         }
 
@@ -2004,11 +1954,12 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, foodStack));
         }
         WorldIn.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.5F, WorldIn.random.nextFloat() * 0.1F + 0.9F);
+        FoodProperties food = foodStack.getItem().getFoodProperties(foodStack, this);
+        if(food == null){
+            return super.eat(WorldIn, foodStack);
+        }
         if(foodStack.getItem().isEdible()){
-            FoodProperties food = foodStack.getItem().getFoodProperties();
-            if(food != null) {
-                this.addMorale(foodStack.getItem().getFoodProperties().getNutrition() * 4);
-            }
+            this.addMorale(food.getNutrition() * 4);
         }
         return super.eat(WorldIn, foodStack);
     }
@@ -2055,10 +2006,10 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return 2;
     }
 
-    public boolean doLimitBreak(){
+    public void doLimitBreak(){
 
         if(this.getMaxLimitBreak() <= this.getLimitBreakLv()){
-            return false;
+            return;
         }
 
         this.addLimitBreak(1);
@@ -2068,7 +2019,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         if(!this.getLevel().isClientSide()) {
             Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.LIMITBREAK));
         }
-        return true;
     }
 
     public int getEntityUpgradeLv() {
@@ -2846,14 +2796,13 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getBrain().tick((ServerLevel)this.level, this);
         this.level.getProfiler().pop();
 
-        if(!this.getBrain().getMemory(HOME).isPresent()){
+        if(this.getBrain().getMemory(HOME).isEmpty()){
             this.getEntityData().set(HOMEPOS, Optional.empty());
             this.getEntityData().set(VALID_HOME_DISTANCE, -1F);
         }
         else if(this.getHOMEPOS().map((pos)-> this.getBrain().getMemory(HOME).map((homepos)->!pos.equals(homepos.pos())).orElse(true)).orElse(true)){
             this.getBrain().getMemory(HOME).ifPresent(this::setHomePos);
         }
-
         CompanionTasks.UpdateActivity(this);
 
         this.getBrain().getActiveNonCoreActivity().ifPresent((activity)->{
@@ -2866,15 +2815,12 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         super.customServerAiStep();
     }
 
-    public boolean setEntityOnShoulder(ServerPlayer p_213439_1_) {
+    public void setEntityOnBack(ServerPlayer p_213439_1_) {
         CompoundTag compoundnbt = new CompoundTag();
-        compoundnbt.putString("id", this.getEncodeId());
+        compoundnbt.putString("id", Objects.requireNonNull(this.getEncodeId()));
         this.saveWithoutId(compoundnbt);
         if (((IMixinPlayerEntity)p_213439_1_).setEntityonBack(compoundnbt)) {
             this.discard();
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -3066,7 +3012,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     this.stopSleeping();
                 }
                 if(!this.getLevel().isClientSide()) {
-                    this.setEntityOnShoulder((ServerPlayer) player);
+                    this.setEntityOnBack((ServerPlayer) player);
                 }
                 //this.startRiding(player, true);
                 return InteractionResult.SUCCESS;
@@ -3089,39 +3035,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                  *
                  * Mowzie's mob is licensed under cutom license. I do hope tht this falls under Non-Compete/Non-Imitate/Non-Manipulate...
                  */
-
-                BlockUtil.RelativeDirection interactionDirection;
-                float entityHitAngle = (float) ((Math.atan2(player.getZ() - getZ(), player.getX() - getX()) * (180 / Math.PI) - 90) % 360);
-                float entityAttackingAngle = yBodyRot % 360;
-                if (entityHitAngle < 0) {
-                    entityHitAngle += 360;
-                }
-                if (entityAttackingAngle < 0) {
-                    entityAttackingAngle += 360;
-                }
-                float entityRelativeAngle = entityHitAngle - entityAttackingAngle;
-
-                if (entityRelativeAngle < 0) {
-                    entityRelativeAngle += 360;
-                }
-
-                if((entityRelativeAngle > 320 || entityRelativeAngle < 45)){
-                    interactionDirection = FRONT;
-                }
-                else if(entityRelativeAngle>45 && entityRelativeAngle<135){
-                    interactionDirection = BlockUtil.RelativeDirection.RIGHT;
-                }
-                else if(entityRelativeAngle>135 && entityRelativeAngle<225){
-                    interactionDirection = BlockUtil.RelativeDirection.BACK;
-                }
-                else{
-                    interactionDirection = BlockUtil.RelativeDirection.LEFT;
-                }
-
-                if(player.isCrouching())
-                {
-                    return this.openInventory(player);
-                }
 
                 if(player.getMainHandItem().isEmpty())
                 {
@@ -3162,7 +3075,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         {
                             if (!this.getLevel().isClientSide())
                             {
-                                this.setEntityOnShoulder((ServerPlayer) player);
+                                this.setEntityOnBack((ServerPlayer) player);
                             }
                             //this.startRiding(player, true);
                             return InteractionResult.SUCCESS;
@@ -3174,6 +3087,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         return InteractionResult.SUCCESS;
                         //this.setOrderedToSit(!this.isSitting());
                     }
+                }
+
+                if(player.isCrouching())
+                {
+                    return this.openInventory(player);
                 }
             }
             return InteractionResult.FAIL;
@@ -3234,7 +3152,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
         }
         //food
-        else if (HeldItem != RegisterItems.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties() != null && this.canEat(HeldItem.getFoodProperties().canAlwaysEat())) {
+        else if (HeldItem != RegisterItems.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties(heldstacks, this) != null && this.canEat(Objects.requireNonNull(HeldItem.getFoodProperties(heldstacks, this)).canAlwaysEat())) {
             ItemStack stack = this.eat(this.getLevel(), player.getItemInHand(hand));
             this.addAffection(0.03);
             if (!player.isCreative()) {
@@ -3317,7 +3235,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                                 return InteractionResult.FAIL;
                             }
                             ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((Player) this.getOwner());
-                            List<AbstractEntityCompanion> dupelist = cap.getCompanionList().stream().filter((companion) -> companion.getBrain().getMemory(HOME).map((globalpos) -> globalpos.equals(pos)).orElse(false)).collect(Collectors.toList());
+                            List<AbstractEntityCompanion> dupelist = cap.getCompanionList().stream().filter((companion) -> companion.getBrain().getMemory(HOME).map((globalpos) -> globalpos.equals(pos)).orElse(false)).toList();
                             @Nullable
                             AbstractEntityCompanion duplicatedComp = dupelist.isEmpty() ? null : dupelist.get(0);
                             boolean isBedDuplicate = !(duplicatedComp ==null);
@@ -3364,6 +3282,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         {
             NetworkHooks.openGui((ServerPlayer) player, new CompanionContainerProvider(this), buf -> buf.writeInt(this.getId()));
         }
+
         this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
         return InteractionResult.SUCCESS;
     }
@@ -3380,14 +3299,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     public boolean isCustomNameVisible() {
         return super.isCustomNameVisible();
-    }
-
-    public boolean CheckVerticalInteraction(LivingEntity player, float heightpoint){
-        Vec3 PlayerLook = player.getViewVector(1.0F).normalize();
-        Vec3 EyeDelta = new Vec3(this.getX() - player.getX(), this.getY(heightpoint) - player.getEyeY(), this.getZ() - player.getZ());
-        EyeDelta = EyeDelta.normalize();
-        double EyeCheckFinal = PlayerLook.dot(EyeDelta);
-        return EyeCheckFinal > 0.997;
     }
 
     private boolean hasHomePos() {
@@ -3456,15 +3367,19 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             if(!this.isEffectiveAi()) {
                 return;
             }
-            this.navigation.stop();
             if (this.isEffectiveAi() &&rigging && waterheight > 1.2) {
+                if(this.navigation != this.swimmingNav){
+                    this.navigation.stop();
+                }
+
                 this.navigation = this.swimmingNav;
                 this.moveControl = this.SwimController;
                 this.setSwimming(true);
             }
-            else {
+            else if(this.navigation != this.groundNav) {
+                this.navigation.stop();
                 this.navigation = this.groundNav;
-                this.moveControl = this.MoveController;
+                this.moveControl = this.GroundMoveController;
                 this.setSwimming(false);
             }
 

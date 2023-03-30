@@ -12,50 +12,22 @@ public class PatMath
 		// north
         if (((entity.getYRot() > 134.0F && entity.getYRot() < 226.0F) || (entity.getYRot() > -226.0F && entity.getYRot() < -134.0F)))
         {
-            if (i == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return i == 1;
         }
     	// east
         else if ((entity.getYRot() > 224.0F && entity.getYRot() < 316.0F) || (entity.getYRot() > -136.0F && entity.getYRot() < -44.0F))
         {
-            if (i == 2)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return i == 2;
         }
 		// west
         else if ((entity.getYRot() > 44.0F && entity.getYRot() < 136.0F) || (entity.getYRot() > -316.0F && entity.getYRot() < -224.0F))
         {
-            if (i == 3)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return i == 3;
         }
     	// south
         else
         {
-            if (i == 4)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return i == 4;
         }
 	}
 

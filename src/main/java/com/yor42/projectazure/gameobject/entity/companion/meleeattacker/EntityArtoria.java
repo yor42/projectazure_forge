@@ -283,7 +283,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     }
 
     @Override
-    public void awardKillScore(Entity p_191956_1_, int p_191956_2_, DamageSource p_191956_3_) {
+    public void awardKillScore(@Nonnull Entity p_191956_1_, int p_191956_2_, @Nonnull DamageSource p_191956_3_) {
         super.awardKillScore(p_191956_1_, p_191956_2_, p_191956_3_);
         this.playSound(registerSounds.ARTORIA_TALK_KILL, this.getSoundVolume(), this.getVoicePitch());
     }

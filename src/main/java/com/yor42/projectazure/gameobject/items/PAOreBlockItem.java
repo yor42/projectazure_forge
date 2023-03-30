@@ -31,6 +31,6 @@ public class PAOreBlockItem extends BlockItem {
 
     @Override
     public Component getName(ItemStack stack) {
-        return new TranslatableComponent(material).append(" ").append(new TranslatableComponent(resourceType.getName()));
+        return new TranslatableComponent(resourceType.getName(), new TranslatableComponent(material));
     }
 }

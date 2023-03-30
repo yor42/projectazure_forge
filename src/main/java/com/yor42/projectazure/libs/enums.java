@@ -390,7 +390,6 @@ public class enums {
         ORE("ore", net.minecraft.world.level.material.Material.STONE, SoundType.STONE),
         DEEPSLATE_ORE("deepslate_ore", net.minecraft.world.level.material.Material.STONE, SoundType.DEEPSLATE),
         METAL_BLOCK("block", net.minecraft.world.level.material.Material.METAL, SoundType.METAL);
-
         private final String name;
         @Nullable
         private final net.minecraft.world.level.material.Material material;

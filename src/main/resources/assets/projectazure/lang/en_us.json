@@ -666,7 +666,8 @@
   "ore": "%s Ore",
   "gear": "%s Gear",
   "block": "%s Block",
-  "raw": "Raw %s",
+  "raw_ore": "Raw %s",
+  "deepslate_ore": "Deepslate %s Ore",
 
   "brass": "Brass",
   "copper": "Copper",

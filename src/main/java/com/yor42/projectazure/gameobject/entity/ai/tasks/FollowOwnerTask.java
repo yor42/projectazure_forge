@@ -44,7 +44,7 @@ public class FollowOwnerTask extends Behavior<AbstractEntityCompanion> {
             if(entity.distanceTo(entity.getOwner())>32){
                 this.tryToTeleportNearEntity(entity, entity.getOwner());
             }
-            BehaviorUtils.setWalkAndLookTargetMemories(entity, entity.getOwner(), 1, followrange.sample(new Random()));
+            BehaviorUtils.setWalkAndLookTargetMemories(entity, entity.getOwner(), 1F, (int)(4*MathUtil.rand.nextFloat())+2);
         }
     }
 
