@@ -9,6 +9,7 @@ import com.lowdragmc.multiblocked.api.tile.ControllerTileEntity;
 import com.lowdragmc.multiblocked.common.capability.FEMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
 import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.definition.ModControllerDefinition;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.mixin.MixinComponentDefinitionAccessor;
@@ -23,7 +24,7 @@ import static com.yor42.projectazure.setup.register.registerMultiBlocks.readUI;
 public class SiliconeCrucibleTE extends ControllerTileEntity {
 
     public static final RecipeMap SILICONCRUCIBLE_RECIPEMAP;
-    public static final ControllerDefinition DEF = new ControllerDefinition(new ResourceLocation(Constants.MODID, "siliconecrucible"), ControllerTileEntity.class);
+    public static final ControllerDefinition DEF;
     private static final MBDGeoRenderer renderer = new MBDGeoRenderer("siliconecrucible", false);
 
     public SiliconeCrucibleTE(ControllerDefinition definition, BlockPos pos, BlockState state) {
@@ -33,13 +34,11 @@ public class SiliconeCrucibleTE extends ControllerTileEntity {
 
     public static void RegisterTE(){
         DEF.setRecipeMap(SILICONCRUCIBLE_RECIPEMAP);
-        DEF.setBasePattern(FactoryBlockPattern.start().aisle("AEA", "AAA", "AAA").aisle("C@C", "ADA", "AXA").where("A", Predicates.any()).where("@", Predicates.component(DEF)).where("E", Predicates.anyCapability(FEMultiblockCapability.CAP)).where("C", Predicates.anyCapability(ItemMultiblockCapability.CAP)).where("D", Predicates.blocks(RegisterBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).where("X", Predicates.blocks(RegisterBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).build());
+        DEF.setBasePattern(FactoryBlockPattern.start().aisle("@", "D", "X").where("@", Predicates.component(DEF)).where("D", Predicates.blocks(RegisterBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).where("X", Predicates.blocks(RegisterBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).build());
         DEF.getBaseStatus().setRenderer(ResourceUtils.getMBDBlockModel("silicone_crucible"));
         DEF.getIdleStatus().setRenderer(renderer);
         DEF.getWorkingStatus().setRenderer(renderer);
-        DEF.traits = readTrait("siliconcrucible");
         DEF.getSuspendStatus().setRenderer(renderer);
-        //((MixinComponentDefinitionAccessor)DEF).setUi(readUI("siliconcrucible"));
         DEF.properties.isOpaque = false;
         DEF.properties.tabGroup = "pa_machines";
         RecipeMap.register(DEF.getRecipeMap());
@@ -47,6 +46,7 @@ public class SiliconeCrucibleTE extends ControllerTileEntity {
     }
 
     static {
+        DEF = new ModControllerDefinition(new ResourceLocation(Constants.MODID, "siliconecrucible"));
         SILICONCRUCIBLE_RECIPEMAP= new RecipeMap("silicon_crucible");
         SILICONCRUCIBLE_RECIPEMAP.inputCapabilities.add(ItemMultiblockCapability.CAP);
         SILICONCRUCIBLE_RECIPEMAP.inputCapabilities.add(FEMultiblockCapability.CAP);
