@@ -72,7 +72,10 @@ public class registerMultiBlocks {
     }
 
     public static JsonObject readTrait(ResourceLocation location) {
-        InputStream inputstream = Main.class.getResourceAsStream("/assets/projectazure/traits/siliconecrucible.json");
+        InputStream inputstream = Main.class.getResourceAsStream(String.format("/assets/%s/traits/%s.json", location.getNamespace(), location.getPath()));
+        if(inputstream==null){
+            return new JsonObject();
+        }
         JsonObject config = JsonParser.parseReader(new InputStreamReader(inputstream)).getAsJsonObject();
         return config.has("traits")? config.getAsJsonObject("traits"): config;
     }
