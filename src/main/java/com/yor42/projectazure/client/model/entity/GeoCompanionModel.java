@@ -11,6 +11,7 @@ import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.mixin.PathNavigatorAccessors;
 import com.yor42.projectazure.mixin.WeaponPoseAccessor;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,7 +49,7 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
         IBone Chest = this.getAnimationProcessor().getBone("Chest");
         float pitch = extraData.headPitch * ((float) Math.PI / 180F);
         float yaw = extraData.netHeadYaw * ((float) Math.PI / 180F);
-        if (!(animatable.isBeingPatted() || animatable.isSleeping())) {
+        if (!(animatable.isBeingPatted() || animatable.isSleeping()) && !Minecraft.getInstance().isPaused()) {
             head.setRotationX(head.getRotationX() + pitch);
             head.setRotationY(head.getRotationY() + yaw);
         }
