@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.mojang.math.Vector3f;
 import com.mojang.serialization.Dynamic;
+import com.spacecat.summer.objects.math.PatMath;
 import com.tac.guns.Config;
 import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.common.Gun;
@@ -820,10 +821,12 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         compound.putBoolean("pickupitem", this.getEntityData().get(PICKUP_ITEM));
         compound.putBoolean("firstattack", this.getEntityData().get(SHOULDFIRSTATTACK));
         compound.putFloat("home_distance", this.getEntityData().get(VALID_HOME_DISTANCE));
-        if(this.getEntityData().get(STAYPOINT).isPresent()) {
-            compound.putDouble("stayX", this.getEntityData().get(STAYPOINT).get().getX());
-            compound.putDouble("stayY", this.getEntityData().get(STAYPOINT).get().getY());
-            compound.putDouble("stayZ", this.getEntityData().get(STAYPOINT).get().getZ());
+        if(this.getEntityData().get(STAYPOINT).isPresent())
+        {
+            BlockPos stay_point_blockpos = this.getEntityData().get(STAYPOINT).get();
+            compound.putDouble("stayX", stay_point_blockpos.getX());
+            compound.putDouble("stayY", stay_point_blockpos.getY());
+            compound.putDouble("stayZ", stay_point_blockpos.getZ());
         }
         if(this.RECRUIT_BEACON_POS != null) {
             compound.putDouble("RecruitStationPosX", this.RECRUIT_BEACON_POS.getX());
@@ -3113,7 +3116,13 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     interactionDirection = BlockUtil.RelativeDirection.LEFT;
                 }
 
-                if(player.getMainHandItem().isEmpty() && this.distanceTo(player)<=2) {
+                if(player.isCrouching())
+                {
+                    return this.openInventory(player);
+                }
+
+                if(player.getMainHandItem().isEmpty())
+                {
                     if (this.isSleeping()) {
                         if (this.forceWakeupCounter > 4) {
                             this.forceWakeup();
@@ -3122,34 +3131,46 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                             this.forcewakeupExpireTimer = 20;
                         }
                         return InteractionResult.SUCCESS;
-                    } else if (this.isLookingAtPart(player, (float) this.getEyeY()) && this.getEntityData().get(ECCI_ANIMATION_TIME)==0 && interactionDirection==FRONT) {
-                        if (this.getCommandSenderWorld().isClientSide()) {
-                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.PAT, true, player.getId()));
+                        //this.isLookingAtPart(player, (float) this.getEyeY())
+                    }
+
+                    // SpaceCat is running!
+                    AABB entity_aabb = this.getBoundingBox();
+                    if (PatMath.targetsView(player, new AABB(entity_aabb.minX, entity_aabb.minY - (entity_aabb.minY - entity_aabb.maxY) / 1.5D, entity_aabb.minZ, entity_aabb.maxX, entity_aabb.maxY, entity_aabb.maxZ)) && this.getEntityData().get(ECCI_ANIMATION_TIME) == 0)
+                    {
+                        if (!this.getLevel().isClientSide())
+                        {
+                            beingpatted(player);
+                            // Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.PAT, true, player.getId()));
                         }
                         return InteractionResult.SUCCESS;
                     }
-                    else if (this.CheckVerticalInteraction(player, 0.65F) && interactionDirection==FRONT) {
-                        if (this.getCommandSenderWorld().isClientSide()) {
-                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.ECCI, true, player.getId()));
+                    else if (PatMath.targetsView(player, new AABB(entity_aabb.minX, entity_aabb.minY - (entity_aabb.minY - entity_aabb.maxY) / 3.0D, entity_aabb.minZ, entity_aabb.maxX, entity_aabb.maxY - (entity_aabb.maxY - entity_aabb.minY) / 3.0D, entity_aabb.maxZ)) && PatMath.targetsView00(player, this))
+                    {
+                        if (!this.getLevel().isClientSide())
+                        {
+                            startqinteraction();
+                            // Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.ECCI, true, player.getId()));
                         }
                         return InteractionResult.SUCCESS;
                     }
-                    else if (this.CheckVerticalInteraction(player, 0.1F)) {
-                        if(player.isCrouching() && player.getPassengers().isEmpty() && !this.isOrderedToSit()) {
-                            if(!this.getCommandSenderWorld().isClientSide()) {
+                    else if (PatMath.targetsView(player, new AABB(entity_aabb.minX, entity_aabb.minY, entity_aabb.minZ, entity_aabb.maxX, entity_aabb.maxY - (entity_aabb.maxY - entity_aabb.minY) / 1.5D, entity_aabb.maxZ)))
+                    {
+                        if(player.isCrouching() && player.getPassengers().isEmpty() && !this.isOrderedToSit())
+                        {
+                            if (!this.getLevel().isClientSide())
+                            {
                                 this.setEntityOnShoulder((ServerPlayer) player);
                             }
                             //this.startRiding(player, true);
                             return InteractionResult.SUCCESS;
                         }
-                        else {
+                        else
+                        {
                             this.SwitchSittingStatus();
                         }
                         return InteractionResult.SUCCESS;
                         //this.setOrderedToSit(!this.isSitting());
-                    }
-                    else if(player.isCrouching()) {
-                        return this.openInventory(player);
                     }
                 }
             }
@@ -3167,10 +3188,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     protected InteractionResult HandleItemInteraction(@Nonnull Player player, @Nonnull Vec3 vec, @Nonnull InteractionHand hand, ItemStack heldstacks){
         Item HeldItem = heldstacks.getItem();
-        if(player.isCrouching()){
-            return this.openInventory(player);
-        }
-        else if(this instanceof EntityKansenBase && HeldItem instanceof ItemRiggingBase){
+        if(this instanceof EntityKansenBase && HeldItem instanceof ItemRiggingBase){
             ItemStack stack = player.getItemInHand(hand).copy();
             ItemStack EquippedStack = this.getRigging().copy();
             ((EntityKansenBase) this).getShipRiggingStorage().setStackInSlot(0, stack);
@@ -3331,9 +3349,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         else if(this.isLimitbreakItem(heldstacks)){
             this.doLimitBreak();
             return InteractionResult.CONSUME;
-        }
-        else if(player.isCrouching()) {
-            return this.openInventory(player);
         }
 
         return InteractionResult.FAIL;
