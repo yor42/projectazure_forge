@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.capability.playercapability;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -54,7 +55,7 @@ public class ProjectAzurePlayerCapability {
     }
 
     public boolean isDupe(AbstractEntityCompanion companion){
-        return isDupe(companion.getType());
+        return isDupe(companion.getType()) && !PAConfig.CONFIG.ALLOW_DUPLICATE.get();
     }
 
     public boolean isDupe(EntityType<?> companion){

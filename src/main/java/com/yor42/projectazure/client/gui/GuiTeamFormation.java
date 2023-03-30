@@ -187,7 +187,9 @@ public class GuiTeamFormation extends Screen{   /*
         }
         if(this.notYetPopulated) {
             int i=-1;
-            for (AbstractEntityCompanion entity : entities) {
+            int minidx = (int) (Math.min(1,(this.lastScrollY/(this.y + 139F)))*entities.size());
+            for(int k=0; k<Math.min(5, entities.size()-minidx); k++){
+                AbstractEntityCompanion entity = entities.get(minidx+k);
                 Button button = new EntityButton(this.x+8, this.y+24+(27*++i), 121, 27, entity, (runnable)->this.addMeber(entity));
                 this.addRenderableWidget(button);
             }
