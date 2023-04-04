@@ -433,7 +433,8 @@ public class ForgeBusEventHandler {
                     .outputEntities(EntityIngredient.of(EntityType.PIG.getRegistryName()))
                     .chance(1).perTick(true).inputFE(100).duration(120).buildAndRegister();
 
-            SiliconeCrucibleTE.SILICONCRUCIBLE_RECIPEMAP.start().name("silicon_ingot").inputItems(new SizedIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), 10)).outputItems(new ItemStack(RegisterItems.MONOCRYSTALLINE_SILICONE.get())).perTick(true).inputFE(1500).duration(430).buildAndRegister();
+            //always match slot names on trait with recipe's slotname!
+            SiliconeCrucibleTE.SILICONCRUCIBLE_RECIPEMAP.start().name("silicon_ingot").slotName("input").inputItems(new SizedIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), 10)).slotName("output").outputItems(new ItemStack(RegisterItems.MONOCRYSTALLINE_SILICONE.get())).perTick(true).slotName("energy").inputFE(1500).duration(430).buildAndRegister();
 
         }
         catch (Exception e){

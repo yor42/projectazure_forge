@@ -34,7 +34,7 @@ public class SiliconeCrucibleTE extends ControllerTileEntity {
 
     public static void RegisterTE(){
         DEF.setRecipeMap(SILICONCRUCIBLE_RECIPEMAP);
-        DEF.setBasePattern(FactoryBlockPattern.start().aisle("C@E", "ADA", "AXA").where("@", Predicates.component(DEF)).where("A", Predicates.any()).where("C", Predicates.anyCapability(ItemMultiblockCapability.CAP)).where("E", Predicates.anyCapability(FEMultiblockCapability.CAP)).where("D", Predicates.blocks(RegisterBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).where("X", Predicates.blocks(RegisterBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).build());
+        DEF.setBasePattern(FactoryBlockPattern.start().aisle("@", "D", "X").where("@", Predicates.component(DEF)).where("A", Predicates.any()).where("C", Predicates.anyCapability(ItemMultiblockCapability.CAP)).where("E", Predicates.anyCapability(FEMultiblockCapability.CAP)).where("D", Predicates.blocks(RegisterBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).where("X", Predicates.blocks(RegisterBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).build());
         DEF.getBaseStatus().setRenderer(ResourceUtils.getMBDBlockModel("silicone_crucible"));
         DEF.getIdleStatus().setRenderer(renderer);
         DEF.getWorkingStatus().setRenderer(renderer);

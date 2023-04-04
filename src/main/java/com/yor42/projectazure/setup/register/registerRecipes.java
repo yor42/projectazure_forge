@@ -29,7 +29,7 @@ public class registerRecipes {
         public static final RegistryObject<RecipeType<CrystalizingRecipe>> CRYSTALIZING = (RegistryObject)register("crystalizing");
         public static final RegistryObject<RecipeType<BasicChemicalReactionRecipe>> BASIC_CHEMICAL_REACTION = (RegistryObject)register("basic_chemicalreaction");
 
-        static RegistryObject<RecipeType> register(String name)
+        static RegistryObject<RecipeType<?>> register(String name)
         {
             return RECIPE_TYPES.register(name, () -> new RecipeType<>()
             {
