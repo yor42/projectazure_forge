@@ -186,11 +186,10 @@ public class GuiTeamFormation extends Screen{   /*
             this.renderScroller(matrixStack, this.lastScrollY, entities.size());
         }
         if(this.notYetPopulated) {
-            int i=-1;
-            int minidx = (int) (Math.min(1,(this.lastScrollY/(this.y + 139F)))*entities.size());
-            for(int k=0; k<Math.min(5, entities.size()-minidx); k++){
+            int minidx = (int) (Math.min(1,(this.lastScrollY/(this.y + 139F)))*entities.size()-5);
+            for(int k=0; k<5; k++){
                 AbstractEntityCompanion entity = entities.get(minidx+k);
-                Button button = new EntityButton(this.x+8, this.y+24+(27*++i), 121, 27, entity, (runnable)->this.addMeber(entity));
+                Button button = new EntityButton(this.x+8, this.y+24+(27*k), 121, 27, entity, (runnable)->this.addMeber(entity));
                 this.addRenderableWidget(button);
             }
         }
