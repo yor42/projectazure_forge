@@ -19,6 +19,7 @@ public class itemModelProvider extends ItemModelProvider {
     public static final ArrayList<String> SIMPLETEXTURELIST = new ArrayList<>();
 
     public static final ArrayList<Pair<String, String>> ITEMENTRY = new ArrayList<>();
+    public static final ArrayList<Pair<String, String>> TOOLENTRY = new ArrayList<>();
     public static final ArrayList<String> SIMPLETEXTUREBBLOCKLIST = new ArrayList<>();
 
 
@@ -31,6 +32,10 @@ public class itemModelProvider extends ItemModelProvider {
 
         for(String id:SIMPLETEXTUREBBLOCKLIST){
             buildSimpleBlockModel(id);
+        }
+
+        for(Pair<String, String> entry:TOOLENTRY){
+            buildtoolModelWithSingleTex(entry.getFirst(), entry.getSecond());
         }
 
         for(Pair<String, String> entry:ITEMENTRY){
@@ -64,6 +69,11 @@ public class itemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder buildModelWithSingleTex(String ItemName, String Texturename){
         ModelFile itemGenerated = getExistingFile(mcLoc("item/generated"));
+        return buildModelWithSingleTex(itemGenerated, ItemName, Texturename);
+    }
+
+    private ItemModelBuilder buildtoolModelWithSingleTex(String ItemName, String Texturename){
+        ModelFile itemGenerated = getExistingFile(mcLoc("item/handheld"));
         return buildModelWithSingleTex(itemGenerated, ItemName, Texturename);
     }
 

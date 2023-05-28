@@ -43,6 +43,7 @@ import java.util.function.Supplier;
 
 import static com.yor42.projectazure.Main.*;
 import static com.yor42.projectazure.data.client.itemModelProvider.ITEMENTRY;
+import static com.yor42.projectazure.data.client.itemModelProvider.TOOLENTRY;
 
 @SuppressWarnings("unused")
 public class RegisterItems {
@@ -568,59 +569,59 @@ public class RegisterItems {
         }
     });
     public static final RegistryObject<Item> SYRINGE = register_withoutTexture("syringe", ()->new ItemSyringe(new Item.Properties().tab(PA_RESOURCES)));
-    public static final RegistryObject<Item> RMA7024_pickaxe = register("rma7024_pickaxe", () -> new PickaxeItem(ModMaterials.RMA_70_24, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> RMA7024_axe = register("rma7024_axe", () -> new AxeItem(ModMaterials.RMA_70_24, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> RMA7024_hoe = register("rma7024_hoe", () -> new HoeItem(ModMaterials.RMA_70_24, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> RMA7024_shovel = register("rma7024_shovel", () -> new ShovelItem(ModMaterials.RMA_70_24, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> RMA7024_sword = register("rma7024_sword", () -> new SwordItem(ModMaterials.RMA_70_24, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> D32_pickaxe = register("d32_pickaxe", () -> new PickaxeItem(ModMaterials.D32, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> D32_axe = register("d32_axe", () -> new AxeItem(ModMaterials.D32, 4, -2F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> D32_hoe = register("d32_hoe", () -> new HoeItem(ModMaterials.D32, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> D32_shovel = register("d32_shovel", () -> new ShovelItem(ModMaterials.D32, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> D32_sword = register("d32_sword", () -> new SwordItem(ModMaterials.D32, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> RMA7012_pickaxe = register("rma7012_pickaxe", () -> new PickaxeItem(ModMaterials.RMA_70_12, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> RMA7012_axe = register("rma7012_axe", () -> new AxeItem(ModMaterials.RMA_70_12, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> RMA7012_hoe = register("rma7012_hoe", () -> new HoeItem(ModMaterials.RMA_70_12, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> RMA7012_shovel = register("rma7012_shovel", () -> new ShovelItem(ModMaterials.RMA_70_12, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> RMA7012_sword = register("rma7012_sword", () -> new SwordItem(ModMaterials.RMA_70_12, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7024_pickaxe = registertool("rma7024_pickaxe", () -> new PickaxeItem(ModMaterials.RMA_70_24, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7024_axe = registertool("rma7024_axe", () -> new AxeItem(ModMaterials.RMA_70_24, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7024_hoe = registertool("rma7024_hoe", () -> new HoeItem(ModMaterials.RMA_70_24, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7024_shovel = registertool("rma7024_shovel", () -> new ShovelItem(ModMaterials.RMA_70_24, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7024_sword = registertool("rma7024_sword", () -> new SwordItem(ModMaterials.RMA_70_24, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_pickaxe = registertool("d32_pickaxe", () -> new PickaxeItem(ModMaterials.D32, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_axe = registertool("d32_axe", () -> new AxeItem(ModMaterials.D32, 4, -2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_hoe = registertool("d32_hoe", () -> new HoeItem(ModMaterials.D32, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_shovel = registertool("d32_shovel", () -> new ShovelItem(ModMaterials.D32, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_sword = registertool("d32_sword", () -> new SwordItem(ModMaterials.D32, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7012_pickaxe = registertool("rma7012_pickaxe", () -> new PickaxeItem(ModMaterials.RMA_70_12, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7012_axe = registertool("rma7012_axe", () -> new AxeItem(ModMaterials.RMA_70_12, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7012_hoe = registertool("rma7012_hoe", () -> new HoeItem(ModMaterials.RMA_70_12, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7012_shovel = registertool("rma7012_shovel", () -> new ShovelItem(ModMaterials.RMA_70_12, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7012_sword = registertool("rma7012_sword", () -> new SwordItem(ModMaterials.RMA_70_12, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
 
-    public static final RegistryObject<Item> LEAD_pickaxe = register("lead_pickaxe", () -> new PickaxeItem(ModMaterials.LEAD, 2, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> LEAD_axe = register("lead_axe", () -> new AxeItem(ModMaterials.LEAD, 7, -3.2F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> LEAD_hoe = register("lead_hoe", () -> new HoeItem(ModMaterials.LEAD, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> LEAD_shovel = register("lead_shovel", () -> new ShovelItem(ModMaterials.LEAD, 2.5F, -3.2F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> LEAD_sword = register("lead_sword", () -> new SwordItem(ModMaterials.LEAD, 4, -2.6F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> LEAD_pickaxe = registertool("lead_pickaxe", () -> new PickaxeItem(ModMaterials.LEAD, 2, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> LEAD_axe = registertool("lead_axe", () -> new AxeItem(ModMaterials.LEAD, 7, -3.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> LEAD_hoe = registertool("lead_hoe", () -> new HoeItem(ModMaterials.LEAD, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> LEAD_shovel = registertool("lead_shovel", () -> new ShovelItem(ModMaterials.LEAD, 2.5F, -3.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> LEAD_sword = registertool("lead_sword", () -> new SwordItem(ModMaterials.LEAD, 4, -2.6F, new Item.Properties().tab(PA_WEAPONS)));
 
 
-    public static final RegistryObject<Item> COPPER_pickaxe = register("copper_pickaxe", () -> new PickaxeItem(ModMaterials.COPPER, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> COPPER_axe = register("copper_axe", () -> new AxeItem(ModMaterials.COPPER, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> COPPER_hoe = register("copper_hoe", () -> new HoeItem(ModMaterials.COPPER, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> COPPER_shovel = register("copper_shovel", () -> new ShovelItem(ModMaterials.COPPER, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> COPPER_sword = register("copper_sword", () -> new SwordItem(ModMaterials.COPPER, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> COPPER_pickaxe = registertool("copper_pickaxe", () -> new PickaxeItem(ModMaterials.COPPER, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> COPPER_axe = registertool("copper_axe", () -> new AxeItem(ModMaterials.COPPER, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> COPPER_hoe = registertool("copper_hoe", () -> new HoeItem(ModMaterials.COPPER, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> COPPER_shovel = registertool("copper_shovel", () -> new ShovelItem(ModMaterials.COPPER, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> COPPER_sword = registertool("copper_sword", () -> new SwordItem(ModMaterials.COPPER, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
 
-    public static final RegistryObject<Item> TIN_pickaxe = register("tin_pickaxe", () -> new PickaxeItem(ModMaterials.TIN, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> TIN_axe = register("tin_axe", () -> new AxeItem(ModMaterials.TIN, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> TIN_hoe = register("tin_hoe", () -> new HoeItem(ModMaterials.TIN, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> TIN_shovel = register("tin_shovel", () -> new ShovelItem(ModMaterials.TIN, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> TIN_sword = register("tin_sword", () -> new SwordItem(ModMaterials.TIN, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TIN_pickaxe = registertool("tin_pickaxe", () -> new PickaxeItem(ModMaterials.TIN, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TIN_axe = registertool("tin_axe", () -> new AxeItem(ModMaterials.TIN, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TIN_hoe = registertool("tin_hoe", () -> new HoeItem(ModMaterials.TIN, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TIN_shovel = registertool("tin_shovel", () -> new ShovelItem(ModMaterials.TIN, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TIN_sword = registertool("tin_sword", () -> new SwordItem(ModMaterials.TIN, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
 
-    public static final RegistryObject<Item> BRONZE_pickaxe = register("bronze_pickaxe", () -> new PickaxeItem(ModMaterials.BRONZE, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> BRONZE_axe = register("bronze_axe", () -> new AxeItem(ModMaterials.BRONZE, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> BRONZE_hoe = register("bronze_hoe", () -> new HoeItem(ModMaterials.BRONZE, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> BRONZE_shovel = register("bronze_shovel", () -> new ShovelItem(ModMaterials.BRONZE, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> BRONZE_sword = register("bronze_sword", () -> new SwordItem(ModMaterials.BRONZE, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> BRONZE_pickaxe = registertool("bronze_pickaxe", () -> new PickaxeItem(ModMaterials.BRONZE, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> BRONZE_axe = registertool("bronze_axe", () -> new AxeItem(ModMaterials.BRONZE, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> BRONZE_hoe = registertool("bronze_hoe", () -> new HoeItem(ModMaterials.BRONZE, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> BRONZE_shovel = registertool("bronze_shovel", () -> new ShovelItem(ModMaterials.BRONZE, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> BRONZE_sword = registertool("bronze_sword", () -> new SwordItem(ModMaterials.BRONZE, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
 
-    public static final RegistryObject<Item> STEEL_pickaxe = register("steel_pickaxe", () -> new PickaxeItem(ModMaterials.STEEL, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> STEEL_axe = register("steel_axe", () -> new AxeItem(ModMaterials.STEEL, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> STEEL_hoe = register("steel_hoe", () -> new HoeItem(ModMaterials.STEEL, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> STEEL_shovel = register("steel_shovel", () -> new ShovelItem(ModMaterials.STEEL, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> STEEL_sword = register("steel_sword", () -> new SwordItem(ModMaterials.STEEL, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> STEEL_pickaxe = registertool("steel_pickaxe", () -> new PickaxeItem(ModMaterials.STEEL, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> STEEL_axe = registertool("steel_axe", () -> new AxeItem(ModMaterials.STEEL, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> STEEL_hoe = registertool("steel_hoe", () -> new HoeItem(ModMaterials.STEEL, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> STEEL_shovel = registertool("steel_shovel", () -> new ShovelItem(ModMaterials.STEEL, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> STEEL_sword = registertool("steel_sword", () -> new SwordItem(ModMaterials.STEEL, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
 
 
     public static final RegistryObject<Item> SLEDGEHAMMER = register_withoutTexture("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = register_withoutTexture("claymore", ItemClaymore::new);
     public static final RegistryObject<Item> GAE_BOLG = register_withoutTexture("gae_bolg", () -> new GaebolgItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));
 
-    public static final RegistryObject<Item> COMMANDING_STICK = register("commanding_stick", ItemCommandStick::new);
+    public static final RegistryObject<Item> COMMANDING_STICK = registertool("commanding_stick", ItemCommandStick::new);
 
     public static final RegistryObject<Item> DD_DEFAULT_RIGGING = register_withoutTexture("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
     .tab(PA_WEAPONS).stacksTo(1), 0,2,1,3,0,0, 5000, 500));
@@ -846,6 +847,10 @@ public class RegisterItems {
         return register_withTexturename(id, id, supplier);
     }
 
+    public static RegistryObject<Item> registertool(String id, Supplier<? extends Item> supplier){
+        return registertool_withTexturename(id, id, supplier, true);
+    }
+
     public static RegistryObject<Item> register_withoutTexture(String id, Supplier<? extends Item> supplier){
         return register_withTexturename(id, id, supplier, false);
     }
@@ -895,6 +900,13 @@ public class RegisterItems {
     public static RegistryObject<Item> register_withTexturename(String id, String texturename, Supplier<? extends Item> supplier, boolean registerItemModel){
         if(registerItemModel) {
             ITEMENTRY.add(new Pair<>(id, texturename));
+        }
+        return ITEMS.register(id, supplier);
+    }
+
+    public static RegistryObject<Item> registertool_withTexturename(String id, String texturename, Supplier<? extends Item> supplier, boolean registerItemModel){
+        if(registerItemModel) {
+            TOOLENTRY.add(new Pair<>(id, texturename));
         }
         return ITEMS.register(id, supplier);
     }
