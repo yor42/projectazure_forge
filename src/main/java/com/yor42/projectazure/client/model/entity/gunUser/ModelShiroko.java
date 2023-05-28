@@ -38,7 +38,7 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone Injured = this.getAnimationProcessor().getBone("Injured");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
-        IBone PatFace = this.getAnimationProcessor().getBone("Pat");
+        IBone PatFace = this.getAnimationProcessor().getBone("pat");
         IBone SleepFace = this.getAnimationProcessor().getBone("Sleeping");
         IBone Flushed = this.getAnimationProcessor().getBone("flushed");
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");

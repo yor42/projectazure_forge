@@ -2,7 +2,7 @@
   "general": {
     "boltAction": false,
     "auto": false,
-    "rate": 10,
+    "rate": 20,
     "rateSelector": [
       0,
       1
@@ -10,13 +10,13 @@
     "gripType": "tac:mini_gun",
     "recoilAngle": 4.25,
     "recoilKick": 5,
-    "horizontalRecoilAngle": 4.3,
+    "horizontalRecoilAngle": 0,
     "recoilAdsReduction": 0,
     "weaponRecoilDuration": 3,
     "recoilDuration": 3,
     "cameraRecoilModifier": 2,
     "alwaysSpread": false,
-    "spread": 0,
+    "spread": 1,
     "weightKilo": 20
   },
   "reloads": {
@@ -34,8 +34,8 @@
     "visible": true,
     "damage": 120,
     "size": 0.4,
-    "speed": 5,
-    "life": 200,
+    "speed": 2,
+    "life": 1000,
     "ricochet": false
   },
   "sounds": {

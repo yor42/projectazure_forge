@@ -9,12 +9,15 @@
   },
   "mixins": [
     "FurnaceAccessors",
+    "GunAccessor",
     "MixinBoatEntity",
     "MixinComponentDefinitionAccessor",
     "MixinExperienceOrbEntity",
     "MixinItem",
+    "MixinModules",
     "MixinPlayerEntity",
     "MixinPotionItem",
+    "ModuleAccessor",
     "PathNavigatorAccessors",
     "SwimmerPathNavigatorAccess",
     "WeaponPoseAccessor"

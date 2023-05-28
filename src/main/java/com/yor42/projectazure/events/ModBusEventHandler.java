@@ -78,11 +78,13 @@ public class ModBusEventHandler {
                 boolean isNecrom = player.getUUID().equals(NecromID);
                 boolean isGilagmesh = player.getUUID().equals(GilgameshID);
                 boolean isGuri = player.getUUID().equals(GuriUUID);
-
+                /*
                 ItemStack cubeStack = new ItemStack(RegisterItems.GLITCHED_PHONE.get());
                 CompoundTag nbt = cubeStack.getOrCreateTag();
                 nbt.putUUID("owner", player.getUUID());
                 player.getInventory().add(cubeStack);
+
+                 */
                 NonNullList<Item> stacks = NonNullList.create();
                 if (isDev) {
                     stacks.addAll(ItemCompanionSpawnEgg.MAP.values());
@@ -156,6 +158,9 @@ public class ModBusEventHandler {
             else{
                 if(!player.getAbilities().instabuild) {
                     gunstack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> energyhandler.extractEnergy(energygun.getEnergyperShot(), false));
+                }
+                if(gunItem == RegisterItems.SUPERNOVA.get()){
+                    player.knockback(1F, player.getViewVector(1F).normalize().x, player.getViewVector(1F).normalize().z);
                 }
             }
         }

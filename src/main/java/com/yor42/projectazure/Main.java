@@ -153,8 +153,10 @@ public class Main
 
     private void setup(final FMLCommonSetupEvent event)
     {
+        ProjectileManager.getInstance().registerFactory(RegisterItems.RAILGUN_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
+        ProjectileManager.getInstance().registerFactory(RegisterItems.SUPERNOVA_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_SUPERNOVA.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
 
-    for (Pair<String, ResourceLocation> pair:registerMultiBlocks.DEFINITIONS){
+        for (Pair<String, ResourceLocation> pair:registerMultiBlocks.DEFINITIONS){
         ComponentDefinition def = MbdComponents.DEFINITION_REGISTRY.get(pair.getSecond());
         if(def instanceof ControllerDefinition) {
             String name = pair.getFirst();
@@ -184,8 +186,6 @@ public class Main
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-        ProjectileManager.getInstance().registerFactory(RegisterItems.RAILGUN_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
-        ProjectileManager.getInstance().registerFactory(RegisterItems.SUPERNOVA_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_SUPERNOVA.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
         if (ModList.get().isLoaded("theoneprobe")) TOPCompat.register();
         if(CompatibilityUtils.isCurioLoaded()) CuriosCompat.sendImc(event);
     }
