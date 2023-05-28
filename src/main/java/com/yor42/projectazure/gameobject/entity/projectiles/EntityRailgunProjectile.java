@@ -27,7 +27,7 @@ public class EntityRailgunProjectile extends ProjectileEntity {
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         if(entity!=this.shooter) {
             createExplosion(this, this.power, false);
-
+            super.onHitEntity(entity, hitVec, startVec, endVec, headshot);
         }
     }
 

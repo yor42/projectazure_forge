@@ -1,6 +1,7 @@
 package com.yor42.projectazure.data.common;
 
 import com.tac.guns.crafting.WorkbenchRecipeBuilder;
+import com.tac.guns.init.ModItems;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.data.recipebuilder.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AdvancedAlloySmelterControllerTE;
@@ -74,12 +75,13 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
     private void generateGunBenchRecipe(@Nonnull Consumer<FinishedRecipe> consumer){
         WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.CASELESS_4MM.get(),6).addIngredient(RegisterItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(RegisterItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SUPERNOVA_AMMO.get(),2).addIngredient(ModItems.RARE_MATERIAL.get(), 1).addIngredient(RegisterItems.COPPER_COIL.get(), 2).build(consumer, Constants.MODID,"gunbench_supernova_ammo");
 
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 14).addIngredient(RegisterItems.PRIMITIVE_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(RegisterItems.MECHANICAL_PARTS.get(), 4).build(consumer, Constants.MODID,"gunbench_granadelauncher");
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.TYPHOON.get()).addIngredient(ModTags.Items.PLATE_STEEL, 25).addIngredient(ModTags.Items.PLATE_ALUMINIUM, 10).addIngredient(ModTags.Items.INGOT_INCANDESCENT_ALLOY, 30).addIngredient(RegisterItems.CRYSTALLINE_COMPONENT.get(),4).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 2).build(consumer, Constants.MODID,"gunbench_typhoon");
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.WHITEFANG_465.get()).addIngredient(ModTags.Items.PLATE_STEEL, 9).addIngredient(ModTags.Items.INGOT_STEEL, 10).build(consumer, Constants.MODID,"gunbench_whitefang");
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SANGVIS_RAILGUN.get()).addIngredient(ModTags.Items.INGOT_STEEL, 40).addIngredient(ModTags.Items.CIRCUITS_CRYSTALLINE, 9).addIngredient(RegisterItems.BASIC_DEVICE.get(), 12).build(consumer, Constants.MODID,"gunbench_cannon");
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SUPERNOVA.get()).addIngredient(ModTags.Items.INGOT_STEEL, 33).addIngredient(ModTags.Items.CIRCUITS_CRYSTALLINE, 12).addIngredient(RegisterItems.BASIC_DEVICE.get(), 8).build(consumer, Constants.MODID,"gunbench_supernova");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.W_GRANADELAUNCHER.get()).addIngredient(ModItems.RARE_MATERIAL.get(), 14).addIngredient(RegisterItems.PRIMITIVE_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(RegisterItems.MECHANICAL_PARTS.get(), 4).build(consumer, Constants.MODID,"gunbench_granadelauncher");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.TYPHOON.get()).addIngredient(ModItems.ULTIMATE_MATERIAL.get(), 30).addIngredient(RegisterItems.CRYSTALLINE_COMPONENT.get(),4).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 2).build(consumer, Constants.MODID,"gunbench_typhoon");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.WHITEFANG_465.get()).addIngredient(ModItems.RARE_MATERIAL.get(), 30).addIngredient(ModTags.Items.INGOT_STEEL, 10).build(consumer, Constants.MODID,"gunbench_whitefang");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SANGVIS_RAILGUN.get()).addIngredient(ModItems.LEGENDARY_MATERIAL.get(), 40).addIngredient(ModTags.Items.CIRCUITS_CRYSTALLINE, 9).addIngredient(RegisterItems.BASIC_DEVICE.get(), 12).build(consumer, Constants.MODID,"gunbench_cannon");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SUPERNOVA.get()).addIngredient(ModItems.LEGENDARY_MATERIAL.get(), 30).addIngredient(ModTags.Items.CIRCUITS_CRYSTALLINE, 12).addIngredient(RegisterItems.BASIC_DEVICE.get(), 8).build(consumer, Constants.MODID,"gunbench_supernova");
     }
 
     private void generateMetalRecipes(@Nonnull Consumer<FinishedRecipe> consumer){

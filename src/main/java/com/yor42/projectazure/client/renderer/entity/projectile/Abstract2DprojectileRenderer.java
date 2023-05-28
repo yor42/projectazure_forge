@@ -31,7 +31,7 @@ public abstract class Abstract2DprojectileRenderer<T extends Entity> extends Ent
         xrot/=vec;
         yrot/=vec;
         zrot/=vec;
-        Quaternion camerarot = new Quaternion(new Vector3f(xrot, yrot, zrot), vec, false);
+        Quaternion camerarot = new Quaternion(new Vector3f(xrot, yrot, zrot), vec, true);
         matrixStackIn.mulPose(camerarot);
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F));
         PoseStack.Pose matrixstack$entry = matrixStackIn.last();

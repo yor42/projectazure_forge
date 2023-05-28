@@ -492,7 +492,7 @@ public class RegisterItems {
     //Shooty stuff
     public static final RegistryObject<Item> WHITEFANG_465 = register_withoutTexture("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
     public static final RegistryObject<Item> TYPHOON = register_withoutTexture("typhoon", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> SUPERNOVA = register_withoutTexture("supernova", ()->new GeoGunItem(50000, 2500, 1, true, (properties)->properties.tab(PA_WEAPONS)){
+    public static final RegistryObject<Item> SUPERNOVA = register_withoutTexture("supernova", ()->new GeoGunItem(50000, 2500, 1, false, (properties)->properties.tab(PA_WEAPONS)){
         @Override
         public Gun getGun() {
             Gun gun = super.getGun();
@@ -513,7 +513,7 @@ public class RegisterItems {
     public static final RegistryObject<Item> CASELESS_4MM = register_withoutTexture("4mmcaseless", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
 
     public static final RegistryObject<Item> RAILGUN_AMMO = register("ammo_sangvisrailgun", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> SUPERNOVA_AMMO = register_withoutTexture("ammo_supernova", ()->new TimelessAmmoItem((properties) -> properties));
+    public static final RegistryObject<Item> SUPERNOVA_AMMO = register("ammo_supernova", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
     //not-so-shooty-stuff
     public static final RegistryObject<Item> CHIXIAO = register_withoutTexture("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SHEATH = register_withoutTexture("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 1, -1.5F, new Item.Properties().tab(PA_WEAPONS)));

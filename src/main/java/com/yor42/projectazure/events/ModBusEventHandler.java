@@ -156,11 +156,15 @@ public class ModBusEventHandler {
                 event.setCanceled(true);
             }
             else{
+                int currentFireMode = gunstack.getOrCreateTag().getInt("CurrentFireMode");
+                if(currentFireMode == 0){
+                    return;
+                }
                 if(!player.getAbilities().instabuild) {
                     gunstack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> energyhandler.extractEnergy(energygun.getEnergyperShot(), false));
                 }
                 if(gunItem == RegisterItems.SUPERNOVA.get()){
-                    player.knockback(1F, player.getViewVector(1F).normalize().x, player.getViewVector(1F).normalize().z);
+                    player.knockback(0.75F, player.getViewVector(1F).normalize().x, player.getViewVector(1F).normalize().z);
                 }
             }
         }

@@ -16,14 +16,13 @@
     "recoilDuration": 3,
     "cameraRecoilModifier": 2,
     "alwaysSpread": false,
-    "spread": 1,
+    "spread": 0,
     "weightKilo": 20
   },
   "reloads": {
-    "item": "ammo_supernova",
     "magFed": true,
     "maxAmmo": 1,
-    "reloadMagTimer": 1,
+    "reloadMagTimer": 200,
     "additionalReloadEmptyMagTimer": 10,
     "preReloadPauseTicks": 7,
     "maxAdditionalAmmoPerOC": [5, 5, 5],
@@ -31,10 +30,12 @@
     "openBolt":true
   },
   "projectile": {
+    "item": "projectazure:ammo_supernova",
     "visible": true,
     "damage": 120,
-    "size": 0.4,
-    "speed": 2,
+    "size": 1,
+    "gravity": false,
+    "speed": 4,
     "life": 1000,
     "ricochet": false
   },

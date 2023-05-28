@@ -188,25 +188,25 @@ public abstract class HatchTE extends PartTileEntity<PartDefinition> {
 
     }
 
-    private static class EnergyTE extends HatchTE{
+    public static class EnergyTE extends HatchTE{
         public EnergyTE(PartDefinition definition, BlockPos pos, BlockState state) {
             super(definition, pos, state, HatchType.ENERGY);
         }
     }
 
-    private static class ItemTE extends HatchTE{
+    public static class ItemTE extends HatchTE{
         public ItemTE(PartDefinition definition, BlockPos pos, BlockState state) {
             super(definition, pos, state, HatchType.ITEM);
         }
     }
 
-    private static class FluidTE extends HatchTE{
+    public static class FluidTE extends HatchTE{
         public FluidTE(PartDefinition definition, BlockPos pos, BlockState state) {
             super(definition, pos, state, HatchType.FLUID);
         }
     }
 
-    private static class EntityTE extends HatchTE{
+    public static class EntityTE extends HatchTE{
         public EntityTE(PartDefinition definition, BlockPos pos, BlockState state) {
             super(definition, pos, state, HatchType.ENTITY);
         }

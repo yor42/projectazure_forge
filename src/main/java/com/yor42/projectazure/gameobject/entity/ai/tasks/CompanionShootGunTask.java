@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
+import static com.tac.guns.client.handler.ShootingHandler.calcShootTickGap;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.LOOK_TARGET;
@@ -118,11 +119,10 @@ public class CompanionShootGunTask extends Behavior<AbstractEntityCompanion> {
                         boolean hasAmmo = gunStack.getOrCreateTag().getInt("AmmoCount") > 0;
                         boolean reloadable = entity.HasRightMagazine(gunStack);
                         Gun modifiedGun = gunItem.getModifiedGun(gunStack);
-                        int rate = GunEnchantmentHelper.getRate(gunStack, modifiedGun);
-                        rate = GunModifierHelper.getModifiedRate(gunStack, rate);
+                        float rpm = (float)modifiedGun.getGeneral().getRate();
                         if (hasAmmo && --this.attackTime <= 0) {
                             entity.AttackUsingGun(gunStack);
-                            this.attackTime = rate;
+                            this.attackTime = (int) calcShootTickGap((int)rpm);
                         } else if (gunStack.getItem() instanceof GunItem && getRemainingAmmo(gunStack) <= 0 && !entity.isReloadingMainHand() && reloadable) {
                             entity.setReloadDelay(gunStack);
                         }

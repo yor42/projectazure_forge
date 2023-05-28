@@ -154,7 +154,7 @@ public class Main
     private void setup(final FMLCommonSetupEvent event)
     {
         ProjectileManager.getInstance().registerFactory(RegisterItems.RAILGUN_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
-        ProjectileManager.getInstance().registerFactory(RegisterItems.SUPERNOVA_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_SUPERNOVA.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
+        ProjectileManager.getInstance().registerFactory(RegisterItems.SUPERNOVA_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_SUPERNOVA.get(), worldIn, entity, weapon, item, modifiedGun, 1F, randx, randy));
 
         for (Pair<String, ResourceLocation> pair:registerMultiBlocks.DEFINITIONS){
         ComponentDefinition def = MbdComponents.DEFINITION_REGISTRY.get(pair.getSecond());
