@@ -218,9 +218,9 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
             double y = target.getEyeY() - entityy;
             double z = target.getZ() - (this.getZ());
 
-            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getLevel(), this);
+            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getLevel(),this, 5+(float)this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE), null);
             projectile.shoot(x,y,z, 1.1F, 0.05F);
-            projectile.setPos(this.getX(), this.getY(0.7), this.getZ());
+            projectile.setPos(this.getX(), this.getEyeY(), this.getZ());
             this.getLevel().addFreshEntity(projectile);
 
             this.playSound(registerSounds.CHIMERA_PROJECTILE_LAUNCH, 1F, 0.8F + this.level.random.nextFloat() * 0.4F);

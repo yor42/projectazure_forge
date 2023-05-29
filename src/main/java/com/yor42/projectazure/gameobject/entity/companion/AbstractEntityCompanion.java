@@ -2136,7 +2136,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     protected SoundEvent getAmbientSound() {
 
-        if(this.isAngry() || this.isSleeping()){
+        if(this.isAngry() || this.isSleeping() || isDeadOrDying() || isCriticallyInjured()){
             return null;
         }
 
@@ -2474,13 +2474,13 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                             this.swing(MAIN_HAND);
                             this.getOwner().hurt(DamageSources.causeRevengeDamage(this), 2F);
                         } else if (newWarningCount >= 3 && this.getSensing().hasLineOfSight(this.getOwner())) {
-                            this.addAffection(-2F);
-                            this.getBrain().setMemory(ATTACK_TARGET, this.getOwner());
+                            this.addAffection(-5F);
+                            this.getOwner().hurt(DamageSources.causeRevengeDamage(this), 19F);
                             if(this.isOrderedToSit()){
                                 this.setOrderedToSit(false);
                             }
                             this.getEntityData().set(ECCI_ANIMATION_TIME, 0);
-                            this.getEntityData().set(ANGRYTIMER, 6000);
+                            this.getEntityData().set(ANGRYTIMER, 20);
                             this.getEntityData().set(INTERACTION_WARNING_COUNT,0);
                         }
                     }

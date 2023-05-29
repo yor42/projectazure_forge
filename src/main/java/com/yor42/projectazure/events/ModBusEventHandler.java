@@ -144,7 +144,6 @@ public class ModBusEventHandler {
         ItemStack gunstack = event.getStack();
         Item gunItem = gunstack.getItem();
         Player player = event.getPlayer();
-        Level world = event.getPlayer().getLevel();
         if(gunItem instanceof ItemEnergyGun){
             ItemEnergyGun energygun = (ItemEnergyGun) gunItem;
             if(gunstack.getCapability(CapabilityEnergy.ENERGY).map((energyhandler)-> energyhandler.extractEnergy(energygun.getEnergyperShot(), true) < ((ItemEnergyGun) gunItem).getEnergyperShot()).orElse(true)){
@@ -155,20 +154,24 @@ public class ModBusEventHandler {
                 }
                 event.setCanceled(true);
             }
-            else{
-                int currentFireMode = gunstack.getOrCreateTag().getInt("CurrentFireMode");
-                if(currentFireMode == 0){
-                    return;
-                }
-                if(!player.getAbilities().instabuild) {
-                    gunstack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> energyhandler.extractEnergy(energygun.getEnergyperShot(), false));
-                }
-                if(gunItem == RegisterItems.SUPERNOVA.get()){
-                    player.knockback(0.75F, player.getViewVector(1F).normalize().x, player.getViewVector(1F).normalize().z);
-                }
+        }
+    }
+
+    @SubscribeEvent
+    public void onGunFirePost(GunFireEvent.Post event) {
+        ItemStack gunstack = event.getStack();
+        Item gunItem = gunstack.getItem();
+        Player player = event.getPlayer();
+        Level world = event.getPlayer().getLevel();
+        if(gunItem instanceof ItemEnergyGun){
+            ItemEnergyGun energygun = (ItemEnergyGun) gunItem;
+            if(!player.getAbilities().instabuild) {
+                gunstack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> energyhandler.extractEnergy(energygun.getEnergyperShot(), false));
             }
         }
-
+        if(gunItem == RegisterItems.SUPERNOVA.get()){
+            player.knockback(0.75F, player.getViewVector(1F).normalize().x, player.getViewVector(1F).normalize().z);
+        }
         if(gunItem instanceof GeoGunItem && !world.isClientSide()){
             final int id = GeckoLibUtil.guaranteeIDForStack(gunstack, (ServerLevel) world);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player);

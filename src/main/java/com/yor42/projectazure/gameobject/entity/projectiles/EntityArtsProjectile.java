@@ -108,6 +108,8 @@ public class EntityArtsProjectile extends AbstractHurtingProjectile {
             LivingEntity LivingTarget = (LivingEntity)target;
             double DistanceMultiplier = this.originPos != null ? Math.min(25 / distanceToSqr(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0) : 1;
             target.hurt(DamageSources.causeArtsDamage(this, this.getOwner()), (float) (this.damage * DistanceMultiplier));
+            Vec3 movement = this.getDeltaMovement().normalize();
+            ((LivingEntity) target).knockback(0.4F, movement.x(),movement.z());
             if(this.Effect != null){
                 LivingTarget.addEffect(this.Effect);
             }

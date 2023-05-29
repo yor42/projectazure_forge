@@ -239,6 +239,7 @@
   "item.projectazure.whitefang465": "WHITE FANG 465",
   "item.projectazure.typhoon": "TYPHOON",
   "item.projectazure.supernova": "Sword of Light: SUPERNOVA",
+  "item.projectazure.supernova_ammo": "SUPERNOVA Ammunition",
   "item.projectazure.sangvis_railgun": "SF-2815 Railgun",
   "item.projectazure.ammo_sangvisrailgun": "SF-2815 Railgun Ammunition",
   "item.projectazure.granadelauncher": "Automatic Granade Launcher",
@@ -822,5 +823,6 @@
   "message.commandstick.entity_pantrypos_invalid": "Registered Pantry position %s is Invalid!",
   "team.defaultteamname": "New Team",
   "equiment.empty": "EMPTY",
-  "gui.rigginginventory": "Rigging Equipments"
+  "gui.rigginginventory": "Rigging Equipments",
+  "entity.not_enough_affection": "Not enough Affection!"
 }

@@ -239,6 +239,7 @@
   "item.projectazure.whitefang465": "화이트팽 465",
   "item.projectazure.typhoon": "타이푼",
   "item.projectazure.supernova": "빛의 검: 슈퍼노바",
+  "item.projectazure.supernova_ammo": "슈퍼노바 탄약",
   "item.projectazure.sangvis_railgun": "SF-2815 레일건",
   "item.projectazure.ammo_sangvisrailgun": "SF-2815 레일건 탄약",
   "item.projectazure.granadelauncher": "자동 유탄발사기",
@@ -666,7 +667,8 @@
   "ore": "%s 광석",
   "gear": "%s 기어",
   "block": "%s 블럭",
-  "raw": "Raw %s",
+  "raw_ore": "Raw %s",
+  "deepslate_ore": "Deepslate %s Ore",
 
   "brass": "황동",
   "copper": "구리",
@@ -809,7 +811,6 @@
 
   "projectazure.codex.entry.pantry.title": "식품 저장고",
   "projectazure.codex.entry.pantry.description": "식품 저장고는 큰 상자와 매우 유사하지만, 음식만 담을 수 있고, 더 작습니다.$(br)또한 동료들은 여기서 자유롭게 음식을 가져갈 수 있으며,$(br)사용하는 나무 종류별로 다른 디자인이 나옵니다.",
-
   "gui.tooltip.homepos": "Bed Location",
   "gui.tooltip.aggressive.on": "This companion will attack hostile entity first",
   "gui.tooltip.aggressive.off": "This companion won't attack hostile entity first",
@@ -822,5 +823,6 @@
   "message.commandstick.entity_pantrypos_invalid": "Registered Pantry position %s is Invalid!",
   "team.defaultteamname": "New Team",
   "equiment.empty": "EMPTY",
-  "gui.rigginginventory": "Rigging Equipments"
+  "gui.rigginginventory": "Rigging Equipments",
+  "raw": "Raw %s"
 }

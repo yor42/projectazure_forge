@@ -18,8 +18,10 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.*;
 
@@ -28,7 +30,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCannon;
-import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.*;
 import static net.minecraft.world.entity.ai.memory.MemoryStatus.VALUE_PRESENT;
 import static net.minecraft.world.entity.schedule.Activity.*;
 
@@ -178,7 +180,9 @@ public class CompanionTasks {
     private static void addCombatActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
         //brain.addActivityWithConditions(Activity.FIGHT, getFightPackage(companion), ImmutableSet.of(Pair.of(ATTACK_TARGET, VALUE_PRESENT)));
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.<net.minecraft.world.entity.ai.behavior.Behavior<? super AbstractEntityCompanion>>of(
-                        //new FindNewAttackTargetTask<>((p_234523_1_) -> !isNearestValidAttackTarget(companion, p_234523_1_)),
+                        new StopAttackingIfTargetInvalid<>((target) -> {
+                            return isNearestValidAttackTarget(companion, target);
+                        }),
                         new RunIf<>(CompanionTasks::shouldStrafe, new BackUpIfTooClose<>(5, 0.75F)),
                         new CompanionMovetoTargetTask(companion,1.0F),
                         new CompanionEndAttackTask(),
@@ -264,7 +268,7 @@ public class CompanionTasks {
 
     private static void maybeRetaliate(AbstractEntityCompanion companion, LivingEntity target) {
         if (!companion.getBrain().isActive(AVOID)) {
-            if (EntitySelector.ENTITY_STILL_ALIVE.test(target)) {
+            if (Sensor.isEntityAttackableIgnoringLineOfSight(companion, target)) {
                 if (hasWeapon(companion, target) && (companion.getOwner() == null || companion.wantsToAttack(target, companion.getOwner()))) {
 
                     if(companion.getVehicle() != null){
@@ -306,7 +310,7 @@ public class CompanionTasks {
         if(hasWeapon(p_234397_0_, p_234397_1_)) {
             Brain<AbstractEntityCompanion> brain = p_234397_0_.getBrain();
             brain.eraseMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
-            brain.setMemoryWithExpiry(ATTACK_TARGET, p_234397_1_, 400L);
+            brain.setMemoryWithExpiry(ATTACK_TARGET, p_234397_1_, 1000L);
         }
     }
 
@@ -353,6 +357,28 @@ public class CompanionTasks {
 
     public static Optional<LivingEntity> getAvoidTarget(AbstractEntityCompanion p_234515_0_) {
         return p_234515_0_.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET) ? p_234515_0_.getBrain().getMemory(MemoryModuleType.AVOID_TARGET) : Optional.empty();
+    }
+
+    private static boolean isNearestValidAttackTarget(AbstractEntityCompanion entity, LivingEntity pTarget) {
+        return findNearestTarget(entity).filter((p_34887_) -> p_34887_ == pTarget).isPresent();
+    }
+
+    private static Optional<? extends LivingEntity> findNearestTarget(AbstractEntityCompanion entity){
+
+        if(entity.isAngry()){
+            return Optional.ofNullable(entity.getOwner());
+        }
+
+        if(!entity.shouldAttackFirst()){
+
+            if(entity.tickCount- entity.getLastHurtByMobTimestamp()>=1200){
+                return Optional.empty();
+            }
+            return Optional.ofNullable(entity.getLastHurtByMob());
+        }
+        else{
+            return entity.getBrain().getMemory(NEAREST_HOSTILE).flatMap((tgt)-> Sensor.isEntityAttackable(entity, tgt)? Optional.of(tgt):Optional.empty());
+        }
     }
 
 }
