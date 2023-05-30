@@ -18,91 +18,87 @@ public class registerNetwork {
                 .networkProtocolVersion(() -> NETWORK_VERSION)
                 .simpleChannel();
 
-        channel.messageBuilder(selectedStarterPacket.class, 1)
+        int id = 0;
+
+        channel.messageBuilder(selectedStarterPacket.class, id++)
                 .decoder(selectedStarterPacket::decode)
                 .encoder(selectedStarterPacket::encode)
                 .consumer(selectedStarterPacket::handle)
                 .add();
 
-        channel.messageBuilder(SyncTeamListPacket.class,2)
+        channel.messageBuilder(SyncTeamListPacket.class, id++)
                 .decoder(SyncTeamListPacket::decode)
                 .encoder(SyncTeamListPacket::encode)
                 .consumer(SyncTeamListPacket::handle)
                 .add();
 
-        channel.messageBuilder(spawnParticlePacket.class, 3)
-                .decoder(spawnParticlePacket::decode)
-                .encoder(spawnParticlePacket::encode)
-                .consumer(spawnParticlePacket::handle)
-                .add();
-
-        channel.messageBuilder(StartRecruitPacket.class,6)
+        channel.messageBuilder(StartRecruitPacket.class, id++)
                 .decoder(StartRecruitPacket::decode)
                 .encoder(StartRecruitPacket::encode)
                 .consumer(StartRecruitPacket::handle)
                 .add();
 
-        channel.messageBuilder(EntityInteractionPacket.class,7)
+        channel.messageBuilder(EntityInteractionPacket.class, id++)
                 .decoder(EntityInteractionPacket::decode)
                 .encoder(EntityInteractionPacket::encode)
                 .consumer(EntityInteractionPacket::handle)
                 .add();
 
-        channel.messageBuilder(EditEntityValuePacket.class,8)
+        channel.messageBuilder(EditEntityValuePacket.class, id++)
                 .decoder(EditEntityValuePacket::decode)
                 .encoder(EditEntityValuePacket::encode)
                 .consumer(EditEntityValuePacket::handle)
                 .add();
 
-        channel.messageBuilder(TeamNameChangedPacket.class,9)
+        channel.messageBuilder(TeamNameChangedPacket.class, id++)
                 .decoder(TeamNameChangedPacket::decode)
                 .encoder(TeamNameChangedPacket::encode)
                 .consumer(TeamNameChangedPacket::handle)
                 .add();
 
-        channel.messageBuilder(CreateTeamPacket.class,10)
+        channel.messageBuilder(CreateTeamPacket.class, id++)
                 .consumer(CreateTeamPacket::handle)
                 .decoder(CreateTeamPacket::decode)
                 .encoder(CreateTeamPacket::encode)
                 .add();
 
-        channel.messageBuilder(RemoveTeamPacket.class,11)
+        channel.messageBuilder(RemoveTeamPacket.class, id++)
                 .consumer(RemoveTeamPacket::handle)
                 .decoder(RemoveTeamPacket::decode)
                 .encoder(RemoveTeamPacket::encode)
                 .add();
 
-        channel.messageBuilder(EditTeamMemberPacket.class,12)
+        channel.messageBuilder(EditTeamMemberPacket.class, id++)
                 .consumer(EditTeamMemberPacket::handle)
                 .decoder(EditTeamMemberPacket::decode)
                 .encoder(EditTeamMemberPacket::encode)
                 .add();
 
-        channel.messageBuilder(DeleteHomePacket.class,13)
+        channel.messageBuilder(DeleteHomePacket.class, id++)
                 .consumer(DeleteHomePacket::handle)
                 .decoder(DeleteHomePacket::decode)
                 .encoder(DeleteHomePacket::encode)
                 .add();
 
-        channel.messageBuilder(SelectInitialSpawnSetPacket.class,14)
+        channel.messageBuilder(SelectInitialSpawnSetPacket.class, id++)
                 .consumer(SelectInitialSpawnSetPacket::handle)
                 .decoder(SelectInitialSpawnSetPacket::decode)
                 .encoder(SelectInitialSpawnSetPacket::encode)
                 .add();
 
-        channel.messageBuilder(ChangeContainerPacket.class,15)
+        channel.messageBuilder(ChangeContainerPacket.class, id++)
                 .decoder(ChangeContainerPacket::decode)
                 .encoder(ChangeContainerPacket::encode)
                 .consumer(ChangeContainerPacket::handle)
                 .add();
 
-        channel.messageBuilder(ReopenEntityInventoryPacket.class,16)
+        channel.messageBuilder(ReopenEntityInventoryPacket.class, id++)
                 .consumer(ReopenEntityInventoryPacket::handle)
                 .decoder(ReopenEntityInventoryPacket::decode)
                 .encoder(ReopenEntityInventoryPacket::encode)
                 .add();
 
-        channel.messageBuilder(PlaySoundPacket.class,17)
+        channel.messageBuilder(PlaySoundPacket.class, id++)
                 .consumer(PlaySoundPacket::handle)
                 .decoder(PlaySoundPacket::decode)
                 .encoder(PlaySoundPacket::encode)
@@ -110,5 +106,4 @@ public class registerNetwork {
 
         return channel;
     }
-
 }
