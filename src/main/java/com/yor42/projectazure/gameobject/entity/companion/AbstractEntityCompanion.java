@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.mojang.math.Vector3f;
 import com.mojang.serialization.Dynamic;
-import com.spacecat.summer.objects.math.PatMath;
+import com.spacecat.summer.objects.math.RayMath;
 import com.tac.guns.Config;
 import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.common.Gun;
@@ -45,10 +45,10 @@ import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.network.serverEvents;
 import com.yor42.projectazure.network.packets.DeleteHomePacket;
 import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
-import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.RegisterAI;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.ChatFormatting;
@@ -57,6 +57,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -1951,7 +1952,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public ItemStack eat(@Nonnull Level WorldIn, @Nonnull ItemStack foodStack) {
         this.getFoodStats().consume(foodStack.getItem(), foodStack);
         if(!this.getLevel().isClientSide()) {
-            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, foodStack));
+            serverEvents.SpawnItemParticles(this, foodStack);
         }
         WorldIn.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.5F, WorldIn.random.nextFloat() * 0.1F + 0.9F);
         FoodProperties food = foodStack.getItem().getFoodProperties(foodStack, this);
@@ -2017,7 +2018,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getLimitBreakSound().ifPresent((sound)->this.playSound(sound, 1.0F, 1.0F));
 
         if(!this.getLevel().isClientSide()) {
-            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.LIMITBREAK));
+            serverEvents.spawnLimitBreakParticle(this);
         }
     }
 
@@ -2055,7 +2056,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getUpgradeSound().ifPresent((sound)->this.playSound(sound, 1.0F, 1.0F));
 
         if(!this.getLevel().isClientSide()) {
-            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.LIMITBREAK));
+            serverEvents.spawnLimitBreakParticle(this);
         }
         return true;
     }
@@ -2096,7 +2097,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getUpgradeSound().ifPresent((sound)->this.playSound(sound, 1.0F, 1.0F));
 
         if(!this.getLevel().isClientSide()) {
-            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.LIMITBREAK));
+            serverEvents.spawnLimitBreakParticle(this);
         }
         return true;
     }
@@ -2416,14 +2417,14 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
                         this.addAffection(0.025*AffectionMultiplier);
                         this.addMorale(0.5*AffectionMultiplier);
-                        Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
+                        serverEvents.spawnPatHeartParticle(this);
 
                     } else {
                         this.getEntityData().set(PATEFFECTCOUNT, this.getEntityData().get(MAXPATEFFECTCOUNT));
                         if (this.getEntityData().get(PATCOOLDOWN) == 0) {
                             this.getEntityData().set(PATCOOLDOWN, (7 + this.random.nextInt(5)) * 1200);
                         }
-                        Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_SMOKE));
+                        serverEvents.spawnPatSmokeParticle(this);
                     }
                 }
             }
@@ -3051,7 +3052,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
                     // SpaceCat is running!
                     AABB entity_aabb = this.getBoundingBox();
-                    if (PatMath.targetsView(player, new AABB(entity_aabb.minX, entity_aabb.minY - (entity_aabb.minY - entity_aabb.maxY) / 1.5D, entity_aabb.minZ, entity_aabb.maxX, entity_aabb.maxY, entity_aabb.maxZ)) && this.getEntityData().get(ECCI_ANIMATION_TIME) == 0)
+                    Vec3 view_vec3 = RayMath.calculateView(player.getXRot(), player.getYRot());
+
+                    if (RayMath.targetsView(player, new AABB(entity_aabb.minX, entity_aabb.minY - (entity_aabb.minY - entity_aabb.maxY) / 1.5D, entity_aabb.minZ, entity_aabb.maxX, entity_aabb.maxY, entity_aabb.maxZ), view_vec3) && this.getEntityData().get(ECCI_ANIMATION_TIME) == 0)
                     {
                         if (!this.getLevel().isClientSide())
                         {
@@ -3060,7 +3063,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         }
                         return InteractionResult.SUCCESS;
                     }
-                    else if (PatMath.targetsView(player, new AABB(entity_aabb.minX, entity_aabb.minY - (entity_aabb.minY - entity_aabb.maxY) / 3.0D, entity_aabb.minZ, entity_aabb.maxX, entity_aabb.maxY - (entity_aabb.maxY - entity_aabb.minY) / 3.0D, entity_aabb.maxZ)) && PatMath.targetsView00(player, this))
+                    else if (RayMath.targetsView(player, new AABB(entity_aabb.minX, entity_aabb.minY - (entity_aabb.minY - entity_aabb.maxY) / 3.0D, entity_aabb.minZ, entity_aabb.maxX, entity_aabb.maxY - (entity_aabb.maxY - entity_aabb.minY) / 3.0D, entity_aabb.maxZ), view_vec3) && RayMath.isFront(player, this))
                     {
                         if (!this.getLevel().isClientSide())
                         {
@@ -3069,7 +3072,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         }
                         return InteractionResult.SUCCESS;
                     }
-                    else if (PatMath.targetsView(player, new AABB(entity_aabb.minX, entity_aabb.minY, entity_aabb.minZ, entity_aabb.maxX, entity_aabb.maxY - (entity_aabb.maxY - entity_aabb.minY) / 1.5D, entity_aabb.maxZ)))
+                    else if (RayMath.targetsView(player, new AABB(entity_aabb.minX, entity_aabb.minY, entity_aabb.minZ, entity_aabb.maxX, entity_aabb.maxY - (entity_aabb.maxY - entity_aabb.minY) / 1.5D, entity_aabb.maxZ), view_vec3))
                     {
                         if(player.isCrouching() && player.getPassengers().isEmpty() && !this.isOrderedToSit())
                         {
@@ -3318,7 +3321,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.addAffection(0.12F);
         this.getEntityData().set(HEAL_TIMER, 50);
         if(!this.getLevel().isClientSide()) {
-            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
+            serverEvents.spawnPatHeartParticle(this);
         }
     }
 

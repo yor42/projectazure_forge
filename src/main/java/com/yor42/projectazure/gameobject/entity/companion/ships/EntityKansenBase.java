@@ -15,7 +15,7 @@ import com.yor42.projectazure.libs.enums.AmmoCategory;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.network.packets.spawnParticlePacket;
+import com.yor42.projectazure.network.serverEvents;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.core.particles.ParticleTypes;
@@ -370,7 +370,12 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                         this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (MathUtil.getRand().nextFloat() - MathUtil.getRand().nextFloat()) * 0.2F + 1.0F);
                         this.level.addFreshEntity(shell);
                         Ammostack.shrink(1);
-                        Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));
+                        Vec3 view_vec3 = this.getViewVector(1.0F);
+
+                        if (!this.getLevel().isClientSide())
+                        {
+                            serverEvents.spawnCannonParticleModerate((ServerLevel)this.getLevel(), vector3d.x, vector3d.y, vector3d.z, view_vec3.x, view_vec3.y);
+                        }
 
                         if(RiggingItem instanceof ItemRiggingBase && !this.getLevel().isClientSide()) {
                             ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;

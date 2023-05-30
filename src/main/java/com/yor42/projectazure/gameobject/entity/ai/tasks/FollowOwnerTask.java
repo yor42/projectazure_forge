@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.network.packets.spawnParticlePacket;
+import com.yor42.projectazure.network.serverEvents;
 import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -75,7 +75,10 @@ public class FollowOwnerTask extends Behavior<AbstractEntityCompanion> {
         } else {
             ety.moveTo((double)x + 0.5D, y, (double)z + 0.5D, ety.getYRot(), ety.getXRot());
             ety.getNavigation().stop();
-            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> ety), new spawnParticlePacket(ety, spawnParticlePacket.Particles.TELEPORT));
+            if (!ety.getLevel().isClientSide())
+            {
+                serverEvents.spawnTeleportParticle(ety);
+            }
             return true;
         }
     }
