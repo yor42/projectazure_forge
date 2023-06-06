@@ -33,8 +33,8 @@ public class EntitySensor extends Sensor<AbstractEntityCompanion> {
                         if (entity.getOwner() != null) {
                             return ((TamableAnimal) candidate).isOwnedBy(entity.getOwner());
                         }
+                        return entity.isOwnedBy((LivingEntity) candidate);
                     }
-                    return entity.isOwnedBy((LivingEntity) candidate);
                 }
             }
             return candidate instanceof Boat || candidate instanceof Monster;

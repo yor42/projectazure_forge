@@ -37,6 +37,7 @@ public class EntityArtsProjectileRenderer extends EntityRenderer<EntityArtsProje
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         EntityModel<EntityArtsProjectile> model = new ModelArtsProjectile();
         VertexConsumer builder = bufferIn.getBuffer(RENDER_TYPE);
+        matrixStackIn.translate(0,-1,0);
         matrixStackIn.pushPose();
         float f = Mth.rotLerp(partialTicks, entityIn.yRotO, entityIn.getYRot());
         float f6 = Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot());

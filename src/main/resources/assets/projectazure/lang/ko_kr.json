@@ -239,7 +239,7 @@
   "item.projectazure.whitefang465": "화이트팽 465",
   "item.projectazure.typhoon": "타이푼",
   "item.projectazure.supernova": "빛의 검: 슈퍼노바",
-  "item.projectazure.supernova_ammo": "슈퍼노바 탄약",
+  "item.projectazure.ammo_supernova": "슈퍼노바 탄약",
   "item.projectazure.sangvis_railgun": "SF-2815 레일건",
   "item.projectazure.ammo_sangvisrailgun": "SF-2815 레일건 탄약",
   "item.projectazure.granadelauncher": "자동 유탄발사기",
@@ -824,5 +824,6 @@
   "team.defaultteamname": "New Team",
   "equiment.empty": "EMPTY",
   "gui.rigginginventory": "Rigging Equipments",
+  "entity.not_enough_affection": "Not enough Affection!",
   "raw": "Raw %s"
 }

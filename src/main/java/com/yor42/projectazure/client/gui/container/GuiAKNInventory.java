@@ -115,12 +115,15 @@ public class GuiAKNInventory extends AbstractGUIScreen<ContainerAKNInventory> {
     protected void addButtons() {
         int homeModeX = this.host.isFreeRoaming() ? 0 : 10;
         int ItemPickupX = this.host.shouldPickupItem() ? 0 : 10;
+        int AttackX = this.host.shouldAttackFirst() ? 41 : 51;
 
         EntityStatusButton HomeModeButton = new EntityStatusButton(this.host, this.leftPos, this.topPos + 51, 10, 10, homeModeX, 200, 10, 0, TEXTURE, EntityStatusButton.ACTIONTYPES.FREEROAM, FREEROAM_TOOLTIP);
         EntityStatusButton ItemPickupButton = new EntityStatusButton(this.host, this.leftPos, this.topPos + 40, 10, 10, ItemPickupX, 220, 10, 0, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM , ITEM_TOOLTIP);
+        EntityStatusButton AttackButton = new EntityStatusButton(this.host, this.leftPos, this.topPos + 29, 10, 10, AttackX, 220, 10, 0, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE , DEFENCE_TOOLTIP);
 
         this.addRenderableWidget(HomeModeButton);
         this.addRenderableWidget(ItemPickupButton);
+        this.addRenderableWidget(AttackButton);
     }
 
 }

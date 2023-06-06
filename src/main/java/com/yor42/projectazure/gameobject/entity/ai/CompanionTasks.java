@@ -21,7 +21,6 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.*;
 
@@ -45,7 +44,7 @@ public class CompanionTasks {
         addRelaxActivity(brain, companion);
         addSittingActivity(brain, companion);
         addCombatActivity(brain, companion);
-        addFollowOwnerActivity(brain, companion);
+        addFollowOwnerActivity(brain);
         addWaitPlayerActivity(brain, companion);
         initRetreatActivity(brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
@@ -66,6 +65,7 @@ public class CompanionTasks {
                     brain.eraseMemory(ATTACK_TARGET);
                 }
             });
+
             companion.setAggressive(companion.getBrain().hasMemoryValue(ATTACK_TARGET));
             if (companion.isCriticallyInjured()) {
                 companion.getBrain().setActiveActivityIfPossible(RegisterAI.INJURED.get());
@@ -148,9 +148,10 @@ public class CompanionTasks {
 
     }
 
-    private static void addFollowOwnerActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivityWithConditions(RegisterAI.FOLLOWING_OWNER.get(), ImmutableList.of(
+    private static void addFollowOwnerActivity(Brain<AbstractEntityCompanion> brain){
+        brain.addActivity(RegisterAI.FOLLOWING_OWNER.get(), ImmutableList.of(
                 Pair.of(0, new FollowOwnerTask()),
+                Pair.of(0, new RunIf<>(AbstractEntityCompanion::shouldAttackFirst, new StartAttackingHostileTask())),
                 Pair.of(0, new CompanionProtectOwnerTask(false)),
                 Pair.of(1, new CompanionFindEntitytoRideTask()),
                 Pair.of(1, new CompanionStartRidingTask()),
@@ -159,7 +160,7 @@ public class CompanionTasks {
                 Pair.of(3, new CompanionPlaceTorchTask()),
                 Pair.of(3, new CompanionMineTask()),
                 Pair.of(4, new FindWalktargetbyChanceTask(0.5F,3,2, 0.1F)),
-                Pair.of(4, new CompanionStopRidingEntityTask())), ImmutableSet.of(new Pair<>(RegisterAI.FOLLOWING_OWNER_MEMORY.get(), VALUE_PRESENT)));
+                Pair.of(4, new CompanionStopRidingEntityTask())));
 
     }
 
@@ -180,9 +181,7 @@ public class CompanionTasks {
     private static void addCombatActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
         //brain.addActivityWithConditions(Activity.FIGHT, getFightPackage(companion), ImmutableSet.of(Pair.of(ATTACK_TARGET, VALUE_PRESENT)));
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.<net.minecraft.world.entity.ai.behavior.Behavior<? super AbstractEntityCompanion>>of(
-                        new StopAttackingIfTargetInvalid<>((target) -> {
-                            return isNearestValidAttackTarget(companion, target);
-                        }),
+                        new StopAttackingIfTargetInvalid<>((target) -> !isNearestValidAttackTarget(companion, target)),
                         new RunIf<>(CompanionTasks::shouldStrafe, new BackUpIfTooClose<>(5, 0.75F)),
                         new CompanionMovetoTargetTask(companion,1.0F),
                         new CompanionEndAttackTask(),
@@ -377,7 +376,12 @@ public class CompanionTasks {
             return Optional.ofNullable(entity.getLastHurtByMob());
         }
         else{
-            return entity.getBrain().getMemory(NEAREST_HOSTILE).flatMap((tgt)-> Sensor.isEntityAttackable(entity, tgt)? Optional.of(tgt):Optional.empty());
+            return entity.getBrain().getMemory(NEAREST_HOSTILE).flatMap((tgt)-> {
+                if(Sensor.isEntityAttackable(entity, tgt)){
+                    return Optional.of(tgt);
+                }
+                return Optional.empty();
+            });
         }
     }
 
