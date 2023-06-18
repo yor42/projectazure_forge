@@ -25,6 +25,8 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -40,19 +42,23 @@ public class PantryBlock extends HorizontalDirectionalBlock implements SimpleWat
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player p_225533_4_, InteractionHand p_225533_5_, BlockHitResult p_225533_6_) {
-        if(state.hasProperty(FACING)){
-            if(world.getBlockState(pos.relative(state.getValue(FACING))).getMaterial() != Material.AIR){
-                return InteractionResult.FAIL;
-            }
-            else
-            {
-                this.openGUI(pos, world, (ServerPlayer) p_225533_4_);
-                return InteractionResult.SUCCESS;
-            }
+        if(!state.hasProperty(FACING)){
+            return super.use(state, world, pos, p_225533_4_, p_225533_5_, p_225533_6_);
         }
-        return super.use(state, world, pos, p_225533_4_, p_225533_5_, p_225533_6_);
+
+        if(world.getBlockState(pos.relative(state.getValue(FACING))).getMaterial() != Material.AIR){
+            return InteractionResult.FAIL;
+        }
+        else
+        {
+            if(!world.isClientSide()) {
+                this.openGUI(pos, world, (ServerPlayer) p_225533_4_);
+            }
+            return InteractionResult.SUCCESS;
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void openGUI(BlockPos pos, Level world, ServerPlayer p_225533_4_)
     {
         if(!world.isClientSide())

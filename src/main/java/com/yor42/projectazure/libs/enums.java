@@ -2,10 +2,12 @@ package com.yor42.projectazure.libs;
 
 import com.mojang.datafixers.util.Function4;
 import com.tac.guns.common.Gun;
+import com.tac.guns.item.AmmoItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
+import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,11 +27,23 @@ public class enums {
         AA("antiair"),
         TORPEDO("torpedo"),
         PLANE("plane"),
-        UTILITY("utility");
+        UTILITY("utility"),
+        STORAGE("storage",(stack)->true),
+        AMMO("ammo", (stack)-> stack.getItem() instanceof AmmoItem || stack.getItem() instanceof ItemCannonshell);
+        ;
 
         private final String name;
+        @Nullable
+        private final Predicate<ItemStack> slotPredicate;
+
+        SLOTTYPE(String name, @Nullable Predicate<ItemStack> slotPredicate) {
+            this.name = name;
+            this.slotPredicate = slotPredicate;
+        }
+
         SLOTTYPE(String name) {
             this.name = name;
+            this.slotPredicate = null;
         }
 
         public String getName(){
@@ -37,6 +51,9 @@ public class enums {
         }
 
         public boolean testPredicate(ItemStack stack){
+            if(slotPredicate != null){
+                return slotPredicate.test(stack);
+            }
             return stack.getItem() instanceof ItemEquipmentBase && ((ItemEquipmentBase)stack.getItem()).getSlot() == this;
         }
 
