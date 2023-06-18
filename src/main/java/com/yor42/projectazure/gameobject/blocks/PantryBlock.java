@@ -29,6 +29,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
@@ -69,6 +70,11 @@ public class PantryBlock extends HorizontalDirectionalBlock implements SimpleWat
 
     @Override
     public void tick(BlockState p_225534_1_, ServerLevel p_225534_2_, BlockPos p_225534_3_, Random p_225534_4_) {
+
+        if(p_225534_2_.getGameTime()%10 != 0){
+            return;
+        }
+
         BlockEntity tileentity = p_225534_2_.getBlockEntity(p_225534_3_);
         if (tileentity instanceof TileEntityPantry) {
             ((TileEntityPantry)tileentity).recheckOpen();
@@ -76,6 +82,7 @@ public class PantryBlock extends HorizontalDirectionalBlock implements SimpleWat
 
     }
 
+    @Nonnull
     @Override
     public BlockState updateShape(BlockState p_196271_1_, Direction p_196271_2_, BlockState p_196271_3_, LevelAccessor p_196271_4_, BlockPos p_196271_5_, BlockPos p_196271_6_) {
         if (p_196271_1_.getValue(WATERLOGGED)) {

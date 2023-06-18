@@ -2,7 +2,7 @@
   "package": "com.yor42.projectazure.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "projectazure.refmap.json",
-  "required": true,
+  "required": false,
   "minVersion": "0.8",
   "injectors": {
     "defaultRequire": 1

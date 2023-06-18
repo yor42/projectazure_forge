@@ -187,15 +187,15 @@ dependencies {
 
 
     //Multiblocked
-    implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:${minecraft_version}-${ldlib_version}")
-    implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:${minecraft_version}-${mbd_version}")
+    compileOnly fg.deobf("com.lowdragmc.ldlib:LowDragLib:${minecraft_version}-${ldlib_version}")
+    compileOnly fg.deobf("com.lowdragmc.multiblocked:Multiblocked:${minecraft_version}-${mbd_version}")
     //Curios
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api")
 
     implementation fg.deobf('com.tac.guns:tac-a:0.3.7.0-1.18.2')
     compileOnly fg.deobf('com.yor.solarapocalypse:solarapocalypse:1.18.2-1.11')
-    implementation fg.deobf("curse.maven:canary-665658:4551263")
+    //implementation fg.deobf("curse.maven:canary-665658:4551263")
 
     // JEI
     implementation fg.deobf('curse.maven:architectury-419699:4384391')

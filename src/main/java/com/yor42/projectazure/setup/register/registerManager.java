@@ -1,12 +1,18 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.intermod.tconstruct.TinkersRegistry;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-
+@Mod.EventBusSubscriber(modid = Constants.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class registerManager {
     public static void register() {
         registerEntity.loadClass();
@@ -34,6 +40,7 @@ public class registerManager {
         //DO NOT CHANGE THESE 2's PLACE//
         RegisterBlocks.BLOCKS.register(eventbus);
         RegisterItems.ITEMS.register(eventbus);
+
         registerRecipes.Types.RECIPE_TYPES.register(eventbus);
         registerRecipes.Serializers.RECIPE_SERIALIZERS.register(eventbus);
         RegisterContainer.CONTAINER.register(eventbus);
@@ -46,5 +53,19 @@ public class registerManager {
         registerPotionEffects.EFFECTS.register(eventbus);
     }
 
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void registerMultiBlocksonEvent(RegistryEvent.Register<Block> event) {
+        if(CompatibilityUtils.isMultiblockedLoaded()){
+            registerMultiBlocks.registerMultiBlocksonEvent(event);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onServerStart(ServerStartedEvent event){
+        if(CompatibilityUtils.isMultiblockedLoaded()){
+            registerMultiBlocks.registerRecipes(event);
+        }
+
+    }
 
 }
