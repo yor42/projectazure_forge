@@ -133,7 +133,6 @@ public class Main
         if(CompatibilityUtils.isMultiblockedLoaded()){
             registerMultiBlocks.registerCapbility();
         }
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldgenInit::registerWorldgen);
 
         // Register ourselves for server and other game events we are interested i
     }

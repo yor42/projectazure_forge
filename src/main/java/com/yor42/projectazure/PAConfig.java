@@ -292,6 +292,12 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue ORIROCK_MINHEIGHT;
         public final ForgeConfigSpec.IntValue ORIROCK_MAXHEIGHT;
 
+        public final ForgeConfigSpec.BooleanValue ENABLE_BAUXITE;
+        public final ForgeConfigSpec.IntValue BAUXITE_VEINSIZE;
+        public final ForgeConfigSpec.IntValue BAUXITE_VEINSPERCHUNK;
+        public final ForgeConfigSpec.IntValue BAUXITE_MINHEIGHT;
+        public final ForgeConfigSpec.IntValue BAUXITE_MAXHEIGHT;
+
         public final ForgeConfigSpec.IntValue BeaconFindSpawnPositionTries;
         public final ForgeConfigSpec.ConfigValue<Integer> InjuredRecoveryTimer;
         public final ForgeConfigSpec.ConfigValue<Integer> FaintTimeLimit;
@@ -600,6 +606,12 @@ public class PAConfig {
             ORIROCK_VEINSIZE = builder.defineInRange("Size of Orirock vein", 40,-64,512);
             ORIROCK_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Orirock can generate", 0,-64,256);
             ORIROCK_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Orirock can generate", 50,-64,256);
+
+            ENABLE_BAUXITE = builder.define("Enable Bauxite Generation", true);
+            BAUXITE_VEINSPERCHUNK = builder.defineInRange("Count of Bauxite vein in single chunk", 4,-64,128);
+            BAUXITE_VEINSIZE = builder.defineInRange("Size of Bauxite vein", 40,-64,512);
+            BAUXITE_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Bauxite can generate", 0,-64,256);
+            BAUXITE_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Bauxite can generate", 50,-64,256);
 
             builder.pop().push("Debug");
             RedStonePoweredMachines = builder.define("Make Machines can be powered with redstone", false);

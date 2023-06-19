@@ -157,6 +157,7 @@ public class RegisterBlocks {
 
     private static RegistryObject<Block> register_simplemodel(String name, Supplier<Block> block, CreativeModeTab itemGroup){
         return register_simplemodel(name, block, new Item.Properties().tab(itemGroup), REGISTERMODEL.BOTH);
+
     }
     private static RegistryObject<Block> register_simplemodel(String name, Supplier<Block> block, Item.Properties properties){
         return register_simplemodel(name, block, properties, REGISTERMODEL.BOTH);
