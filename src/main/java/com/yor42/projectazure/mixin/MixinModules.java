@@ -1,7 +1,6 @@
 package com.yor42.projectazure.mixin;
 
 import com.tac.guns.common.Gun;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipebuilders.WeightedRecipeBuilder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

@@ -2,7 +2,6 @@ package com.yor42.projectazure.network;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.setup.register.RegisterItems;
-
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;

@@ -12,14 +12,10 @@ import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.definition.ModControllerDefinition;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.mixin.MixinComponentDefinitionAccessor;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
-
-import static com.yor42.projectazure.setup.register.registerMultiBlocks.readTrait;
-import static com.yor42.projectazure.setup.register.registerMultiBlocks.readUI;
 
 public class SiliconeCrucibleTE extends ControllerTileEntity {
 

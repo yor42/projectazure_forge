@@ -16,8 +16,6 @@ import com.lowdragmc.multiblocked.api.recipe.RecipeCondition;
 import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
 import com.lowdragmc.multiblocked.jei.recipepage.RecipeMapCategory;
 import com.lowdragmc.multiblocked.jei.recipepage.RecipeMapFuelCategory;
-import com.lowdragmc.multiblocked.rei.recipepage.RecipeMapDisplayCategory;
-import com.lowdragmc.multiblocked.rei.recipepage.RecipeMapFuelDisplayCategory;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;

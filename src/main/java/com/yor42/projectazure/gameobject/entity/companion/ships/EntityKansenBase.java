@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.mojang.datafixers.util.Pair;
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;

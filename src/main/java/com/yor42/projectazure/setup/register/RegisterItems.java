@@ -20,7 +20,6 @@ import com.yor42.projectazure.gameobject.misc.ModFoods;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.mixin.GunAccessor;
 import com.yor42.projectazure.mixin.ModuleAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;

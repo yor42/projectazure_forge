@@ -7,6 +7,7 @@ import com.lowdragmc.lowdraglib.utils.FileUtility;
 import com.lowdragmc.multiblocked.Multiblocked;
 import com.lowdragmc.multiblocked.api.definition.ComponentDefinition;
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
+import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
 import com.lowdragmc.multiblocked.api.recipe.ingredient.EntityIngredient;
 import com.lowdragmc.multiblocked.api.recipe.ingredient.SizedIngredient;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
@@ -18,14 +19,17 @@ import com.tac.guns.init.ModItems;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.*;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipebuilders.WeightedRecipeBuilder;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -35,22 +39,23 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-@Mod.EventBusSubscriber(modid = Constants.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
+import static com.lowdragmc.multiblocked.api.registry.MbdCapabilities.registerCapability;
+
 public class registerMultiBlocks {
 
     public static final ArrayList<Pair<String, ResourceLocation>> DEFINITIONS = new ArrayList<>();
@@ -108,6 +113,40 @@ public class registerMultiBlocks {
             Main.LOGGER.error("error while loading the UI {}", location.toString());
         }
         return null;
+    }
+
+    public static void setupDefinitions(final FMLCommonSetupEvent event)
+    {
+        for (Pair<String, ResourceLocation> pair:registerMultiBlocks.DEFINITIONS){
+            ComponentDefinition def = MbdComponents.DEFINITION_REGISTRY.get(pair.getSecond());
+            if(def instanceof ControllerDefinition) {
+                String name = pair.getFirst();
+                try {
+                    RecipeMap map = getRecipeFromJSON(ResourceUtils.ModResourceLocation("recipe_map/" + name + ".json"));
+                    ((ControllerDefinition) def).setRecipeMap(map);
+                    RecipeMap.register(map);
+                } catch (Exception var9) {
+                    Multiblocked.LOGGER.error("error while loading the definition resource {}", name);
+                }
+            }
+            MbdComponents.registerComponent(def);
+        }
+
+    }
+
+    private static RecipeMap getRecipeFromJSON(ResourceLocation location) throws IOException {
+        InputStream stream = Minecraft.getInstance().getResourceManager().getResource(location).getInputStream();
+        InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        RecipeMap map = GsonHelper.fromJson(Multiblocked.GSON, reader, RecipeMap.class);
+        if (map != null) {
+            return map;
+        }
+
+        return RecipeMap.EMPTY;
+    }
+
+    public static void registerCapbility(){
+        registerCapability(CompanionMultiblockCapability.CAP);
     }
 
     public static void registerRecipes(ServerStartedEvent event){

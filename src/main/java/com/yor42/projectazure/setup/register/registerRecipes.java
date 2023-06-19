@@ -10,7 +10,6 @@ import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import slimeknights.tconstruct.TConstruct;
 
 import java.util.function.Supplier;
 

@@ -29,8 +29,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCannon;
-import static net.minecraft.world.entity.ai.memory.MemoryModuleType.*;
-import static net.minecraft.world.entity.ai.memory.MemoryStatus.VALUE_PRESENT;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_HOSTILE;
 import static net.minecraft.world.entity.schedule.Activity.*;
 
 public class CompanionTasks {

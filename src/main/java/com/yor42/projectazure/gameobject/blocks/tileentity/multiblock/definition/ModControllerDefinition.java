@@ -1,7 +1,5 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.definition;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
 import com.yor42.projectazure.mixin.MixinComponentDefinitionAccessor;
 import net.minecraft.resources.ResourceLocation;

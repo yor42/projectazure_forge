@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.serverEvents;
@@ -19,10 +18,8 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
-import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_ORE;
 

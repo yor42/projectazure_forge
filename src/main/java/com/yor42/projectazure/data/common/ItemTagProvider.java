@@ -14,7 +14,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

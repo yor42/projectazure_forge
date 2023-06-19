@@ -1,11 +1,5 @@
 package com.yor42.projectazure;
 
-import com.lowdragmc.multiblocked.Multiblocked;
-import com.lowdragmc.multiblocked.api.definition.ComponentDefinition;
-import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
-import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
-import com.lowdragmc.multiblocked.api.registry.MbdComponents;
-import com.mojang.datafixers.util.Pair;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.common.ProjectileManager;
@@ -15,7 +9,6 @@ import com.yor42.projectazure.client.renderer.armor.GasMaskRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineRecruitBeaconRenderer;
 import com.yor42.projectazure.events.ModBusEventHandler;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityRailgunProjectile;
@@ -27,14 +20,10 @@ import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
-import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.CrushingRecipeCache;
 import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -64,16 +53,12 @@ import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
+
 import javax.annotation.Nonnull;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.stream.Stream;
 
-import static com.lowdragmc.multiblocked.api.registry.MbdCapabilities.registerCapability;
 import static com.yor42.projectazure.libs.Constants.MODID;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -145,43 +130,22 @@ public class Main
         GeckoLibMod.DISABLE_IN_DEV = true;
         GeckoLib.initialize();
 
-        registerCapability(CompanionMultiblockCapability.CAP);
+        if(CompatibilityUtils.isMultiblockedLoaded()){
+            registerMultiBlocks.registerCapbility();
+        }
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldgenInit::registerWorldgen);
 
         // Register ourselves for server and other game events we are interested i
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
+    private void setup(final FMLCommonSetupEvent event) {
         ProjectileManager.getInstance().registerFactory(RegisterItems.RAILGUN_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
         ProjectileManager.getInstance().registerFactory(RegisterItems.SUPERNOVA_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_SUPERNOVA.get(), worldIn, entity, weapon, item, modifiedGun, 1F, randx, randy));
 
-        for (Pair<String, ResourceLocation> pair:registerMultiBlocks.DEFINITIONS){
-        ComponentDefinition def = MbdComponents.DEFINITION_REGISTRY.get(pair.getSecond());
-        if(def instanceof ControllerDefinition) {
-            String name = pair.getFirst();
-            try {
-                RecipeMap map = getRecipeFromJSON(ResourceUtils.ModResourceLocation("recipe_map/" + name + ".json"));
-                ((ControllerDefinition) def).setRecipeMap(map);
-                RecipeMap.register(map);
-            } catch (Exception var9) {
-                Multiblocked.LOGGER.error("error while loading the definition resource {}", name);
-            }
-        }
-        MbdComponents.registerComponent(def);
-    }
-
-    }
-
-    private static RecipeMap getRecipeFromJSON(ResourceLocation location) throws IOException {
-        InputStream stream = Minecraft.getInstance().getResourceManager().getResource(location).getInputStream();
-        InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-        RecipeMap map = GsonHelper.fromJson(Multiblocked.GSON, reader, RecipeMap.class);
-        if (map != null) {
-            return map;
+        if (CompatibilityUtils.isMultiblockedLoaded()) {
+            registerMultiBlocks.setupDefinitions(event);
         }
 
-        return RecipeMap.EMPTY;
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)

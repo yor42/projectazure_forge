@@ -3,8 +3,6 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
-import com.tac.guns.util.GunEnchantmentHelper;
-import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
