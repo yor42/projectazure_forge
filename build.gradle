@@ -157,6 +157,11 @@ repositories {
 
     maven { url 'https://maven.blamejared.com' }
 
+    maven {
+        name = "SmartBrainLib (SBL) Maven Repo"
+        url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
+    }
+
     flatDir {
         dirs 'compilelib', 'implementlib'
     }
@@ -185,6 +190,7 @@ dependencies {
 
     compileOnly fg.deobf('curse.maven:realistic-torches-235729:4101941')
 
+    implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-${project.minecraft_version}:${project.sbl_version}")
 
     //Multiblocked
     implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:${minecraft_version}-${ldlib_version}")

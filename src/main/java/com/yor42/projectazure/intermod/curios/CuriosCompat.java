@@ -36,7 +36,7 @@ import static com.yor42.projectazure.libs.utils.CompatibilityUtils.CURIOS_MODID;
 
 public class CuriosCompat {
 
-    public static void sendImc(final InterModEnqueueEvent event) {
+    public static void sendImc(final InterModEnqueueEvent vent) {
         InterModComms.sendTo(CURIOS_MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BACK.getMessageBuilder().build());
         InterModComms.sendTo(CURIOS_MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.RING.getMessageBuilder().build());
         InterModComms.sendTo(CURIOS_MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HEAD.getMessageBuilder().build());
