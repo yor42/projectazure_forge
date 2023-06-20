@@ -57,7 +57,7 @@ public class ModOrePlacement {
     public static final Holder<PlacedFeature> ORE_RMA7012_LARGEPLACEMENT = PlacementUtils.register("ore_rma7012_largeplacement", ORE_RMA7012_LARGE, commonOrePlacement(PAConfig.CONFIG.RMA7012_VEINSPERCHUNK.get(), HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(-20))));
     public static final Holder<PlacedFeature> ORE_RMA7012_SMALLPLACEMENT = PlacementUtils.register("ore_rma7012_smallplacement", ORE_RMA7012_SMALL, commonOrePlacement(4, HeightRangePlacement.triangle(VerticalAnchor.absolute(10), VerticalAnchor.absolute(40))));
 
-    public static final Holder<PlacedFeature> ORE_ORIROCK_LARGEPLACEMENT = PlacementUtils.register("ore_orirock_largeplacement", ORE_ORIROCK, commonOrePlacement(PAConfig.CONFIG.ORIROCK_VEINSPERCHUNK.get(), HeightRangePlacement.triangle(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(16))));
+    public static final Holder<PlacedFeature> ORE_ORIROCK_LARGEPLACEMENT = PlacementUtils.register("ore_orirock_largeplacement", ORE_ORIROCK, commonOrePlacement(PAConfig.CONFIG.ORIROCK_VEINSPERCHUNK.get(), HeightRangePlacement.triangle(VerticalAnchor.absolute(0), VerticalAnchor.absolute(16))));
     public static final Holder<PlacedFeature> ORE_ORIROCK_SMALLPLACEMENT = PlacementUtils.register("ore_orirock_smallplacement", ORE_ORIROCK, commonOrePlacement(4, HeightRangePlacement.uniform(VerticalAnchor.absolute(45), VerticalAnchor.absolute(80))));
 
     public static final Holder<PlacedFeature> ORE_PYROXENE_LARGEPLACEMENT = PlacementUtils.register("ore_pyroxene_largeplacement", ORE_PYROXENE_LARGE, rareOrePlacement(5, HeightRangePlacement.triangle(VerticalAnchor.absolute(-60), VerticalAnchor.absolute(-30))));
