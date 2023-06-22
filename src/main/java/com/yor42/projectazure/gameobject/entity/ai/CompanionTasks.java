@@ -59,7 +59,7 @@ public class CompanionTasks {
 
     public static void UpdateActivity(AbstractEntityCompanion companion){
         if(companion.isAlive()) {
-            Brain<AbstractEntityCompanion> brain = companion.getBrain();
+            Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) companion.getBrain();
             brain.getMemory(ATTACK_TARGET).ifPresent((tgt)->{
                 if (tgt.isDeadOrDying()){
                     brain.eraseMemory(ATTACK_TARGET);
@@ -165,7 +165,7 @@ public class CompanionTasks {
     }
 
     private static boolean wantsToStopFleeing(AbstractEntityCompanion p_234533_0_) {
-        Brain<AbstractEntityCompanion> brain = p_234533_0_.getBrain();
+        Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) p_234533_0_.getBrain();
         if (!brain.hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
             return true;
         } else {
@@ -245,7 +245,7 @@ public class CompanionTasks {
     }
 
     public static void wasHurtBy(AbstractEntityCompanion companion, LivingEntity target) {
-        Brain<AbstractEntityCompanion> brain = companion.getBrain();
+        Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) companion.getBrain();
         List<LivingEntity> injuredmob = getVisibleFriendlies(companion).stream().filter((entity)->entity.getHealth()/entity.getMaxHealth()<=0.3F).collect(Collectors.toList());
 
         getAvoidTarget(companion).ifPresent((p_234462_2_) -> {
@@ -307,7 +307,7 @@ public class CompanionTasks {
 
     private static void setAttackTarget(AbstractEntityCompanion p_234397_0_, LivingEntity p_234397_1_) {
         if(hasWeapon(p_234397_0_, p_234397_1_)) {
-            Brain<AbstractEntityCompanion> brain = p_234397_0_.getBrain();
+            Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) p_234397_0_.getBrain();
             brain.eraseMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
             brain.setMemoryWithExpiry(ATTACK_TARGET, p_234397_1_, 1000L);
         }
@@ -342,7 +342,7 @@ public class CompanionTasks {
     }
 
     private static void retreatFromNearestTarget(AbstractEntityCompanion companion, LivingEntity attacker) {
-        Brain<AbstractEntityCompanion> brain = companion.getBrain();
+        Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) companion.getBrain();
         LivingEntity lvt_3_1_ = BehaviorUtils.getNearestTarget(companion, brain.getMemory(MemoryModuleType.AVOID_TARGET), attacker);
         lvt_3_1_ = BehaviorUtils.getNearestTarget(companion, brain.getMemory(ATTACK_TARGET), lvt_3_1_);
         retreatforAwhile(companion, lvt_3_1_);

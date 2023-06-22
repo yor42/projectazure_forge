@@ -22,7 +22,6 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipebuilders.WeightedRecipeBuilder;
-import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;

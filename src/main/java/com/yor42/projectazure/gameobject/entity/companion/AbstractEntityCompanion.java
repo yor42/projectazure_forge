@@ -86,6 +86,7 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -143,10 +144,7 @@ import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.AvoidSun;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.AvoidEntity;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.EscapeSun;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.*;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetRandomLookTarget;
@@ -2800,13 +2798,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         }
     }
 
-    //I know what I am doing, GAME!
-    @Nonnull
-    @SuppressWarnings("unchecked")
-    public Brain<AbstractEntityCompanion> getBrain() {
-        return (Brain<AbstractEntityCompanion>)super.getBrain();
-    }
-
     @Override
     public List<ExtendedSensor<AbstractEntityCompanion>> getSensors() {
         return ObjectArrayList.of(
@@ -2822,8 +2813,8 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public BrainActivityGroup<AbstractEntityCompanion> getCoreTasks() {
         return BrainActivityGroup.coreTasks(	                // Keep pathfinder avoiding the sun	                // Escape the sun	                // Run away from wolves
                 new LookAtTargetSink(40, 300), 														// Look at the look target
-                new StrafeTarget<>().stopStrafingWhen(entity -> !isHoldingBow(entity)).startCondition(AbstractEntityCompanion::isHoldingBow),	// Strafe around target
-                new MoveToWalkTarget<>());
+                new StrafeTarget<>().stopStrafingWhen(entity -> !shouldStrafe((AbstractEntityCompanion) entity)).startCondition((entity)->shouldStrafe((AbstractEntityCompanion) entity)),	// Strafe around target
+                new WalkOrRunToWalkTarget<>());
     }
 
     @Override
@@ -2833,9 +2824,48 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
                         new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available
                         new SetRandomLookTarget<>()), 					// Set the look target to a random nearby location
-                new OneRandomBehaviour<>( 								// Run only one of the below behaviours, picked at random
+                new FirstApplicableBehaviour<>(
+                        new FollowOwner<>(),
+                        new OneRandomBehaviour<>( 								// Run only one of the below behaviours, picked at random
                         new SetRandomWalkTarget<>().speedModifier(1), 				// Set the walk target to a nearby random pathable location
-                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60)))); // Don't walk anywhere
+                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))))); // Don't walk anywhere
+    }
+
+    @Override
+    public Map<Activity, BrainActivityGroup<AbstractEntityCompanion>> getAdditionalTasks() {
+        return ImmutableMap.of(RegisterAI.WAITING.get(), CreateWaitTask()
+
+
+                );
+    }
+
+    public BrainActivityGroup<AbstractEntityCompanion> CreateWaitTask() {
+        return new BrainActivityGroup<AbstractEntityCompanion>(RegisterAI.WAITING.get()).priority(10).behaviours(
+                new FirstApplicableBehaviour<>(                // Run only one of the below behaviours, trying each one in order. Include explicit generic typing because javac is silly
+                        new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
+                        new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available
+                        new SetRandomLookTarget<>()), 					// Set the look target to a random nearby location
+                        new OneRandomBehaviour<>( 								// Run only one of the below behaviours, picked at random
+                                new SetRandomWalkTarget<>().speedModifier(1).walkTargetPredicate((ety, vec3)->{
+                                        GlobalPos pos = BrainUtils.getMemory(ety, RegisterAI.WAIT_POINT.get());
+                                        if(pos == null || pos.dimension() != ety.getCommandSenderWorld().dimension()) {
+                                            return false;
+                                        }
+                                        return Math.sqrt(pos.pos().distToCenterSqr(vec3.x, vec3.y, vec3.z))<4;
+                                        }),
+                                new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60)))
+        ).requireAndWipeMemoriesOnUse(RegisterAI.WAIT_POINT.get());
+    }
+
+
+
+    public static boolean shouldStrafe(AbstractEntityCompanion entity){
+
+        if(BrainUtils.getTargetOfEntity(entity) == null){
+            return false;
+        }
+
+        return isHoldingBow(entity)|| isHoldingCrosbow(entity) || isHoldingGun(entity) || entity.canUseCannonOrTorpedo();
     }
 
     public static boolean hasValidWeapon(AbstractEntityCompanion entity){

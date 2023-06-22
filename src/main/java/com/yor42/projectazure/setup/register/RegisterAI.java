@@ -4,8 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.NearbyAllysSensor;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.outdated.EntitySensor;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.outdated.WorldSensor;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.core.BlockPos;
@@ -42,6 +40,7 @@ public class RegisterAI {
     public static final RegistryObject<Activity> FOLLOWING_OWNER = registerActivity("following_ownner");
     public static final RegistryObject<Activity> SITTING = registerActivity("sitting");
     public static final RegistryObject<Activity> WAITING = registerActivity("waiting");
+    public static final RegistryObject<Activity> ACTIVITY_RESTING = registerActivity("resting");
     public static final RegistryObject<Activity> INJURED = registerActivity("injured");
     //MemoryModuleType
     public static final RegistryObject<MemoryModuleType<GlobalPos>> WAIT_POINT = registerMemoryModuleType("wait_point", GlobalPos.CODEC);
