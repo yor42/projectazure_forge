@@ -1,9 +1,12 @@
 package com.yor42.projectazure.setup.register;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.EntitySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.WorldSensor;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.NearbyAllysSensor;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.outdated.EntitySensor;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.outdated.WorldSensor;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -46,6 +49,7 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<BlockPos>> HURT_AT = registerMemoryModuleType("hurt_at");
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_ALLYS = registerMemoryModuleType("nearby_allys");
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_ALLYS = registerMemoryModuleType("visible_allys");
+    public static final RegistryObject<MemoryModuleType<AbstractEntityCompanion>> NEARBY_ALLY = registerMemoryModuleType("nearby_ally");
     public static final RegistryObject<MemoryModuleType<Integer>> VISIBLE_ALLYS_COUNT = registerMemoryModuleType("visible_allys_count");
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_HOSTILES = registerMemoryModuleType("nearby_hostiles");
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_HOSTILES = registerMemoryModuleType("visible_hostiles");
@@ -68,10 +72,17 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_WORLDSKILLABLE = registerMemoryModuleType("nearest_worldskillable");
     public static final RegistryObject<MemoryModuleType<Boolean>> FOLLOWING_OWNER_MEMORY = registerMemoryModuleType("following_owner");
     public static final RegistryObject<MemoryModuleType<Boolean>> KILLED_ENTITY = registerMemoryModuleType("killed_entity");
-    //Sensors
-    public static final RegistryObject<SensorType<EntitySensor>> ENTITY_SENSOR = registerSensorType("entity_sensor", EntitySensor::new);
-    public static final RegistryObject<SensorType<InventorySensor>> INVENTORY_SENSOR = registerSensorType("inventory_sensor", InventorySensor::new);
-    public static final RegistryObject<SensorType<WorldSensor>> WORLD_SENSOR = registerSensorType("world_sensor", WorldSensor::new);
+
+    public static final RegistryObject<MemoryModuleType<Pair<Integer, Integer>>> ITEM_SWAP_ENTRY = registerMemoryModuleType("item_swap_entry");
+
+    public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_HARVESTABLES = registerMemoryModuleType("near_harvestable");
+    public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_ORES = registerMemoryModuleType("near_ores");
+    public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_BONEMEALABLE = registerMemoryModuleType("near_bonemealable");
+    public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_PLANTABLE = registerMemoryModuleType("near_plantable");
+    public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_WORLDSKILLABLE = registerMemoryModuleType("near_worldskillable");
+
+    public static final RegistryObject<SensorType<InventorySensor<? extends AbstractEntityCompanion>>> INVSENSOR = registerSensorType("invsensor", InventorySensor::new);
+    public static final RegistryObject<SensorType<NearbyAllysSensor<? extends AbstractEntityCompanion>>> NEARBY_ALLY_SENSOR = registerSensorType("nearby_ally", NearbyAllysSensor::new);
     public static final RegistryObject<Schedule> CompanionSchedule = registerSchedule("companion_schedule", (builder)-> builder.changeActivityAt(10, Activity.IDLE).changeActivityAt(12000, Activity.REST).build());
     @SuppressWarnings("UnstableApiUsage")
     //POI

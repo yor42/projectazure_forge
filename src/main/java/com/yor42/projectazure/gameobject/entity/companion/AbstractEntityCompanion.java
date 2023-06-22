@@ -38,10 +38,7 @@ import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import com.yor42.projectazure.gameobject.items.tools.ItemCommandStick;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
-import com.yor42.projectazure.interfaces.IAknOp;
-import com.yor42.projectazure.interfaces.IAzurLaneKansen;
-import com.yor42.projectazure.interfaces.IFGOServant;
-import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
+import com.yor42.projectazure.interfaces.*;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
@@ -51,6 +48,7 @@ import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.serverEvents;
 import com.yor42.projectazure.setup.register.RegisterAI;
 import com.yor42.projectazure.setup.register.RegisterItems;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -88,16 +86,19 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.monster.RangedAttackMob;
@@ -135,6 +136,25 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
+import net.tslat.smartbrainlib.api.SmartBrainOwner;
+import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
+import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
+import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.AvoidSun;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.AvoidEntity;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.EscapeSun;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetRandomLookTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliate;
+import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
+import net.tslat.smartbrainlib.api.core.sensor.vanilla.*;
+import net.tslat.smartbrainlib.example.SBLSkeleton;
+import net.tslat.smartbrainlib.util.BrainUtils;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -165,7 +185,7 @@ import static net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.*;
 import static net.minecraft.world.entity.schedule.Activity.*;
 
-public abstract class AbstractEntityCompanion extends TamableAnimal implements CrossbowAttackMob, RangedAttackMob, IAnimatable, IAnimationTickable {
+public abstract class AbstractEntityCompanion extends TamableAnimal implements CrossbowAttackMob, RangedAttackMob, IAnimatable, IAnimationTickable, SmartBrainOwner<AbstractEntityCompanion> {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
     private final AttributeModifier LevelHealthModifier = new AttributeModifier(UUID.randomUUID(), "Level HP Bonus", this.getEntityLevel()*4, AttributeModifier.Operation.ADDITION);
     private final AttributeModifier LevelAttackDamageModifier = new AttributeModifier(UUID.randomUUID(), "Level Attack Damage Bonus", this.getEntityLevel()/2.5F, AttributeModifier.Operation.ADDITION);
@@ -442,33 +462,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     //protected static final DataParameter<CompanionPose> POSE = EntityDataManager.defineId(AbstractEntityCompanion.class, POSESERIALIZER);
 
-
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(@Nonnull ServerLevel p_146743_, @Nonnull AgeableMob p_146744_) {
         return null;
     }
-
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
-            HOME, RegisterAI.RESTING.get(), MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, RegisterAI.VISIBLE_ALLYS_COUNT.get(),
-            RegisterAI.VISIBLE_HOSTILE_COUNT.get(), RegisterAI.VISIBLE_HOSTILES.get(), RegisterAI.NEARBY_HOSTILES.get(),
-            RegisterAI.WAIT_POINT.get(), RegisterAI.HEAL_TARGET.get(), RegisterAI.MEMORY_SITTING.get(), MemoryModuleType.NEAREST_LIVING_ENTITIES,
-            MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, NEAREST_HOSTILE,
-            MemoryModuleType.NEAREST_VISIBLE_PLAYER, RIDE_TARGET, RegisterAI.WAIT_POINT.get(), RegisterAI.NEARBY_ALLYS.get(),
-            RegisterAI.VISIBLE_ALLYS.get(), MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER, FOOD_PANTRY.get(),
-            RegisterAI.FOOD_INDEX.get(), RegisterAI.HEAL_POTION_INDEX.get(), RegisterAI.REGENERATION_POTION_INDEX.get(), RegisterAI.TOTEM_INDEX.get(),
-            RegisterAI.TORCH_INDEX.get(), RegisterAI.FIRE_EXTINGIGH_ITEM.get(), RegisterAI.FALL_BREAK_ITEM_INDEX.get(),
-            MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET,
-            MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH,
-            MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, FOOD_PANTRY.get(),
-            MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
-            MemoryModuleType.LAST_WOKEN, RegisterAI.HURT_AT.get(), RegisterAI.NEAREST_BOAT.get(), RegisterAI.NEAREST_ORE.get(), RegisterAI.NEAREST_HARVESTABLE.get(), RegisterAI.NEAREST_PLANTABLE.get(),
-            RegisterAI.NEAREST_BONEMEALABLE.get(), RegisterAI.NEAREST_WORLDSKILLABLE.get(), RegisterAI.FOLLOWING_OWNER_MEMORY.get(), RegisterAI.KILLED_ENTITY.get());
-    private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(
-            SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS,
-            SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY,
-            RegisterAI.ENTITY_SENSOR.get(), RegisterAI.WORLD_SENSOR.get(),
-            RegisterAI.INVENTORY_SENSOR.get());
 
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<AbstractEntityCompanion, PoiType>> POI_MEMORIES = ImmutableMap.of(HOME, (p_213769_0_, p_213769_1_) -> p_213769_1_ == PoiType.HOME);
 
@@ -1507,14 +1505,18 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean shouldUseGun() {
-        ItemStack gunstack = this.getGunStack();
-        if (gunstack.getItem() instanceof GunItem) {
-            CompoundTag tag = gunstack.getOrCreateTag();
-            int ammocount = tag.getInt("AmmoCount");
-            boolean hasAmmo = ammocount>0;
-            return (!this.canUseCannonOrTorpedo() || !this.isSailing()) && this.getGunStack() != ItemStack.EMPTY && (this.HasRightMagazine(gunstack) || hasAmmo);
+        if(!isHoldingGun(this)) {
+            return false;
         }
-        return false;
+
+        ItemStack gunstack = this.getItemInHand(MAIN_HAND);
+        if (!(gunstack.getItem() instanceof GunItem)) {
+            return false;
+        }
+        CompoundTag tag = gunstack.getOrCreateTag();
+        int ammocount = tag.getInt("AmmoCount");
+        boolean hasAmmo = ammocount>0;
+        return this.HasRightMagazine(gunstack) || hasAmmo;
     }
 
     public boolean HasRightMagazine(ItemStack gunStack) {
@@ -1768,11 +1770,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     public boolean isBaby() {
-        return false;
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
     }
 
@@ -2154,24 +2151,16 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 return ((IAknOp)this).getNormalAmbientSounds();
             }
         }
-        else if(this instanceof IAzurLaneKansen){
-            IAzurLaneKansen kansen = (IAzurLaneKansen) this;
-            switch (kansen.affectionValuetoEnum()){
-                case DISAPPOINTED:
-                    return kansen.getDisappointedAmbientSound();
-                case STRANGER:
-                    return kansen.getStrangerAmbientSound();
-                case FRIENDLY:
-                    return kansen.getFriendlyAmbientSound();
-                case CRUSH:
-                    return kansen.getLikeAmbientSound();
-                case LOVE:
-                case OATH:
-                    return kansen.getLoveAmbientSound();
-            }
+        else if(this instanceof IAzurLaneKansen kansen){
+            return switch (kansen.affectionValuetoEnum()) {
+                case DISAPPOINTED -> kansen.getDisappointedAmbientSound();
+                case STRANGER -> kansen.getStrangerAmbientSound();
+                case FRIENDLY -> kansen.getFriendlyAmbientSound();
+                case CRUSH -> kansen.getLikeAmbientSound();
+                case LOVE, OATH -> kansen.getLoveAmbientSound();
+            };
         }
-        else if(this instanceof IFGOServant){
-            IFGOServant Iservant = ((IFGOServant)this);
+        else if(this instanceof IFGOServant Iservant){
             float bond = this.getAffection();
             if(bond>=90F){
                 return Iservant.getBondlevel5Sound();
@@ -2218,14 +2207,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     public int getMaxLevel(){
         if(this instanceof IAknOp){
-            switch(this.getLimitBreakLv()) {
-                default:
-                    return 50;
-                case 1:
-                    return 70;
-                case 2:
-                    return 80;
-            }
+            return switch (this.getLimitBreakLv()) {
+                default -> 50;
+                case 1 -> 70;
+                case 2 -> 80;
+            };
         }
         else if(this instanceof IFGOServant){
             return Math.min(60+this.getLimitBreakLv()<7?(this.getLimitBreakLv()*5):(this.getLimitBreakLv()*2), 120);
@@ -2271,15 +2257,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             value = Math.min(value, this.maxSkillPoint());
         }
         this.setSkillPoints(Math.max(0, value));
-    }
-
-    private boolean isLookingAtPart(Player pPlayer, float yval) {
-        Vec3 NormalizedPlayerView = pPlayer.getViewVector(1.0F).normalize();
-        Vec3 PosDelta = new Vec3(this.getX() - pPlayer.getX(), yval - pPlayer.getEyeY(), this.getZ() - pPlayer.getZ());
-        double DeltaLength = PosDelta.length();
-        PosDelta = PosDelta.normalize();
-        double d1 = NormalizedPlayerView.dot(PosDelta);
-        return d1 > 1.0D - 0.025D / DeltaLength && pPlayer.hasLineOfSight(this);
     }
 
     public void addSkillPoints() {
@@ -2792,7 +2769,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     protected void customServerAiStep() {
         this.level.getProfiler().push("CompanionBrain");
-        this.getBrain().tick((ServerLevel)this.level, this);
+        tickBrain(this);
         this.level.getProfiler().pop();
 
         if(this.getBrain().getMemory(HOME).isEmpty()){
@@ -2829,31 +2806,80 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public Brain<AbstractEntityCompanion> getBrain() {
         return (Brain<AbstractEntityCompanion>)super.getBrain();
     }
-    @Nonnull
+
     @Override
-    protected Brain<?> makeBrain(@Nonnull Dynamic<?> p_213364_1_) {
-        Brain<AbstractEntityCompanion> brain = this.brainProvider().makeBrain(p_213364_1_);
-        CompanionTasks.registerBrain(brain, this);
-        return brain;
+    public List<ExtendedSensor<AbstractEntityCompanion>> getSensors() {
+        return ObjectArrayList.of(
+                new NearbyLivingEntitySensor<>(), // This tracks nearby entities
+                new HurtBySensor<>(),                // This tracks the last damage source and attacker
+                new NearbyHostileSensor<>(),
+                new NearbyPlayersSensor<>(),
+                new NearestItemSensor<>()
+        );
+    }
+
+    @Override
+    public BrainActivityGroup<AbstractEntityCompanion> getCoreTasks() {
+        return BrainActivityGroup.coreTasks(	                // Keep pathfinder avoiding the sun	                // Escape the sun	                // Run away from wolves
+                new LookAtTargetSink(40, 300), 														// Look at the look target
+                new StrafeTarget<>().stopStrafingWhen(entity -> !isHoldingBow(entity)).startCondition(AbstractEntityCompanion::isHoldingBow),	// Strafe around target
+                new MoveToWalkTarget<>());
+    }
+
+    @Override
+    public BrainActivityGroup<AbstractEntityCompanion> getIdleTasks() {
+        return BrainActivityGroup.idleTasks(
+                new FirstApplicableBehaviour<>(                // Run only one of the below behaviours, trying each one in order. Include explicit generic typing because javac is silly
+                        new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
+                        new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available
+                        new SetRandomLookTarget<>()), 					// Set the look target to a random nearby location
+                new OneRandomBehaviour<>( 								// Run only one of the below behaviours, picked at random
+                        new SetRandomWalkTarget<>().speedModifier(1), 				// Set the walk target to a nearby random pathable location
+                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60)))); // Don't walk anywhere
+    }
+
+    public static boolean hasValidWeapon(AbstractEntityCompanion entity){
+
+        LivingEntity target = BrainUtils.getTargetOfEntity(entity);
+
+        return entity.shouldUseGun()||entity.canUseCannonOrTorpedo() || (target != null && (entity instanceof ISpellUser && ((ISpellUser) entity).shouldUseSpell(target)) || (entity instanceof IMeleeAttacker && ((IMeleeAttacker) entity).shouldUseNonVanillaAttack(target)));
+    }
+
+    public static boolean isHoldingSword(PathfinderMob entity){
+        return entity.getItemInHand(MAIN_HAND).getItem() instanceof SwordItem;
+    }
+
+    public static boolean isHoldingBow(PathfinderMob entity) {
+        return entity.isHolding(stack -> stack.getItem() instanceof BowItem);
+    }
+
+    public static boolean isHoldingCrosbow(PathfinderMob entity) {
+        return entity.isHolding(stack -> stack.getItem() instanceof CrossbowItem);
+    }
+
+    public static boolean isHoldingGun(PathfinderMob entity) {
+        return entity.getItemInHand(MAIN_HAND).getItem() instanceof GunItem;
     }
 
     public void releasePoi(MemoryModuleType<GlobalPos> p_213742_1_) {
-        if (this.level instanceof ServerLevel) {
-            MinecraftServer minecraftserver = ((ServerLevel)this.level).getServer();
-            this.brain.getMemory(p_213742_1_).ifPresent((p_213752_3_) -> {
-                ServerLevel serverworld = minecraftserver.getLevel(p_213752_3_.dimension());
-                if (serverworld != null) {
-                    PoiManager pointofinterestmanager = serverworld.getPoiManager();
-                    Optional<PoiType> optional = pointofinterestmanager.getType(p_213752_3_.pos());
-                    BiPredicate<AbstractEntityCompanion, PoiType> bipredicate = POI_MEMORIES.get(p_213742_1_);
-                    if (optional.isPresent() && bipredicate.test(this, optional.get())) {
-                        pointofinterestmanager.release(p_213752_3_.pos());
-                        DebugPackets.sendPoiTicketCountPacket(serverworld, p_213752_3_.pos());
-                    }
-
-                }
-            });
+        if (!(this.level instanceof ServerLevel)) {
+            return;
         }
+
+        MinecraftServer minecraftserver = ((ServerLevel) this.level).getServer();
+        this.brain.getMemory(p_213742_1_).ifPresent((p_213752_3_) -> {
+            ServerLevel serverworld = minecraftserver.getLevel(p_213752_3_.dimension());
+            if (serverworld != null) {
+                PoiManager pointofinterestmanager = serverworld.getPoiManager();
+                Optional<PoiType> optional = pointofinterestmanager.getType(p_213752_3_.pos());
+                BiPredicate<AbstractEntityCompanion, PoiType> bipredicate = POI_MEMORIES.get(p_213742_1_);
+                if (optional.isPresent() && bipredicate.test(this, optional.get())) {
+                    pointofinterestmanager.release(p_213752_3_.pos());
+                    DebugPackets.sendPoiTicketCountPacket(serverworld, p_213752_3_.pos());
+                }
+
+            }
+        });
     }
 
     @Override
@@ -3617,7 +3643,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Nonnull
     protected Brain.Provider<AbstractEntityCompanion> brainProvider() {
-        return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
+        return new SmartBrainProvider<>(this);
     }
 
     public void setMovementMode(MOVE_STATUS status){
