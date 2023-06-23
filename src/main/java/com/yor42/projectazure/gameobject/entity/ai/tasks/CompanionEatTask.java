@@ -35,8 +35,7 @@ public class CompanionEatTask extends Behavior<AbstractEntityCompanion> {
         } else if (entity.getFoodStats().getFoodLevel() < 20) {
             if (this.getFoodHand(entity).isPresent()) {
                 this.FoodHand = this.getFoodHand(entity).get();
-                boolean value = (entity.isEating() || (!entity.isAggressive() && !entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET)) || (entity.getHealth() <= 10)) && entity.getFoodStats().getFoodLevel() < 20;
-                return value;
+                return (entity.isEating() || (!entity.isAggressive() && !entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET)) || (entity.getHealth() <= 10)) && entity.getFoodStats().getFoodLevel() < 20;
             }
             entity.getBrain().getMemory(FOOD_INDEX.get()).ifPresent((index) -> {
                 if (entity.getItemSwapIndexOffHand() == -1) {

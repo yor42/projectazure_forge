@@ -40,7 +40,7 @@ public class CompanionTakeFoodFromPantryGoal extends Behavior<AbstractEntityComp
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel world, AbstractEntityCompanion entity) {
-        Brain<AbstractEntityCompanion> brain = entity.getBrain();
+        Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
 
         for(int i=0; i<entity.getInventory().getSlots();i++){
             ItemStack stack = entity.getInventory().getStackInSlot(i);
@@ -95,7 +95,7 @@ public class CompanionTakeFoodFromPantryGoal extends Behavior<AbstractEntityComp
 
     @Override
     protected void start(ServerLevel p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
-        Brain<AbstractEntityCompanion> brain = entity.getBrain();
+        Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
         GlobalPos pos = brain.getMemory(FOOD_PANTRY.get()).get();
         BlockPos target = pos.pos();
         if(!target.closerThan(entity.blockPosition(), 3)) {
@@ -108,7 +108,7 @@ public class CompanionTakeFoodFromPantryGoal extends Behavior<AbstractEntityComp
 
     @Override
     protected void tick(ServerLevel world, AbstractEntityCompanion entity, long tickcount) {
-        Brain<AbstractEntityCompanion> brain = entity.getBrain();
+        Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
         GlobalPos pos = brain.getMemory(FOOD_PANTRY.get()).get();
         BlockPos target = pos.pos();
         BlockEntity te = world.getBlockEntity(target);

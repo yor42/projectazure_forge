@@ -32,7 +32,7 @@ public class CompanionUseTotemTask extends Behavior<AbstractEntityCompanion> {
 
     @Override
     protected void start(ServerLevel p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
-        if(!this.getTotemHand(entity).isPresent()) {
+        if(this.getTotemHand(entity).isEmpty()) {
             ItemStack buffer = entity.getOffhandItem();
             this.previousSwitchIndex = entity.getItemSwapIndexOffHand();
             entity.getBrain().getMemory(TOTEM_INDEX.get()).ifPresent((index) -> {
@@ -54,7 +54,7 @@ public class CompanionUseTotemTask extends Behavior<AbstractEntityCompanion> {
 
     @Override
     protected void tick(ServerLevel world, AbstractEntityCompanion entity, long p_212833_3_) {
-        if(!this.getTotemHand(entity).isPresent() && entity.hasEffect(MobEffects.REGENERATION) && entity.hasEffect(MobEffects.ABSORPTION)){
+        if(this.getTotemHand(entity).isEmpty() && entity.hasEffect(MobEffects.REGENERATION) && entity.hasEffect(MobEffects.ABSORPTION)){
             this.doStop(world, entity, p_212833_3_);
         }
     }

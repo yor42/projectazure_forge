@@ -182,7 +182,7 @@ public class CompanionHealAllyAndPlayerTask extends Behavior<AbstractEntityCompa
     private int getPotionFromInv(AbstractEntityCompanion entity, LivingEntity HealTarget){
         MemoryModuleType<Integer> preferredEffect = HealTarget.getHealth()<6? RegisterAI.HEAL_POTION_INDEX.get(): RegisterAI.REGENERATION_POTION_INDEX.get();
         MemoryModuleType<Integer> otherEffect = preferredEffect == RegisterAI.HEAL_POTION_INDEX.get()? RegisterAI.REGENERATION_POTION_INDEX.get(): RegisterAI.HEAL_POTION_INDEX.get();
-        Brain<AbstractEntityCompanion> brain = entity.getBrain();
+        Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
         return brain.getMemory(preferredEffect).orElse(brain.getMemory(otherEffect).orElse(-1));
     }
 

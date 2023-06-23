@@ -1,12 +1,12 @@
 package com.yor42.projectazure.gameobject.entity.ai.sensor;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.mixin.EntityAccessor;
 import com.yor42.projectazure.setup.register.RegisterAI;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.PredicateSensor;
@@ -22,7 +22,7 @@ public class NearestBoatSensor<E extends AbstractEntityCompanion> extends Predic
 
     protected SquareRadius radius = new SquareRadius(32, 16);
     public NearestBoatSensor(){
-        setPredicate(((boat, e) -> boat.getPassengers().size()<2 && e.hasLineOfSight(boat)));
+        setPredicate(((boat, e) -> ((EntityAccessor)boat).invokecanAddPassenger(e)&& e.hasLineOfSight(boat)));
     }
 
     @Override

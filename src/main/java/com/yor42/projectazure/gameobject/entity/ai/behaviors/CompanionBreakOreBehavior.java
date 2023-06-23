@@ -24,12 +24,12 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.BreakBlock;
 import java.util.List;
 import java.util.Objects;
 
-public class CompanionBreakOreTask extends BreakBlock<AbstractEntityCompanion> {
+public class CompanionBreakOreBehavior extends BreakBlock<AbstractEntityCompanion> {
 
     private static final List<Pair<MemoryModuleType<?>, MemoryStatus>> MEMORY_REQUIREMENTS = ObjectArrayList.of(Pair.of(RegisterAI.NEAR_ORES.get(), MemoryStatus.VALUE_PRESENT));
 
 
-    public CompanionBreakOreTask(){
+    public CompanionBreakOreBehavior(){
         this.timeToBreak((entity, pos, state)-> (int) (1/progresspertick(state, entity, entity.level, pos)));
         this.forBlocks((entity, pos, state)-> true);
     }
