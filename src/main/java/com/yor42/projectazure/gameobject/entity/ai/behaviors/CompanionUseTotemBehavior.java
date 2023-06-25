@@ -52,7 +52,7 @@ public class CompanionUseTotemBehavior extends ExtendedItemSwitchingBehavior<Abs
     }
 
     @Override
-    protected InteractionHand SwapHand() {
+    protected InteractionHand SwapHand(AbstractEntityCompanion entity) {
         return InteractionHand.OFF_HAND;
     }
 

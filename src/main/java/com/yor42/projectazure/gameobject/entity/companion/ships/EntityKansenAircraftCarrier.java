@@ -18,6 +18,14 @@ public abstract class EntityKansenAircraftCarrier extends EntityKansenBase {
         this.setShipClass(enums.shipClass.AircraftCarrier);
     }
 
+    public int getPlaneLaunchDelay(){
+        return 0;
+    }
+
+    public int getPlanePreLaunchAnimationDelay(){
+        return 0;
+    }
+
     public void LaunchPlane(ItemStack planestack, AbstractEntityPlanes plane, LivingEntity target, IItemHandlerModifiable hanger, int hangerIndex){
         plane.setOwner(this);
         plane.setPos(this.getX(), this.getY() + 2, this.getZ());

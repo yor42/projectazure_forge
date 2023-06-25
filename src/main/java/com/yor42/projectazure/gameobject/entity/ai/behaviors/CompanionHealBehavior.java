@@ -24,14 +24,13 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.HEAL_POTION_INDEX;
 import static com.yor42.projectazure.setup.register.RegisterAI.REGENERATION_POTION_INDEX;
 
-public class CompanionHealTask extends ExtendedItemSwitchingBehavior<AbstractEntityCompanion> {
+public class CompanionHealBehavior extends ExtendedItemSwitchingBehavior<AbstractEntityCompanion> {
 
-    public CompanionHealTask(){
+    public CompanionHealBehavior(){
         cooldownFor((e)->10);
         startCondition((entity)->{
 
@@ -132,7 +131,7 @@ public class CompanionHealTask extends ExtendedItemSwitchingBehavior<AbstractEnt
     }
 
     @Override
-    protected InteractionHand SwapHand() {
+    protected InteractionHand SwapHand(AbstractEntityCompanion entity) {
         return InteractionHand.MAIN_HAND;
     }
 

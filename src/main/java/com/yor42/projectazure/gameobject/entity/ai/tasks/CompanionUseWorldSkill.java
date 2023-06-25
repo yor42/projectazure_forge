@@ -27,7 +27,7 @@ public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
             return false;
         }
 
-        Brain<AbstractEntityCompanion> brain = entity.getBrain();
+        Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
 
         Optional<BlockPos> skillpos = brain.getMemory(NEAREST_WORLDSKILLABLE.get());
 
@@ -55,7 +55,7 @@ public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
     protected void start(ServerLevel world, AbstractEntityCompanion entity, long p_212831_3_) {
         if(entity instanceof IWorldSkillUseable){
             entity.setUsingWorldSkill(true);
-            Brain<AbstractEntityCompanion> brain = entity.getBrain();
+            Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
 
             if(brain.getMemory(NEAREST_WORLDSKILLABLE.get()).map((pos)-> ((IWorldSkillUseable) entity).executeWorldSkill(world, pos, entity)).orElse(true)){
                 this.doStop(world, entity, p_212831_3_);
@@ -78,7 +78,7 @@ public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
     @Override
     protected void tick(ServerLevel world, AbstractEntityCompanion entity, long p_212833_3_) {
         if(entity instanceof IWorldSkillUseable){
-            Brain<AbstractEntityCompanion> brain = entity.getBrain();
+            Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
 
             if(brain.getMemory(NEAREST_WORLDSKILLABLE.get()).map((pos)-> ((IWorldSkillUseable) entity).executeWorldSkillTick(world, pos, entity)).orElse(true)){
                 this.doStop(world, entity, p_212833_3_);

@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.level.pathfinder.Path;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.PredicateSensor;
 import net.tslat.smartbrainlib.object.SquareRadius;
@@ -22,7 +23,9 @@ public class NearestBoatSensor<E extends AbstractEntityCompanion> extends Predic
 
     protected SquareRadius radius = new SquareRadius(32, 16);
     public NearestBoatSensor(){
-        setPredicate(((boat, e) -> ((EntityAccessor)boat).invokecanAddPassenger(e)&& e.hasLineOfSight(boat)));
+        setPredicate(((boat, e) -> {
+            Path path = e.getNavigation().createPath(boat, 0);
+            return ((EntityAccessor)boat).invokecanAddPassenger(e)&& e.hasLineOfSight(boat) && path != null && path.canReach();}));
     }
 
     @Override

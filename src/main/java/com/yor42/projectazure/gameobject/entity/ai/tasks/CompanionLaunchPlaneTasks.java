@@ -62,7 +62,7 @@ public class CompanionLaunchPlaneTasks extends Behavior<AbstractEntityCompanion>
 
     @Override
     protected void start(ServerLevel p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
-        if(!entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isPresent()){
+        if(entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isEmpty()){
             return;
         }
         if(!entity.closerThan(entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get(), entity.getSpellRange())){

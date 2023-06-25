@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +21,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.BreakBlock;
+import net.tslat.smartbrainlib.registry.SBLMemoryTypes;
+import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +39,29 @@ public class CompanionBreakOreBehavior extends BreakBlock<AbstractEntityCompanio
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, AbstractEntityCompanion entity) {
-        return super.checkExtraStartConditions(level, entity);
+        for (Pair<BlockPos, BlockState> pair : Objects.requireNonNull(BrainUtils.getMemory(entity, RegisterAI.NEAR_ORES.get()))) {
+            if (this.targetBlockPredicate.test(entity, pair.getFirst(), pair.getSecond())) {
+                this.pos = pair.getFirst();
+                this.state = pair.getSecond();
+                this.timeToBreak = this.digTimePredicate.apply(entity, this.pos, this.state);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    protected void start(AbstractEntityCompanion entity) {
+        if(Math.sqrt(entity.distanceToSqr(this.pos.getX(), this.pos.getY(), this.pos.getZ())) >3){
+            BehaviorUtils.setWalkAndLookTargetMemories(entity, this.pos, 1, 1);
+        }
+    }
+
+    @Override
+    protected boolean shouldKeepRunning(AbstractEntityCompanion entity) {
+        return super.shouldKeepRunning(entity) && Math.sqrt(entity.distanceToSqr(this.pos.getX(), this.pos.getY(), this.pos.getZ())) <= 3;
     }
 
     public float progresspertick(BlockState pState, AbstractEntityCompanion entity, BlockGetter pLevel, BlockPos pPos) {

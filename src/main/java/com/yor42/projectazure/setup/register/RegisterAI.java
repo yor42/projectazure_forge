@@ -73,7 +73,7 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<Boolean>> FOLLOWING_OWNER_MEMORY = registerMemoryModuleType("following_owner");
     public static final RegistryObject<MemoryModuleType<Boolean>> KILLED_ENTITY = registerMemoryModuleType("killed_entity");
 
-    public static final RegistryObject<MemoryModuleType<Pair<Integer, Integer>>> ITEM_SWAP_ENTRY = registerMemoryModuleType("item_swap_entry");
+    public static final RegistryObject<MemoryModuleType<Animations>> ANIMATION = registerMemoryModuleType("animation");
 
     public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_HARVESTABLES = registerMemoryModuleType("near_harvestable");
     public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_ORES = registerMemoryModuleType("near_ores");
@@ -116,6 +116,14 @@ public class RegisterAI {
 
     public static <U> RegistryObject<MemoryModuleType<U>> registerMemoryModuleType(String ID){
         return MEMORYMODULES.register(ID,()->new MemoryModuleType<>(Optional.empty()));
+    }
+
+    public enum Animations{
+        LAUNCH_PLANE,
+        SHOOT_CANNON,
+        USE_SPELL,
+        SHOOT_GUN,
+        MELEE_ATTACK
     }
 
     public static void register() {

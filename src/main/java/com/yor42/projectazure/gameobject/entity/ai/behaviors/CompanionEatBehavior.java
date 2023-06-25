@@ -43,7 +43,7 @@ public class CompanionEatBehavior extends ExtendedItemSwitchingBehavior<Abstract
     }
 
     @Override
-    protected InteractionHand SwapHand() {
+    protected InteractionHand SwapHand(AbstractEntityCompanion entity) {
         return InteractionHand.MAIN_HAND;
     }
 

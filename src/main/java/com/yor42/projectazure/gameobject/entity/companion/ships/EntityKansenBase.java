@@ -56,6 +56,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase.CONTROLLER_NAME;
@@ -322,7 +323,15 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     @Override
     public boolean canUseCannonOrTorpedo() {
-        return this.canUseRigging() && (canUseCannon(this, this.getRigging()) || canUseTorpedo(this, this.getRigging()));
+        return this.canUseRigging() && (can_UseCannon() || can_UseTorpedo());
+    }
+
+    public boolean can_UseCannon(){
+        return canUseCannon(this, this.getRigging());
+    }
+
+    public boolean can_UseTorpedo(){
+        return canUseTorpedo(this, this.getRigging());
     }
 
     public boolean canUseShell(enums.AmmoCategory types){
@@ -337,7 +346,15 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return AmmoCategory.GENERIC;
     }
 
-    public void AttackUsingCannon(LivingEntity target){
+    public int getFireAnimLength(){
+        return -1;
+    }
+
+    public int getAnimationDelayBeforeFire(){
+        return 0;
+    }
+
+    public boolean AttackUsingCannon(LivingEntity target){
         boolean shouldFire = this.canUseShell(getActiveShellCategory()) && this.canUseRigging() && canUseCannon(this, this.getRigging());
 
         if(shouldFire) {
@@ -345,17 +362,16 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             Item RiggingItem = rigging.getItem();
             ItemStack Ammostack = this.findAmmo(this.getActiveShellCategory());
             if(!(Ammostack.getItem() instanceof ItemCannonshell)){
-                return;
+                return false;
             }
 
-            getPreparedWeapon(this, rigging, MAIN_GUN, SUB_GUN).ifPresent(
-                    (pair)->{
+            return getPreparedWeapon(this, rigging, MAIN_GUN, SUB_GUN).flatMap((pair)->{
                         enums.SLOTTYPE cannonType = pair.getFirst();
                         int slotindex = pair.getSecond();
                         ItemStack FiringCannon = MultiInvUtil.getCap(rigging).getInventory(cannonType.ordinal()).getStackInSlot(slotindex);
 
                         if(!(FiringCannon.getItem() instanceof ItemEquipmentBase)){
-                            return;
+                            return Optional.of(false);
                         }
                         Vec3 vector3d = this.getViewVector(1.0F);
                         double x = target.getX() - (this.getX());
@@ -376,8 +392,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                             serverEvents.spawnCannonParticleModerate((ServerLevel)this.getLevel(), vector3d.x, vector3d.y, vector3d.z, view_vec3.x, view_vec3.y);
                         }
 
-                        if(RiggingItem instanceof ItemRiggingBase && !this.getLevel().isClientSide()) {
-                            ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;
+                        if(RiggingItem instanceof ItemRiggingBase riggingBase && !this.getLevel().isClientSide()) {
                             final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerLevel) this.getLevel());
                             final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, CONTROLLER_NAME);
                             Pair<String, Integer> animationpair = riggingBase.getFireAnimationname(cannonType, slotindex);
@@ -397,11 +412,12 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                         Vec3 vec = this.getDeltaMovement().add(recoil);
                         this.setDeltaMovement(vec);
                         this.addMorale(-0.2);
-                        this.startPlayingShipAttackAnim();
+                        return Optional.of(true);
                     }
-            );
+            ).orElse(false);
 
         }
+        return false;
     }
 
     public void AttackUsingTorpedo(LivingEntity target){

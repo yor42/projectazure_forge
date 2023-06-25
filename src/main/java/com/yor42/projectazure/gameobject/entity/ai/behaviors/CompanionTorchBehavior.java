@@ -77,7 +77,7 @@ public class CompanionTorchBehavior extends ExtendedItemSwitchingBehavior<Abstra
     }
 
     @Override
-    protected InteractionHand SwapHand() {
+    protected InteractionHand SwapHand(AbstractEntityCompanion entity) {
         return InteractionHand.OFF_HAND;
     }
 }

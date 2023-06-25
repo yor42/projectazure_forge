@@ -20,28 +20,28 @@ public abstract class ExtendedItemSwitchingBehavior<E extends AbstractEntityComp
     protected void stop(@Nonnull ServerLevel level, @Nonnull E entity, long gameTime) {
         super.stop(level, entity, gameTime);
 
-        int itemswapindex = this.SwapHand() == InteractionHand.MAIN_HAND? entity.getItemSwapIndexMainHand() : entity.getItemSwapIndexOffHand();
+        int itemswapindex = this.SwapHand(entity) == InteractionHand.MAIN_HAND? entity.getItemSwapIndexMainHand() : entity.getItemSwapIndexOffHand();
 
         if(itemswapindex>-1) {
-            ItemStack buffer = entity.getItemInHand(this.SwapHand());
-            entity.setItemInHand(this.SwapHand(), entity.getInventory().getStackInSlot(itemswapindex));
+            ItemStack buffer = entity.getItemInHand(this.SwapHand(entity));
+            entity.setItemInHand(this.SwapHand(entity), entity.getInventory().getStackInSlot(itemswapindex));
             entity.getInventory().setStackInSlot(itemswapindex, buffer);
             setSwapIndex(entity, -1);
         }
     }
 
-    protected void ChangeItem(int index, AbstractEntityCompanion entity){
+    protected void ChangeItem(int index, E entity){
         if(this.getSwapIndex(entity)<0){
             return;
         }
 
-        ItemStack Buffer = entity.getItemInHand(SwapHand());
-        entity.setItemInHand(this.SwapHand(), entity.getInventory().getStackInSlot(index));
+        ItemStack Buffer = entity.getItemInHand(SwapHand(entity));
+        entity.setItemInHand(this.SwapHand(entity), entity.getInventory().getStackInSlot(index));
         entity.getInventory().setStackInSlot(index, Buffer);
         setSwapIndex(entity, index);
     }
 
-    protected boolean ChangeItemwithMemory(MemoryModuleType<Integer> memory, AbstractEntityCompanion entity){
+    protected boolean ChangeItemwithMemory(MemoryModuleType<Integer> memory, E entity){
         Integer idx = BrainUtils.getMemory(entity, memory);
         if(idx == null){
             return false;
@@ -52,7 +52,7 @@ public abstract class ExtendedItemSwitchingBehavior<E extends AbstractEntityComp
 
 
     @SafeVarargs
-    protected final void ChangeItemWithPriority(AbstractEntityCompanion entity, MemoryModuleType<Integer>... memories){
+    protected final void ChangeItemWithPriority(E entity, MemoryModuleType<Integer>... memories){
         for(MemoryModuleType<Integer> memory:memories){
             if(ChangeItemwithMemory(memory, entity)){
                 break;
@@ -60,8 +60,8 @@ public abstract class ExtendedItemSwitchingBehavior<E extends AbstractEntityComp
         }
     }
 
-    private void setSwapIndex(AbstractEntityCompanion entity, int idx){
-        if(this.SwapHand() == InteractionHand.MAIN_HAND) {
+    private void setSwapIndex(E entity, int idx){
+        if(this.SwapHand(entity) == InteractionHand.MAIN_HAND) {
             entity.setItemSwapIndexMainHand(idx);
         }
         else{
@@ -70,7 +70,7 @@ public abstract class ExtendedItemSwitchingBehavior<E extends AbstractEntityComp
     }
 
     @Nullable
-    protected static InteractionHand getItemHand(AbstractEntityCompanion entity, Predicate<ItemStack> predicate){
+    protected InteractionHand getItemHand(E entity, Predicate<ItemStack> predicate){
         for(InteractionHand hand : InteractionHand.values()){
             ItemStack stack = entity.getItemInHand(hand);
             if(predicate.test(stack)){
@@ -80,10 +80,10 @@ public abstract class ExtendedItemSwitchingBehavior<E extends AbstractEntityComp
         return null;
     }
 
-    private int getSwapIndex(AbstractEntityCompanion entity){
-        return entity.getItemSwapIndex(SwapHand());
+    private int getSwapIndex(E entity){
+        return entity.getItemSwapIndex(SwapHand(entity));
     }
 
-    protected abstract InteractionHand SwapHand();
+    protected abstract InteractionHand SwapHand(E entity);
 
 }
