@@ -2,10 +2,11 @@ package com.yor42.projectazure.gameobject.entity.ai;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.entity.ai.tasks.CompanionBowRangedAttackTask;
+import com.yor42.projectazure.gameobject.entity.ai.behaviors.CompanionUseCrossbowBehavior;
 import com.yor42.projectazure.gameobject.entity.ai.tasks.*;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
@@ -34,28 +35,6 @@ import static net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_HOST
 import static net.minecraft.world.entity.schedule.Activity.*;
 
 public class CompanionTasks {
-
-    //I have absolutely 0 idea what I am doing here! :D
-    public static void registerBrain(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivity(Activity.CORE, getCorePackage());
-        //brain.addActivity(FOLLOWING_OWNER.get(), getFollowOwnerPackage());
-        brain.addActivity(RegisterAI.INJURED.get(), getInjuredPackage());
-        brain.addActivity(IDLE, getIdlePackage(companion, 0.75F));
-        addRelaxActivity(brain, companion);
-        addSittingActivity(brain, companion);
-        addCombatActivity(brain, companion);
-        addFollowOwnerActivity(brain);
-        addWaitPlayerActivity(brain, companion);
-        initRetreatActivity(brain);
-        brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
-        brain.setDefaultActivity(RegisterAI.FOLLOWING_OWNER.get());
-        brain.useDefaultActivity();
-        if(brain.getActiveNonCoreActivity().map((activity) -> activity == IDLE || activity == REST).orElse(false)) {
-            brain.setSchedule(RegisterAI.CompanionSchedule.get());
-            brain.updateActivityFromSchedule(companion.level.getDayTime(), companion.level.getGameTime());
-        }
-    }
-
 
     public static void UpdateActivity(AbstractEntityCompanion companion){
         if(companion.isAlive()) {
@@ -188,7 +167,7 @@ public class CompanionTasks {
                         new CompanionLaunchPlaneTasks(20, 40, 50),
                         new CompanionShipRangedAttackTask(),
                         new CompanionUseSkillTask(),
-                        new CompanionUseCrossbowTask(),
+                        new CompanionUseCrossbowBehavior(),
                         new CompanionBowRangedAttackTask(),
                         new CompanionShootGunTask(),
                         new CompanionNonVanillaMeleeAttackTask(),

@@ -1,11 +1,10 @@
-package com.yor42.projectazure.gameobject.entity.ai.tasks;
+package com.yor42.projectazure.gameobject.entity.ai.behaviors;
 
-import com.google.common.collect.ImmutableMap;
+import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -13,14 +12,22 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 
-public class CompanionUseCrossbowTask extends Behavior<AbstractEntityCompanion> {
+import java.util.List;
+
+public class CompanionUseCrossbowBehavior extends ExtendedBehaviour<AbstractEntityCompanion> {
 
     private int attackDelay;
     private Status crossbowState = Status.UNCHARGED;
     
-    public CompanionUseCrossbowTask() {
-        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
+    public CompanionUseCrossbowBehavior() {
+        runFor((e)->1200);
+    }
+
+    @Override
+    protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
+        return List.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT));
     }
 
     protected boolean checkExtraStartConditions(ServerLevel p_212832_1_, AbstractEntityCompanion p_212832_2_) {
@@ -48,16 +55,16 @@ public class CompanionUseCrossbowTask extends Behavior<AbstractEntityCompanion> 
         this.crossbowAttack(p_212833_2_, livingentity);
     }
 
-    protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
-        if (p_212835_2_.isUsingItem()) {
-            p_212835_2_.stopUsingItem();
+    @Override
+    protected void stop(AbstractEntityCompanion entity) {
+        if (entity.isUsingItem()) {
+            entity.stopUsingItem();
         }
 
-        if (p_212835_2_.isHolding(item -> item.getItem() instanceof CrossbowItem)) {
-            p_212835_2_.setChargingCrossbow(false);
-            CrossbowItem.setCharged(p_212835_2_.getUseItem(), false);
+        if (entity.isHolding(item -> item.getItem() instanceof CrossbowItem)) {
+            entity.setChargingCrossbow(false);
+            CrossbowItem.setCharged(entity.getUseItem(), false);
         }
-
     }
 
     private void crossbowAttack(AbstractEntityCompanion p_233888_1_, LivingEntity p_233888_2_) {

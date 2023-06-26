@@ -38,6 +38,7 @@ public class CompanionShipRangedAttackBehavior extends DelayedBehaviour<Abstract
 
     @Override
     protected void start(AbstractEntityCompanion entity) {
+
         if(entity instanceof EntityKansenBase) {
             BehaviorUtils.lookAtEntity(entity, Objects.requireNonNull(BrainUtils.getTargetOfEntity(entity)));
             BrainUtils.setForgettableMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.SHOOT_CANNON, ((EntityKansenBase) entity).getFireAnimLength());

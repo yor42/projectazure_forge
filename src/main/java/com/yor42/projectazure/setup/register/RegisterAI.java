@@ -1,5 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
@@ -40,7 +42,7 @@ public class RegisterAI {
     public static final RegistryObject<Activity> FOLLOWING_OWNER = registerActivity("following_ownner");
     public static final RegistryObject<Activity> SITTING = registerActivity("sitting");
     public static final RegistryObject<Activity> WAITING = registerActivity("waiting");
-    public static final RegistryObject<Activity> ACTIVITY_RESTING = registerActivity("resting");
+    public static final RegistryObject<Activity> ACTIVITY_RELAXING = registerActivity("resting");
     public static final RegistryObject<Activity> INJURED = registerActivity("injured");
     //MemoryModuleType
     public static final RegistryObject<MemoryModuleType<GlobalPos>> WAIT_POINT = registerMemoryModuleType("wait_point", GlobalPos.CODEC);
@@ -84,9 +86,8 @@ public class RegisterAI {
     public static final RegistryObject<SensorType<InventorySensor<? extends AbstractEntityCompanion>>> INVSENSOR = registerSensorType("invsensor", InventorySensor::new);
     public static final RegistryObject<SensorType<NearbyAllysSensor<? extends AbstractEntityCompanion>>> NEARBY_ALLY_SENSOR = registerSensorType("nearby_ally", NearbyAllysSensor::new);
     public static final RegistryObject<Schedule> CompanionSchedule = registerSchedule("companion_schedule", (builder)-> builder.changeActivityAt(10, Activity.IDLE).changeActivityAt(12000, Activity.REST).build());
-    @SuppressWarnings("UnstableApiUsage")
     //POI
-    //public static final RegistryObject<PointOfInterestType> POI_PANTRY = registerPOI("poi_pantry",ImmutableList.of(registerBlocks.OAK_PANTRY.get(),registerBlocks.SPRUCE_PANTRY.get(),registerBlocks.BIRCH_PANTRY.get(),registerBlocks.JUNGLE_PANTRY.get(),registerBlocks.DARK_OAK_PANTRY.get(),registerBlocks.ACACIA_PANTRY.get(),registerBlocks.WARPED_PANTRY.get(),registerBlocks.CRIMSON_PANTRY.get()).stream().flatMap((p_234171_0_) -> p_234171_0_.getStateDefinition().getPossibleStates().stream()).collect(ImmutableSet.toImmutableSet()), null, 1,1);
+    public static final RegistryObject<PoiType> POI_PANTRY = registerPOI("poi_pantry", ImmutableList.of(RegisterBlocks.OAK_PANTRY.get(),RegisterBlocks.SPRUCE_PANTRY.get(),RegisterBlocks.BIRCH_PANTRY.get(),RegisterBlocks.JUNGLE_PANTRY.get(),RegisterBlocks.DARK_OAK_PANTRY.get(),RegisterBlocks.ACACIA_PANTRY.get(),RegisterBlocks.WARPED_PANTRY.get(),RegisterBlocks.CRIMSON_PANTRY.get()).stream().flatMap((p_234171_0_) -> p_234171_0_.getStateDefinition().getPossibleStates().stream()).collect(ImmutableSet.toImmutableSet()), null, 1,1);
 
     public static RegistryObject<Activity> registerActivity(String ID){
         return ACTIVITIES.register(ID,()-> new Activity(ID));

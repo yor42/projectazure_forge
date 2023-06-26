@@ -1,10 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.companion;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.mojang.math.Vector3f;
-import com.mojang.serialization.Dynamic;
 import com.spacecat.summer.objects.math.RayMath;
 import com.tac.guns.Config;
 import com.tac.guns.client.render.pose.TwoHandedPose;
@@ -29,7 +27,10 @@ import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementControll
 import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
+import com.yor42.projectazure.gameobject.entity.ai.CompanionSchedule;
 import com.yor42.projectazure.gameobject.entity.ai.CompanionTasks;
+import com.yor42.projectazure.gameobject.entity.ai.behaviors.*;
+import com.yor42.projectazure.gameobject.entity.ai.tasks.CompanionPlaceTorchTask;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -86,20 +87,16 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
-import net.minecraft.world.entity.ai.sensing.Sensing;
-import net.minecraft.world.entity.ai.sensing.Sensor;
-import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.monster.RangedAttackMob;
@@ -142,13 +139,15 @@ import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
 import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.AvoidSun;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.attack.AnimatableMeleeAttack;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.*;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetRandomLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliate;
+import net.tslat.smartbrainlib.api.core.schedule.SmartBrainSchedule;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.*;
 import net.tslat.smartbrainlib.example.SBLSkeleton;
@@ -704,7 +703,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isUsingGun(){
-        return this.getMainHandItem().getItem() instanceof GunItem && this.getEntityData().get(ISUSINGGUN);
+        return this.getMainHandItem().getItem() instanceof GunItem && BrainUtils.getMemory(this, RegisterAI.ANIMATION.get()) == RegisterAI.Animations.SHOOT_GUN;
     }
 
     public ItemStack[] getMagazine(ResourceLocation id){
@@ -2798,6 +2797,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         }
     }
 
+    @Nullable
+    public Class<? extends AbstractEntityCompanion> EntityToFollow(){
+        return null;
+    }
+
     @Override
     public List<ExtendedSensor<AbstractEntityCompanion>> getSensors() {
         return ObjectArrayList.of(
@@ -2811,38 +2815,68 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     public BrainActivityGroup<AbstractEntityCompanion> getCoreTasks() {
-        return BrainActivityGroup.coreTasks(	                // Keep pathfinder avoiding the sun	                // Escape the sun	                // Run away from wolves
-                new LookAtTargetSink(40, 300), 														// Look at the look target
+        return BrainActivityGroup.coreTasks(
+                new CompanionOpenDoorBehavior(),
+                new LookAtTargetSink(40, 300),
                 new StrafeTarget<>().stopStrafingWhen(entity -> !shouldStrafe((AbstractEntityCompanion) entity)).startCondition((entity)->shouldStrafe((AbstractEntityCompanion) entity)),	// Strafe around target
-                new WalkOrRunToWalkTarget<>());
+                new WalkOrRunToWalkTarget<>(),
+                new CompanionMoveToAttackTargetBehavior(),
+                new CompanionUseTotemBehavior(),
+                new CompanionRaiseShield(),
+                new CompanionEatBehavior(),
+                new CompanionHealPlayerAndAllyBehavior(),
+                new AcquirePOISBL(PoiType.HOME, HOME, false, (byte) 14),
+                new AcquirePOISBL(RegisterAI.POI_PANTRY.get(), FOOD_PANTRY.get(), false, (byte) 14));
     }
 
     @Override
     public BrainActivityGroup<AbstractEntityCompanion> getIdleTasks() {
         return BrainActivityGroup.idleTasks(
-                new FirstApplicableBehaviour<>(                // Run only one of the below behaviours, trying each one in order. Include explicit generic typing because javac is silly
+                new CompanionProtectOwnerBehavior(),
+                new FirstApplicableBehaviour<>(
                         new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
-                        new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available
-                        new SetRandomLookTarget<>()), 					// Set the look target to a random nearby location
+                        new SetPlayerLookTarget<>(),
+                        new SetRandomLookTarget<>()),
+                new CompanionHealBehavior(),
+                new CompanionHealPlayerAndAllyBehavior(),
+                new CompanionPlaceTorchTask(),
                 new FirstApplicableBehaviour<>(
                         new FollowOwner<>(),
-                        new OneRandomBehaviour<>( 								// Run only one of the below behaviours, picked at random
-                        new SetRandomWalkTarget<>().speedModifier(1), 				// Set the walk target to a nearby random pathable location
-                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))))); // Don't walk anywhere
+                        new OneRandomBehaviour<>(
+                        new SetRandomWalkTarget<>().speedModifier(1),
+                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60)))));
+    }
+
+    @Override
+    public BrainActivityGroup<AbstractEntityCompanion> getFightTasks() {
+        return BrainActivityGroup.fightTasks(
+                new InvalidateAttackTarget<>(),
+                new FirstApplicableBehaviour<>(
+                        new CompanionUseGunBehavior(),
+                        new CompanionNonVanillaMeleeAttackBehavior(this),
+                        new CompanionUseSpellBehavior(this),
+                        new CompanionUseCrossbowBehavior(),
+                        new AnimatableMeleeAttack<>(0).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false)),
+                        new CompanionLaunchAircraftTask(this),
+                        new CompanionShipRangedAttackBehavior(this),
+                        new AnimatableMeleeAttack<>(0).startCondition((entity)->entity.getMainHandItem().getItem() instanceof SwordItem).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false))
+                        ));
     }
 
     @Override
     public Map<Activity, BrainActivityGroup<AbstractEntityCompanion>> getAdditionalTasks() {
-        return ImmutableMap.of(RegisterAI.WAITING.get(), CreateWaitTask()
-
-
-                );
+        return ImmutableMap.of(RegisterAI.WAITING.get(), CreateWaitTask(),
+                RegisterAI.ACTIVITY_RELAXING.get(), CreateRestathomeTask(),
+                RegisterAI.SITTING.get(), CreateSittingTask()
+        );
     }
 
     public BrainActivityGroup<AbstractEntityCompanion> CreateWaitTask() {
         return new BrainActivityGroup<AbstractEntityCompanion>(RegisterAI.WAITING.get()).priority(10).behaviours(
+                new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
+                new CompanionHealBehavior(),
+                new CompanionHealPlayerAndAllyBehavior(),
                 new FirstApplicableBehaviour<>(                // Run only one of the below behaviours, trying each one in order. Include explicit generic typing because javac is silly
-                        new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
                         new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available
                         new SetRandomLookTarget<>()), 					// Set the look target to a random nearby location
                         new OneRandomBehaviour<>( 								// Run only one of the below behaviours, picked at random
@@ -2854,10 +2888,40 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                                         return Math.sqrt(pos.pos().distToCenterSqr(vec3.x, vec3.y, vec3.z))<4;
                                         }),
                                 new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60)))
-        ).requireAndWipeMemoriesOnUse(RegisterAI.WAIT_POINT.get());
+        ).onlyStartWithMemoryStatus(RegisterAI.WAIT_POINT.get(), MemoryStatus.VALUE_PRESENT);
     }
 
+    public BrainActivityGroup<AbstractEntityCompanion> CreateSittingTask() {
+        return new BrainActivityGroup<AbstractEntityCompanion>(RegisterAI.SITTING.get()).priority(10).behaviours(
+                new FirstApplicableBehaviour<>(                // Run only one of the below behaviours, trying each one in order. Include explicit generic typing because javac is silly
+                        new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
+                        new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available
+                        new SetRandomLookTarget<>()) 					// Set the look target to a random nearby location
+        ).onlyStartWithMemoryStatus(RegisterAI.MEMORY_SITTING.get(), MemoryStatus.VALUE_PRESENT);
+    }
 
+    public BrainActivityGroup<AbstractEntityCompanion> CreateRestathomeTask() {
+        return new BrainActivityGroup<AbstractEntityCompanion>(RegisterAI.ACTIVITY_RELAXING.get()).priority(10).behaviours(
+                new FirstApplicableBehaviour<>(                // Run only one of the below behaviours, trying each one in order. Include explicit generic typing because javac is silly
+                        new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
+                        new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available
+                        new SetRandomLookTarget<>()),
+                new OneRandomBehaviour<>( 								// Run only one of the below behaviours, picked at random
+                        new SetRandomWalkTarget<>().speedModifier(1).walkTargetPredicate((mob,pos)->mob.level.getMaxLocalRawBrightness(new BlockPos(pos.x, pos.y, pos.z))>6), 				// Set the walk target to a nearby random pathable location
+                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))) // Don't walk anywhere// Set the look target to a random nearby location
+        ).onlyStartWithMemoryStatus(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT).onlyStartWithMemoryStatus(RegisterAI.RESTING.get(), MemoryStatus.VALUE_PRESENT);
+    }
+
+    @Override
+    public List<Activity> getActivityPriorities() {
+        return ObjectArrayList.of(Activity.FIGHT, RegisterAI.SITTING.get(), RegisterAI.ACTIVITY_RELAXING.get(), RegisterAI.WAITING.get(), Activity.IDLE);
+    }
+
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public SmartBrainSchedule getSchedule() {
+        return new CompanionSchedule();
+    }
 
     public static boolean shouldStrafe(AbstractEntityCompanion entity){
 
