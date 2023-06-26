@@ -41,10 +41,6 @@ import java.util.Optional;
 import static com.yor42.projectazure.setup.register.registerSounds.SYRINGE_INJECT;
 
 public class CompanionHealPlayerAndAllyBehavior extends ExtendedItemSwitchingBehavior<AbstractEntityCompanion> {
-
-    List<Pair<MemoryModuleType<?>, MemoryStatus>> MEMORIES = List.of(Pair.of(RegisterAI.HEAL_POTION_INDEX.get(), MemoryStatus.REGISTERED), Pair.of(RegisterAI.REGENERATION_POTION_INDEX.get(), MemoryStatus.REGISTERED)
-    , Pair.of(RegisterAI.HEAL_TARGET.get(), MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED));
-
     @Nullable
     private InteractionHand hand;
 
@@ -54,7 +50,8 @@ public class CompanionHealPlayerAndAllyBehavior extends ExtendedItemSwitchingBeh
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return MEMORIES;
+        return List.of(Pair.of(RegisterAI.HEAL_POTION_INDEX.get(), MemoryStatus.REGISTERED), Pair.of(RegisterAI.REGENERATION_POTION_INDEX.get(), MemoryStatus.REGISTERED)
+                , Pair.of(RegisterAI.HEAL_TARGET.get(), MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED));
     }
 
     @Override

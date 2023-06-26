@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.entity.companion;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.mojang.math.Vector3f;
-import com.mojang.serialization.Dynamic;
 import com.spacecat.summer.objects.math.RayMath;
 import com.tac.guns.Config;
 import com.tac.guns.client.render.pose.TwoHandedPose;
@@ -87,7 +86,7 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
+import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
@@ -151,8 +150,8 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliat
 import net.tslat.smartbrainlib.api.core.schedule.SmartBrainSchedule;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.*;
-import net.tslat.smartbrainlib.example.SBLSkeleton;
 import net.tslat.smartbrainlib.util.BrainUtils;
+import net.tslat.smartbrainlib.util.EntityRetrievalUtil;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -174,6 +173,7 @@ import java.util.function.Predicate;
 
 import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
+import static com.yor42.projectazure.setup.register.RegisterAI.Animations.MELEE_ATTACK;
 import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_PANTRY;
 import static com.yor42.projectazure.setup.register.RegisterAI.KILLED_ENTITY;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
@@ -412,9 +412,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public int StartedSpellAttackTimeStamp = -1;
 
     //I'd really like to get off from datamanager's wild ride.
-    protected static final EntityDataAccessor<Integer> SPELLDELAY = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Integer> NONVANILLAMELEEATTACKDELAY = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Integer> SHIP_ATTACK_ANIM_DELAY = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> SKILLDELAYTICK = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Boolean> CHARGING_CROSSBOW = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> USING_SKILL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
@@ -489,7 +486,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.groundNav = new CompanionGroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimMovementController(this);
         this.GroundMoveController = new CompanionDefaultMovementController(this);
-
 
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 0.0F);
@@ -756,7 +752,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("spelldelay", this.getEntityData().get(SPELLDELAY));
         compound.putFloat("affection", this.getEntityData().get(AFFECTION));
         compound.putInt("patcooldown", this.getEntityData().get(PATCOOLDOWN));
         compound.putInt("angrytimer", this.getEntityData().get(ANGRYTIMER));
@@ -834,7 +829,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         compound.put("ammostorage", this.getAmmoStorage().serializeNBT());
         this.getEntityData().get(TeamUUID).ifPresent((UUID)->compound.putUUID("team", UUID));
         this.foodStats.write(compound);
-        compound.putInt("attackdelay", this.getEntityData().get(NONVANILLAMELEEATTACKDELAY));
         compound.putInt("SwapIndexMainHand", this.ItemSwapIndexMainHand);
         //compound.putString("pose", this.getEntityData().get(POSE).name());
         compound.putInt("SwapIndexOffHand", this.ItemSwapIndexOffhand);
@@ -842,11 +836,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     public void readAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.getEntityData().set(SPELLDELAY, compound.getInt("spelldelay"));
         this.getEntityData().set(AFFECTION, compound.getFloat("affection"));
         this.getEntityData().set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.getEntityData().set(OATHED, compound.getBoolean("oathed"));
-        this.getEntityData().set(NONVANILLAMELEEATTACKDELAY, compound.getInt("attackdelay"));
         this.getEntityData().set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
         this.getEntityData().set(SHOULDFIRSTATTACK, compound.getBoolean("firstattack"));
         this.RangedAttackCoolDown = compound.getInt("rangedattackcooldown");
@@ -1784,7 +1776,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.getEntityData().define(SPELLDELAY, 0);
         this.getEntityData().define(SKILLDELAYTICK, 0);
         this.getEntityData().define(EXP, 0.0F);
         this.getEntityData().define(UPGRADELEVEL, 0);
@@ -1797,8 +1788,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getEntityData().define(SITTING, false);
         this.getEntityData().define(MAXPATEFFECTCOUNT, 0);
         this.getEntityData().define(PATEFFECTCOUNT, 0);
-        this.getEntityData().define(NONVANILLAMELEEATTACKDELAY, 0);
-        this.getEntityData().define(SHIP_ATTACK_ANIM_DELAY, 0);
         this.getEntityData().define(PATCOOLDOWN, 0);
         this.getEntityData().define(MOVE_MODE, 0);
         this.getEntityData().define(PAT_ANIMATION_TIME, 0);
@@ -1859,34 +1848,15 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public int getSpellDelay(){
-        return this.getEntityData().get(SPELLDELAY);
-    }
-
-    public void setSpellDelay(int value) {
-        this.getEntityData().set(SPELLDELAY, value);
+        return (int) BrainUtils.getTimeUntilMemoryExpires(this, RegisterAI.ANIMATION.get());
     }
 
     public boolean isUsingSpell(){
         return BrainUtils.getMemory(this, RegisterAI.ANIMATION.get()) == RegisterAI.Animations.USE_SPELL;
     }
 
-    public int getShipAttackAnimDelay(){
-        return this.getEntityData().get(SHIP_ATTACK_ANIM_DELAY);
-    }
-
-    public void setShipAtackAnimDelayDelay(int value) {
-        this.getEntityData().set(SHIP_ATTACK_ANIM_DELAY, value);
-    }
-
     public boolean shouldPlayShipAttackAnim(){
         return BrainUtils.getMemory(this, RegisterAI.ANIMATION.get()) == RegisterAI.Animations.SHOOT_CANNON;
-    }
-
-    protected void startPlayingShipAttackAnim(){
-        int length = this.CannonAttackAnimLength();
-        if(length>0){
-            this.setShipAtackAnimDelayDelay(length);
-        }
     }
 
     public int CannonAttackAnimLength() {
@@ -2401,20 +2371,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
         if(!this.getLevel().isClientSide()) {
 
-            int currentspelldelay = this.getSpellDelay();
-            if(currentspelldelay>0){
-                this.setSpellDelay(--currentspelldelay);
-            }
-
-            int currentattackldelay = this.getNonVanillaMeleeAttackDelay();
-            if(currentattackldelay>0){
-                this.setMeleeAttackDelay(--currentattackldelay);
-                if(currentattackldelay == 0){
-                    this.AttackCount = 0;
-                }
-            }
-
-
             int AngerWarningCount = this.getEntityData().get(INTERACTION_WARNING_COUNT);
             if(this.getOwner() != null && this.getOwner().isAlive()){
                 if (!this.isAngry() && this.getOwner() != null && this.getOwner().isAlive() && this.getEntityData().get(ECCI_ANIMATION_TIME) > 0) {
@@ -2487,11 +2443,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
             if(this.getEntityData().get(HEAL_TIMER)>0){
                 this.getEntityData().set(HEAL_TIMER, this.getEntityData().get(HEAL_TIMER)-1);
-            }
-
-            int cannonattackanimdelay = this.getShipAttackAnimDelay();
-            if(cannonattackanimdelay>0){
-                this.setShipAtackAnimDelayDelay(cannonattackanimdelay-1);
             }
         }
 
@@ -2584,14 +2535,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public void playMeleeAttackPreSound(){}
 
     public int getNonVanillaMeleeAttackDelay(){
-        return this.getEntityData().get(NONVANILLAMELEEATTACKDELAY);
+        return (int) BrainUtils.getTimeUntilMemoryExpires(this, RegisterAI.ANIMATION.get());
     }
 
-    public void setMeleeAttackDelay(int value) {
-        this.getEntityData().set(NONVANILLAMELEEATTACKDELAY, value);
-    }
     public boolean isNonVanillaMeleeAttacking(){
-        return this.getNonVanillaMeleeAttackDelay()>0;
+        return BrainUtils.getMemory(this, RegisterAI.ANIMATION.get()) == MELEE_ATTACK;
     }
 
     public void setSkillItemSlotContent(int index, ItemStack stack){
@@ -2800,17 +2748,18 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return BrainActivityGroup.coreTasks(
                 new CompanionWakeupBehavior(),
                 new CompanionOpenDoorBehavior(),
-                new CompanionDismountBehavior(),
                 new LookAtTargetSink(40, 300),
                 new StrafeTarget<>().stopStrafingWhen(entity -> !shouldStrafe((AbstractEntityCompanion) entity)).startCondition((entity)->shouldStrafe((AbstractEntityCompanion) entity)),	// Strafe around target
+                new CompanionUseSkillBehavior(),
+                new CompanionTakeFoodfromPantryBehavior(),
                 new WalkOrRunToWalkTarget<>(),
                 new CompanionMoveToAttackTargetBehavior(),
                 new CompanionUseTotemBehavior(),
                 new CompanionRaiseShield(),
                 new CompanionEatBehavior(),
                 new CompanionHealPlayerAndAllyBehavior(),
-                new AcquirePOISBL(PoiType.HOME, HOME, false, (byte) 14));
-                //new AcquirePOISBL(RegisterAI.POI_PANTRY.get(), FOOD_PANTRY.get(), false, (byte) 14));
+                new AcquireHome(false, (byte) 14));
+                //new AcquireHome(RegisterAI.POI_PANTRY.get(), FOOD_PANTRY.get(), false, (byte) 14));
     }
 
     @Override
@@ -2819,6 +2768,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 new CompanionProtectOwnerBehavior(),
                 new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
                 new CompanionTorchBehavior(),
+                new CompanionBreakOreBehavior(),
                 new FirstApplicableBehaviour<>(
                         new CompanionSteerBoatBehavior(),
                         new CompanionMountOnBoatBehavior()
@@ -2826,6 +2776,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 new FirstApplicableBehaviour<>(
                         new FollowOwner<>(),
                         new OneRandomBehaviour<>(
+                                new FollowEntity<AbstractEntityCompanion, AbstractEntityCompanion>().following((entity)-> EntityRetrievalUtil.getNearestEntity(entity, 5, (target)-> entity.EntityToFollow().isInstance(target) && entity.isAlly((LivingEntity) target))),
                                 new SetRandomWalkTarget<>().speedModifier(1),
                                 new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))
                         )
@@ -2899,6 +2850,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     public BrainActivityGroup<AbstractEntityCompanion> CreateRestathomeTask() {
         return new BrainActivityGroup<AbstractEntityCompanion>(RegisterAI.ACTIVITY_RELAXING.get()).priority(10).behaviours(
+                new CompanionSetWalkTargetFromMemory(HOME, 1, 2, 150, 1200),
+                new ValidateNearbyPoi(PoiType.HOME, MemoryModuleType.HOME),
+                new SleepInBed(),
+                new InsideBrownianWalk(1),
+                new SetClosestHomeAsWalkTarget(1),
                 new FirstApplicableBehaviour<>(                // Run only one of the below behaviours, trying each one in order. Include explicit generic typing because javac is silly
                         new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
                         new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available

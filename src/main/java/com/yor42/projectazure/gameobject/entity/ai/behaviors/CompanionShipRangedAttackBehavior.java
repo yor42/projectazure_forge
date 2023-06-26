@@ -41,7 +41,7 @@ public class CompanionShipRangedAttackBehavior extends DelayedBehaviour<Abstract
 
         if(entity instanceof EntityKansenBase) {
             BehaviorUtils.lookAtEntity(entity, Objects.requireNonNull(BrainUtils.getTargetOfEntity(entity)));
-            BrainUtils.setForgettableMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.SHOOT_CANNON, ((EntityKansenBase) entity).getFireAnimLength());
+            BrainUtils.setForgettableMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.SHOOT_CANNON, entity.CannonAttackAnimLength());
         }
         super.start(entity);
     }
@@ -62,6 +62,6 @@ public class CompanionShipRangedAttackBehavior extends DelayedBehaviour<Abstract
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.REGISTERED));
+        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.VALUE_ABSENT));
     }
 }

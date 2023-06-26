@@ -9,12 +9,10 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.behavior.AcquirePoi;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 
@@ -25,7 +23,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class AcquirePOISBL extends ExtendedBehaviour<AbstractEntityCompanion> {
+public class AcquireHome extends ExtendedBehaviour<AbstractEntityCompanion> {
 
     private static final int BATCH_SIZE = 5;
     private static final int RATE = 20;
@@ -36,19 +34,17 @@ public class AcquirePOISBL extends ExtendedBehaviour<AbstractEntityCompanion> {
     private final Optional<Byte> onPoiAcquisitionEvent;
     private long nextScheduledStart;
     private final Long2ObjectMap<JitteredLinearRetry> batchCache = new Long2ObjectOpenHashMap<>();
-    private final Pair<MemoryModuleType<?>, MemoryStatus> MemoryCondition;
 
-    public AcquirePOISBL(PoiType pPoiType, MemoryModuleType<GlobalPos> pMemoryToAcquire, boolean pOnlyIfAdult, byte pOnPoiAcquistitionEvent){
-        this.poiType = pPoiType;
-        this.memoryToAcquire = pMemoryToAcquire;
+    public AcquireHome(boolean pOnlyIfAdult, byte pOnPoiAcquistitionEvent){
+        this.poiType = PoiType.HOME;
+        this.memoryToAcquire = MemoryModuleType.HOME;
         this.onlyIfAdult = pOnlyIfAdult;
         this.onPoiAcquisitionEvent = Optional.of(pOnPoiAcquistitionEvent);
-        this.MemoryCondition = Pair.of(pMemoryToAcquire, MemoryStatus.VALUE_ABSENT);
     }
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(MemoryCondition);
+        return List.of(Pair.of(MemoryModuleType.HOME, MemoryStatus.VALUE_ABSENT));
     }
 
     @Override

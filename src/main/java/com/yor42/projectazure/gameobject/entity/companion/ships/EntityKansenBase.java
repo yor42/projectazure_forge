@@ -346,9 +346,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return AmmoCategory.GENERIC;
     }
 
-    public int getFireAnimLength(){
-        return -1;
-    }
 
     public int getAnimationDelayBeforeFire(){
         return 0;

@@ -32,7 +32,7 @@ public class CompanionSteerBoatBehavior extends ExtendedBehaviour<AbstractEntity
     private Path path;
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of();
+        return List.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT));
     }
 
     @Override

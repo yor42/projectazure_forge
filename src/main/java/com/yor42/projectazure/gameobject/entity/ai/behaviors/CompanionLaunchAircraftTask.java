@@ -5,6 +5,7 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
@@ -118,6 +119,7 @@ public class CompanionLaunchAircraftTask extends DelayedBehaviour<AbstractEntity
                         AbstractEntityPlanes planeEntity = planetype.create(entity.getLevel());
                         if (planeEntity != null) {
                             entity.LaunchPlane(planestack, planeEntity, target, hanger, hangerIndex);
+                            BrainUtils.setForgettableMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.SHOOT_CANNON, entity.CannonAttackAnimLength());
                         }
                     }
                 }
@@ -127,7 +129,7 @@ public class CompanionLaunchAircraftTask extends DelayedBehaviour<AbstractEntity
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.REGISTERED));
+        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.VALUE_ABSENT));
     }
 
     private void clearWalkTarget(LivingEntity p_233967_1_) {

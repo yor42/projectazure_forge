@@ -24,7 +24,7 @@ public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCo
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.REGISTERED));
+        return List.of(Pair.of(LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.VALUE_ABSENT));
     }
 
     @Override

@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class CompanionBreakOreBehavior extends BreakBlock<AbstractEntityCompanion> {
 
-    private static final List<Pair<MemoryModuleType<?>, MemoryStatus>> MEMORY_REQUIREMENTS = ObjectArrayList.of(Pair.of(RegisterAI.NEAR_ORES.get(), MemoryStatus.VALUE_PRESENT));
+    private static final List<Pair<MemoryModuleType<?>, MemoryStatus>> MEMORY_REQUIREMENTS = List.of(Pair.of(RegisterAI.NEAR_ORES.get(), MemoryStatus.VALUE_PRESENT));
 
 
     public CompanionBreakOreBehavior(){
@@ -131,6 +131,6 @@ public class CompanionBreakOreBehavior extends BreakBlock<AbstractEntityCompanio
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return MEMORY_REQUIREMENTS;
+        return List.of(Pair.of(RegisterAI.NEAR_ORES.get(), MemoryStatus.VALUE_PRESENT));
     }
 }

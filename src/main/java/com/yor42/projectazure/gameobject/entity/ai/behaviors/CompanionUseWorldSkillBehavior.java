@@ -90,6 +90,6 @@ public class CompanionUseWorldSkillBehavior extends ExtendedBehaviour<AbstractEn
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(NEAREST_WORLDSKILLABLE.get(), MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
+        return List.of(Pair.of(NEAREST_WORLDSKILLABLE.get(), MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(ANIMATION.get(), MemoryStatus.VALUE_ABSENT));
     }
 }

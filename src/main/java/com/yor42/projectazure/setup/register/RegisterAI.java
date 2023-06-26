@@ -90,7 +90,7 @@ public class RegisterAI {
     public static final RegistryObject<SensorType<NearbyAllysSensor<? extends AbstractEntityCompanion>>> NEARBY_ALLY_SENSOR = registerSensorType("nearby_ally", NearbyAllysSensor::new);
     public static final RegistryObject<Schedule> CompanionSchedule = registerSchedule("companion_schedule", (builder)-> builder.changeActivityAt(10, Activity.IDLE).changeActivityAt(12000, Activity.REST).build());
     //POI
-    public static final RegistryObject<PoiType> POI_PANTRY = registerPOI("poi_pantry", ImmutableList.of(RegisterBlocks.OAK_PANTRY.get(),RegisterBlocks.SPRUCE_PANTRY.get(),RegisterBlocks.BIRCH_PANTRY.get(),RegisterBlocks.JUNGLE_PANTRY.get(),RegisterBlocks.DARK_OAK_PANTRY.get(),RegisterBlocks.ACACIA_PANTRY.get(),RegisterBlocks.WARPED_PANTRY.get(),RegisterBlocks.CRIMSON_PANTRY.get()).stream().flatMap((p_234171_0_) -> p_234171_0_.getStateDefinition().getPossibleStates().stream()).collect(ImmutableSet.toImmutableSet()), null, 1,1);
+    //public static final RegistryObject<PoiType> POI_PANTRY = registerPOI("poi_pantry", ImmutableList.of(RegisterBlocks.OAK_PANTRY.get(),RegisterBlocks.SPRUCE_PANTRY.get(),RegisterBlocks.BIRCH_PANTRY.get(),RegisterBlocks.JUNGLE_PANTRY.get(),RegisterBlocks.DARK_OAK_PANTRY.get(),RegisterBlocks.ACACIA_PANTRY.get(),RegisterBlocks.WARPED_PANTRY.get(),RegisterBlocks.CRIMSON_PANTRY.get()).stream().flatMap((p_234171_0_) -> p_234171_0_.getStateDefinition().getPossibleStates().stream()).collect(ImmutableSet.toImmutableSet()), null, 1,1);
 
     public static RegistryObject<Activity> registerActivity(String ID){
         return ACTIVITIES.register(ID,()-> new Activity(ID));
