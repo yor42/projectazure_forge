@@ -1,24 +1,26 @@
-package com.yor42.projectazure.gameobject.entity.ai.tasks;
+package com.yor42.projectazure.gameobject.entity.ai.behaviors;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IWorldSkillUseable;
+import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.util.BrainUtils;
 
+import java.util.List;
 import java.util.Optional;
 
+import static com.yor42.projectazure.setup.register.RegisterAI.ANIMATION;
 import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_WORLDSKILLABLE;
 
-public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
-
-    public CompanionUseWorldSkill() {
-        super(ImmutableMap.of(NEAREST_WORLDSKILLABLE.get(), MemoryStatus.VALUE_PRESENT), Integer.MAX_VALUE);
-    }
+public class CompanionUseWorldSkillBehavior extends ExtendedBehaviour<AbstractEntityCompanion> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel world, AbstractEntityCompanion entity) {
@@ -29,7 +31,7 @@ public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
 
         Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
 
-        Optional<BlockPos> skillpos = brain.getMemory(NEAREST_WORLDSKILLABLE.get());
+        Optional<BlockPos> skillpos = Optional.ofNullable(BrainUtils.getMemory(entity, NEAREST_WORLDSKILLABLE.get()));
 
         if(!skillpos.isPresent()){
             return false;
@@ -56,7 +58,7 @@ public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
         if(entity instanceof IWorldSkillUseable){
             entity.setUsingWorldSkill(true);
             Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
-
+            BrainUtils.setMemory(entity, ANIMATION.get(), RegisterAI.Animations.WORLD_SKILL);
             if(brain.getMemory(NEAREST_WORLDSKILLABLE.get()).map((pos)-> ((IWorldSkillUseable) entity).executeWorldSkill(world, pos, entity)).orElse(true)){
                 this.doStop(world, entity, p_212831_3_);
             }
@@ -65,14 +67,14 @@ public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
 
     @Override
     protected void stop(ServerLevel p_212835_1_, AbstractEntityCompanion entity, long p_212835_3_) {
-        entity.setUsingWorldSkill(false);
         if(entity instanceof IWorldSkillUseable){
             entity.getBrain().getMemory(NEAREST_WORLDSKILLABLE.get()).ifPresent((pos)->{
                 ((IWorldSkillUseable) entity).endWorldSkill(p_212835_1_, pos, entity);
             });
         }
-        entity.getBrain().eraseMemory(NEAREST_WORLDSKILLABLE.get());
-        entity.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
+        BrainUtils.clearMemory(entity, ANIMATION.get());
+        BrainUtils.clearMemory(entity, NEAREST_WORLDSKILLABLE.get());
+        BrainUtils.clearMemory(entity, MemoryModuleType.LOOK_TARGET);
     }
 
     @Override
@@ -84,5 +86,10 @@ public class CompanionUseWorldSkill extends Behavior<AbstractEntityCompanion> {
                 this.doStop(world, entity, p_212833_3_);
             }
         }
+    }
+
+    @Override
+    protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
+        return List.of(Pair.of(NEAREST_WORLDSKILLABLE.get(), MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
     }
 }

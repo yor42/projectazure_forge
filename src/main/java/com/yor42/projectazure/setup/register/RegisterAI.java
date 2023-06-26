@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.HealTargetSensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.NearbyAllysSensor;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -73,6 +74,7 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_BONEMEALABLE = registerMemoryModuleType("nearest_bonemealable");
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_WORLDSKILLABLE = registerMemoryModuleType("nearest_worldskillable");
     public static final RegistryObject<MemoryModuleType<Boolean>> FOLLOWING_OWNER_MEMORY = registerMemoryModuleType("following_owner");
+    public static final RegistryObject<MemoryModuleType<Boolean>> INJURED_MEMORY = registerMemoryModuleType("injured_memory");
     public static final RegistryObject<MemoryModuleType<Boolean>> KILLED_ENTITY = registerMemoryModuleType("killed_entity");
 
     public static final RegistryObject<MemoryModuleType<Animations>> ANIMATION = registerMemoryModuleType("animation");
@@ -83,6 +85,7 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_PLANTABLE = registerMemoryModuleType("near_plantable");
     public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_WORLDSKILLABLE = registerMemoryModuleType("near_worldskillable");
 
+    public static final RegistryObject<SensorType<HealTargetSensor>> HEAL_TARGET_SENSOR = registerSensorType("heal_target_sensor", HealTargetSensor::new);
     public static final RegistryObject<SensorType<InventorySensor<? extends AbstractEntityCompanion>>> INVSENSOR = registerSensorType("invsensor", InventorySensor::new);
     public static final RegistryObject<SensorType<NearbyAllysSensor<? extends AbstractEntityCompanion>>> NEARBY_ALLY_SENSOR = registerSensorType("nearby_ally", NearbyAllysSensor::new);
     public static final RegistryObject<Schedule> CompanionSchedule = registerSchedule("companion_schedule", (builder)-> builder.changeActivityAt(10, Activity.IDLE).changeActivityAt(12000, Activity.REST).build());
@@ -124,7 +127,8 @@ public class RegisterAI {
         SHOOT_CANNON,
         USE_SPELL,
         SHOOT_GUN,
-        MELEE_ATTACK
+        MELEE_ATTACK,
+        WORLD_SKILL
     }
 
     public static void register() {

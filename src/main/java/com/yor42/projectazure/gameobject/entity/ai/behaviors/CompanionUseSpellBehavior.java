@@ -53,9 +53,7 @@ public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCo
         LivingEntity target = BrainUtils.getTargetOfEntity(entity);
 
         if (entity instanceof ISpellUser && target != null) {
-            if (!entity.closerThan(target, entity.getSpellRange())) {
-                BehaviorUtils.setWalkAndLookTargetMemories(entity, target, 1.0F, (int) entity.getSpellRange());
-            } else {
+            if (entity.closerThan(target, entity.getSpellRange())) {
                 BrainUtils.clearMemory(entity, WALK_TARGET);
                 ((ISpellUser) entity).StartSpellAttack(target);
                 BrainUtils.setForgettableMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.USE_SPELL, ((ISpellUser) entity).getInitialSpellDelay());
