@@ -3,19 +3,7 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:plates/steel"
-      },
-      "count": 25
-    },
-    {
-      "item": {
-        "tag": "forge:plates/aluminium"
-      },
-      "count": 10
-    },
-    {
-      "item": {
-        "tag": "forge:ingots/incandescent_alloy"
+        "item": "tac:ultimate_material"
       },
       "count": 30
     },

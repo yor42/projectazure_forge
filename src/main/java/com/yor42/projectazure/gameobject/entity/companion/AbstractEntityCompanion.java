@@ -173,9 +173,9 @@ import java.util.function.Predicate;
 
 import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
+import static com.yor42.projectazure.setup.register.RegisterAI.*;
 import static com.yor42.projectazure.setup.register.RegisterAI.Animations.MELEE_ATTACK;
-import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_PANTRY;
-import static com.yor42.projectazure.setup.register.RegisterAI.KILLED_ENTITY;
+import static com.yor42.projectazure.setup.register.RegisterAI.Animations.WORLD_SKILL;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
 import static net.minecraft.world.InteractionHand.OFF_HAND;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
@@ -1819,7 +1819,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isUsingWorldSkill() {
-        return this.getEntityData().get(USINGWORLDSKILL);
+        return BrainUtils.getMemory(this, ANIMATION.get()) == WORLD_SKILL;
     }
 
     public void setUsingWorldSkill(boolean value){
@@ -2850,11 +2850,10 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     public BrainActivityGroup<AbstractEntityCompanion> CreateRestathomeTask() {
         return new BrainActivityGroup<AbstractEntityCompanion>(RegisterAI.ACTIVITY_RELAXING.get()).priority(10).behaviours(
-                new CompanionSetWalkTargetFromMemory(HOME, 1, 2, 150, 1200),
-                new ValidateNearbyPoi(PoiType.HOME, MemoryModuleType.HOME),
-                new SleepInBed(),
-                new InsideBrownianWalk(1),
-                new SetClosestHomeAsWalkTarget(1),
+                new CompanionReturnHomeFromMemory(1, 2, 150, 1200),
+                new CompanionSleepInBed(),
+                new SBLInsideBrownianWalk<>(1),
+                new SBLSetClosestHomeAsWalkTarget<>(1),
                 new FirstApplicableBehaviour<>(                // Run only one of the below behaviours, trying each one in order. Include explicit generic typing because javac is silly
                         new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
                         new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available

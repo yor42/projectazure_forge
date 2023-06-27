@@ -99,7 +99,6 @@ sourceSets.main.resources {
 
 repositories {
     mavenCentral()
-    mavenLocal()
     repositories {
         maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     }
@@ -165,6 +164,8 @@ repositories {
     flatDir {
         dirs 'compilelib', 'implementlib'
     }
+
+    mavenLocal()
 }
 
 dependencies {

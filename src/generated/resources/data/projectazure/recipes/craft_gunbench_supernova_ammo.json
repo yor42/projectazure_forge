@@ -4,17 +4,17 @@
     {
       "item": {
         "item": "tac:rare_material"
-      },
-      "count": 30
+      }
     },
     {
       "item": {
-        "tag": "forge:ingots/steel"
+        "item": "projectazure:copper_coil"
       },
-      "count": 10
+      "count": 2
     }
   ],
   "result": {
-    "item": "projectazure:whitefang465"
+    "item": "projectazure:ammo_supernova",
+    "count": 2
   }
 }

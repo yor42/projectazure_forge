@@ -3,7 +3,7 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/steel"
+        "item": "tac:legendary_material"
       },
       "count": 40
     },

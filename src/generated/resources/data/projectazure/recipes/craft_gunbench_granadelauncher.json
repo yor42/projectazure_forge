@@ -3,7 +3,7 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:plates/steel"
+        "item": "tac:rare_material"
       },
       "count": 14
     },

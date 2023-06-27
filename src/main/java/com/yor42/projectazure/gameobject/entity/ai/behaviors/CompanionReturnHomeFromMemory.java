@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.entity.ai.behaviors;
 
-import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.core.BlockPos;
@@ -11,23 +10,22 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CompanionSetWalkTargetFromMemory extends ExtendedBehaviour<AbstractEntityCompanion> {
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.HOME;
 
-    private final MemoryModuleType<GlobalPos> memoryType;
+public class CompanionReturnHomeFromMemory extends ExtendedBehaviour<AbstractEntityCompanion> {
+
     private final float speedModifier;
     private final int closeEnoughDist;
     private final int tooFarDistance;
     private final int tooLongUnreachableDuration;
 
-    public CompanionSetWalkTargetFromMemory(MemoryModuleType<GlobalPos> pMemoryType, float pSpeedModifier, int pCloseEnoughDist, int pTooFarDistance, int pTooLongUnreachableDuration) {
-        this.memoryType = pMemoryType;
+    public CompanionReturnHomeFromMemory(float pSpeedModifier, int pCloseEnoughDist, int pTooFarDistance, int pTooLongUnreachableDuration) {
         this.speedModifier = pSpeedModifier;
         this.closeEnoughDist = pCloseEnoughDist;
         this.tooFarDistance = pTooFarDistance;
@@ -36,15 +34,15 @@ public class CompanionSetWalkTargetFromMemory extends ExtendedBehaviour<Abstract
 
     private void dropPOI(AbstractEntityCompanion pVillager, long pTime) {
         Brain<?> brain = pVillager.getBrain();
-        pVillager.releasePoi(this.memoryType);
-        brain.eraseMemory(this.memoryType);
+        pVillager.releasePoi(HOME);
+        brain.eraseMemory(HOME);
         brain.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, pTime);
     }
 
     @Override
     protected void start(ServerLevel pLevel, AbstractEntityCompanion pEntity, long pGameTime) {
         Brain<?> brain = pEntity.getBrain();
-        brain.getMemory(this.memoryType).ifPresent((p_24067_) -> {
+        brain.getMemory(HOME).ifPresent((p_24067_) -> {
             if (!this.wrongDimension(pLevel, p_24067_) && !this.tiredOfTryingToFindTarget(pLevel, pEntity)) {
                 if (this.tooFar(pEntity, p_24067_)) {
                     Vec3 vec3 = null;
@@ -89,6 +87,6 @@ public class CompanionSetWalkTargetFromMemory extends ExtendedBehaviour<Abstract
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(memoryType, MemoryStatus.VALUE_PRESENT));
+        return List.of(Pair.of(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(HOME, MemoryStatus.VALUE_PRESENT));
     }
 }
