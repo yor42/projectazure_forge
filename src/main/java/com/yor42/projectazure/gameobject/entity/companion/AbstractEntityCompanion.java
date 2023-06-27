@@ -48,7 +48,6 @@ import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.serverEvents;
 import com.yor42.projectazure.setup.register.RegisterAI;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -2733,7 +2732,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     public List<ExtendedSensor<AbstractEntityCompanion>> getSensors() {
-        return ObjectArrayList.of(
+        return List.of(
                 new NearbyLivingEntitySensor<>(), // This tracks nearby entities
                 new HurtBySensor<>(),                // This tracks the last damage source and attacker
                 new NearbyHostileSensor<>(),
@@ -2746,14 +2745,14 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     public BrainActivityGroup<AbstractEntityCompanion> getCoreTasks() {
         return BrainActivityGroup.coreTasks(
+                new WalkOrRunToWalkTarget<>(),
+                new CompanionMoveToAttackTargetBehavior(),
                 new CompanionWakeupBehavior(),
                 new CompanionOpenDoorBehavior(),
                 new LookAtTargetSink(40, 300),
                 new StrafeTarget<>().stopStrafingWhen(entity -> !shouldStrafe((AbstractEntityCompanion) entity)).startCondition((entity)->shouldStrafe((AbstractEntityCompanion) entity)),	// Strafe around target
                 new CompanionUseSkillBehavior(),
                 new CompanionTakeFoodfromPantryBehavior(),
-                new WalkOrRunToWalkTarget<>(),
-                new CompanionMoveToAttackTargetBehavior(),
                 new CompanionUseTotemBehavior(),
                 new CompanionRaiseShield(),
                 new CompanionEatBehavior(),
@@ -2765,6 +2764,14 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     public BrainActivityGroup<AbstractEntityCompanion> getIdleTasks() {
         return BrainActivityGroup.idleTasks(
+                new FirstApplicableBehaviour<>(
+                        new CompanionFollowOwnerBehavior(),
+                        new FollowEntity<AbstractEntityCompanion, AbstractEntityCompanion>().following((entity)-> EntityRetrievalUtil.getNearestEntity(entity, 5, (target)-> {
+                            if(entity.EntityToFollow() == null){
+                                return false;
+                            }
+                            return Objects.requireNonNull(entity.EntityToFollow()).isInstance(target) && entity.isAlly((LivingEntity) target);}))
+                ),
                 new CompanionProtectOwnerBehavior(),
                 new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
                 new CompanionTorchBehavior(),
@@ -2772,14 +2779,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 new FirstApplicableBehaviour<>(
                         new CompanionSteerBoatBehavior(),
                         new CompanionMountOnBoatBehavior()
-                ),
-                new FirstApplicableBehaviour<>(
-                        new FollowOwner<>(),
-                        new OneRandomBehaviour<>(
-                                new FollowEntity<AbstractEntityCompanion, AbstractEntityCompanion>().following((entity)-> EntityRetrievalUtil.getNearestEntity(entity, 5, (target)-> entity.EntityToFollow().isInstance(target) && entity.isAlly((LivingEntity) target))),
-                                new SetRandomWalkTarget<>().speedModifier(1),
-                                new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))
-                        )
                 ),
                 new CompanionUseWorldSkillBehavior(),
                 new FirstApplicableBehaviour<>(
@@ -2866,7 +2865,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     public List<Activity> getActivityPriorities() {
-        return ObjectArrayList.of(RegisterAI.INJURED.get(), Activity.FIGHT, RegisterAI.SITTING.get(), RegisterAI.ACTIVITY_RELAXING.get(), RegisterAI.WAITING.get(), Activity.IDLE);
+        return List.of(RegisterAI.INJURED.get(), Activity.FIGHT, RegisterAI.SITTING.get(), RegisterAI.ACTIVITY_RELAXING.get(), RegisterAI.WAITING.get(), Activity.IDLE);
     }
 
     @org.jetbrains.annotations.Nullable
