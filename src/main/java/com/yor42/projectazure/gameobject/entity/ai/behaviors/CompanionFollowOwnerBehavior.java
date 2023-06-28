@@ -16,6 +16,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.BiPredicate;
 
 public class CompanionFollowOwnerBehavior extends FollowOwner<AbstractEntityCompanion> {
+
+    @Override
+    protected boolean shouldKeepRunning(AbstractEntityCompanion entity) {
+
+        LivingEntity target = this.followingEntityProvider.apply(entity);
+
+        if (target == null)
+            return false;
+
+        double dist = entity.distanceToSqr(target);
+        double minDist = this.followDistMin.apply(entity, target);
+
+        return dist > minDist * minDist;
+    }
     @Override
     protected void teleportToTarget(AbstractEntityCompanion entity, LivingEntity target) {
         Level level = entity.level;

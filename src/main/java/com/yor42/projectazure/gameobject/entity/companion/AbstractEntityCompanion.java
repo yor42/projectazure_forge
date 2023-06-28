@@ -422,6 +422,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     protected static final EntityDataAccessor<Integer> AWAKENINGLEVEL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
 
     protected static final EntityDataAccessor<Integer> LEVEL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+
+
+    protected static final EntityDataAccessor<Byte> ANIMATION = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BYTE);
     protected static final EntityDataAccessor<Integer> ANGRYTIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> INJURYCURETIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Float> AFFECTION = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.FLOAT);
@@ -694,7 +697,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isUsingGun(){
-        return this.getMainHandItem().getItem() instanceof GunItem && BrainUtils.getMemory(this, RegisterAI.ANIMATION.get()) == RegisterAI.Animations.SHOOT_GUN;
+        return this.getMainHandItem().getItem() instanceof GunItem && this.getEntityData().get(ANIMATION) == RegisterAI.Animations.SHOOT_GUN.ordinal();
     }
 
     public ItemStack[] getMagazine(ResourceLocation id){
@@ -755,6 +758,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         compound.putInt("patcooldown", this.getEntityData().get(PATCOOLDOWN));
         compound.putInt("angrytimer", this.getEntityData().get(ANGRYTIMER));
         compound.putInt("injury_curetimer", this.getEntityData().get(INJURYCURETIMER));
+        compound.putByte("animation", this.getEntityData().get(ANIMATION));
         compound.putBoolean("oathed", this.getEntityData().get(OATHED));
         compound.putBoolean("pickupitem", this.getEntityData().get(PICKUP_ITEM));
         compound.putBoolean("firstattack", this.getEntityData().get(SHOULDFIRSTATTACK));
@@ -839,6 +843,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getEntityData().set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.getEntityData().set(OATHED, compound.getBoolean("oathed"));
         this.getEntityData().set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
+        this.getEntityData().set(ANIMATION, compound.getByte("animation"));
         this.getEntityData().set(SHOULDFIRSTATTACK, compound.getBoolean("firstattack"));
         this.RangedAttackCoolDown = compound.getInt("rangedattackcooldown");
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
@@ -1810,6 +1815,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getEntityData().define(INJURYCURETIMER, 0);
         this.getEntityData().define(ECCI_ANIMATION_TIME, 0);
         this.getEntityData().define(INTERACTION_WARNING_COUNT, 0);
+        this.getEntityData().define(ANIMATION, (byte)-1);
         this.getEntityData().define(SKILL_ITEM_0, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_1, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_2, ItemStack.EMPTY);
@@ -1818,11 +1824,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isUsingWorldSkill() {
-        return BrainUtils.getMemory(this, ANIMATION.get()) == WORLD_SKILL;
-    }
-
-    public void setUsingWorldSkill(boolean value){
-        this.getEntityData().set(USINGWORLDSKILL, value);
+        return this.getEntityData().get(ANIMATION) == WORLD_SKILL.ordinal();
     }
 
     public int getInjuryCureTimer(){
@@ -1851,11 +1853,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isUsingSpell(){
-        return BrainUtils.getMemory(this, RegisterAI.ANIMATION.get()) == RegisterAI.Animations.USE_SPELL;
+        return this.getEntityData().get(ANIMATION) == RegisterAI.Animations.USE_SPELL.ordinal();
     }
 
     public boolean shouldPlayShipAttackAnim(){
-        return BrainUtils.getMemory(this, RegisterAI.ANIMATION.get()) == RegisterAI.Animations.SHOOT_CANNON;
+        return this.getEntityData().get(ANIMATION) == RegisterAI.Animations.SHOOT_CANNON.ordinal();
     }
 
     public int CannonAttackAnimLength() {
@@ -2538,7 +2540,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isNonVanillaMeleeAttacking(){
-        return BrainUtils.getMemory(this, RegisterAI.ANIMATION.get()) == MELEE_ATTACK;
+        return this.getEntityData().get(ANIMATION) == MELEE_ATTACK.ordinal();
     }
 
     public void setSkillItemSlotContent(int index, ItemStack stack){
@@ -2698,6 +2700,14 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     protected void customServerAiStep() {
         tickBrain(this);
 
+        if(BrainUtils.hasMemory(this, RegisterAI.ANIMATION.get())){
+            this.getNavigation().stop();
+            this.getEntityData().set(ANIMATION, ((byte) Objects.requireNonNull(BrainUtils.getMemory(this, RegisterAI.ANIMATION.get())).ordinal()));
+        }
+        else {
+            this.getEntityData().set(ANIMATION, (byte)-1);
+        }
+
         if(this.getBrain().getMemory(HOME).isEmpty()){
             this.getEntityData().set(HOMEPOS, Optional.empty());
             this.getEntityData().set(VALID_HOME_DISTANCE, -1F);
@@ -2745,19 +2755,22 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     public BrainActivityGroup<AbstractEntityCompanion> getCoreTasks() {
         return BrainActivityGroup.coreTasks(
-                new WalkOrRunToWalkTarget<>(),
-                new CompanionMoveToAttackTargetBehavior(),
                 new CompanionWakeupBehavior(),
                 new CompanionOpenDoorBehavior(),
                 new LookAtTargetSink(40, 300),
                 new StrafeTarget<>().stopStrafingWhen(entity -> !shouldStrafe((AbstractEntityCompanion) entity)).startCondition((entity)->shouldStrafe((AbstractEntityCompanion) entity)),	// Strafe around target
                 new CompanionUseSkillBehavior(),
                 new CompanionTakeFoodfromPantryBehavior(),
-                new CompanionUseTotemBehavior(),
-                new CompanionRaiseShield(),
-                new CompanionEatBehavior(),
-                new CompanionHealPlayerAndAllyBehavior(),
-                new AcquireHome(false, (byte) 14));
+                new FirstApplicableBehaviour<>(
+                    new CompanionUseTotemBehavior(),
+                    new CompanionRaiseShield(),
+                    new CompanionEatBehavior(),
+                    new CompanionHealPlayerAndAllyBehavior()
+                ),
+                new AcquireHome(false, (byte) 14),
+                new WalkOrRunToWalkTarget<>(),
+                new CompanionMoveToAttackTargetBehavior()
+                );
                 //new AcquireHome(RegisterAI.POI_PANTRY.get(), FOOD_PANTRY.get(), false, (byte) 14));
     }
 
@@ -2765,13 +2778,25 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public BrainActivityGroup<AbstractEntityCompanion> getIdleTasks() {
         return BrainActivityGroup.idleTasks(
                 new FirstApplicableBehaviour<>(
-                        new CompanionFollowOwnerBehavior(),
+                    new CompanionFollowOwnerBehavior(),
                         new FollowEntity<AbstractEntityCompanion, AbstractEntityCompanion>().following((entity)-> EntityRetrievalUtil.getNearestEntity(entity, 5, (target)-> {
-                            if(entity.EntityToFollow() == null){
-                                return false;
+                        if(entity.EntityToFollow() == null){
+                           return false;
+                         }
+                        return Objects.requireNonNull(entity.EntityToFollow()).isInstance(target) && entity.isAlly((LivingEntity) target);})),
+                        new SetRandomWalkTarget<>().speedModifier(1).walkTargetPredicate((ety, vec3)->{
+                            if(ety instanceof AbstractEntityCompanion entity && entity.getOwner() != null){
+                                return Math.sqrt(entity.getOwner().distanceToSqr(vec3))<8;
                             }
-                            return Objects.requireNonNull(entity.EntityToFollow()).isInstance(target) && entity.isAlly((LivingEntity) target);}))
-                ),
+                            return false;
+                        }).cooldownFor((e)->MathUtil.getRand().nextInt(100)+200),
+                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60)).stopIf((ety)->{
+                            if(ety instanceof AbstractEntityCompanion entity && entity.getOwner() != null){
+                                return Math.sqrt(entity.distanceToSqr(entity.getOwner()))<12;
+                            }
+                            return false;
+                        })
+                        ),
                 new CompanionProtectOwnerBehavior(),
                 new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
                 new CompanionTorchBehavior(),

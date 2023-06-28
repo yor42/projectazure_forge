@@ -56,7 +56,6 @@ public class CompanionUseWorldSkillBehavior extends ExtendedBehaviour<AbstractEn
     @Override
     protected void start(ServerLevel world, AbstractEntityCompanion entity, long p_212831_3_) {
         if(entity instanceof IWorldSkillUseable){
-            entity.setUsingWorldSkill(true);
             Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
             BrainUtils.setMemory(entity, ANIMATION.get(), RegisterAI.Animations.WORLD_SKILL);
             if(brain.getMemory(NEAREST_WORLDSKILLABLE.get()).map((pos)-> ((IWorldSkillUseable) entity).executeWorldSkill(world, pos, entity)).orElse(true)){

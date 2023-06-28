@@ -182,11 +182,7 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
             parser.setValue("query.head_pitch", ()->((LivingEntity) animatable).getXRot());
             parser.setValue("query.head_yaw", ()->((LivingEntity)animatable).yHeadRot-((LivingEntity)animatable).yBodyRot);
 
-            parser.setValue("query.prev_head_pitch", ()->((LivingEntity)animatable).xRotO * ((float) Math.PI / 180F));
-            parser.setValue("query.prev_head_yaw", ()->((LivingEntity)animatable).yHeadRotO * ((float) Math.PI / 180F));
-
             parser.setValue("query.animation_speed", ()->(Math.min(((AbstractEntityCompanion)animatable).animationSpeed*2,1)));
-            parser.setValue("query.speed_modifier", ()->(((PathNavigatorAccessors)((AbstractEntityCompanion)animatable).getNavigation()).getSpeedModifier()));
         }
     }
 }

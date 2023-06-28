@@ -19,7 +19,6 @@ import static net.minecraft.world.entity.ai.memory.MemoryModuleType.*;
 public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCompanion> {
     public CompanionUseSpellBehavior(AbstractEntityCompanion entity) {
         super(entity instanceof ISpellUser? ((ISpellUser) entity).getProjectilePreAnimationDelay():-1);
-
     }
 
     @Override
@@ -62,13 +61,8 @@ public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCo
     }
 
     @Override
-    protected boolean canStillUse(ServerLevel level, AbstractEntityCompanion entity, long gameTime) {
-        LivingEntity target = BrainUtils.getTargetOfEntity(entity);
-        if(target == null || target.isDeadOrDying()){
-            return false;
-        }
-
-        return BrainUtils.hasMemory(entity, RegisterAI.ANIMATION.get());
+    protected void tick(AbstractEntityCompanion entity) {
+        super.tick(entity);
     }
 
     @Override
