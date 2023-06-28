@@ -42,8 +42,9 @@ public class CompanionUseGunBehavior extends ExtendedBehaviour<AbstractEntityCom
         if(stack.getItem() instanceof GunItem){
             boolean canusegun = entity.shouldUseGun();
             boolean hastarget = !target.isDeadOrDying();
-            boolean entitycanAttack = !entity.isSleeping() && !entity.isOrderedToSit();
-            return canusegun && entitycanAttack && hastarget&& entity.closerThan(target, entity.getGunRange());
+            boolean isnotSitting = !entity.isOrderedToSit();
+            boolean entitycanAttack = !entity.isSleeping() && isnotSitting;
+            return canusegun && entitycanAttack && hastarget && entity.closerThan(target, entity.getGunRange());
         }
 
         return false;

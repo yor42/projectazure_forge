@@ -97,6 +97,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -794,11 +795,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             if(activity == REST){
                 NBT.putString("status", "resting");
             }
-            else if(activity == (IDLE)){
-                NBT.putString("status", "idle");
+            else if(activity == ACTIVITY_RELAXING.get()){
+                NBT.putString("status", "relaxing");
             }
             else if(activity == RegisterAI.SITTING.get()){
-                NBT.putString("status", "following");
+                NBT.putString("status", "sitting");
             }
             else if(activity == RegisterAI.WAITING.get()){
                 NBT.putString("status", "waiting");
@@ -889,7 +890,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 this.setOrderedToSit(true);
                 this.getEntityData().set(ISFREEROAMING, false);
             }
-            case "idle" -> {
+            case "relaxing" -> {
                 this.setResting();
                 this.getEntityData().set(ISFREEROAMING, true);
                 this.getBrain().setMemory(RegisterAI.RESTING.get(), true);
@@ -2798,7 +2799,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         })
                         ),
                 new CompanionProtectOwnerBehavior(),
-                new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
+                new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt) && tgt instanceof Monster).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
                 new CompanionTorchBehavior(),
                 new CompanionBreakOreBehavior(),
                 new FirstApplicableBehaviour<>(
@@ -2821,7 +2822,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         new CompanionNonVanillaMeleeAttackBehavior(this),
                         new CompanionUseSpellBehavior(this),
                         new CompanionUseCrossbowBehavior(),
-                        new AnimatableMeleeAttack<>(0).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false)),
                         new CompanionLaunchAircraftTask(this),
                         new CompanionShipRangedAttackBehavior(this),
                         new AnimatableMeleeAttack<>(0).startCondition((entity)->entity.getMainHandItem().getItem() instanceof SwordItem).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false))
@@ -3120,18 +3120,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 return this.HandleItemInteraction(player, vec, hand, heldstacks);
             }
             else if(player.getItemInHand(hand).isEmpty() && !this.isAngry()) {
-
-                /*
-                 * This Part of class is based on EntityWroughtnaut.java class from Mowzie's mob
-                 * Get the Source Code in github:
-                 * https://github.com/BobMowzie/MowziesMobs/blob/1.16.5/src/main/java/com/bobmowzie/mowziesmobs/server/entity/wroughtnaut/EntityWroughtnaut.java
-                 * Get Mod on curseforge:
-                 *  https://www.curseforge.com/minecraft/mc-mods/mowzies-mobs
-                 *
-                 * Mowzie's mob is licensed under cutom license. I do hope tht this falls under Non-Compete/Non-Imitate/Non-Manipulate...
-                 */
-
-                if(player.getMainHandItem().isEmpty())
+                if(player.isCrouching())
+                {
+                    return this.openInventory(player);
+                }
+                else if(player.getMainHandItem().isEmpty())
                 {
                     if (this.isSleeping()) {
                         if (this.forceWakeupCounter > 4) {
@@ -3184,11 +3177,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         return InteractionResult.SUCCESS;
                         //this.setOrderedToSit(!this.isSitting());
                     }
-                }
-
-                if(player.isCrouching())
-                {
-                    return this.openInventory(player);
                 }
             }
             return InteractionResult.FAIL;
@@ -3692,7 +3680,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getBrain().setMemory(RegisterAI.RESTING.get(), true);
         this.getBrain().eraseMemory(RegisterAI.FOLLOWING_OWNER_MEMORY.get());
         this.getBrain().eraseMemory(RegisterAI.MEMORY_SITTING.get());
-        this.getBrain().setActiveActivityIfPossible(IDLE);
+        this.getBrain().setActiveActivityIfPossible(ACTIVITY_RELAXING.get());
     }
 
     private void setWaiting(){
