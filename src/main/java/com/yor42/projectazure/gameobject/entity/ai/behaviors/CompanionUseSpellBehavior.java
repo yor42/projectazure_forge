@@ -19,6 +19,7 @@ import static net.minecraft.world.entity.ai.memory.MemoryModuleType.*;
 public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCompanion> {
     public CompanionUseSpellBehavior(AbstractEntityCompanion entity) {
         super(entity instanceof ISpellUser? ((ISpellUser) entity).getProjectilePreAnimationDelay():-1);
+        cooldownFor((e)->10);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCo
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, AbstractEntityCompanion entity) {
 
-        if(this.delayTime<0){
+        if(this.delayTime<0 || BrainUtils.hasMemory(entity, RegisterAI.ANIMATION.get())){
             return false;
         }
 
@@ -53,7 +54,6 @@ public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCo
 
         if (entity instanceof ISpellUser && target != null) {
             if (entity.closerThan(target, entity.getSpellRange())) {
-                BrainUtils.clearMemory(entity, WALK_TARGET);
                 ((ISpellUser) entity).StartSpellAttack(target);
                 BrainUtils.setForgettableMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.USE_SPELL, ((ISpellUser) entity).getInitialSpellDelay());
             }
@@ -63,6 +63,7 @@ public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCo
     @Override
     protected void tick(AbstractEntityCompanion entity) {
         super.tick(entity);
+        entity.getNavigation().stop();
     }
 
     @Override
