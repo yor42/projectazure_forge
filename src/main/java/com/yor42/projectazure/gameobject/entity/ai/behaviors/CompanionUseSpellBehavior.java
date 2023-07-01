@@ -24,13 +24,13 @@ public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCo
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.VALUE_ABSENT));
+        return List.of(Pair.of(LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT));
     }
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, AbstractEntityCompanion entity) {
 
-        if(this.delayTime<0 || BrainUtils.hasMemory(entity, RegisterAI.ANIMATION.get())){
+        if(this.delayTime<0 || entity.isAnimating()){
             return false;
         }
 
@@ -55,7 +55,7 @@ public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCo
         if (entity instanceof ISpellUser && target != null) {
             if (entity.closerThan(target, entity.getSpellRange())) {
                 ((ISpellUser) entity).StartSpellAttack(target);
-                BrainUtils.setForgettableMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.USE_SPELL, ((ISpellUser) entity).getInitialSpellDelay());
+                entity.setAnimation(RegisterAI.Animations.USE_SPELL, ((ISpellUser) entity).getInitialSpellDelay());
             }
         }
     }

@@ -35,7 +35,7 @@ public class CompanionUseGunBehavior extends ExtendedBehaviour<AbstractEntityCom
     protected boolean checkExtraStartConditions(ServerLevel level, AbstractEntityCompanion entity) {
         LivingEntity target = BrainUtils.getTargetOfEntity(entity);
 
-        if(target == null || !entity.wantsToAttack(target, entity)){
+        if(target == null || !entity.wantsToAttack(target, entity) || entity.isAnimating()){
             return false;
         }
         ItemStack stack = entity.getMainHandItem();
@@ -98,15 +98,15 @@ public class CompanionUseGunBehavior extends ExtendedBehaviour<AbstractEntityCom
             }
 
             if (!entity.isUsingGun() && this.seeTime >= 5 && gunStack != ItemStack.EMPTY && getRemainingAmmo(gunStack) > 0) {
-                BrainUtils.setMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.SHOOT_GUN);
+                entity.setAnimation(RegisterAI.Animations.SHOOT_GUN);
             }
             boolean flag = entity.isUsingGun();
             entity.getBrain().setMemory(LOOK_TARGET, new EntityTracker(target, true));
             if (flag) {
                 if (!canSee && this.seeTime < -80) {
-                    BrainUtils.clearMemory(entity, RegisterAI.ANIMATION.get());
+                    entity.clearAnimation();
                 } else if (canSee) {
-                    BrainUtils.setMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.SHOOT_GUN);
+                    entity.setAnimation(RegisterAI.Animations.SHOOT_GUN);
                     boolean hasAmmo = gunStack.getOrCreateTag().getInt("AmmoCount") > 0;
                     boolean reloadable = entity.HasRightMagazine(gunStack);
                     Gun modifiedGun = gunItem.getModifiedGun(gunStack);
@@ -118,8 +118,8 @@ public class CompanionUseGunBehavior extends ExtendedBehaviour<AbstractEntityCom
                         entity.setReloadDelay(gunStack);
                     }
                 }
-            } else if (this.seeTime >= -80) {
-                BrainUtils.setMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.SHOOT_GUN);
+            } else if (this.seeTime < -80) {
+                entity.clearAnimation();
             }
         }
 
@@ -128,7 +128,7 @@ public class CompanionUseGunBehavior extends ExtendedBehaviour<AbstractEntityCom
 
     @Override
     protected void stop(AbstractEntityCompanion entity) {
-        BrainUtils.clearMemory(entity, RegisterAI.ANIMATION.get());
+        entity.clearAnimation();
         this.seeTime = 0;
         this.attackTime = -1;
         super.stop(entity);
@@ -140,6 +140,6 @@ public class CompanionUseGunBehavior extends ExtendedBehaviour<AbstractEntityCom
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.VALUE_ABSENT));
+        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
     }
 }

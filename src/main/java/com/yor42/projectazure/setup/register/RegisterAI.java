@@ -48,14 +48,7 @@ public class RegisterAI {
     //MemoryModuleType
     public static final RegistryObject<MemoryModuleType<GlobalPos>> WAIT_POINT = registerMemoryModuleType("wait_point", GlobalPos.CODEC);
     public static final RegistryObject<MemoryModuleType<GlobalPos>> FOOD_PANTRY = registerMemoryModuleType("food_pantry", GlobalPos.CODEC);
-    public static final RegistryObject<MemoryModuleType<BlockPos>> HURT_AT = registerMemoryModuleType("hurt_at");
-    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_ALLYS = registerMemoryModuleType("nearby_allys");
-    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_ALLYS = registerMemoryModuleType("visible_allys");
     public static final RegistryObject<MemoryModuleType<AbstractEntityCompanion>> NEARBY_ALLY = registerMemoryModuleType("nearby_ally");
-    public static final RegistryObject<MemoryModuleType<Integer>> VISIBLE_ALLYS_COUNT = registerMemoryModuleType("visible_allys_count");
-    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_HOSTILES = registerMemoryModuleType("nearby_hostiles");
-    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_HOSTILES = registerMemoryModuleType("visible_hostiles");
-    public static final RegistryObject<MemoryModuleType<Integer>> VISIBLE_HOSTILE_COUNT = registerMemoryModuleType("visible_hostile_count");
     public static final RegistryObject<MemoryModuleType<Entity>> NEAREST_BOAT = registerMemoryModuleType("nearest_boat");
     public static final RegistryObject<MemoryModuleType<Entity>> NEAREST_HORSE = registerMemoryModuleType("nearest_horse");
     public static final RegistryObject<MemoryModuleType<LivingEntity>> HEAL_TARGET = registerMemoryModuleType("heal_target");
@@ -66,12 +59,6 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<Integer>> REGENERATION_POTION_INDEX = registerMemoryModuleType("regneneration_potion_index");
     public static final RegistryObject<MemoryModuleType<Integer>> TOTEM_INDEX = registerMemoryModuleType("totem_index");
     public static final RegistryObject<MemoryModuleType<Integer>> TORCH_INDEX = registerMemoryModuleType("torch_index");
-    public static final RegistryObject<MemoryModuleType<Integer>> FIRE_EXTINGIGH_ITEM = registerMemoryModuleType("fire_extinguish_index");
-    public static final RegistryObject<MemoryModuleType<Integer>> FALL_BREAK_ITEM_INDEX = registerMemoryModuleType("fall_break_index");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_ORE = registerMemoryModuleType("nearest_ore");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_HARVESTABLE = registerMemoryModuleType("nearest_harvestable");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_PLANTABLE = registerMemoryModuleType("nearest_plantable");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_BONEMEALABLE = registerMemoryModuleType("nearest_bonemealable");
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_WORLDSKILLABLE = registerMemoryModuleType("nearest_worldskillable");
     public static final RegistryObject<MemoryModuleType<Boolean>> FOLLOWING_OWNER_MEMORY = registerMemoryModuleType("following_owner");
     public static final RegistryObject<MemoryModuleType<Boolean>> INJURED_MEMORY = registerMemoryModuleType("injured_memory");
@@ -83,12 +70,10 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_ORES = registerMemoryModuleType("near_ores");
     public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_BONEMEALABLE = registerMemoryModuleType("near_bonemealable");
     public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_PLANTABLE = registerMemoryModuleType("near_plantable");
-    public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_WORLDSKILLABLE = registerMemoryModuleType("near_worldskillable");
 
     public static final RegistryObject<SensorType<HealTargetSensor>> HEAL_TARGET_SENSOR = registerSensorType("heal_target_sensor", HealTargetSensor::new);
     public static final RegistryObject<SensorType<InventorySensor<? extends AbstractEntityCompanion>>> INVSENSOR = registerSensorType("invsensor", InventorySensor::new);
     public static final RegistryObject<SensorType<NearbyAllysSensor<? extends AbstractEntityCompanion>>> NEARBY_ALLY_SENSOR = registerSensorType("nearby_ally", NearbyAllysSensor::new);
-    public static final RegistryObject<Schedule> CompanionSchedule = registerSchedule("companion_schedule", (builder)-> builder.changeActivityAt(10, Activity.IDLE).changeActivityAt(12000, Activity.REST).build());
     //POI
     //public static final RegistryObject<PoiType> POI_PANTRY = registerPOI("poi_pantry", ImmutableList.of(RegisterBlocks.OAK_PANTRY.get(),RegisterBlocks.SPRUCE_PANTRY.get(),RegisterBlocks.BIRCH_PANTRY.get(),RegisterBlocks.JUNGLE_PANTRY.get(),RegisterBlocks.DARK_OAK_PANTRY.get(),RegisterBlocks.ACACIA_PANTRY.get(),RegisterBlocks.WARPED_PANTRY.get(),RegisterBlocks.CRIMSON_PANTRY.get()).stream().flatMap((p_234171_0_) -> p_234171_0_.getStateDefinition().getPossibleStates().stream()).collect(ImmutableSet.toImmutableSet()), null, 1,1);
 

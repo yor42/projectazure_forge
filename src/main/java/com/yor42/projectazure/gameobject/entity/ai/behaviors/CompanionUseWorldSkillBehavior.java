@@ -17,7 +17,6 @@ import net.tslat.smartbrainlib.util.BrainUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.RegisterAI.ANIMATION;
 import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_WORLDSKILLABLE;
 
 public class CompanionUseWorldSkillBehavior extends ExtendedBehaviour<AbstractEntityCompanion> {
@@ -25,11 +24,13 @@ public class CompanionUseWorldSkillBehavior extends ExtendedBehaviour<AbstractEn
     @Override
     protected boolean checkExtraStartConditions(ServerLevel world, AbstractEntityCompanion entity) {
 
-        if(entity.isAngry()){
+        if(entity.isAnimating()){
             return false;
         }
 
-        Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
+        if(entity.isAngry()){
+            return false;
+        }
 
         Optional<BlockPos> skillpos = Optional.ofNullable(BrainUtils.getMemory(entity, NEAREST_WORLDSKILLABLE.get()));
 
@@ -57,7 +58,7 @@ public class CompanionUseWorldSkillBehavior extends ExtendedBehaviour<AbstractEn
     protected void start(ServerLevel world, AbstractEntityCompanion entity, long p_212831_3_) {
         if(entity instanceof IWorldSkillUseable){
             Brain<AbstractEntityCompanion> brain = (Brain<AbstractEntityCompanion>) entity.getBrain();
-            BrainUtils.setMemory(entity, ANIMATION.get(), RegisterAI.Animations.WORLD_SKILL);
+            entity.setAnimation(RegisterAI.Animations.WORLD_SKILL);
             if(brain.getMemory(NEAREST_WORLDSKILLABLE.get()).map((pos)-> ((IWorldSkillUseable) entity).executeWorldSkill(world, pos, entity)).orElse(true)){
                 this.doStop(world, entity, p_212831_3_);
             }
@@ -71,7 +72,7 @@ public class CompanionUseWorldSkillBehavior extends ExtendedBehaviour<AbstractEn
                 ((IWorldSkillUseable) entity).endWorldSkill(p_212835_1_, pos, entity);
             });
         }
-        BrainUtils.clearMemory(entity, ANIMATION.get());
+        entity.clearAnimation();
         BrainUtils.clearMemory(entity, NEAREST_WORLDSKILLABLE.get());
         BrainUtils.clearMemory(entity, MemoryModuleType.LOOK_TARGET);
     }
@@ -89,6 +90,6 @@ public class CompanionUseWorldSkillBehavior extends ExtendedBehaviour<AbstractEn
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(NEAREST_WORLDSKILLABLE.get(), MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(ANIMATION.get(), MemoryStatus.VALUE_ABSENT));
+        return List.of(Pair.of(NEAREST_WORLDSKILLABLE.get(), MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
     }
 }

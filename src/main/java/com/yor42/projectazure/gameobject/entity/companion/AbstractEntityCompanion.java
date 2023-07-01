@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Vector3f;
 import com.spacecat.summer.objects.math.RayMath;
 import com.tac.guns.Config;
@@ -29,6 +30,7 @@ import com.yor42.projectazure.gameobject.entity.CompanionSwimMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.CompanionSchedule;
 import com.yor42.projectazure.gameobject.entity.ai.behaviors.*;
+import com.yor42.projectazure.gameobject.entity.ai.behaviors.base.EntityAnimationData;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.HealTargetSensor;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
@@ -56,12 +58,14 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
@@ -174,8 +178,7 @@ import java.util.function.Predicate;
 import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.RegisterAI.*;
-import static com.yor42.projectazure.setup.register.RegisterAI.Animations.MELEE_ATTACK;
-import static com.yor42.projectazure.setup.register.RegisterAI.Animations.WORLD_SKILL;
+import static com.yor42.projectazure.setup.register.RegisterAI.Animations.*;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
 import static net.minecraft.world.InteractionHand.OFF_HAND;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
@@ -425,7 +428,23 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     protected static final EntityDataAccessor<Integer> LEVEL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
 
 
-    protected static final EntityDataAccessor<Byte> ANIMATION = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<EntityAnimationData> ANIMATION = SynchedEntityData.defineId(AbstractEntityCompanion.class, new EntityDataSerializer<>() {
+
+        @Override
+        public void write(FriendlyByteBuf pBuffer, EntityAnimationData pValue) {
+            pValue.write(pBuffer);
+        }
+
+        @Override
+        public EntityAnimationData read(FriendlyByteBuf pBuffer) {
+            return EntityAnimationData.read(pBuffer);
+        }
+
+        @Override
+        public EntityAnimationData copy(EntityAnimationData pValue) {
+            return pValue.copy();
+        }
+    });
     protected static final EntityDataAccessor<Integer> ANGRYTIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> INJURYCURETIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Float> AFFECTION = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.FLOAT);
@@ -698,7 +717,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isUsingGun(){
-        return this.getMainHandItem().getItem() instanceof GunItem && this.getEntityData().get(ANIMATION) == RegisterAI.Animations.SHOOT_GUN.ordinal();
+        return this.getMainHandItem().getItem() instanceof GunItem && this.getEntityData().get(ANIMATION).isAnimating(RegisterAI.Animations.SHOOT_GUN);
     }
 
     public ItemStack[] getMagazine(ResourceLocation id){
@@ -759,7 +778,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         compound.putInt("patcooldown", this.getEntityData().get(PATCOOLDOWN));
         compound.putInt("angrytimer", this.getEntityData().get(ANGRYTIMER));
         compound.putInt("injury_curetimer", this.getEntityData().get(INJURYCURETIMER));
-        compound.putByte("animation", this.getEntityData().get(ANIMATION));
         compound.putBoolean("oathed", this.getEntityData().get(OATHED));
         compound.putBoolean("pickupitem", this.getEntityData().get(PICKUP_ITEM));
         compound.putBoolean("firstattack", this.getEntityData().get(SHOULDFIRSTATTACK));
@@ -844,7 +862,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getEntityData().set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.getEntityData().set(OATHED, compound.getBoolean("oathed"));
         this.getEntityData().set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
-        this.getEntityData().set(ANIMATION, compound.getByte("animation"));
         this.getEntityData().set(SHOULDFIRSTATTACK, compound.getBoolean("firstattack"));
         this.RangedAttackCoolDown = compound.getInt("rangedattackcooldown");
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
@@ -1816,7 +1833,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getEntityData().define(INJURYCURETIMER, 0);
         this.getEntityData().define(ECCI_ANIMATION_TIME, 0);
         this.getEntityData().define(INTERACTION_WARNING_COUNT, 0);
-        this.getEntityData().define(ANIMATION, (byte)-1);
+        this.getEntityData().define(ANIMATION, new EntityAnimationData());
         this.getEntityData().define(SKILL_ITEM_0, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_1, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_2, ItemStack.EMPTY);
@@ -1825,7 +1842,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isUsingWorldSkill() {
-        return this.getEntityData().get(ANIMATION) == WORLD_SKILL.ordinal();
+        return this.getEntityData().get(ANIMATION).isAnimating(WORLD_SKILL);
     }
 
     public int getInjuryCureTimer(){
@@ -1849,16 +1866,32 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         }
     }
 
+    public boolean isAnimating(){
+        return this.getEntityData().get(ANIMATION).isAnimating();
+    }
+
+    public void setAnimation(Animations animations, int cooldown){
+        this.getEntityData().get(ANIMATION).setAnimation(animations, cooldown);
+    }
+
+    public void setAnimation(Animations animations){
+        this.getEntityData().get(ANIMATION).setAnimation(animations, -1);
+    }
+
+    public void clearAnimation(){
+        this.getEntityData().get(ANIMATION).setAnimation(null, 0);
+    }
+
     public int getSpellDelay(){
-        return (int) BrainUtils.getTimeUntilMemoryExpires(this, RegisterAI.ANIMATION.get());
+        return this.getEntityData().get(ANIMATION).getCooldown(USE_SPELL);
     }
 
     public boolean isUsingSpell(){
-        return this.getEntityData().get(ANIMATION) == RegisterAI.Animations.USE_SPELL.ordinal();
+        return this.getEntityData().get(ANIMATION).isAnimating(RegisterAI.Animations.USE_SPELL);
     }
 
     public boolean shouldPlayShipAttackAnim(){
-        return this.getEntityData().get(ANIMATION) == RegisterAI.Animations.SHOOT_CANNON.ordinal();
+        return this.getEntityData().get(ANIMATION).isAnimating(RegisterAI.Animations.SHOOT_CANNON);
     }
 
     public int CannonAttackAnimLength() {
@@ -2237,6 +2270,8 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public void aiStep() {
         super.aiStep();
 
+        this.getEntityData().get(ANIMATION).tick();
+
         if(this.tickCount%30==0) {
             this.getBrain().getMemory(HOME).ifPresent((globalpos)->{
                 if(globalpos.dimension() == this.getLevel().dimension()){
@@ -2537,11 +2572,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public void playMeleeAttackPreSound(){}
 
     public int getNonVanillaMeleeAttackDelay(){
-        return (int) BrainUtils.getTimeUntilMemoryExpires(this, RegisterAI.ANIMATION.get());
+        return this.getEntityData().get(ANIMATION).getCooldown(MELEE_ATTACK);
     }
 
     public boolean isNonVanillaMeleeAttacking(){
-        return this.getEntityData().get(ANIMATION) == MELEE_ATTACK.ordinal();
+        return this.getEntityData().get(ANIMATION).isAnimating(MELEE_ATTACK);
     }
 
     public void setSkillItemSlotContent(int index, ItemStack stack){
@@ -2701,14 +2736,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     protected void customServerAiStep() {
         tickBrain(this);
 
-        if(BrainUtils.hasMemory(this, RegisterAI.ANIMATION.get())){
-            this.getNavigation().stop();
-            this.getEntityData().set(ANIMATION, ((byte) Objects.requireNonNull(BrainUtils.getMemory(this, RegisterAI.ANIMATION.get())).ordinal()));
-        }
-        else {
-            this.getEntityData().set(ANIMATION, (byte)-1);
-        }
-
         if(this.getBrain().getMemory(HOME).isEmpty()){
             this.getEntityData().set(HOMEPOS, Optional.empty());
             this.getEntityData().set(VALID_HOME_DISTANCE, -1F);
@@ -2824,7 +2851,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         new CompanionUseCrossbowBehavior(),
                         new CompanionLaunchAircraftTask(this),
                         new CompanionShipRangedAttackBehavior(this),
-                        new AnimatableMeleeAttack<>(0).startCondition((entity)->entity.getMainHandItem().getItem() instanceof SwordItem).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false))
+                        new AnimatableMeleeAttack<>(0).startCondition((entity)->entity.getMainHandItem().getItem() instanceof SwordItem && !this.isAnimating()).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false))
                         ));
     }
 
