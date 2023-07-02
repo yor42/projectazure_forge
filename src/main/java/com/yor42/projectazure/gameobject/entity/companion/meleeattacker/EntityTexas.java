@@ -350,7 +350,6 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this): DamageSource.mobAttack(this), damage+3);
-        this.AttackCount = 0;
         if(MathUtil.rollBooleanRNG(0.25F)) {
             this.playSound(registerSounds.TEXAS_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
         }

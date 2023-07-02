@@ -34,7 +34,7 @@ public class CompanionNonVanillaMeleeAttackBehavior extends MultiTriggeringDelay
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, AbstractEntityCompanion entity) {
 
-        if(!(entity instanceof IMeleeAttacker)){
+        if(!(entity instanceof IMeleeAttacker) || entity.isAnimating()){
             return false;
         }
 
@@ -54,7 +54,7 @@ public class CompanionNonVanillaMeleeAttackBehavior extends MultiTriggeringDelay
     @Override
     protected void start(ServerLevel level, AbstractEntityCompanion entity, long gameTime) {
         super.start(level, entity, gameTime);
-        BrainUtils.setForgettableMemory(entity,RegisterAI.ANIMATION.get(), MELEE_ATTACK, ((IMeleeAttacker)entity).MeleeAttackAnimationLength());
+        entity.setAnimation(MELEE_ATTACK, ((IMeleeAttacker)entity).MeleeAttackAnimationLength());
     }
 
     @Override
@@ -65,6 +65,6 @@ public class CompanionNonVanillaMeleeAttackBehavior extends MultiTriggeringDelay
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.VALUE_ABSENT));
+        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
     }
 }

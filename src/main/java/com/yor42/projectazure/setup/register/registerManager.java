@@ -31,6 +31,7 @@ public class registerManager {
         registerRecipes.Serializers.register();
         RegisterAI.register();
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
+        RegisterDataSerializers.register(eventbus);
         registerEntity.ENTITIES.register(eventbus);
         registerBiomes.BIOMES.register(eventbus);
         RegisterFluids.FLUIDS.register(eventbus);

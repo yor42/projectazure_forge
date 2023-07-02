@@ -50,7 +50,6 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<GlobalPos>> FOOD_PANTRY = registerMemoryModuleType("food_pantry", GlobalPos.CODEC);
     public static final RegistryObject<MemoryModuleType<AbstractEntityCompanion>> NEARBY_ALLY = registerMemoryModuleType("nearby_ally");
     public static final RegistryObject<MemoryModuleType<Entity>> NEAREST_BOAT = registerMemoryModuleType("nearest_boat");
-    public static final RegistryObject<MemoryModuleType<Entity>> NEAREST_HORSE = registerMemoryModuleType("nearest_horse");
     public static final RegistryObject<MemoryModuleType<LivingEntity>> HEAL_TARGET = registerMemoryModuleType("heal_target");
     public static final RegistryObject<MemoryModuleType<Boolean>> RESTING = registerMemoryModuleType("resting");
     public static final RegistryObject<MemoryModuleType<Boolean>> MEMORY_SITTING = registerMemoryModuleType("sitting");
@@ -63,8 +62,6 @@ public class RegisterAI {
     public static final RegistryObject<MemoryModuleType<Boolean>> FOLLOWING_OWNER_MEMORY = registerMemoryModuleType("following_owner");
     public static final RegistryObject<MemoryModuleType<Boolean>> INJURED_MEMORY = registerMemoryModuleType("injured_memory");
     public static final RegistryObject<MemoryModuleType<Boolean>> KILLED_ENTITY = registerMemoryModuleType("killed_entity");
-
-    public static final RegistryObject<MemoryModuleType<Animations>> ANIMATION = registerMemoryModuleType("animation");
 
     public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_HARVESTABLES = registerMemoryModuleType("near_harvestable");
     public static final RegistryObject<MemoryModuleType<List<Pair<BlockPos, BlockState>>>> NEAR_ORES = registerMemoryModuleType("near_ores");

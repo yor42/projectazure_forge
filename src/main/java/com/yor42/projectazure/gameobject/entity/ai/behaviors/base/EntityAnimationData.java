@@ -25,7 +25,7 @@ public class EntityAnimationData {
         this.cooldown = cooldown;
     }
 
-    public void tick(){
+    public EntityAnimationData tick(){
         if(this.cooldown>0) {
             this.cooldown -= 1;
         }
@@ -33,6 +33,7 @@ public class EntityAnimationData {
         if(this.cooldown == 0){
             this.animation = null;
         }
+        return this;
     }
 
     public int getCooldown(RegisterAI.Animations animation){

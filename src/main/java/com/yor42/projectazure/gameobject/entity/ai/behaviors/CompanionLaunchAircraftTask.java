@@ -29,6 +29,7 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.EntityUtils.EntityHasPlanes;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getPreparedPlane;
+import static com.yor42.projectazure.setup.register.RegisterAI.Animations.MELEE_ATTACK;
 
 public class CompanionLaunchAircraftTask extends DelayedBehaviour<AbstractEntityCompanion> {
     public CompanionLaunchAircraftTask(AbstractEntityCompanion entity) {
@@ -50,7 +51,7 @@ public class CompanionLaunchAircraftTask extends DelayedBehaviour<AbstractEntity
     protected boolean checkExtraStartConditions(ServerLevel level, AbstractEntityCompanion entity) {
 
         LivingEntity target = BrainUtils.getTargetOfEntity(entity);
-        if(target == null || this.delayTime<0){
+        if(target == null || this.delayTime<0 || entity.isAnimating()){
             return false;
         }
 
@@ -77,7 +78,7 @@ public class CompanionLaunchAircraftTask extends DelayedBehaviour<AbstractEntity
         }
 
         if(!entity.closerThan(target, entity.getPlaneRange())){
-            BrainUtils.setForgettableMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.LAUNCH_PLANE, ((EntityKansenAircraftCarrier) entity).getPlaneLaunchDelay());
+            entity.setAnimation(RegisterAI.Animations.SHOOT_CANNON, entity.CannonAttackAnimLength());
             this.clearWalkTarget(entity);
         }
     }
@@ -89,7 +90,7 @@ public class CompanionLaunchAircraftTask extends DelayedBehaviour<AbstractEntity
             return false;
         }
 
-        return this.checkExtraStartConditions(level, entity)&& entity.closerThan(target, entity.getPlaneRange()) || BrainUtils.getMemory(entity, RegisterAI.ANIMATION.get()) == RegisterAI.Animations.LAUNCH_PLANE;
+        return this.checkExtraStartConditions(level, entity)&& entity.closerThan(target, entity.getPlaneRange()) || entity.isAnimating(RegisterAI.Animations.LAUNCH_PLANE);
     }
 
     @Override
@@ -119,7 +120,7 @@ public class CompanionLaunchAircraftTask extends DelayedBehaviour<AbstractEntity
                         AbstractEntityPlanes planeEntity = planetype.create(entity.getLevel());
                         if (planeEntity != null) {
                             entity.LaunchPlane(planestack, planeEntity, target, hanger, hangerIndex);
-                            BrainUtils.setForgettableMemory(entity, RegisterAI.ANIMATION.get(), RegisterAI.Animations.SHOOT_CANNON, entity.CannonAttackAnimLength());
+                            entity.setAnimation(RegisterAI.Animations.SHOOT_CANNON, entity.CannonAttackAnimLength());
                         }
                     }
                 }
@@ -129,7 +130,7 @@ public class CompanionLaunchAircraftTask extends DelayedBehaviour<AbstractEntity
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(RegisterAI.ANIMATION.get(), MemoryStatus.VALUE_ABSENT));
+        return List.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
     }
 
     private void clearWalkTarget(LivingEntity p_233967_1_) {

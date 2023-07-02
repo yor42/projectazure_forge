@@ -179,6 +179,7 @@ import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.RegisterAI.*;
 import static com.yor42.projectazure.setup.register.RegisterAI.Animations.*;
+import static com.yor42.projectazure.setup.register.RegisterDataSerializers.ENTITY_ANIMATIONDATA;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
 import static net.minecraft.world.InteractionHand.OFF_HAND;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
@@ -410,9 +411,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     private List<ExperienceOrb> nearbyExpList;
     protected long lastSlept, lastWokenup, lastsleepingheal;
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
-    public int StartedMeleeAttackTimeStamp = -1;
-    public int AttackCount = 0;
-    public int StartedSpellAttackTimeStamp = -1;
 
     //I'd really like to get off from datamanager's wild ride.
     protected static final EntityDataAccessor<Integer> SKILLDELAYTICK = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
@@ -428,23 +426,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     protected static final EntityDataAccessor<Integer> LEVEL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
 
 
-    protected static final EntityDataAccessor<EntityAnimationData> ANIMATION = SynchedEntityData.defineId(AbstractEntityCompanion.class, new EntityDataSerializer<>() {
-
-        @Override
-        public void write(FriendlyByteBuf pBuffer, EntityAnimationData pValue) {
-            pValue.write(pBuffer);
-        }
-
-        @Override
-        public EntityAnimationData read(FriendlyByteBuf pBuffer) {
-            return EntityAnimationData.read(pBuffer);
-        }
-
-        @Override
-        public EntityAnimationData copy(EntityAnimationData pValue) {
-            return pValue.copy();
-        }
-    });
+    protected static final EntityDataAccessor<EntityAnimationData> ANIMATION = (EntityDataAccessor<EntityAnimationData>) SynchedEntityData.defineId(AbstractEntityCompanion.class, ENTITY_ANIMATIONDATA.get().getSerializer());
     protected static final EntityDataAccessor<Integer> ANGRYTIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> INJURYCURETIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Float> AFFECTION = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.FLOAT);
@@ -1870,6 +1852,10 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return this.getEntityData().get(ANIMATION).isAnimating();
     }
 
+    public boolean isAnimating(Animations animations){
+        return this.getEntityData().get(ANIMATION).isAnimating(animations);
+    }
+
     public void setAnimation(Animations animations, int cooldown){
         this.getEntityData().get(ANIMATION).setAnimation(animations, cooldown);
     }
@@ -2270,7 +2256,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public void aiStep() {
         super.aiStep();
 
-        this.getEntityData().get(ANIMATION).tick();
+        this.entityData.set(ANIMATION, this.getEntityData().get(ANIMATION).tick());
 
         if(this.tickCount%30==0) {
             this.getBrain().getMemory(HOME).ifPresent((globalpos)->{

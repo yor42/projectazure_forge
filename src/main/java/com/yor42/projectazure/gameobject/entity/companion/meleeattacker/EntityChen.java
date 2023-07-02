@@ -100,7 +100,6 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         boolean ishit;
         if(AttackCount == 2){
             ishit = target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage+3);
-            this.AttackCount = 0;
         }
         else{
             ishit = target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage*0.5F);
