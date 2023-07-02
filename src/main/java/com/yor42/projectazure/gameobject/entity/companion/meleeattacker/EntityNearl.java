@@ -271,8 +271,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public boolean canUseSkill(LivingEntity target) {
-        int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
-        if(currentspelldelay == 0 && this.getSkillPoints()>=6){
+        if(!this.isAnimating() && this.getSkillPoints()>=6){
             if((this.getHealth()/this.getMaxHealth())<=0.5F){
                 return true;
             }

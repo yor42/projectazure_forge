@@ -40,7 +40,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+0.785398);
             boolean shouldDraw = true;
             if(entityLivingBaseIn.isUsingSpell() && SpellItemIndex == 0){
-                int skillprogress = entityLivingBaseIn.getInitialSpellDelay()-entityLivingBaseIn.getSpellDelay();
+                int skillprogress = entityLivingBaseIn.getInitialSpellDelay()-entityLivingBaseIn.getAnimationCooldown();
                 ymovement = 50*(float) Math.sin(2*Math.PI*(1/(float)entityLivingBaseIn.getInitialSpellDelay())*skillprogress);
                 shouldDraw = ((float)skillprogress/entityLivingBaseIn.getInitialSpellDelay())<=0.25;
             }
@@ -61,7 +61,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+0.785398);
             boolean shouldDraw = true;
             if(entityLivingBaseIn.isUsingSpell() && SpellItemIndex == 1){
-                int skillprogress = entityLivingBaseIn.getInitialSpellDelay()-entityLivingBaseIn.getSpellDelay();
+                int skillprogress = entityLivingBaseIn.getInitialSpellDelay()-entityLivingBaseIn.getAnimationCooldown();
                 ymovement = 50*(float) Math.sin(2*Math.PI*(1/(float)entityLivingBaseIn.getInitialSpellDelay())*skillprogress);
                 shouldDraw = ((float)skillprogress/entityLivingBaseIn.getInitialSpellDelay())<=0.25;
             }
@@ -79,7 +79,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+0.52);
             boolean shouldDraw = true;
             if(entityLivingBaseIn.isUsingSpell() && SpellItemIndex == 2){
-                int skillprogress = entityLivingBaseIn.getInitialSpellDelay()-entityLivingBaseIn.getSpellDelay();
+                int skillprogress = entityLivingBaseIn.getInitialSpellDelay()-entityLivingBaseIn.getAnimationCooldown();
                 ymovement = 50*(float) Math.sin(2*Math.PI*(1/(float)entityLivingBaseIn.getInitialSpellDelay())*skillprogress);
                 shouldDraw = ((float)skillprogress/entityLivingBaseIn.getInitialSpellDelay())<=0.25;
             }
@@ -100,7 +100,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+1.04);
             boolean shouldDraw = true;
             if(entityLivingBaseIn.isUsingSpell() && SpellItemIndex == 3){
-                int skillprogress = entityLivingBaseIn.getInitialSpellDelay()-entityLivingBaseIn.getSpellDelay();
+                int skillprogress = entityLivingBaseIn.getInitialSpellDelay()-entityLivingBaseIn.getAnimationCooldown();
                 ymovement = 50*(float) Math.sin(2*Math.PI*(1/(float)entityLivingBaseIn.getInitialSpellDelay())*skillprogress);
                 shouldDraw = ((float)skillprogress/entityLivingBaseIn.getInitialSpellDelay())<=0.25;
             }

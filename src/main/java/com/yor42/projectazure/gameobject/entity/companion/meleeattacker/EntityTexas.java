@@ -278,14 +278,13 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public boolean canUseSkill(@Nullable LivingEntity target) {
-        int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
 
         if(target == null){
             return false;
         }
         int sp = this.getSkillPoints();
         boolean hasSkillpoint = sp>39;
-        if(currentspelldelay == 0 &&hasSkillpoint){
+        if(!this.isAnimating() &&hasSkillpoint){
             this.targets.clear();
             this.targets.add(target);
             this.getLevel().getEntities(target, target.getBoundingBox().inflate(5, 2, 5), (canditate)-> canditate instanceof LivingEntity && !this.isAlly((LivingEntity) canditate)).forEach((entity)-> this.targets.add((LivingEntity) entity));

@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Vector3f;
 import com.spacecat.summer.objects.math.RayMath;
 import com.tac.guns.Config;
@@ -30,7 +29,6 @@ import com.yor42.projectazure.gameobject.entity.CompanionSwimMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.CompanionSchedule;
 import com.yor42.projectazure.gameobject.entity.ai.behaviors.*;
-import com.yor42.projectazure.gameobject.entity.ai.behaviors.base.EntityAnimationData;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.HealTargetSensor;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
@@ -58,14 +56,12 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
@@ -179,7 +175,6 @@ import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.RegisterAI.*;
 import static com.yor42.projectazure.setup.register.RegisterAI.Animations.*;
-import static com.yor42.projectazure.setup.register.RegisterDataSerializers.ENTITY_ANIMATIONDATA;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
 import static net.minecraft.world.InteractionHand.OFF_HAND;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
@@ -426,7 +421,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     protected static final EntityDataAccessor<Integer> LEVEL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
 
 
-    protected static final EntityDataAccessor<EntityAnimationData> ANIMATION = (EntityDataAccessor<EntityAnimationData>) SynchedEntityData.defineId(AbstractEntityCompanion.class, ENTITY_ANIMATIONDATA.get().getSerializer());
+    protected static final EntityDataAccessor<Integer> ANIMATION = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+
+    protected static final EntityDataAccessor<Integer> ANIMATION_COOLDOWN = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> ANGRYTIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> INJURYCURETIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Float> AFFECTION = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.FLOAT);
@@ -699,7 +696,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isUsingGun(){
-        return this.getMainHandItem().getItem() instanceof GunItem && this.getEntityData().get(ANIMATION).isAnimating(RegisterAI.Animations.SHOOT_GUN);
+        return this.getMainHandItem().getItem() instanceof GunItem && this.isAnimating(RegisterAI.Animations.SHOOT_GUN);
     }
 
     public ItemStack[] getMagazine(ResourceLocation id){
@@ -1815,7 +1812,8 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getEntityData().define(INJURYCURETIMER, 0);
         this.getEntityData().define(ECCI_ANIMATION_TIME, 0);
         this.getEntityData().define(INTERACTION_WARNING_COUNT, 0);
-        this.getEntityData().define(ANIMATION, new EntityAnimationData());
+        this.getEntityData().define(ANIMATION, -1);
+        this.getEntityData().define(ANIMATION_COOLDOWN, -1);
         this.getEntityData().define(SKILL_ITEM_0, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_1, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_2, ItemStack.EMPTY);
@@ -1824,7 +1822,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isUsingWorldSkill() {
-        return this.getEntityData().get(ANIMATION).isAnimating(WORLD_SKILL);
+        return this.getEntityData().get(ANIMATION) == WORLD_SKILL.ordinal();
     }
 
     public int getInjuryCureTimer(){
@@ -1849,35 +1847,36 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isAnimating(){
-        return this.getEntityData().get(ANIMATION).isAnimating();
+        return this.getAnimationCooldown()!=0;
     }
 
     public boolean isAnimating(Animations animations){
-        return this.getEntityData().get(ANIMATION).isAnimating(animations);
+        return this.getEntityData().get(ANIMATION) == animations.ordinal();
     }
 
     public void setAnimation(Animations animations, int cooldown){
-        this.getEntityData().get(ANIMATION).setAnimation(animations, cooldown);
+        this.getEntityData().set(ANIMATION, animations.ordinal());
+        this.getEntityData().set(ANIMATION_COOLDOWN, cooldown);
     }
 
     public void setAnimation(Animations animations){
-        this.getEntityData().get(ANIMATION).setAnimation(animations, -1);
+        this.getEntityData().set(ANIMATION, animations.ordinal());
     }
 
     public void clearAnimation(){
-        this.getEntityData().get(ANIMATION).setAnimation(null, 0);
+        this.getEntityData().set(ANIMATION, -1);
     }
 
-    public int getSpellDelay(){
-        return this.getEntityData().get(ANIMATION).getCooldown(USE_SPELL);
+    public int getAnimationCooldown(){
+        return this.getEntityData().get(ANIMATION_COOLDOWN);
     }
 
     public boolean isUsingSpell(){
-        return this.getEntityData().get(ANIMATION).isAnimating(RegisterAI.Animations.USE_SPELL);
+        return this.getEntityData().get(ANIMATION) == RegisterAI.Animations.USE_SPELL.ordinal();
     }
 
     public boolean shouldPlayShipAttackAnim(){
-        return this.getEntityData().get(ANIMATION).isAnimating(RegisterAI.Animations.SHOOT_CANNON);
+        return this.getEntityData().get(ANIMATION) == RegisterAI.Animations.SHOOT_CANNON.ordinal();
     }
 
     public int CannonAttackAnimLength() {
@@ -2256,8 +2255,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public void aiStep() {
         super.aiStep();
 
-        this.entityData.set(ANIMATION, this.getEntityData().get(ANIMATION).tick());
-
         if(this.tickCount%30==0) {
             this.getBrain().getMemory(HOME).ifPresent((globalpos)->{
                 if(globalpos.dimension() == this.getLevel().dimension()){
@@ -2557,12 +2554,8 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
      */
     public void playMeleeAttackPreSound(){}
 
-    public int getNonVanillaMeleeAttackDelay(){
-        return this.getEntityData().get(ANIMATION).getCooldown(MELEE_ATTACK);
-    }
-
     public boolean isNonVanillaMeleeAttacking(){
-        return this.getEntityData().get(ANIMATION).isAnimating(MELEE_ATTACK);
+        return this.getEntityData().get(ANIMATION) == MELEE_ATTACK.ordinal();
     }
 
     public void setSkillItemSlotContent(int index, ItemStack stack){
@@ -2721,6 +2714,14 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     protected void customServerAiStep() {
         tickBrain(this);
+
+        int cooldown = this.getAnimationCooldown();
+        if(cooldown>0){
+            this.getEntityData().set(ANIMATION_COOLDOWN, cooldown-1);
+        }
+        else if(cooldown == 0){
+            this.clearAnimation();
+        }
 
         if(this.getBrain().getMemory(HOME).isEmpty()){
             this.getEntityData().set(HOMEPOS, Optional.empty());

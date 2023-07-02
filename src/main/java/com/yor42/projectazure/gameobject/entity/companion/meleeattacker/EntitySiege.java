@@ -140,7 +140,7 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
     }
 
     public boolean canUseSkill(@Nullable LivingEntity target){
-        return this.getNonVanillaMeleeAttackDelay() == 0 && this.getTarget() != null && this.getTarget().isAlive() && this.getSkillPoints()>=12 && this.isSkillItem(this.getMainHandItem());
+        return !this.isAnimating() && this.getTarget() != null && this.getTarget().isAlive() && this.getSkillPoints()>=12 && this.isSkillItem(this.getMainHandItem());
     }
 
     @Override
