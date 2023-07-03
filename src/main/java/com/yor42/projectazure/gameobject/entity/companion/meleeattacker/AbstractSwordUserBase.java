@@ -19,7 +19,9 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
 
     public boolean hasMeleeItem(){
         Item item = this.getItemInHand(this.getNonVanillaMeleeAttackHand()).getItem();
-        return this.getTalentedWeaponList().contains(item) || (item instanceof SwordItem && allowVanillaSwords());
+        boolean hastalentedweapon = this.getTalentedWeaponList().contains(item);
+        boolean hasvanillasword = (item instanceof SwordItem && allowVanillaSwords());
+        return hastalentedweapon || hasvanillasword;
     }
 
     private boolean allowVanillaSwords(){
@@ -29,7 +31,6 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
     public boolean isTalentedWeaponinMainHand(){
         return this.isTalentedWeapon(this.getMainHandItem());
     }
-
     @Nonnull
     @Override
     public ItemStack getMainHandItem() {

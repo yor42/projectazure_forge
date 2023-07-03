@@ -108,9 +108,24 @@ public class RegisterAI {
         LAUNCH_PLANE,
         SHOOT_CANNON,
         USE_SPELL,
-        SHOOT_GUN,
+        SHOOT_GUN(false),
         MELEE_ATTACK,
-        WORLD_SKILL
+        WORLD_SKILL;
+
+        private final boolean shouldStopNavigation;
+
+        Animations(){
+            this.shouldStopNavigation = true;
+        }
+
+        Animations(boolean shouldStopNagivation){
+            this.shouldStopNavigation = shouldStopNagivation;
+        }
+
+        public boolean ShouldStopNavigation(){
+            return this.shouldStopNavigation;
+        }
+
     }
 
     public static void register() {

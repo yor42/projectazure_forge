@@ -39,7 +39,7 @@ public class CompanionNonVanillaMeleeAttackBehavior extends MultiTriggeringDelay
         }
 
         LivingEntity target = BrainUtils.getTargetOfEntity(entity);
-        if(target == null || ((IMeleeAttacker)entity).shouldUseNonVanillaAttack(target)){
+        if(target == null || !((IMeleeAttacker)entity).shouldUseNonVanillaAttack(target)){
             return false;
         }
         else if(entity.isSwimming() && entity.isOrderedToSit() && entity.isPassenger()){
@@ -60,6 +60,9 @@ public class CompanionNonVanillaMeleeAttackBehavior extends MultiTriggeringDelay
     @Override
     protected void doDelayedActions(AbstractEntityCompanion entity, int counter) {
         LivingEntity target = BrainUtils.getTargetOfEntity(entity);
+        if(target == null){
+            return;
+        }
         ((IMeleeAttacker) entity).PerformMeleeAttack(target, (float) entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue(), counter);
     }
 

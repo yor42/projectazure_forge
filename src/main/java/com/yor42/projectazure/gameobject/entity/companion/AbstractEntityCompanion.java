@@ -1813,7 +1813,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.getEntityData().define(ECCI_ANIMATION_TIME, 0);
         this.getEntityData().define(INTERACTION_WARNING_COUNT, 0);
         this.getEntityData().define(ANIMATION, -1);
-        this.getEntityData().define(ANIMATION_COOLDOWN, -1);
+        this.getEntityData().define(ANIMATION_COOLDOWN, 0);
         this.getEntityData().define(SKILL_ITEM_0, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_1, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_2, ItemStack.EMPTY);
@@ -1847,7 +1847,16 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isAnimating(){
-        return this.getAnimationCooldown()!=0;
+        return this.getAnimation()!=null;
+    }
+
+    @Nullable
+    public RegisterAI.Animations getAnimation(){
+        int index = this.getEntityData().get(ANIMATION);
+        if(index<0){
+            return null;
+        }
+        return Animations.values()[index];
     }
 
     public boolean isAnimating(Animations animations){
@@ -2717,9 +2726,15 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
         int cooldown = this.getAnimationCooldown();
         if(cooldown>0){
-            this.getEntityData().set(ANIMATION_COOLDOWN, cooldown-1);
+
+            if(this.getAnimation() != null && this.getAnimation().ShouldStopNavigation()){
+                this.getNavigation().stop();
+            }
+
+            cooldown -= 1;
+            this.getEntityData().set(ANIMATION_COOLDOWN, cooldown);
         }
-        else if(cooldown == 0){
+        else if(this.isAnimating() && cooldown == 0){
             this.clearAnimation();
         }
 
@@ -3704,8 +3719,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     private void setFollowingOwner(){
         this.getBrain().eraseMemory(RegisterAI.WAIT_POINT.get());
         this.getBrain().eraseMemory(RegisterAI.RESTING.get());
-        this.getBrain().setMemory(RegisterAI.FOLLOWING_OWNER_MEMORY.get(), true);
-        this.getBrain().setActiveActivityIfPossible(RegisterAI.FOLLOWING_OWNER.get());
     }
 
     @Override
@@ -3739,12 +3752,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public enum MOVE_STATUS{
-        FOLLOWING_OWNER(RegisterAI.FOLLOWING_OWNER.get(), new TranslatableComponent("entity.status.following").withStyle(ChatFormatting.AQUA)),
+        FOLLOWING_OWNER(Activity.IDLE, new TranslatableComponent("entity.status.following").withStyle(ChatFormatting.AQUA)),
         WAITING(RegisterAI.WAITING.get(), new TranslatableComponent("entity.status.waiting").withStyle(ChatFormatting.YELLOW)),
         SLEEPING(REST, new TranslatableComponent("entity.status.sleeping").withStyle(ChatFormatting.GRAY)),
         SITTING(RegisterAI.SITTING.get(), new TranslatableComponent("entity.status.sitting").withStyle(ChatFormatting.BLUE)),
         FAINTED(null, new TranslatableComponent("entity.status.fainted").withStyle(ChatFormatting.DARK_RED)),
-        IDLE(Activity.IDLE, new TranslatableComponent("entity.status.relaxing").withStyle(ChatFormatting.GREEN)),
         INJURED(RegisterAI.INJURED.get(), new TranslatableComponent("entity.status.injured").withStyle(ChatFormatting.RED)),
         RETREAT(AVOID, new TranslatableComponent("entity.status.retreat").withStyle(ChatFormatting.DARK_PURPLE)),
         COMBAT(FIGHT, new TranslatableComponent("entity.status.combat").withStyle(ChatFormatting.DARK_BLUE));
