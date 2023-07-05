@@ -2853,7 +2853,16 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         new CompanionUseCrossbowBehavior(),
                         new CompanionLaunchAircraftTask(this),
                         new CompanionShipRangedAttackBehavior(this),
-                        new AnimatableMeleeAttack<>(0).startCondition((entity)->entity.getMainHandItem().getItem() instanceof SwordItem && !this.isAnimating()).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false))
+                        new AnimatableMeleeAttack<>(0).startCondition((entity)->{
+                            LivingEntity target = BrainUtils.getTargetOfEntity(this);
+                            if(target == null || this.isAnimating()){
+                                return false;
+                            }
+                            else if(!(entity.getMainHandItem().getItem() instanceof SwordItem)){
+                                return false;
+                            }
+                            else return !(this instanceof IMeleeAttacker) || !((IMeleeAttacker) this).shouldUseNonVanillaAttack(target);
+                        }).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false))
                         ));
     }
 

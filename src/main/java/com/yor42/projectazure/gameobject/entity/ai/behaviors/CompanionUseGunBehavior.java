@@ -56,23 +56,6 @@ public class CompanionUseGunBehavior extends ExtendedBehaviour<AbstractEntityCom
     }
 
     @Override
-    protected void start(AbstractEntityCompanion entity) {
-
-        LivingEntity target = BrainUtils.getTargetOfEntity(entity);
-
-        if(target == null || !entity.wantsToAttack(target, entity)){
-            return;
-        }
-
-        if(entity.closerThan(target, entity.getSpellRange()) && entity.getSensing().hasLineOfSight(target)){
-            this.clearWalkTarget(entity);
-        }
-        else{
-            BehaviorUtils.setWalkAndLookTargetMemories(entity, target, 1,0);
-        }
-    }
-
-    @Override
     protected void tick(AbstractEntityCompanion entity) {
 
         LivingEntity target = BrainUtils.getTargetOfEntity(entity);
