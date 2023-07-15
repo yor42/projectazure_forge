@@ -45,7 +45,7 @@ public class CompanionUseSpellBehavior extends DelayedBehaviour<AbstractEntityCo
             return false;
         }
 
-        return super.checkExtraStartConditions(level, entity);
+        return ((ISpellUser) entity).shouldUseSpell(target);
     }
 
     @Override

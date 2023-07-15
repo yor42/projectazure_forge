@@ -30,14 +30,9 @@ import static com.yor42.projectazure.setup.register.RegisterContainer.RIGGING_IN
 
 public class RiggingContainer extends AbstractContainerMenu {
 
-    @Nullable
     public ItemStack riggingStack;
-    @Nullable
-    public UUID previousEntityUUID = null;
+    public UUID previousEntityUUID;
 
-    public RiggingContainer(int id, Inventory playerInv) {
-        super(RIGGING_INVENTORY.get(), id);
-    }
 
     public RiggingContainer(int id, Inventory playerInv, ItemStack riggingStack, @Nullable UUID ownerID) {
         super(RIGGING_INVENTORY.get(), id);
@@ -45,12 +40,36 @@ public class RiggingContainer extends AbstractContainerMenu {
         this.previousEntityUUID = ownerID;
 
         IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
+        for(enums.SLOTTYPE slottype:inventories.getAllKeys()){
+            Function<Integer, Integer> x;
+            Function<Integer, Integer> y;
 
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal()), i -> 7, i -> 34 + 18 * i, enums.SLOTTYPE.MAIN_GUN);
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal()), i -> 31 + 18 * i, i -> 34, enums.SLOTTYPE.SUB_GUN);
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.AA.ordinal()), i -> 151, i -> 34 + 18 * i, enums.SLOTTYPE.AA);
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.TORPEDO.ordinal()), i -> 30 + 18 * i, i -> 77, enums.SLOTTYPE.TORPEDO);
-        this.addSlots(inventories.getInventory(enums.SLOTTYPE.PLANE.ordinal()), i -> 30 + 18 * i, i -> 30, enums.SLOTTYPE.PLANE);
+            switch (slottype) {
+                default -> {
+                    x = i -> 7;
+                    y = i -> 34 + 18 * i;
+                }
+                case SUB_GUN -> {
+                    x = i -> 31 + 18 * i;
+                    y = i -> 34;
+                }
+                case AA -> {
+                    x = i -> 151;
+                    y = i -> 34 + 18 * i;
+                }
+                case TORPEDO -> {
+                    x = i -> 30 + 18 * i;
+                    y = i -> 77;
+                }
+                case PLANE -> {
+                    x = i -> 30 + 18 * i;
+                    y = i -> 30;
+                }
+            }
+
+            this.addSlots(inventories.getInventory(slottype), x,y,slottype);
+
+        }
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -71,12 +90,12 @@ public class RiggingContainer extends AbstractContainerMenu {
         ItemStack itemstack = ItemStack.EMPTY;
         IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             int hangercount = 0;
-            MultiInvStackHandler hanger = inventories.getInventory(enums.SLOTTYPE.PLANE.ordinal());
+            MultiInvStackHandler hanger = inventories.getInventory(enums.SLOTTYPE.PLANE);
             if (hanger != null) {
                 hangercount = Math.min(hanger.getSlots(), 6);
             }

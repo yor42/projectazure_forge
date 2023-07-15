@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,17 @@ public class CompanionReturnHomeFromMemory extends ExtendedBehaviour<AbstractEnt
         pVillager.releasePoi(HOME);
         brain.eraseMemory(HOME);
         brain.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, pTime);
+    }
+
+    @Override
+    protected boolean checkExtraStartConditions(ServerLevel level, AbstractEntityCompanion entity) {
+
+        GlobalPos pos = BrainUtils.getMemory(entity, HOME);
+        if(pos == null || pos.dimension() != level.dimension()){
+            return false;
+        }
+
+        return Math.sqrt(entity.distanceToSqr(pos.pos().getX(), pos.pos().getY(),pos.pos().getZ()))>=32 || level.isNight();
     }
 
     @Override

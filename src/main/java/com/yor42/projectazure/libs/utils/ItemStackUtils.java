@@ -104,28 +104,18 @@ public class ItemStackUtils {
         if (riggingStack.getItem() instanceof ItemRiggingBase) {
             IMultiInventory inventories = MultiInvUtil.getCap(riggingStack);
             int slotCount = MultiInvUtil.getSlotCount(inventories, enums.SLOTTYPE.values());
-            int toDamage = shouldDamageMultiple ? rollDamagingRiggingCount(slotCount) : 1;
-            Set<Integer> slotsToDamage = new HashSet<>();
 
-            int mainDamagedSlot = generateRandomInt(slotCount);
-            ItemStack mainDamageStack = MultiInvUtil.getStack(inventories, mainDamagedSlot);
+            ItemStack mainDamageStack = MultiInvUtil.getRandomStack(inventories);
             if (mainDamageStack.getItem() instanceof ItemEquipmentBase) {
                 DamageItem(damage, mainDamageStack);
             }
             else{
                 mainDamageStack.hurt(MathUtil.generateRandomIntInRange(1, 3), MathUtil.rand, null);
             }
-            toDamage--;
+            int toDamage = shouldDamageMultiple ? rollDamagingRiggingCount(slotCount) : 0;
 
-            while (slotsToDamage.size() < toDamage) {
-                int slot = generateRandomInt(slotCount);
-                if (slot != mainDamagedSlot) {
-                    slotsToDamage.add(slot);
-                }
-            }
-
-            for (int slot : slotsToDamage) {
-                ItemStack stackToDamage = MultiInvUtil.getStack(inventories, slot);
+            for(int i=0; i<toDamage; i++){
+                ItemStack stackToDamage = MultiInvUtil.getRandomStack(inventories);
                 if (stackToDamage.getItem() instanceof ItemEquipmentBase) {
                     DamageItem(damage * 0.4f, stackToDamage);
                 }else{
@@ -200,38 +190,37 @@ public class ItemStackUtils {
 
 
     @Nonnull
-    public static Optional<Pair<enums.SLOTTYPE, Integer>> getPreparedWeapon(LivingEntity shooter, ItemStack rigging, enums.SLOTTYPE... slottypes){
+    public static Optional<Pair<enums.SLOTTYPE, Integer>> getPreparedWeapon(LivingEntity shooter, ItemStack rigging, enums.SLOTTYPE... slottypes) {
 
-        if(!rigging.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).isPresent()){
+        if (!rigging.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).isPresent()) {
             return Optional.empty();
         }
 
         AtomicReference<Pair<enums.SLOTTYPE, Integer>> returnvalue = new AtomicReference<>(null);
 
-        for(enums.SLOTTYPE slot:slottypes) {
+        rigging.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).ifPresent(inventories -> {
+                    for (enums.SLOTTYPE slot : inventories.getAllKeys()) {
+                        IItemHandler equipments = inventories.getInventory(slot);
+                        boolean isplane = slot == enums.SLOTTYPE.PLANE;
+                        for (int i = 0; i < equipments.getSlots(); i++) {
 
-                rigging.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).ifPresent(inventories -> {
-                            IItemHandler equipments = inventories.getInventory(slot);
-                            boolean isplane = slot == enums.SLOTTYPE.PLANE;
-                            for (int i = 0; i < equipments.getSlots(); i++) {
-
-                                ItemStack stack = equipments.getStackInSlot(i);
-                                if(isplane && !isPlaneReady(stack, (Mob) shooter)){
-                                    continue;
-                                }
-                                if (!slot.testPredicate(stack) || isDestroyed(stack) || getDelayofEquipment(equipments.getStackInSlot(i)) > 0) {
-                                    continue;
-                                } else if (slot == enums.SLOTTYPE.TORPEDO && isOutOfAmmo(stack)) {
-                                    continue;
-                                }
-
-                                returnvalue.set(new Pair<>(slot, i));
-                                return;
-
+                            ItemStack stack = equipments.getStackInSlot(i);
+                            if (isplane && !isPlaneReady(stack, (Mob) shooter)) {
+                                continue;
                             }
+                            if (!slot.testPredicate(stack) || isDestroyed(stack) || getDelayofEquipment(equipments.getStackInSlot(i)) > 0) {
+                                continue;
+                            } else if (slot == enums.SLOTTYPE.TORPEDO && isOutOfAmmo(stack)) {
+                                continue;
+                            }
+
+                            returnvalue.set(new Pair<>(slot, i));
+                            return;
+
                         }
-                );
-            }
+                    }
+                }
+        );
         return Optional.ofNullable(returnvalue.get());
     }
 

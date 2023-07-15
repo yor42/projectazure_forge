@@ -30,6 +30,7 @@ import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.CompanionSchedule;
 import com.yor42.projectazure.gameobject.entity.ai.behaviors.*;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.HealTargetSensor;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -172,6 +173,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
+import static com.yor42.projectazure.libs.utils.EntityUtils.EntityHasPlanes;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.RegisterAI.*;
 import static com.yor42.projectazure.setup.register.RegisterAI.Animations.*;
@@ -2845,7 +2847,33 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public BrainActivityGroup<AbstractEntityCompanion> getFightTasks() {
         return BrainActivityGroup.fightTasks(
                 new SetWalkTargetToAttackTarget<>(),
-                new InvalidateAttackTarget<>(),
+                new InvalidateAttackTarget<>().invalidateIf((entity, target)->{
+                    if(target instanceof Player pl){
+                        return (pl.isCreative() || pl.isSpectator());
+                    }
+
+                    if(entity instanceof AbstractEntityCompanion companion) {
+
+                        if (companion instanceof IMeleeAttacker && ((IMeleeAttacker) companion).shouldUseNonVanillaAttack(target)) {
+                            return false;
+                        } else if (companion instanceof ISpellUser && ((ISpellUser) companion).shouldUseSpell(target)) {
+                            return false;
+                        } else if (companion instanceof EntityKansenAircraftCarrier && EntityHasPlanes((EntityKansenBase) companion)) {
+                            return false;
+                        } else if (companion.isHolding(item -> item.getItem() instanceof CrossbowItem)) {
+                            return false;
+                        } else if (companion instanceof EntityKansenBase host) {
+                            boolean isArmed = host.canUseShell(host.getActiveShellCategory());
+                            boolean isSailing = host.isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
+                            if (isArmed && isSailing && host.canUseRigging()) {
+                                return false;
+                            }
+                        }
+
+                        return !companion.shouldUseGun() && !(companion.getMainHandItem().getItem() instanceof SwordItem);
+                    }
+                    return true;
+                }),
                 new FirstApplicableBehaviour<>(
                         new CompanionUseGunBehavior(),
                         new CompanionNonVanillaMeleeAttackBehavior(this),
@@ -2914,15 +2942,34 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return new BrainActivityGroup<AbstractEntityCompanion>(RegisterAI.ACTIVITY_RELAXING.get()).priority(10).behaviours(
                 new CompanionReturnHomeFromMemory(1, 2, 150, 1200),
                 new CompanionSleepInBed(),
-                new SBLInsideBrownianWalk<>(1),
-                new SBLSetClosestHomeAsWalkTarget<>(1),
+                new SBLSetClosestHomeAsWalkTarget<>(1).startCondition((e)->{
+                    GlobalPos pos = BrainUtils.getMemory(e, HOME);
+                    if(pos == null || pos.dimension() != e.level.dimension()){
+                        return false;
+                    }
+
+                    return Math.sqrt(e.distanceToSqr(pos.pos().getX(), pos.pos().getX(),pos.pos().getX()))>24;
+                }),
+                new OneRandomBehaviour<>(
+                        new SBLInsideBrownianWalk<>(1),// Run only one of the below behaviours, picked at random
+                        new SetRandomWalkTarget<>().speedModifier(1).walkTargetPredicate((mob,pos)->{
+                            GlobalPos glb = BrainUtils.getMemory(mob, HOME);
+                            if(pos == null || glb == null || glb.dimension() != mob.level.dimension()){
+                                return false;
+                            }
+
+                            if(mob.level.getMaxLocalRawBrightness(new BlockPos(pos.x, pos.y, pos.z))<=6){
+                                return false;
+                            }
+                            return Math.sqrt(pos.distanceToSqr(glb.pos().getX(),glb.pos().getY(),glb.pos().getZ()))<16;
+
+                            }), 				// Set the walk target to a nearby random pathable location
+                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))),
                 new FirstApplicableBehaviour<>(                // Run only one of the below behaviours, trying each one in order. Include explicit generic typing because javac is silly
                         new TargetOrRetaliate<AbstractEntityCompanion>().attackablePredicate((tgt)->tgt.isAlive() && this.shouldAttackFirst() && !this.isAlly(tgt)).isAllyIf(AbstractEntityCompanion::isAlly),                        // Set the attack target
                         new SetPlayerLookTarget<>(),                    // Set the look target to a nearby player if available
-                        new SetRandomLookTarget<>()),
-                new OneRandomBehaviour<>( 								// Run only one of the below behaviours, picked at random
-                        new SetRandomWalkTarget<>().speedModifier(1).walkTargetPredicate((mob,pos)->mob.level.getMaxLocalRawBrightness(new BlockPos(pos.x, pos.y, pos.z))>6), 				// Set the walk target to a nearby random pathable location
-                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))) // Don't walk anywhere// Set the look target to a random nearby location
+                        new SetRandomLookTarget<>())
+                // Don't walk anywhere// Set the look target to a random nearby location
         ).onlyStartWithMemoryStatus(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT).onlyStartWithMemoryStatus(RegisterAI.RESTING.get(), MemoryStatus.VALUE_PRESENT);
     }
 
@@ -3764,6 +3811,8 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         FOLLOWING_OWNER(Activity.IDLE, new TranslatableComponent("entity.status.following").withStyle(ChatFormatting.AQUA)),
         WAITING(RegisterAI.WAITING.get(), new TranslatableComponent("entity.status.waiting").withStyle(ChatFormatting.YELLOW)),
         SLEEPING(REST, new TranslatableComponent("entity.status.sleeping").withStyle(ChatFormatting.GRAY)),
+
+        RESTATHOME(RegisterAI.ACTIVITY_RELAXING.get(), new TranslatableComponent("entity.status.resting").withStyle(ChatFormatting.GREEN)),
         SITTING(RegisterAI.SITTING.get(), new TranslatableComponent("entity.status.sitting").withStyle(ChatFormatting.BLUE)),
         FAINTED(null, new TranslatableComponent("entity.status.fainted").withStyle(ChatFormatting.DARK_RED)),
         INJURED(RegisterAI.INJURED.get(), new TranslatableComponent("entity.status.injured").withStyle(ChatFormatting.RED)),

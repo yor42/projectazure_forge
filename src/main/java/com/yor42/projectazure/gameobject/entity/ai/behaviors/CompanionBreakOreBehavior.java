@@ -39,6 +39,12 @@ public class CompanionBreakOreBehavior extends BreakBlock<AbstractEntityCompanio
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, AbstractEntityCompanion entity) {
+
+
+        if(!entity.shouldHelpMine()){
+            return false;
+        }
+
         for (Pair<BlockPos, BlockState> pair : Objects.requireNonNull(BrainUtils.getMemory(entity, RegisterAI.NEAR_ORES.get()))) {
             if (this.targetBlockPredicate.test(entity, pair.getFirst(), pair.getSecond())) {
                 this.pos = pair.getFirst();

@@ -30,10 +30,10 @@ public class CompanionShipRangedAttackBehavior extends DelayedBehaviour<Abstract
             return false;
         }
         EntityKansenBase host = (EntityKansenBase) entity;
-        boolean isArmed = host.canUseShell(host.getActiveShellCategory()) && (host.can_UseCannon() || host.can_UseTorpedo() && host.isSailing());
+        boolean isArmed = host.canUseShell(host.getActiveShellCategory()) && (host.can_UseCannon() || host.can_UseTorpedo());
         boolean isSailing = host.isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
         boolean withinrange = host.closerThan(target, host.getCannonRange());
-        return isArmed && isSailing && withinrange;
+        return isArmed && isSailing && withinrange && entity.canUseRigging();
     }
 
     @Override

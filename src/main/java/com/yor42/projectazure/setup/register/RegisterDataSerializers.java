@@ -16,30 +16,6 @@ import java.util.function.Supplier;
 public class RegisterDataSerializers {
     public static final DeferredRegister<DataSerializerEntry> DATA_SERIALIZER = DeferredRegister.create(ForgeRegistries.Keys.DATA_SERIALIZERS, Constants.MODID);
 
-    public static final RegistryObject<DataSerializerEntry> ENTITY_ANIMATIONDATA = register("animationdata", ()->new EntityDataSerializer<Optional<EntityAnimationData>>() {
-        @Override
-        public void write(FriendlyByteBuf pBuffer, Optional<EntityAnimationData> pValue) {
-            pBuffer.writeBoolean(pValue.isPresent());
-            pValue.ifPresent((val)-> val.write(pBuffer));
-        }
-
-        @Override
-        public Optional<EntityAnimationData> read(FriendlyByteBuf pBuffer) {
-            boolean exists = pBuffer.readBoolean();
-
-            if(!exists){
-                return Optional.empty();
-            }
-            return Optional.of(EntityAnimationData.read(pBuffer));
-
-        }
-
-        @Override
-        public Optional<EntityAnimationData> copy(Optional<EntityAnimationData> pValue) {
-            return Optional.empty();
-        }
-    });
-
     private static RegistryObject<DataSerializerEntry> register(String name, Supplier<? extends EntityDataSerializer<?>> sup){
         return DATA_SERIALIZER.register(name, ()->new DataSerializerEntry(sup.get()));
     }

@@ -825,5 +825,6 @@
   "equiment.empty": "EMPTY",
   "gui.rigginginventory": "Rigging Equipments",
   "entity.not_enough_affection": "Not enough Affection!",
-  "message.commandstick.entity_pantrypos_applied": "Registered Pantry at %s for %s."
+  "message.commandstick.entity_pantrypos_applied": "Registered Pantry at %s for %s.",
+  "entity.status.resting": "Resting"
 }

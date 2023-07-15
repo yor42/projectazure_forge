@@ -1,36 +1,51 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.libs.enums;
+
+import java.util.List;
 
 public interface IMultiInventory {
 
     int getInventoryCount();
-    MultiInvStackHandler getInventory(int index);
 
-    default MultiInvStackHandler getInventory(enums.SLOTTYPE slottype){
-        return getInventory(slottype.ordinal());
-    }
+    MultiInvStackHandler getInventory(enums.SLOTTYPE slottype);
+
+    ImmutableList<MultiInvStackHandler> getAllInvs();
+
+    ImmutableList<enums.SLOTTYPE> getAllKeys();
 
     class Impl implements IMultiInventory {
 
-        MultiInvStackHandler[] inventories;
+        ImmutableMap<enums.SLOTTYPE, MultiInvStackHandler> inventories;
 
-        public Impl(MultiInvStackHandler... inventories) {
+        public Impl(ImmutableMap<enums.SLOTTYPE, MultiInvStackHandler> inventories) {
             this.inventories = inventories;
         }
 
         @Override
         public int getInventoryCount() {
-            return inventories.length;
+            return inventories.size();
         }
 
         @Override
-        public MultiInvStackHandler getInventory(int index) {
-            if (index < 0 || index >= inventories.length) {
-                throw new IllegalArgumentException(String.format("Argument 'index' out of bounds, value %d", index));
+        public MultiInvStackHandler getInventory(enums.SLOTTYPE type) {
+            if (!inventories.containsKey(type)) {
+                throw new IllegalArgumentException(String.format("Argument 'type' out of bounds, value %s", type.getName()));
             }
 
-            return inventories[index];
+            return inventories.get(type);
+        }
+
+        @Override
+        public ImmutableList<MultiInvStackHandler> getAllInvs() {
+            return inventories.values().asList();
+        }
+
+        @Override
+        public ImmutableList<enums.SLOTTYPE> getAllKeys() {
+            return inventories.keySet().asList();
         }
     }
 }

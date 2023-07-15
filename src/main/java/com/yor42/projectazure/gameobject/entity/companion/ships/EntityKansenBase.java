@@ -212,7 +212,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     @Nullable
     public IItemHandler getHanger() {
         if (this.hasRigging()) {
-            IItemHandler hangar = MultiInvUtil.getCap(this.getRigging()).getInventory(enums.SLOTTYPE.PLANE.ordinal());
+            IItemHandler hangar = MultiInvUtil.getCap(this.getRigging()).getInventory(enums.SLOTTYPE.PLANE);
             if (hangar.getSlots() > 0) {
                 return hangar;
             }
@@ -365,7 +365,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             return getPreparedWeapon(this, rigging, MAIN_GUN, SUB_GUN).flatMap((pair)->{
                         enums.SLOTTYPE cannonType = pair.getFirst();
                         int slotindex = pair.getSecond();
-                        ItemStack FiringCannon = MultiInvUtil.getCap(rigging).getInventory(cannonType.ordinal()).getStackInSlot(slotindex);
+                        ItemStack FiringCannon = MultiInvUtil.getCap(rigging).getInventory(cannonType).getStackInSlot(slotindex);
 
                         if(!(FiringCannon.getItem() instanceof ItemEquipmentBase)){
                             return Optional.of(false);
@@ -427,7 +427,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             enums.SLOTTYPE slottype = pair.getFirst();
             int index = pair.getSecond();
 
-            ItemStack torpedostack = MultiInvUtil.getCap(rigging).getInventory(slottype.ordinal()).getStackInSlot(index);
+            ItemStack torpedostack = MultiInvUtil.getCap(rigging).getInventory(slottype).getStackInSlot(index);
 
             Vec3 vector3d = this.getViewVector(1.0F);
             double d2 = target.getX() - (this.getX() + vector3d.x * 4.0D);

@@ -1,5 +1,7 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
+import com.google.common.collect.ImmutableMap;
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -21,9 +23,9 @@ public class RiggingItemCapabilityProvider implements ICapabilityProvider {
     protected ItemStack stack;
     protected final LivingEntity entity;
     private int fuelTankCapacity;
-    private MultiInvStackHandlerItemStack[] inventories;
+    private ImmutableMap<enums.SLOTTYPE, MultiInvStackHandler> inventories;
 
-    public RiggingItemCapabilityProvider(ItemStack stack, @Nullable LivingEntity entity, int FuelTankCapacity, MultiInvStackHandlerItemStack... inventories){
+    public RiggingItemCapabilityProvider(ItemStack stack, @Nullable LivingEntity entity, int FuelTankCapacity, ImmutableMap<enums.SLOTTYPE, MultiInvStackHandler> inventories){
         this.fuelTankCapacity = FuelTankCapacity;
         this.stack = stack;
         this.entity = entity;

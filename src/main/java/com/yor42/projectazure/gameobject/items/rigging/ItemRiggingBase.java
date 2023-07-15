@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -78,7 +79,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     protected enums.shipClass validclass;
-    protected final int maingunslotslots, subgunslots, torpedoslots, aaslots, hangerslots, utilityslots, fueltankcapacity;
+    protected final int maingunslotslots, subgunslots, torpedoslots, aaslots, hangerslots, storageslot,ammoslot, utilityslots, fueltankcapacity;
     protected boolean isShipRigging = true;
     protected Matrix4f dispatchedMat = new Matrix4f();
     protected Matrix4f renderEarlyMat = new Matrix4f();
@@ -111,7 +112,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         data.addAnimationController(new AnimationController(this, CONTROLLER_NAME, 0, this::predicate));
     }
 
-    public ItemRiggingBase(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots,int fuelcapccity, int HP) {
+    public ItemRiggingBase(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots,int storageslot,int ammoslot,int fuelcapacity, int HP) {
         super(properties, HP);
         GeckoLibNetwork.registerSyncable(this);
         this.maingunslotslots = maingunslotslots;
@@ -120,7 +121,13 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         this.torpedoslots = torpedoslots;
         this.hangerslots = hangerslots;
         this.utilityslots = utilityslots;
-        this.fueltankcapacity = fuelcapccity;
+        this.fueltankcapacity = fuelcapacity;
+        this.storageslot = storageslot;
+        this.ammoslot = ammoslot;
+    }
+
+    public ItemRiggingBase(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots ,int fuelcapacity, int HP) {
+        this(properties, maingunslotslots, subgunslots, aaslots, torpedoslots, hangerslots, utilityslots, 0,0,fuelcapacity,HP);
     }
 
     @Override
@@ -155,26 +162,23 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     @OnlyIn(Dist.CLIENT)
     public void addInformationAfterShift(ItemStack stack, IMultiInventory inventories, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
         TextColor CategoryColor = TextColor.parseColor("#6bb82d");
-        for(int i = 0; i< inventories.getInventoryCount(); i++){
-            IItemHandler Equipments = inventories.getInventory(i);
-            enums.SLOTTYPE slottype = enums.SLOTTYPE.values()[i];
-            //not really needed but its here to make mc to not add header of equipment that isnt supported by rigging
-            if(Equipments.getSlots()>0) {
-                if(slottype != enums.SLOTTYPE.PLANE) {
-                    tooltip.add((new TextComponent("===").append(new TranslatableComponent(slottype.getName()).append(new TextComponent("==="))).setStyle(Style.EMPTY.withColor(CategoryColor))));
-                    for (int j = 0; j < Equipments.getSlots(); j++) {
-                        ItemStack currentstack = Equipments.getStackInSlot(j);
-                        if (currentstack.getItem() instanceof ItemEquipmentBase)
-                            tooltip.add(currentstack.getHoverName().plainCopy().append(" (" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.withColor(getHPColor(currentstack))));
-                        else {
-                            tooltip.add((new TextComponent("-").append(new TranslatableComponent("equiment.empty")).append("-")).setStyle(Style.EMPTY.withItalic(true).withColor(TextColor.fromRgb(7829367))));
-                        }
+
+        for(enums.SLOTTYPE slottype:inventories.getAllKeys()) {
+            IItemHandler Equipments = inventories.getInventory(slottype);
+            if (slottype != enums.SLOTTYPE.PLANE) {
+                tooltip.add((new TextComponent("===").append(new TranslatableComponent(slottype.getName()).append(new TextComponent("==="))).setStyle(Style.EMPTY.withColor(CategoryColor))));
+                for (int j = 0; j < Equipments.getSlots(); j++) {
+                    ItemStack currentstack = Equipments.getStackInSlot(j);
+                    if (currentstack.getItem() instanceof ItemEquipmentBase)
+                        tooltip.add(currentstack.getHoverName().plainCopy().append(" (" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.withColor(getHPColor(currentstack))));
+                    else {
+                        tooltip.add((new TextComponent("-").append(new TranslatableComponent("equiment.empty")).append("-")).setStyle(Style.EMPTY.withItalic(true).withColor(TextColor.fromRgb(7829367))));
                     }
                 }
-                else{
-                    tooltip.add(new TranslatableComponent("item.tooltip.hanger_slot_usage").append(": " + getPlaneCount(stack) + "/" + getHangerSlots()));
-                }
+            } else {
+                tooltip.add(new TranslatableComponent("item.tooltip.hanger_slot_usage").append(": " + getPlaneCount(stack) + "/" + getHangerSlots()));
             }
+
         }
     }
 
@@ -186,6 +190,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
             if (player.isShiftKeyDown()) {
                 NetworkHooks.openGui((ServerPlayer) player, new RiggingContainer.Provider(stack, null), (buf) -> {
                     buf.writeItem(stack);
+                    buf.writeUUID(player.getUUID());
                 });
                 return InteractionResultHolder.success(stack);
             }
@@ -218,15 +223,21 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     public int getFuelTankCapacity(){return this.fueltankcapacity;}
 
-    public MultiInvStackHandlerItemStack[] createInventories(ItemStack container) {
-        return new MultiInvStackHandlerItemStack[]{
-                new MultiInvEquipmentHandlerItemStack(container, "MainGun", getMainGunSlotCount(), enums.SLOTTYPE.MAIN_GUN),
-                new MultiInvEquipmentHandlerItemStack(container, "SubGun", getSubGunSlotCount(), enums.SLOTTYPE.SUB_GUN),
-                new MultiInvEquipmentHandlerItemStack(container, "AA", getAASlotCount(), enums.SLOTTYPE.AA),
-                new MultiInvEquipmentHandlerItemStack(container, "Torpedo", getTorpedoSlotCount(), enums.SLOTTYPE.TORPEDO),
-                new MultiInvEquipmentHandlerItemStack(container, "Hangar", getHangerSlots(), enums.SLOTTYPE.PLANE),
-                new MultiInvEquipmentHandlerItemStack(container, "Utility", getUtilitySlots(), enums.SLOTTYPE.UTILITY)
-        };
+    public ImmutableMap<enums.SLOTTYPE, MultiInvStackHandler> createInventories(ItemStack container) {
+
+        ImmutableMap.Builder<enums.SLOTTYPE, MultiInvStackHandler> builder = new ImmutableMap.Builder<>();
+
+        int[] slotsize = {maingunslotslots, subgunslots, aaslots, torpedoslots, hangerslots, utilityslots, storageslot, ammoslot};
+
+        for(enums.SLOTTYPE slottype: enums.SLOTTYPE.values()){
+            int size = slotsize[slottype.ordinal()];
+            if(size<1){
+                continue;
+            }
+            builder.put(slottype, new MultiInvEquipmentHandlerItemStack(container, slottype.getName(), size, slottype));
+        }
+
+        return builder.build();
     }
 
     public abstract AnimatedGeoModel getModel();
@@ -239,8 +250,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     public void onUpdate(ItemStack stack) {
         IMultiInventory inventories = MultiInvUtil.getCap(stack);
-        for (int invIndex = 0; invIndex < inventories.getInventoryCount(); invIndex++) {
-            IItemHandler inventory = inventories.getInventory(invIndex);
+        for(MultiInvStackHandler inventory : inventories.getAllInvs()){
             for (int slot = 0; slot < inventory.getSlots(); slot++) {
                 ItemStack stackInSlot = inventory.getStackInSlot(0);
                 Item item = stackInSlot.getItem();
@@ -378,8 +388,8 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     @OnlyIn(Dist.CLIENT)
     public void RenderEquipments(ItemStack Rigging, GeoModel riggingModel, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
         IMultiInventory inventories = MultiInvUtil.getCap(Rigging);
-        for(enums.SLOTTYPE slottype : enums.SLOTTYPE.values()){
-            IItemHandler inventory = inventories.getInventory(slottype.ordinal());
+        for(enums.SLOTTYPE slottype : inventories.getAllKeys()){
+            IItemHandler inventory = inventories.getInventory(slottype);
             for(int i=0; i<inventory.getSlots(); i++){
                 ItemStack equipment = inventory.getStackInSlot(i);
                 Item item = equipment.getItem();
@@ -422,7 +432,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     private int getPlaneCount(ItemStack riggingStack) {
-        IItemHandler hangar = MultiInvUtil.getCap(riggingStack).getInventory(enums.SLOTTYPE.PLANE.ordinal());
+        IItemHandler hangar = MultiInvUtil.getCap(riggingStack).getInventory(enums.SLOTTYPE.PLANE);
         int count = 0;
         for (int i = 0; i < hangar.getSlots(); i++) {
             if (hangar.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase) {

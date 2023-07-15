@@ -31,7 +31,7 @@ public class CompanionSleepInBed extends ExtendedBehaviour<AbstractEntityCompani
     }
 
     protected boolean checkExtraStartConditions(ServerLevel pLevel, AbstractEntityCompanion pOwner) {
-        if (pOwner.isPassenger()) {
+        if (pOwner.isPassenger() || pLevel.isDay()) {
             return false;
         } else {
             Brain<?> brain = pOwner.getBrain();
@@ -48,7 +48,7 @@ public class CompanionSleepInBed extends ExtendedBehaviour<AbstractEntityCompani
                 }
 
                 BlockState blockstate = pLevel.getBlockState(globalpos.pos());
-                return globalpos.pos().closerToCenterThan(pOwner.position(), 2.0D) && blockstate.is(BlockTags.BEDS) && !blockstate.getValue(BedBlock.OCCUPIED);
+                return globalpos.pos().closerToCenterThan(pOwner.position(), 3.0D) && blockstate.is(BlockTags.BEDS) && !blockstate.getValue(BedBlock.OCCUPIED);
             }
         }
     }
@@ -73,13 +73,5 @@ public class CompanionSleepInBed extends ExtendedBehaviour<AbstractEntityCompani
 
     protected boolean timedOut(long pGameTime) {
         return false;
-    }
-
-    protected void stop(ServerLevel pLevel, AbstractEntityCompanion pEntity, long pGameTime) {
-        if (pEntity.isSleeping()) {
-            pEntity.stopSleeping();
-            this.nextOkStartTime = pGameTime + 40L;
-        }
-
     }
 }

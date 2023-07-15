@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.world.item.ItemStack;
 
 public class MultiInvUtil {
@@ -9,13 +10,6 @@ public class MultiInvUtil {
         return stack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
     }
 
-    public static int getSlotCount(IMultiInventory inventories, int[] indices) {
-        int sum = 0;
-        for (int index : indices) {
-            sum += inventories.getInventory(index).getSlots();
-        }
-        return sum;
-    }
 
     public static int getSlotCount(IMultiInventory inventories, enums.SLOTTYPE[] indices) {
         int sum = 0;
@@ -25,20 +19,10 @@ public class MultiInvUtil {
         return sum;
     }
 
-    public static ItemStack getStack(IMultiInventory inventories, int slot) {
-        int inventoryCount = inventories.getInventoryCount();
-        int currentInv = 0;
-
-        while (currentInv < inventoryCount && slot >= inventories.getInventory(currentInv).getSlots())
-        {
-            slot -= inventories.getInventory(currentInv).getSlots();
-        }
-
-        if (slot < inventories.getInventory(currentInv).getSlots())
-        {
-            return inventories.getInventory(currentInv).getStackInSlot(slot);
-        }
-
-        throw new IllegalArgumentException(String.format("Argument 'slot' out of bounds, index = %d but last inventory only has %d slots.", slot, inventories.getInventory(currentInv).getSlots()));
+    public static ItemStack getRandomStack(IMultiInventory inventories){
+        enums.SLOTTYPE slottype = inventories.getAllKeys().get(MathUtil.getRand().nextInt(inventories.getAllKeys().size()));
+        MultiInvStackHandler handler = inventories.getInventory(slottype);
+        return handler.getStackInSlot(MathUtil.getRand().nextInt(handler.getSlots()));
     }
+
 }

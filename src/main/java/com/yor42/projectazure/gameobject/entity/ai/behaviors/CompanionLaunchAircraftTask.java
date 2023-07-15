@@ -104,7 +104,7 @@ public class CompanionLaunchAircraftTask extends DelayedBehaviour<AbstractEntity
 
         if (e.getRigging().getItem() instanceof ItemRiggingBase) {
             if(e instanceof EntityKansenAircraftCarrier entity) {
-                IItemHandlerModifiable hanger = MultiInvUtil.getCap(entity.getRigging()).getInventory(enums.SLOTTYPE.PLANE.ordinal());
+                IItemHandlerModifiable hanger = MultiInvUtil.getCap(entity.getRigging()).getInventory(enums.SLOTTYPE.PLANE);
 
                 if (hanger == null) {
                     return;
