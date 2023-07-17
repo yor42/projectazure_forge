@@ -8,6 +8,7 @@ import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.armor.GasMaskRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineRecruitBeaconRenderer;
+import com.yor42.projectazure.events.ChargeFireHandler;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
@@ -117,6 +118,7 @@ public class Main
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, PAConfig.CONFIG_SPEC, "projectazure.toml");
         MinecraftForge.EVENT_BUS.register(new ModBusEventHandler());
+        MinecraftForge.EVENT_BUS.register(ChargeFireHandler.getInstance());
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);

@@ -20,6 +20,7 @@
     "MixinPotionItem",
     "ModuleAccessor",
     "PathNavigatorAccessors",
+    "ShootingHandlerAccessor",
     "SwimmerPathNavigatorAccess",
     "WeaponPoseAccessor"
   ],

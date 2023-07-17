@@ -1,10 +1,12 @@
 package com.yor42.projectazure.network.packets;
 
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.ClientEvents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
@@ -22,6 +24,14 @@ public class PlaySoundPacket {
 
     public PlaySoundPacket(SoundEvent soundEvent, SoundSource category, double x, double y, double z, float pitch, float volume){
         this(soundEvent.getRegistryName(),category, x,y,z,pitch,volume);
+    }
+
+    public PlaySoundPacket(SoundEvent soundEvent, SoundSource category, Entity entity, float pitch, float volume){
+        this(soundEvent.getRegistryName(),category, entity.getX(0.5),entity.getY(0.5),entity.getZ(0.5),pitch,volume);
+    }
+
+    public PlaySoundPacket(SoundEvent soundEvent, SoundSource category, Entity entity){
+        this(soundEvent.getRegistryName(),category, entity.getX(0.5),entity.getY(0.5),entity.getZ(0.5), MathUtil.getRand().nextFloat()*0.4F+0.8F,MathUtil.getRand().nextFloat()*0.4F+0.8F);
     }
 
     public PlaySoundPacket(ResourceLocation soundEvent, SoundSource category, double x, double y, double z, float pitch, float volume){

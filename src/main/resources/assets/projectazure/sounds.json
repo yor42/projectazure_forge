@@ -200,6 +200,13 @@
       }
     ]
   },
+  "supernova_charge": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/gun/supernova_charge"
+      }
+    ]
+  },
   "sangvis_cannon_fire": {
     "sounds": [
       {

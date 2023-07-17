@@ -27,6 +27,7 @@ public final class registerSounds {
     public static final SoundEvent SYRINGE_INJECT=registerSoundEvent("syringe_inject");
 
     public static final SoundEvent SUPERNOVA_FIRE = registerSoundEvent("supernova_fire");
+    public static final SoundEvent SUPERNOVA_CHARGE = registerSoundEvent("supernova_charge");
 
     public static final SoundEvent SANGVIS_CANNON_NOAMMO = registerSoundEvent("sangvis_cannon_noammo");
     public static final SoundEvent SANGVIS_CANNON_OPEN = registerSoundEvent("sangvis_cannon_open");
