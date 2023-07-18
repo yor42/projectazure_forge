@@ -1,50 +1,30 @@
 package com.yor42.projectazure.events;
 
-import com.tac.guns.Config;
 import com.tac.guns.client.InputHandler;
 import com.tac.guns.client.handler.AimingHandler;
-import com.tac.guns.client.handler.GunRenderingHandler;
-import com.tac.guns.client.handler.RecoilHandler;
-import com.tac.guns.client.handler.ShootingHandler;
-import com.tac.guns.common.Gun;
-import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
-import com.tac.guns.network.PacketHandler;
-import com.tac.guns.network.message.MessageEmptyMag;
-import com.tac.guns.network.message.MessageShoot;
-import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.items.ItemEnergyGun;
 import com.yor42.projectazure.interfaces.IChargeFire;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.mixin.ShootingHandlerAccessor;
 import com.yor42.projectazure.network.packets.PlaySoundPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.lwjgl.glfw.GLFW;
 
-import static com.tac.guns.client.handler.ShootingHandler.calcShootTickGap;
 import static com.tac.guns.client.handler.ShootingHandler.get;
 @Mod.EventBusSubscriber(modid = Constants.MODID)
 public class ChargeFireHandler {
@@ -102,15 +82,15 @@ public class ChargeFireHandler {
                     }
 
                     if (InputHandler.PULL_TRIGGER.down) {
-                        if (get().getShootTickGapLeft() == 0&& heldItem.getItem() instanceof IChargeFire) {
+                        if (get().getShootTickGapLeft() == 0&& heldItem.getItem() instanceof IChargeFire chargeFire) {
                             this.charging = true;
-                            if(((IChargeFire)heldItem.getItem()).getChargeSound() != null) {
+                            if(chargeFire.getChargeSound() != null) {
                                 float pitch = MathUtil.getRand().nextFloat()*0.4F+0.8F;
                                 float vol = MathUtil.getRand().nextFloat()*0.4F+0.8F;
-                                Main.NETWORK.sendToServer(new PlaySoundPacket(((IChargeFire)heldItem.getItem()).getChargeSound(), SoundSource.PLAYERS, player, pitch, vol));
-                                player.playSound(((IChargeFire)heldItem.getItem()).getChargeSound(), pitch, vol);
+                                Main.NETWORK.sendToServer(new PlaySoundPacket(chargeFire.getChargeSound(), SoundSource.PLAYERS, player, pitch, vol));
+                                player.playSound(chargeFire.getChargeSound(), pitch, vol);
                             }
-                            this.chargemaxtime = ((IChargeFire) heldItem.getItem()).getMaxChargeTime();
+                            this.chargemaxtime = chargeFire.getMaxChargeTime();
                         }
                     }
                 }
@@ -128,10 +108,11 @@ public class ChargeFireHandler {
                             this.shouldfire = false;
                         }
                         this.chargeprogress=0;
+                        this.charging = false;
+                        this.display_percentage();
                     }
+
                 }
-                this.charging = false;
-                this.display_percentage();
             }
         }
     }

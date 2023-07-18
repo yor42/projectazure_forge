@@ -824,6 +824,5 @@
   "team.defaultteamname": "New Team",
   "equiment.empty": "EMPTY",
   "gui.rigginginventory": "Rigging Equipments",
-  "entity.not_enough_affection": "Not enough Affection!",
-  "raw": "Raw %s"
+  "entity.not_enough_affection": "Not enough Affection!"
 }
