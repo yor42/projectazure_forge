@@ -26,7 +26,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.lwjgl.glfw.GLFW;
 
 import static com.tac.guns.client.handler.ShootingHandler.get;
-@Mod.EventBusSubscriber(modid = Constants.MODID)
+@Mod.EventBusSubscriber(modid = Constants.MODID, value = Dist.CLIENT)
 public class ChargeFireHandler {
 
     public ChargeFireHandler(){}

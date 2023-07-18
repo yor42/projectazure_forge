@@ -118,7 +118,10 @@ public class Main
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, PAConfig.CONFIG_SPEC, "projectazure.toml");
         MinecraftForge.EVENT_BUS.register(new ModBusEventHandler());
-        MinecraftForge.EVENT_BUS.register(ChargeFireHandler.getInstance());
+
+        if(isClient()){
+            MinecraftForge.EVENT_BUS.register(ChargeFireHandler.getInstance());
+        }
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
