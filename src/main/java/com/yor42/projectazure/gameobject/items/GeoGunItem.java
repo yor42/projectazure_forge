@@ -45,7 +45,7 @@ public class GeoGunItem extends ItemEnergyGun implements IAnimatable, ISyncable 
     }
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, ControllerID, 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, ControllerID, 1, this::predicate));
     }
 
     @Override
@@ -66,7 +66,7 @@ public class GeoGunItem extends ItemEnergyGun implements IAnimatable, ISyncable 
     public void onAnimationSync(int id, int state) {
         final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, ControllerID);
         if(state == ANIM_FIRE){
-            //controller.markNeedsReload();
+            controller.markNeedsReload();
             controller.setAnimation(FIRE);
         }
     }
@@ -75,6 +75,7 @@ public class GeoGunItem extends ItemEnergyGun implements IAnimatable, ISyncable 
     public void onfire(GunFireEvent.Post event){
         if(event.getStack().getItem() instanceof GeoGunItem && !event.isClient()){
             GeckoLibNetwork.syncAnimation(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getPlayer), this, GeckoLibUtil.guaranteeIDForStack(event.getStack(), (ServerLevel) event.getPlayer().getCommandSenderWorld()), ANIM_FIRE);
+
         }
     }
 

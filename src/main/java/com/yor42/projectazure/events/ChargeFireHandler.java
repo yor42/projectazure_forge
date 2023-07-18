@@ -31,7 +31,7 @@ public class ChargeFireHandler {
 
     public ChargeFireHandler(){}
 
-    private int chargemaxtime=0;
+    private int chargemaxtime=Integer.MAX_VALUE;
     private int chargeprogress=0;
     private boolean charging = false;
     private boolean shouldfire = false;
@@ -74,6 +74,11 @@ public class ChargeFireHandler {
                 return;
             }
             ItemStack heldItem = player.getMainHandItem();
+
+            if(heldItem.getOrCreateTag().getInt("CurrentFireMode") == 0){
+                return;
+            }
+
             if (event.getAction() == GLFW.GLFW_PRESS) {
                 if (heldItem.getItem() instanceof GunItem) {
                     int button = event.getButton();
@@ -82,7 +87,7 @@ public class ChargeFireHandler {
                     }
 
                     if (InputHandler.PULL_TRIGGER.down) {
-                        if (get().getShootTickGapLeft() == 0&& heldItem.getItem() instanceof IChargeFire chargeFire) {
+                        if (get().getShootTickGapLeft() <= 0&& heldItem.getItem() instanceof IChargeFire chargeFire) {
                             this.charging = true;
                             if(chargeFire.getChargeSound() != null) {
                                 float pitch = MathUtil.getRand().nextFloat()*0.4F+0.8F;
@@ -97,12 +102,8 @@ public class ChargeFireHandler {
             }
             else if (event.getAction() == GLFW.GLFW_RELEASE && event.getButton() == InputHandler.PULL_TRIGGER.keyCode().getValue()) {
                 if (heldItem.getItem() instanceof GunItem) {
-                    int button = event.getButton();
-                    if (button == 0 || button == 1 && AimingHandler.get().isLookingAtInteractableBlock()) {
-                        event.setCanceled(true);
-                    }
                     if (heldItem.getItem() instanceof IChargeFire) {
-                        if(get().getShootTickGapLeft() == 0&& get().getshootMsGap() <= 0.0F && this.chargeprogress>=this.chargemaxtime) {
+                        if(get().getShootTickGapLeft() <= 0&& get().getshootMsGap() <= 0.0F && this.chargeprogress>=this.chargemaxtime) {
                             this.shouldfire = true;
                             get().fire(player, heldItem);
                             this.shouldfire = false;

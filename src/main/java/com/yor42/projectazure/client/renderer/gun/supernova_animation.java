@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class supernova_animation implements IOverrideModel {
