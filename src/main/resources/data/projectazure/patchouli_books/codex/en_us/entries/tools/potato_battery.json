@@ -1,0 +1,12 @@
+{
+  "name": "item.projectazure.potato_battery",
+  "icon": "projectazure:potato_battery",
+  "category": "projectazure:tools",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:potato_battery",
+      "text": "projectazure.codex.entry.potato_battery.description"
+    }
+  ]
+}

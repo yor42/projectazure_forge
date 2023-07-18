@@ -758,7 +758,7 @@
   "death.attack.frostbite_1": "%1$s took chill pill",
 
   "modifier.projectazure.assimilating": "Assimilating",
-  "modifier.projectazure.assimilating.flavor": "Don't eat these.",
+  "modifier.projectazure.assimilating.flavor": "Dangerous for Consumption.",
   "modifier.projectazure.assimilating.description": "Mined Blocks now has chance of dropping originium shard.",
 
   "modifier.projectazure.absorption": "Absorption",
@@ -767,7 +767,7 @@
 
   "modifier.projectazure.mystery": "Mystery",
   "modifier.projectazure.mystery.flavor": "Archived Blue!",
-  "modifier.projectazure.mystery.description": "By chance, tools durability does not decrease.",
+  "modifier.projectazure.mystery.description": "Tool's durability does not decrease by chance.",
   "modifier.projectazure.mystery.tooltip": "Tool does not get damaged by %s chance.",
 
   "top.companion_level.message": "Level: %s",
@@ -808,6 +808,7 @@
 
   "projectazure.codex.entry.alloy_furnace.description": "Alloy Furnace is modified version of furnace that mixes 2 different metal and makes alloy.$(br)It is also the stepping stone for every machine or Project:Azure.",
   "projectazure.codex.entry.primitive_originium_battery.description": "\"This is just an iron and copper rod shoved into originium prime! how does this even store power!?\"$(br)$(br)- Old Reunion movement Research note",
+  "projectazure.codex.entry.potato_battery.description": "May look like cheap childern's science project, but still powerful enough to run one sophisticated and crazy AI.",
 
   "projectazure.codex.entry.pantry.title": "Pantry",
   "projectazure.codex.entry.pantry.description": "Pantries are very similar to large chest, but smaller, and can only store foods.$(br)also, your companions can take food from pantries by their own.$(br)you can also use different types of wood for different design.",

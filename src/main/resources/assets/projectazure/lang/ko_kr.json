@@ -667,8 +667,8 @@
   "ore": "%s 광석",
   "gear": "%s 기어",
   "block": "%s 블럭",
-  "raw_ore": "Raw %s",
-  "deepslate_ore": "Deepslate %s Ore",
+  "raw_ore": "%s 원석",
+  "deepslate_ore": "심층암 %s광석",
 
   "brass": "황동",
   "copper": "구리",
@@ -766,7 +766,7 @@
   "modifier.projectazure.absorption.description": "채굴된 오리지늄 원암과 오리지늄을 흡수해 도구를 수리합니다.",
 
   "modifier.projectazure.mystery": "신비",
-  "modifier.projectazure.mystery.flavor": "우리는 기억한다 수리의 귀찮음을. 우리는 원한다 오래가는 도구를.",
+  "modifier.projectazure.mystery.flavor": "몰?루.",
   "modifier.projectazure.mystery.description": "일정확률로 도구의 내구도가 소모되지 않습니다.",
   "modifier.projectazure.mystery.tooltip": "%s의 확률로 내구도가 소모되지 않습니다.",
 
@@ -798,7 +798,7 @@
   "projectazure.codex.category.tools.description": "프로젝트: 애저가 추가하는 도구들을 다룹니다",
 
   "projectazure.codex.entry.defibrilator.title": "제세동기",
-  "projectazure.codex.entry.defibrilator.introduction1": "우리는 모두 실수를 하죠. 그게 크리퍼가 되었든, 용암이 되었던지요. 그리고 우리 모두 그 실수때문에 댕댕이를 잃거나 아이템을 태워먹거나 하는 일이 한번쯤인 있었을겁니다. 프로젝트 애저는 동료가 죽더라도 걱정하지 마세요. 이 간지나는 제세동기는 이유 불문하고 죽인 동료를 살려 드립니다! 또한, 이 제세동기가지고 다른 몹들을 지지고 다닐 수도 있습니다.!",
+  "projectazure.codex.entry.defibrilator.introduction1": "우리는 모두 실수를 하죠. 그게 크리퍼가 되었든, 용암이 되었던지요. 그리고 우리 모두 그 실수때문에 댕댕이를 잃거나 아이템을 태워먹거나 하는 일이 한번쯤은 있었을겁니다. 프로젝트 애저에서는 동료가 죽더라도 걱정하지 마세요. 이 간지나는 제세동기는 이유 불문하고 죽인 동료를 살려 드립니다! 또한, 이 제세동기가지고 다른 몹들을 지지고 다닐 수도 있습니다.!",
   "projectazure.codex.entry.defibrilator.introduction2": "하지만 일반 도구들과 다르게, 이 제세동기는 일반 도구와는 다르게 1개의 아이템이 아니라 2개의 제세동기 패들과 1개의 충전기가 필요합니다. 충전기를 손에 든 채로 웅크리기+우클릭으로 전원을 켜고, 양손에 패들을 드세요. 그 상태에서 웅크리기+우클릭으로 축전기를 충전한 뒤에 목표물을 바라보며 다시한번 우클릭하시면 됩니다.",
 
   "projectazure.codex.entry.defib_paddle.guide.title": "제세동기 사용법",
@@ -808,6 +808,7 @@
 
   "projectazure.codex.entry.alloy_furnace.description": "합금로는 두개 이상의 금속을 섞어 합금을 만들어내는 기계입니다.$(br)또한 프로젝트: 애저의 모든 기계의 주춧돌이기도 합니다.",
   "projectazure.codex.entry.primitive_originium_battery.description": "\"이건 그냥 오리지늄에 쇠하고 구리막대기 끼워 놓은거잖아! 이게 무슨 감자냐? 그리고 이게 작동은 왜 되는건데!?\"$(br)$(br)- 낡은 리유니온 연구 노트",
+  "projectazure.codex.entry.potato_battery.description": "애들용 싸구려 장난감처럼 보여도 한 정신나간 강인공지능을 돌릴 정도는 됩니다.",
 
   "projectazure.codex.entry.pantry.title": "식품 저장고",
   "projectazure.codex.entry.pantry.description": "식품 저장고는 큰 상자와 매우 유사하지만, 음식만 담을 수 있고, 더 작습니다.$(br)또한 동료들은 여기서 자유롭게 음식을 가져갈 수 있으며,$(br)사용하는 나무 종류별로 다른 디자인이 나옵니다.",
