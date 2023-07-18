@@ -23,6 +23,8 @@ import com.yor42.projectazure.mixin.ShootingHandlerAccessor;
 import com.yor42.projectazure.network.packets.PlaySoundPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -49,8 +51,8 @@ public class ChargeFireHandler {
 
     public ChargeFireHandler(){}
 
-    private int chargemaxtime;
-    private int chargeprogress;
+    private int chargemaxtime=0;
+    private int chargeprogress=0;
     private boolean charging = false;
     private boolean shouldfire = false;
 
@@ -76,6 +78,10 @@ public class ChargeFireHandler {
         } else {
             return false;
         }
+    }
+
+    public boolean shouldfire() {
+        return this.shouldfire;
     }
 
     @SubscribeEvent
@@ -136,7 +142,7 @@ public class ChargeFireHandler {
         if (this.isInGame()) {
             Minecraft mc = Minecraft.getInstance();
             Player player = mc.player;
-            if (player != null && this.charging) {
+            if (player != null && player.getMainHandItem().getItem() instanceof IChargeFire && this.charging) {
                 this.chargeprogress = Math.min(this.chargemaxtime, ++this.chargeprogress);
                 this.display_percentage();
             }
@@ -151,24 +157,17 @@ public class ChargeFireHandler {
             float prog = (float) this.chargeprogress / this.chargemaxtime;
             ChatFormatting color = ChatFormatting.DARK_RED;
             int percentage = (int) (prog * 100);
-            if (percentage > 60) {
+            BaseComponent text = new TranslatableComponent("gun.desc.charging", percentage + "%");
+            if(percentage == 100){
+                color = ChatFormatting.BLUE;
+                text = new TranslatableComponent("gun.desc.ready");
+            }
+            else if (percentage > 60) {
                 color = ChatFormatting.GREEN;
             } else if (percentage > 30) {
                 color = ChatFormatting.YELLOW;
             }
-            player.displayClientMessage(new TranslatableComponent("gun.desc.charging", percentage + "%").withStyle(ChatFormatting.BOLD).withStyle(color), true);
-        }
-    }
-    //TODO fix this
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    @OnlyIn(Dist.CLIENT)
-    public void onGunFire(GunFireEvent.Pre event) {
-        ItemStack gunstack = event.getStack();
-        Item gunItem = gunstack.getItem();
-        if(gunItem instanceof IChargeFire){
-            if(!this.shouldfire) {
-                event.setCanceled(true);
-            }
+            player.displayClientMessage(text.withStyle(ChatFormatting.BOLD).withStyle(color), true);
         }
     }
     @SubscribeEvent

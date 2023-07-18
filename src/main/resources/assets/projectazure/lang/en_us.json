@@ -827,5 +827,6 @@
   "entity.not_enough_affection": "Not enough Affection!",
   "message.commandstick.entity_pantrypos_applied": "Registered Pantry at %s for %s.",
   "entity.status.resting": "Resting",
-  "gun.desc.charging": "Charge: %s"
+  "gun.desc.charging": "Charge: %s",
+  "gun.desc.ready": "CHARGING COMPLETE!"
 }

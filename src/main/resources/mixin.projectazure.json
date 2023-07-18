@@ -18,6 +18,7 @@
     "MixinModules",
     "MixinPlayerEntity",
     "MixinPotionItem",
+    "MixinShootingHandler",
     "ModuleAccessor",
     "PathNavigatorAccessors",
     "ShootingHandlerAccessor",
