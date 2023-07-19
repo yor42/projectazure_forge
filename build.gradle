@@ -24,7 +24,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '0.9.14-IDP-1.18.2'
+version = '0.10-IDP-1.18.2'
 group = 'com.yor42.projectrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
