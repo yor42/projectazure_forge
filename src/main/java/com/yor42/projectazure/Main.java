@@ -150,6 +150,8 @@ public class Main
             registerMultiBlocks.setupDefinitions(event);
         }
 
+        registerManager.registerGrips();
+
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)

@@ -1,8 +1,12 @@
 package com.yor42.projectazure.setup.register;
 
+import com.tac.guns.client.render.pose.OneHandedPoseHighRes_m1873;
+import com.tac.guns.common.GripType;
+import com.yor42.projectazure.gameobject.grips.SupernovaPose;
 import com.yor42.projectazure.intermod.tconstruct.TinkersRegistry;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -69,4 +73,7 @@ public class registerManager {
 
     }
 
+    public static void registerGrips() {
+        GripType.registerType(new GripType(new ResourceLocation(Constants.MODID, "supernova"), new SupernovaPose()));
+    }
 }
