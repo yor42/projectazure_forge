@@ -7,10 +7,7 @@ import com.yor42.projectazure.client.renderer.entity.misc.EntityMissileDroneRend
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.*;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.*;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityHK416;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityW;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.*;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityKyaru;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
@@ -84,6 +81,8 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntitySkullShatterer>> SKULLSHATTERER = ENTITIES.register("entityskullshatterer", () -> EntityType.Builder.of(EntitySkullShatterer::new, MobCategory.CREATURE).sized(0.572F, 1.58F).build(ModResourceLocation("entityskullshatterer").toString()));
 
     public static final RegistryObject<EntityType<EntityShiroko>> SHIROKO = ENTITIES.register("entityshiroko", () -> EntityType.Builder.of(EntityShiroko::new, MobCategory.CREATURE).sized(0.572F, 1.575F).build(ModResourceLocation("entityshiroko").toString()));
+    public static final RegistryObject<EntityType<EntitySaori>> SAORI = ENTITIES.register("entitysaori", () -> EntityType.Builder.of(EntitySaori::new, MobCategory.CREATURE).sized(0.572F, 1.67F).build(ModResourceLocation("entitysaori").toString()));
+    public static final RegistryObject<EntityType<EntityRabu>> RABU = ENTITIES.register("entityrabu", () -> EntityType.Builder.of(EntityRabu::new, MobCategory.CREATURE).sized(0.572F, 1.6F).build(ModResourceLocation("entityrabu").toString()));
 
     public static final RegistryObject<EntityType<EntityHK416>> HK416 = ENTITIES.register("entityhk416", () -> EntityType.Builder.of(EntityHK416::new, MobCategory.CREATURE).sized(0.572F, 1.58F).build(ModResourceLocation("entityhk416").toString()));public static final RegistryObject<EntityType<EntityM4A1>> M4A1 = ENTITIES.register("entitym4a1", () -> EntityType.Builder.of(EntityM4A1::new, MobCategory.CREATURE).sized(0.65F, 1.825F).build(ModResourceLocation("entitym4a1").toString()));
     public static final RegistryObject<EntityType<EntityNagato>> NAGATO = ENTITIES.register("entitynagato", () -> EntityType.Builder.of(EntityNagato::new, MobCategory.CREATURE).sized(0.572F, 1.32F).build(ModResourceLocation("entitynagato").toString()));
@@ -110,6 +109,8 @@ public class registerEntity {
         event.put(PLANE_F4FWILDCAT.get(), EntityF4fWildcat.MutableAttribute().build());
         event.put(MISSILEDRONE.get(), EntityMissileDrone.MutableAttribute().build());
         event.put(SHIROKO.get(), EntityShiroko.MutableAttribute().build());
+        event.put(SAORI.get(), EntitySaori.MutableAttribute().build());
+        event.put(RABU.get(), EntityRabu.MutableAttribute().build());
         event.put(NAGATO.get(), EntityNagato.MutableAttribute().build());
         event.put(CHEN.get(), EntityChen.MutableAttribute().build());
         event.put(ROSMONTIS.get(), EntityRosmontis.MutableAttribute().build());
@@ -151,6 +152,8 @@ public class registerEntity {
         event.registerEntityRenderer(registerEntity.LAFFEY.get(), EntityLaffeyRenderer::new);
         event.registerEntityRenderer(registerEntity.GANGWON.get(), entityGangwonRenderer::new);
         event.registerEntityRenderer(registerEntity.SHIROKO.get(), entityShirokoRenderer::new);
+        event.registerEntityRenderer(registerEntity.SAORI.get(), EntitySaoriRenderer::new);
+        event.registerEntityRenderer(registerEntity.RABU.get(), EntityRabuRenderer::new);
         event.registerEntityRenderer(registerEntity.ENTERPRISE.get(), entityEnterpriseRenderer::new);
         event.registerEntityRenderer(registerEntity.NAGATO.get(), entityNagatoRenderer::new);
         event.registerEntityRenderer(registerEntity.CHEN.get(), EntityChenRenderer::new);

@@ -2,22 +2,15 @@ package com.yor42.projectazure.gameobject.entity.companion.gunusers;
 
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
-import com.yor42.projectazure.gameobject.items.ItemMissleDrone;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
@@ -28,21 +21,20 @@ import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public class EntityShiroko extends EntityGunUserBase {
-    @Override
-    public enums.EntityType getEntityType() {
-        return enums.EntityType.BLUEARCHIVE;
-    }
-
-    public EntityShiroko(EntityType<? extends TamableAnimal> type, Level worldIn) {
+public class EntitySaori extends EntityGunUserBase{
+    public EntitySaori(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
     @Override
     public enums.GunClass getGunSpecialty() {
         return enums.GunClass.AR;
+    }
+
+    @Override
+    public enums.EntityType getEntityType() {
+        return enums.EntityType.BLUEARCHIVE;
     }
 
     @Override
@@ -53,6 +45,11 @@ public class EntityShiroko extends EntityGunUserBase {
         }
 
         return super.hurt(source, amount);
+    }
+
+    @Override
+    public int Reload_Anim_Delay() {
+        return 63;
     }
 
     @Override
@@ -135,17 +132,6 @@ public class EntityShiroko extends EntityGunUserBase {
     }
 
     @Override
-    public int Reload_Anim_Delay() {
-        return 63;
-    }
-
-    @Nonnull
-    @Override
-    public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.STAR_5;
-    }
-
-    @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
         if(this.isOnPlayersBack()){
@@ -165,11 +151,11 @@ public class EntityShiroko extends EntityGunUserBase {
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-                if (this.isCriticallyInjured()) {
-                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("sit_injured_leg_idle", ILoopType.EDefaultLoopTypes.LOOP));
-                } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
-                }
+            if (this.isCriticallyInjured()) {
+                event.getController().setAnimation(builder.addAnimation("sit_injured_leg", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("sit_injured_leg_idle", ILoopType.EDefaultLoopTypes.LOOP));
+            } else {
+                event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
+            }
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {
@@ -193,78 +179,16 @@ public class EntityShiroko extends EntityGunUserBase {
     {
         return Mob.createMobAttributes()
                 //Attribute
-                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ShirokoMovementSpeed.get())
-                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ShirokoSwimSpeed.get())
-                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.ShirokoHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.ShirokoAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.SaoriMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.SaoriSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.SaoriHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.SaoriAttackDamage.get())
                 ;
     }
 
+    @Nonnull
     @Override
-    public boolean performOneTimeSkill(LivingEntity target) {
-
-        ItemStack stack = this.getSkillItem(0);
-        if(stack.getItem() instanceof ItemMissleDrone && this.getTarget() != null){
-            AbstractEntityFollowingDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getLevel(), stack, this);
-            if(drone != null){
-                drone.setTarget(this.getTarget());
-                this.getLevel().addFreshEntity(drone);
-                stack.shrink(1);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean canUseSkill(LivingEntity target) {
-
-        if(!super.canUseSkill(target)){
-            return false;
-        }
-
-        ItemStack droneStack = this.getInventory().getStackInSlot(12);
-        if(droneStack.getItem() instanceof ItemMissleDrone) {
-            boolean hasSkillItem = this.isSkillItem(droneStack);
-            boolean isDroneReady = ItemStackUtils.getCurrentHP(droneStack) > 2;
-            boolean isDroneArmed = ItemStackUtils.getRemainingAmmo(droneStack) > 0;
-            return hasSkillItem && isDroneArmed && isDroneReady;
-        }
-        return false;
-    }
-
-    @Nullable
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return this.getAffection()>=90? registerSounds.SHIROKO_TALK_HIGH_AFFECTION :registerSounds.SHIROKO_TALK_NORMAL;
-    }
-
-    @Nullable
-    @Override
-    protected SoundEvent getAggroedSoundEvent() {
-        return registerSounds.SHIROKO_TALK_ATTACK;
-    }
-
-    @Nullable
-    @Override
-    public SoundEvent getPatSoundEvent() {
-        return registerSounds.SHIROKO_TALK_PAT;
-    }
-
-    @Nullable
-    @Override
-    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSourceIn) {
-        return registerSounds.SHIROKO_HURT;
-    }
-
-    @Nullable
-    @Override
-    protected SoundEvent getDeathSound() {
-        return registerSounds.SHIROKO_FAINT;
-    }
-
-    @Override
-    public boolean isSkillItem(ItemStack stack) {
-        return stack.getItem() instanceof ItemMissleDrone;
+    public enums.CompanionRarity getRarity() {
+        return enums.CompanionRarity.STAR_5;
     }
 }

@@ -73,6 +73,16 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue ShirokoAttackDamage;
         public final ForgeConfigSpec.DoubleValue ShirokoMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue SaoriHealth;
+        public final ForgeConfigSpec.DoubleValue SaoriSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue SaoriAttackDamage;
+        public final ForgeConfigSpec.DoubleValue SaoriMovementSpeed;
+
+        public final ForgeConfigSpec.DoubleValue RabuHealth;
+        public final ForgeConfigSpec.DoubleValue RabuSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue RabuAttackDamage;
+        public final ForgeConfigSpec.DoubleValue RabuMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue M4A1Health;
         public final ForgeConfigSpec.DoubleValue M4A1SwimSpeed;
         public final ForgeConfigSpec.DoubleValue M4A1AttackDamage;
@@ -364,6 +374,16 @@ public class PAConfig {
             ShirokoSwimSpeed = builder.defineInRange("Swim Speed of Shiroko", 1F, 0, 1024);
             ShirokoAttackDamage = builder.defineInRange("Attack Damage of Shiroko", 2.0F, 0, 1024);
             ShirokoMovementSpeed = builder.defineInRange("Movement speed of Shiroko", 0.3F, 0, 2);
+
+            SaoriHealth = builder.defineInRange("Max Health of Saori", 40D, 1, 1024);
+            SaoriSwimSpeed = builder.defineInRange("Swim Speed of Saori", 1F, 0, 1024);
+            SaoriAttackDamage = builder.defineInRange("Attack Damage of Saori", 2.0F, 0, 1024);
+            SaoriMovementSpeed = builder.defineInRange("Movement speed of Saori", 0.3F, 0, 2);
+
+            RabuHealth = builder.defineInRange("Max Health of Rabu", 40D, 1, 1024);
+            RabuSwimSpeed = builder.defineInRange("Swim Speed of Rabu", 1F, 0, 1024);
+            RabuAttackDamage = builder.defineInRange("Attack Damage of Rabu", 2.0F, 0, 1024);
+            RabuMovementSpeed = builder.defineInRange("Movement speed of Rabu", 0.3F, 0, 2);
 
             builder.pop().push("Arknights");
             ChenHealth = builder.defineInRange("Max Health of Ch'en", 25D, 1, 1024);

@@ -768,6 +768,12 @@ public class RegisterItems {
 
     public static final RegistryObject<Item> SPAWN_SHIROKO = register_BA("spawnshiroko", () -> new ItemCompanionSpawnEgg<>(registerEntity.SHIROKO, new Item.Properties()
             .tab(PA_COMPANIONS)));
+    public static final RegistryObject<Item> SPAWN_SAORI = register_BA("spawnsaori", () -> new ItemCompanionSpawnEgg<>(registerEntity.SAORI, new Item.Properties()
+            .tab(PA_COMPANIONS)));
+
+    public static final RegistryObject<Item> SPAWN_RABU = register_BA("spawnrabu", () -> new ItemCompanionSpawnEgg<>(registerEntity.RABU, new Item.Properties()
+            .tab(PA_COMPANIONS)));
+
 
     public static final RegistryObject<Item> SPAWN_TEXAS = register_AKN("spawntexas", () -> new ItemCompanionSpawnEgg<>(registerEntity.TEXAS, new Item.Properties()
             .tab(PA_COMPANIONS)));

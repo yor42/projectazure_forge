@@ -1090,7 +1090,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .pattern("LPL")
                 .unlockedBy("has_part", has(ItemTags.CRIMSON_STEMS))
                 .save(consumer);
-
+        /*
         ShapedRecipeBuilder.shaped(OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getStackForm().getItem(), 1)
                 .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
@@ -1103,6 +1103,8 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .pattern("CFC")
                 .unlockedBy("has_part", has(RegisterItems.ADVANCED_MOTOR.get()))
                 .save(consumer);
+
+
 
         ShapedRecipeBuilder.shaped(HatchTE.ItemHatchDefinition.getStackForm().getItem(), 4)
                 .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
@@ -1154,6 +1156,8 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .pattern(" F ")
                 .unlockedBy("has_part", has(RegisterItems.FOR_DESTABILIZER.get()))
                 .save(consumer);
+
+         */
 
         ShapedRecipeBuilder.shaped(RegisterItems.KYARU_STAFF.get(), 1)
                 .define('S', Tags.Items.RODS_WOODEN)
@@ -1710,6 +1714,8 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
                 .save(consumer);
 
+        /*
+
         ShapedRecipeBuilder.shaped(RiftwayControllerTE.RiftwayDefinition.getStackForm().getItem())
                 .define('C', RegisterItems.COMPUTERCORE.get())
                 .define('W', RegisterItems.WISDOM_CUBE.get())
@@ -1748,6 +1754,8 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .pattern("POP")
                 .unlockedBy("has_item", has(RegisterItems.BASIC_MOTOR.get()))
                 .save(consumer);
+
+         */
 
         ShapedRecipeBuilder.shaped(RegisterItems.DRONE_BAMISSILE.get())
                 .define('C', RegisterItems.COMPUTERCORE.get())

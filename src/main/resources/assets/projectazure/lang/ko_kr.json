@@ -603,6 +603,8 @@
   "entity.projectazure.entityhk416": "HK416",
 
   "entity.projectazure.entityshiroko": "시로코",
+  "entity.projectazure.entitysaori": "사오리",
+  "entity.projectazure.entityrabu": "라브",
 
   "entity.projectazure.entitychen": "첸",
   "entity.projectazure.entityamiya": "아미야",
@@ -619,7 +621,7 @@
   "entity.projectazure.entitynearl": "니어",
   "entity.projectazure.entityyato": "야토",
   "entity.projectazure.entityw": "W",
-  "entity.projectazure.entityskullshatterer": "스컬셰터러",
+  "entity.projectazure.entityskullshatterer": "스컬슈레더",
 
   "entity.projectazure.entityartoria": "아르토리아 펜드래건",
   "entity.projectazure.entityscathath": "스카사하",
@@ -825,5 +827,9 @@
   "team.defaultteamname": "New Team",
   "equiment.empty": "EMPTY",
   "gui.rigginginventory": "Rigging Equipments",
-  "entity.not_enough_affection": "Not enough Affection!"
+  "entity.not_enough_affection": "Not enough Affection!",
+  "message.commandstick.entity_pantrypos_applied": "Registered Pantry at %s for %s.",
+  "entity.status.resting": "Resting",
+  "gun.desc.charging": "Charge: %s",
+  "gun.desc.ready": "충전 완료!"
 }
