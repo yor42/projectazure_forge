@@ -81,8 +81,8 @@ public class RegisterBlocks {
     public static final RegistryObject<Block> MANGANESE_BLOCK = registerMaterialBlock("manganese");
     public static final RegistryObject<Block> INCANDESCENT_ALLOY_BLOCK = registerMaterialBlock("incandescent_alloy");
 
-    public static final RegistryObject<Block> ORIROCK = register_simplemodel("orirock",() -> new OreBlock(BlockBehaviour.Properties.of(Material.STONE).friction(0).strength(1.5F, 3F)), Main.PA_RESOURCES);
-    public static final RegistryObject<Block> COBBLED_ORIROCK = register_simplemodel("cobbled_orirock",() -> new Block(BlockBehaviour.Properties.of(Material.STONE).friction(0).strength(1.5F, 3F)), Main.PA_RESOURCES);
+    public static final RegistryObject<Block> ORIROCK = register_simplemodel("orirock",() -> new OreBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 3F)), Main.PA_RESOURCES);
+    public static final RegistryObject<Block> COBBLED_ORIROCK = register_simplemodel("cobbled_orirock",() -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 3F)), Main.PA_RESOURCES);
     public static final RegistryObject<Block> CRUDE_OIL = register_noItem("crude_oil", ()->new LiquidBlock(()-> (FlowingFluid) RegisterFluids.CRUDE_OIL_FLOWING_REGISTRY.get(), BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> GASOLINE = register_noItem("gasoline", ()->new LiquidBlock(()-> (FlowingFluid) RegisterFluids.GASOLINE_SOURCE_REGISTRY.get(), BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> DIESEL = register_noItem("diesel", ()->new LiquidBlock(()-> (FlowingFluid) RegisterFluids.DIESEL_SOURCE_REGISTRY.get(), BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));

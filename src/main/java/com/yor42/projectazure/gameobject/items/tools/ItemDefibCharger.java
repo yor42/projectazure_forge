@@ -221,7 +221,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, controllerName, 1, this::predicate));
     }
 
     @Override
@@ -246,10 +246,10 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
         if (state == ANIM_ON) {
             // Always use GeckoLibUtil to get AnimationControllers when you don't have
             // access to an AnimationEvent
-            controller.setAnimation(new AnimationBuilder().addAnimation("on", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("on_still"));
+            controller.setAnimation(new AnimationBuilder().addAnimation("on", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("on_still", ILoopType.EDefaultLoopTypes.LOOP));
         }
         else if(state == ANIM_OFF){
-            controller.setAnimation(new AnimationBuilder().addAnimation("off", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("off_still"));
+            controller.setAnimation(new AnimationBuilder().addAnimation("off", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("off_still", ILoopType.EDefaultLoopTypes.LOOP));
         }
     }
 
