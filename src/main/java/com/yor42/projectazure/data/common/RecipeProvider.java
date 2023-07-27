@@ -386,6 +386,28 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_ZINC))
                 .save(consumer, "zinc_battery");
 
+        ShapedRecipeBuilder.shaped(RegisterItems.LED.get(),2)
+                .define('G', Tags.Items.GLASS_COLORLESS)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .define('P', ModTags.Items.GEM_PYROXENE)
+                .define('D', Tags.Items.DUSTS_GLOWSTONE)
+                .define('T', ModTags.Items.NUGGET_TIN)
+                .pattern(" G ")
+                .pattern("RPD")
+                .pattern("T T")
+                .unlockedBy("has_material", has(ModTags.Items.GEM_PYROXENE))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.EUV_ARRAY.get(),2)
+                .define('L', RegisterItems.LED.get())
+                .define('D', Tags.Items.GEMS_DIAMOND)
+                .define('C', ModTags.Items.CIRCUITS_BASIC)
+                .pattern("LLL")
+                .pattern("CLD")
+                .pattern("LLL")
+                .unlockedBy("has_material", has(RegisterItems.LED.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_STONE.get())
                 .define('I', Tags.Items.COBBLESTONE)
                 .define('S', Tags.Items.RODS_WOODEN)
@@ -1090,8 +1112,8 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .pattern("LPL")
                 .unlockedBy("has_part", has(ItemTags.CRIMSON_STEMS))
                 .save(consumer);
-        /*
-        ShapedRecipeBuilder.shaped(OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getStackForm().getItem(), 1)
+
+        MultiblockedShapedRecipeBuilder.shaped(OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition, 1)
                 .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
                 .define('P', Blocks.PISTON.asItem())
@@ -1106,7 +1128,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
 
 
-        ShapedRecipeBuilder.shaped(HatchTE.ItemHatchDefinition.getStackForm().getItem(), 4)
+        MultiblockedShapedRecipeBuilder.shaped(HatchTE.ItemHatchDefinition, 4)
                 .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', Tags.Items.CHESTS)
                 .define('D', RegisterItems.PRIMITIVE_DEVICE.get())
@@ -1127,7 +1149,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_part", has(RegisterBlocks.MACHINE_FRAME.get().asItem()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(HatchTE.EnergyHatchDefinition.getStackForm().getItem(), 4)
+        MultiblockedShapedRecipeBuilder.shaped(HatchTE.EnergyHatchDefinition, 4)
                 .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', Tags.Items.STORAGE_BLOCKS_REDSTONE)
                 .define('D', RegisterItems.PRIMITIVE_DEVICE.get())
@@ -1137,7 +1159,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_part", has(RegisterBlocks.MACHINE_FRAME.get().asItem()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(HatchTE.FluidHatchDefinition.getStackForm().getItem(), 4)
+        MultiblockedShapedRecipeBuilder.shaped(HatchTE.FluidHatchDefinition, 4)
                 .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', Items.BUCKET)
                 .define('D', RegisterItems.PRIMITIVE_DEVICE.get())
@@ -1147,7 +1169,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_part", has(RegisterBlocks.MACHINE_FRAME.get().asItem()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(HatchTE.EntityDefinition.getStackForm().getItem(), 4)
+        MultiblockedShapedRecipeBuilder.shaped(HatchTE.EntityDefinition, 4)
                 .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', RegisterItems.FOR_DESTABILIZER.get())
                 .define('D', RegisterItems.BASIC_DEVICE.get())
@@ -1157,7 +1179,6 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_part", has(RegisterItems.FOR_DESTABILIZER.get()))
                 .save(consumer);
 
-         */
 
         ShapedRecipeBuilder.shaped(RegisterItems.KYARU_STAFF.get(), 1)
                 .define('S', Tags.Items.RODS_WOODEN)
@@ -1714,9 +1735,8 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
                 .save(consumer);
 
-        /*
 
-        ShapedRecipeBuilder.shaped(RiftwayControllerTE.RiftwayDefinition.getStackForm().getItem())
+        MultiblockedShapedRecipeBuilder.shaped(RiftwayControllerTE.RiftwayDefinition)
                 .define('C', RegisterItems.COMPUTERCORE.get())
                 .define('W', RegisterItems.WISDOM_CUBE.get())
                 .define('P', RegisterItems.CRYSTALLINE_CIRCUIT.get())
@@ -1730,7 +1750,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_item", has(RegisterItems.FOR_DESTABILIZER.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getStackForm().getItem())
+        MultiblockedShapedRecipeBuilder.shaped(AdvancedAlloySmelterControllerTE.SMELTRYDefinition)
                 .define('C', RegisterBlocks.MACHINE_DYNAMO.get())
                 .define('D', RegisterItems.PRIMITIVE_DEVICE.get())
                 .define('I', RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get())
@@ -1742,7 +1762,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_item", has(RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(AmmoPressControllerTE.AmmoPressDefinition.getStackForm().getItem())
+        MultiblockedShapedRecipeBuilder.shaped(AmmoPressControllerTE.AmmoPressDefinition)
                 .define('C', RegisterBlocks.MACHINE_DYNAMO.get())
                 .define('D', RegisterItems.BASIC_DEVICE.get())
                 .define('I', Blocks.PISTON)
@@ -1754,8 +1774,6 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .pattern("POP")
                 .unlockedBy("has_item", has(RegisterItems.BASIC_MOTOR.get()))
                 .save(consumer);
-
-         */
 
         ShapedRecipeBuilder.shaped(RegisterItems.DRONE_BAMISSILE.get())
                 .define('C', RegisterItems.COMPUTERCORE.get())

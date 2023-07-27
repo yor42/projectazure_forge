@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "RPD",
+    "T T"
+  ],
+  "key": {
+    "G": {
+      "tag": "forge:glass/colorless"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "P": {
+      "tag": "forge:gems/pyroxene"
+    },
+    "D": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "T": {
+      "tag": "forge:nuggets/tin"
+    }
+  },
+  "result": {
+    "item": "projectazure:led",
+    "count": 2
+  }
+}

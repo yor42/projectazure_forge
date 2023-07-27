@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "CLD",
+    "LLL"
+  ],
+  "key": {
+    "L": {
+      "item": "projectazure:led"
+    },
+    "D": {
+      "tag": "forge:gems/diamond"
+    },
+    "C": {
+      "tag": "forge:circuits/basic"
+    }
+  },
+  "result": {
+    "item": "projectazure:euv_array",
+    "count": 2
+  }
+}

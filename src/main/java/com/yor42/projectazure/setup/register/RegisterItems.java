@@ -254,6 +254,12 @@ public class RegisterItems {
         }
     });
 
+    public static final RegistryObject<Item> LED = register("led", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> EUV_ARRAY = register("euv_array", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
     public static final RegistryObject<Item> TOKEN = register("token", () -> new ItemCompanionUpgrade(new Item.Properties()
             .tab(PA_RESOURCES)));
 
