@@ -3,7 +3,7 @@ package com.yor42.projectazure.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
+import com.yor42.projectazure.gameobject.misc.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;

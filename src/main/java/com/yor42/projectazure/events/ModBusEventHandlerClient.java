@@ -1,6 +1,6 @@
 package com.yor42.projectazure.events;
 
-import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
+import com.yor42.projectazure.gameobject.misc.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.color.item.ItemColors;

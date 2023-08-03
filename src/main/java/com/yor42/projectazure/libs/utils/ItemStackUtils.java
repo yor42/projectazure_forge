@@ -357,4 +357,31 @@ public class ItemStackUtils {
         }
     }
 
+    public static void TogglePower(@Nonnull ItemStack stack){
+        setOn(stack, isOn(stack));
+    }
+
+    public static boolean isOn(@Nonnull ItemStack stack){
+        return stack.getOrCreateTag().getBoolean("isOn");
+    }
+
+    public static void setOn(@Nonnull ItemStack stack, boolean value){
+        stack.getOrCreateTag().putBoolean("isOn", value);
+    }
+
+    public static int getChargeProgress(@Nonnull ItemStack stack){
+        return stack.getOrCreateTag().getInt("chargeProgress");
+    }
+
+    public static void setChargeProgress(@Nonnull ItemStack stack, int value){
+        stack.getOrCreateTag().putInt("chargeProgress", value);
+    }
+
+    public static boolean ShouldCharging(@Nonnull ItemStack stack){
+        return stack.getOrCreateTag().getBoolean("charging");
+    }
+
+    public static void setCharging(@Nonnull ItemStack stack, boolean value){
+        stack.getOrCreateTag().putBoolean("charging", value);
+    }
 }

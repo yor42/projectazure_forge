@@ -6,7 +6,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.items.GasMaskItem;
+import com.yor42.projectazure.gameobject.items.tools.GasMaskItem;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
@@ -247,7 +247,7 @@ public class ForgeBusEventHandler {
                 for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                     ItemStack invstack = player.getInventory().getItem(i);
                     Item item = invstack.getItem();
-                    if (item instanceof ItemDefibCharger && ItemDefibCharger.isOn(invstack) && ItemDefibCharger.getChargeProgress(invstack)==100) {
+                    if (item instanceof ItemDefibCharger && ItemStackUtils.isOn(invstack) && ItemStackUtils.getChargeProgress(invstack)==100) {
                         ChargerStack = invstack;
                         break;
                     }
@@ -256,7 +256,7 @@ public class ForgeBusEventHandler {
                 if(ChargerStack.isEmpty() && isCurioLoaded()){
                     ChargerStack = getCurioItemStack(player, (itemstack)->{
                         Item item = itemstack.getItem();
-                        return item instanceof ItemDefibCharger && ItemDefibCharger.isOn(itemstack) && ItemDefibCharger.getChargeProgress(itemstack) == 100;
+                        return item instanceof ItemDefibCharger && ItemStackUtils.isOn(itemstack) && ItemStackUtils.getChargeProgress(itemstack) == 100;
                     });
                     isCurio = true;
                 }
@@ -274,7 +274,7 @@ public class ForgeBusEventHandler {
                     }
 
                     if(PAConfig.CONFIG.FaintTimeLimit.get()>0) {
-                        ItemDefibCharger.setChargeProgress(ChargerStack, 0);
+                        ItemStackUtils.setChargeProgress(ChargerStack, 0);
                         player.playSound(registerSounds.DEFIB_SHOCK, 0.8F + (0.4F + MathUtil.getRand().nextFloat()), 0.8F + (0.4F + MathUtil.getRand().nextFloat()));
                         if (target instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) target).isDeadOrDying() && ((AbstractEntityCompanion) target).isOwnedBy(player)) {
                             ((AbstractEntityCompanion) target).reviveCompanion();
@@ -284,7 +284,7 @@ public class ForgeBusEventHandler {
                         }
 
                         if(isCurio){
-                            ItemDefibCharger.setOn(ChargerStack, false);
+                            ItemStackUtils.setOn(ChargerStack, false);
                         }
 
                         event.setCanceled(true);

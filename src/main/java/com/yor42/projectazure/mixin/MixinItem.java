@@ -1,6 +1,6 @@
 package com.yor42.projectazure.mixin;
 
-import com.yor42.projectazure.gameobject.items.GasMaskItem;
+import com.yor42.projectazure.gameobject.items.tools.GasMaskItem;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;

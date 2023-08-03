@@ -12,7 +12,8 @@ import javax.annotation.Nonnull;
 public class ModArmorMaterials {
 
     public enum ArmorModMaterials implements ArmorMaterial{
-        GASMASK("gasmask",new int[]{0, 0, 0, 0}, new int[]{2,0,0,0}, 0, 0, 0, SoundEvents.ARMOR_EQUIP_LEATHER, Ingredient.EMPTY);
+        GASMASK("gasmask",new int[]{0, 0, 0, 0}, new int[]{2,0,0,0}, 0, 0, 0, SoundEvents.ARMOR_EQUIP_LEATHER, Ingredient.EMPTY),
+        NIGHTVISION ("gasmask",new int[]{0, 0, 0, 0}, new int[]{2,0,0,0}, 0, 0, 0, SoundEvents.ARMOR_EQUIP_IRON, Ingredient.EMPTY);
 
         private final int[] durability, defence;
         private final int enchantment;

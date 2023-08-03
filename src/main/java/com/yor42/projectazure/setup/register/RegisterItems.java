@@ -566,6 +566,8 @@ public class RegisterItems {
             });
         }
     });
+
+    public static final RegistryObject<Item> NIGHTVISION = register("nightvision", ItemNightVisionHelmet::new);
     public static final RegistryObject<Item> SYRINGE = register_withoutTexture("syringe", ()->new ItemSyringe(new Item.Properties().tab(PA_RESOURCES)));
     public static final RegistryObject<Item> RMA7024_pickaxe = registertool("rma7024_pickaxe", () -> new PickaxeItem(ModMaterials.RMA_70_24, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> RMA7024_axe = registertool("rma7024_axe", () -> new AxeItem(ModMaterials.RMA_70_24, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));

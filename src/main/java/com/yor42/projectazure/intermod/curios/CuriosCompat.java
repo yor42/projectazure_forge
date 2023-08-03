@@ -11,6 +11,7 @@ package com.yor42.projectazure.intermod.curios;
 import com.yor42.projectazure.gameobject.capability.CuriosCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.CuriosEnergyCapabilityProvider;
 import com.yor42.projectazure.interfaces.IHelmetOverlay;
+import com.yor42.projectazure.interfaces.IShaderEquipment;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -103,6 +104,27 @@ public class CuriosCompat {
                 }
             });
 
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static ItemStack FindCurioShader(LocalPlayer player){
+        AtomicReference<ItemStack> returnstack = new AtomicReference<>(ItemStack.EMPTY);
+        CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent((cap)->{
+            Map<String, ICurioStacksHandler> curios = cap.getCurios();
+            ICurioStacksHandler curioStacksHandler = curios.get(SlotTypePreset.HEAD.getIdentifier());
+            if(curioStacksHandler == null){
+                return;
+            }
+            IDynamicStackHandler helmetstack = curioStacksHandler.getStacks();
+            for (int i = 0; i < helmetstack.getSlots(); i++) {
+                ItemStack stack = helmetstack.getStackInSlot(i);
+                Item item = stack.getItem();
+                if(item instanceof IShaderEquipment){
+                    returnstack.set(stack);
+                }
+            }
+        });
+        return returnstack.get();
     }
 
 }

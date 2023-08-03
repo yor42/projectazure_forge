@@ -1,8 +1,9 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemDefibChargerRenderer;
-import com.yor42.projectazure.gameobject.items.ICurioItem;
+import com.yor42.projectazure.interfaces.ICurioItem;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -81,7 +82,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
         ItemStack stack= player.getItemInHand(hand);
         if(stack.getItem() instanceof ItemDefibCharger){
             if(player.isCrouching()){
-                boolean nextstate = !isOn(stack);
+                boolean nextstate = !ItemStackUtils.isOn(stack);
 
                 if(nextstate && stack.getCapability(CapabilityEnergy.ENERGY).map((e)-> e.extractEnergy(1, true)<=0).orElse(true)){
                     player.playSound(DEFIB_NOBATTERY, 1.0F, 1.0F);
@@ -98,12 +99,12 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
                 }
 
                 if(!nextstate){
-                    setChargeProgress(stack, 0);
-                    setCharging(stack, false);
+                    ItemStackUtils.setChargeProgress(stack, 0);
+                    ItemStackUtils.setCharging(stack, false);
                 }
 
                 player.playSound(nextstate?DEFIB_POWERON:DEFIB_POWEROFF, 1.0F, 1.0F);
-                setOn(stack, nextstate);
+                ItemStackUtils.setOn(stack, nextstate);
                 return InteractionResultHolder.pass(stack);
             }
         }
@@ -122,27 +123,27 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
     }
 
     public void handleCharge(ItemStack stack, Entity entity, Level world){
-        if(isOn(stack)){
-            int chargeprogress = getChargeProgress(stack);
-            if(ShouldCharging(stack)){
+        if(ItemStackUtils.isOn(stack)){
+            int chargeprogress = ItemStackUtils.getChargeProgress(stack);
+            if(ItemStackUtils.ShouldCharging(stack)){
                 if(stack.getCapability(CapabilityEnergy.ENERGY).map((e)->e.extractEnergy(100, true)>=100).orElse(false)) {
                     int charge = Math.min(100, chargeprogress + 1);
                     if (charge == 100) {
-                        setCharging(stack, false);
+                        ItemStackUtils.setCharging(stack, false);
                         entity.playSound(DEFIB_READY, 1.0F, 1.0F);
                     }
-                    setChargeProgress(stack, charge);
+                    ItemStackUtils.setChargeProgress(stack, charge);
                     stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(100, false));
                 }else{
-                    int charge = Math.max(0, getChargeProgress(stack)-4);
+                    int charge = Math.max(0, ItemStackUtils.getChargeProgress(stack)-4);
                     if (charge == 0) {
-                        setCharging(stack, false);
+                        ItemStackUtils.setCharging(stack, false);
                         if(entity instanceof Player) {
                             Player player = (Player) entity;
                             player.displayClientMessage(new TranslatableComponent("item.tooltip.chargefailed_nobattery").withStyle(ChatFormatting.RED), true);
                         }
                     }
-                    setChargeProgress(stack, charge);
+                    ItemStackUtils.setChargeProgress(stack, charge);
                 }
 
             }
@@ -152,25 +153,25 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
                         stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(1, false));
                     }
                     else{
-                        setChargeProgress(stack, 0);
-                        setCharging(stack, false);
+                        ItemStackUtils.setChargeProgress(stack, 0);
+                        ItemStackUtils.setCharging(stack, false);
                         if(!world.isClientSide()){
                             final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
                             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity);
                             GeckoLibNetwork.syncAnimation(target, this, id, ANIM_OFF);
                         }
                         entity.playSound(DEFIB_POWEROFF, 1.0F, 1.0F);
-                        setOn(stack, false);
+                        ItemStackUtils.setOn(stack, false);
                     }
                 }
             }
         }
         if(entity instanceof Player) {
             Player player = (Player) entity;
-            if (ShouldCharging(stack)) {
-                int charge = (int) (((float) getChargeProgress(stack) / 100) * 100);
+            if (ItemStackUtils.ShouldCharging(stack)) {
+                int charge = (int) (((float) ItemStackUtils.getChargeProgress(stack) / 100) * 100);
                 player.displayClientMessage(new TranslatableComponent("item.tooltip.chargeprogress", charge + "%").withStyle(ChatFormatting.AQUA), true);
-            } else if (getChargeProgress(stack) == 100) {
+            } else if (ItemStackUtils.getChargeProgress(stack) == 100) {
                 player.displayClientMessage(new TranslatableComponent("item.tooltip.ready").withStyle(ChatFormatting.GREEN), true);
             }
         }
@@ -180,7 +181,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
             final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
             if (controller.getAnimationState() == AnimationState.Stopped) {
                 controller.markNeedsReload();
-                String animationname = isOn(stack) ? "on_still" : "off_still";
+                String animationname = ItemStackUtils.isOn(stack) ? "on_still" : "off_still";
                 controller.setAnimation(new AnimationBuilder().addAnimation(animationname));
             }
         }
@@ -189,30 +190,6 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
     @Override
     public void curioTick(LivingEntity entity, int index, ItemStack stack) {
         this.handleCharge(stack, entity, entity.getLevel());
-    }
-
-    public static boolean isOn(@Nonnull ItemStack stack){
-        return stack.getOrCreateTag().getBoolean("isOn");
-    }
-
-    public static void setOn(@Nonnull ItemStack stack, boolean value){
-        stack.getOrCreateTag().putBoolean("isOn", value);
-    }
-
-    public static int getChargeProgress(@Nonnull ItemStack stack){
-        return stack.getOrCreateTag().getInt("chargeProgress");
-    }
-
-    public static void setChargeProgress(@Nonnull ItemStack stack, int value){
-        stack.getOrCreateTag().putInt("chargeProgress", value);
-    }
-
-    public static boolean ShouldCharging(@Nonnull ItemStack stack){
-        return stack.getOrCreateTag().getBoolean("charging");
-    }
-
-    public static void setCharging(@Nonnull ItemStack stack, boolean value){
-        stack.getOrCreateTag().putBoolean("charging", value);
     }
 
     public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
@@ -244,8 +221,6 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
         final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
         controller.markNeedsReload();
         if (state == ANIM_ON) {
-            // Always use GeckoLibUtil to get AnimationControllers when you don't have
-            // access to an AnimationEvent
             controller.setAnimation(new AnimationBuilder().addAnimation("on", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("on_still", ILoopType.EDefaultLoopTypes.LOOP));
         }
         else if(state == ANIM_OFF){
@@ -273,20 +248,14 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
         percentage*=100;
         tooltips.add(new TranslatableComponent("item.tooltip.energystored", new TextComponent(MathUtil.formatValueMatric(remainingBattery)+" FE / "+MathUtil.formatValueMatric(this.batterysize)+String.format(" FE (%.2f", percentage)+"%)").withStyle(color)));
 
-        if(ShouldCharging(stack)){
-            int charge = (int) (((float)getChargeProgress(stack)/100)*100);
+        if(ItemStackUtils.ShouldCharging(stack)){
+            int charge = (int) (((float) ItemStackUtils.getChargeProgress(stack)/100)*100);
             tooltips.add(new TranslatableComponent("item.tooltip.energystored", charge+"%").withStyle(ChatFormatting.AQUA));
         }
-        else if(getChargeProgress(stack) == 100){
+        else if(ItemStackUtils.getChargeProgress(stack) == 100){
             tooltips.add(new TranslatableComponent("item.tooltip.ready").withStyle(ChatFormatting.GREEN));
         }
         super.appendHoverText(stack, worldin, tooltips, tooltipadvanced);
-    }
-
-    @Nullable
-    @Override
-    public CompoundTag getShareTag(ItemStack stack) {
-        return super.getShareTag(stack);
     }
 
 }

@@ -7,6 +7,7 @@ import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.Process;
 import com.yor42.projectazure.gameobject.capability.ItemPowerCapabilityProvider;
+import com.yor42.projectazure.interfaces.ISecondaryBar;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
@@ -29,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
-public class ItemEnergyGun extends TimelessGunItem {
+public class ItemEnergyGun extends TimelessGunItem implements ISecondaryBar {
 
     private final int energycapacity, energypershot, idleenergyconsumption;
     private final boolean ignoreAmmo;
@@ -164,7 +165,7 @@ public class ItemEnergyGun extends TimelessGunItem {
 
 
     @Override
-    public int getBarWidth(ItemStack stack) {
+    public int getSecondaryBarWidth(ItemStack stack) {
         if(stack.getCapability(CapabilityEnergy.ENERGY).isPresent()&&doesIgnoreAmmo(stack)){
             return stack.getCapability(CapabilityEnergy.ENERGY).map((energystorage)-> (int)(13* (double)energystorage.getEnergyStored() / (double)energystorage.getMaxEnergyStored())).orElse(super.getBarWidth(stack));
         }
@@ -172,11 +173,16 @@ public class ItemEnergyGun extends TimelessGunItem {
     }
 
     @Override
-    public boolean isBarVisible(ItemStack pStack) {
+    public boolean isSecondaryBarVisible(ItemStack pStack) {
         if(pStack.getCapability(CapabilityEnergy.ENERGY).isPresent()){
             return true;
         }
         return super.isBarVisible(pStack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return 5636095;
     }
 
     private static boolean doesIgnoreAmmo(ItemStack stack) {

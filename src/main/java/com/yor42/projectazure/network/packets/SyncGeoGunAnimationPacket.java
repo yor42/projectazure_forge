@@ -1,17 +1,13 @@
 package com.yor42.projectazure.network.packets;
 
-import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public class SyncGeoGunAnimationPacket {

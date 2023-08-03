@@ -251,6 +251,7 @@ d2d399a95dcb7d07fe6876a2c3515dfde5e3b2a0 assets/projectazure/models/item/motor_b
 13bab3570affc1f517990dd4b36eee5ad24d9645 assets/projectazure/models/item/netherite_hammer.json
 1857016ea3135943f17ad8a8b9735715b5f1d323 assets/projectazure/models/item/netherite_mortar.json
 74e89b66c17e710b3fbdf99b1e2256a19c24ab13 assets/projectazure/models/item/netherite_saw.json
+3de199ccca620fc6ed2441b02988dd0cb1398b93 assets/projectazure/models/item/nightvision.json
 8039d66579faf9a616ac1d288308eb97dc0b8156 assets/projectazure/models/item/nugget_brass.json
 8585df315ec83f3d095aca4fc7d2703ac9d5ac05 assets/projectazure/models/item/nugget_bronze.json
 befec25b19edacd6cc84b8fdc47c7e64e3afa28f assets/projectazure/models/item/nugget_copper.json
@@ -425,7 +426,7 @@ a5cba2925bcf39f84f2c3109855bc1500e0eb0c4 assets/projectazure/models/item/torpedo
 397c9e5d50400c0e1fa4f3ee5337ae994bd672a2 assets/projectazure/tinkering/materials/rma7012.json
 382367e9037a4c3e3f979f7276553be26699572b assets/projectazure/tinkering/materials/rma7024.json
 e8a63cda48eb9880120ad3833d5ce3bbc768a441 data/curios/tags/items/back.json
-c590d6d32a4899a17cddd98f8752bf904e8745fc data/curios/tags/items/head.json
+155789b1978be6dd8afc238bdf862862f9f3707e data/curios/tags/items/head.json
 5cf475f6a6b6c81187eeba99a35b9663c25f609b data/curios/tags/items/ring.json
 a40ff122b89799e8a5ae84cad62cd14abc3c8fdf data/forge/tags/blocks/ores.json
 b21f923e5e75da415a9d7930115a9fd5d8a5b1aa data/forge/tags/blocks/ores/aluminium.json

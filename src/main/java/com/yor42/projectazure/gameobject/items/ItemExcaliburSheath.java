@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.EntityArtoria;
+import com.yor42.projectazure.interfaces.ICurioItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;

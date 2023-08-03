@@ -18,7 +18,7 @@ import com.tac.guns.network.message.MessageGunSound;
 import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
+import com.yor42.projectazure.gameobject.misc.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.blocks.PantryBlock;
 import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;

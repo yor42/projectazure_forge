@@ -6,6 +6,7 @@ import com.tac.guns.common.ProjectileManager;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.armor.GasMaskRenderer;
+import com.yor42.projectazure.client.renderer.armor.NightVisionRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineRecruitBeaconRenderer;
 import com.yor42.projectazure.events.ChargeFireHandler;
@@ -13,16 +14,17 @@ import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityRailgunProjectile;
-import com.yor42.projectazure.gameobject.items.GasMaskItem;
+import com.yor42.projectazure.gameobject.items.ItemNightVisionHelmet;
+import com.yor42.projectazure.gameobject.items.tools.GasMaskItem;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.intermod.curios.client.RenderDefib;
 import com.yor42.projectazure.intermod.curios.client.RenderGasMask;
+import com.yor42.projectazure.intermod.curios.client.RenderNightVision;
 import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import com.yor42.projectazure.setup.CrushingRecipeCache;
-import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.CreativeModeTab;
@@ -33,7 +35,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
@@ -174,10 +175,11 @@ public class Main
         //register Entity renderers
     	registerEntity.registerRenderer();
         ClientUtils.RegisterModelProperties();
-        GeoArmorRenderer.registerArmorRenderer(GasMaskItem.class, GasMaskRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(GasMaskItem.class, RenderGasMask::new);
+        GeoArmorRenderer.registerArmorRenderer(ItemNightVisionHelmet.class, NightVisionRenderer::new);
 
         ClientRegisterManager.registerScreen();
-
+        CuriosRendererRegistry.register(RegisterItems.NIGHTVISION.get(), RenderNightVision::new);
         CuriosRendererRegistry.register(RegisterItems.GASMASK.get(), RenderGasMask::new);
         CuriosRendererRegistry.register(RegisterItems.DEFIB_CHARGER.get(), RenderDefib::new);
 

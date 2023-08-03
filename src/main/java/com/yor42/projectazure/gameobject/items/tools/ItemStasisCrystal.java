@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
-import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
+import com.yor42.projectazure.gameobject.misc.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.ChatFormatting;

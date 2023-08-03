@@ -1,5 +1,6 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.tools;
 
+import com.yor42.projectazure.interfaces.ICurioItem;
 import com.yor42.projectazure.interfaces.IHelmetOverlay;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.libs.utils.ClientUtils;

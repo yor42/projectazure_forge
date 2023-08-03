@@ -38,10 +38,10 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
 
     @Unique
     @Nullable
-    private AbstractEntityCompanion companionOnBack;
+    private AbstractEntityCompanion projectazure_forge$companionOnBack;
 
     @Unique
-    private long timeEntitySatOnBack;
+    private long projectazure_forge$timeEntitySatOnBack;
 
     @Inject(method = "defineSynchedData", at=@At("TAIL"))
     private void onDefineSynchedData(CallbackInfo ci){
@@ -64,8 +64,8 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
             this.removeEntityOnBack();
         }
 
-        if(this.tickCount%400==0 && MathUtil.rollBooleanRNG() && this.companionOnBack!=null){
-            this.playSound(this.companionOnBack.Ambientsoundgetter(),0.9F, 0.9F+(0.2F*MathUtil.rand.nextFloat()));
+        if(this.tickCount%400==0 && MathUtil.rollBooleanRNG() && this.projectazure_forge$companionOnBack !=null){
+            this.playSound(this.projectazure_forge$companionOnBack.Ambientsoundgetter(),0.9F, 0.9F+(0.2F*MathUtil.rand.nextFloat()));
         }
 
         if(this.tickCount %1200 !=0 || this.getEntityonBack().isEmpty()){
@@ -76,10 +76,10 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
 
         if(entityonBack.isEmpty()){
             return;
-        }else if(this.companionOnBack == null){
+        }else if(this.projectazure_forge$companionOnBack == null){
             EntityType.create(entityonBack, this.level).ifPresent((entity)->{
                 if(entity instanceof AbstractEntityCompanion){
-                    this.companionOnBack = (AbstractEntityCompanion) entity;
+                    this.projectazure_forge$companionOnBack = (AbstractEntityCompanion) entity;
                 }
             });
         }
@@ -125,7 +125,7 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
 
         if (this.getEntityonBack().isEmpty()) {
             this.forcesetEntityonBack(compound);
-            this.timeEntitySatOnBack = this.level.getGameTime();
+            this.projectazure_forge$timeEntitySatOnBack = this.level.getGameTime();
             return true;
         }
         return false;
@@ -136,9 +136,9 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
         if(!compound.isEmpty()) {
             Optional<Entity> ety = EntityType.create(compound, this.level);
             if (ety.isPresent() && ety.get() instanceof AbstractEntityCompanion) {
-                this.companionOnBack = (AbstractEntityCompanion) ety.get();
+                this.projectazure_forge$companionOnBack = (AbstractEntityCompanion) ety.get();
             } else {
-                this.companionOnBack = null;
+                this.projectazure_forge$companionOnBack = null;
             }
         }
         this.entityData.set(DATA_BACK, compound);
@@ -146,7 +146,7 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
 
     @Override
     public Optional<Entity> removeEntityOnBack() {
-        if (this.timeEntitySatOnBack + 20L < this.level.getGameTime()) {
+        if (this.projectazure_forge$timeEntitySatOnBack + 20L < this.level.getGameTime()) {
             return forceremoveEntityOnBack();
         }
         return Optional.empty();

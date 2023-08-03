@@ -1,6 +1,6 @@
 package com.yor42.projectazure.intermod.curios;
 
-import com.yor42.projectazure.gameobject.items.ICurioItem;
+import com.yor42.projectazure.interfaces.ICurioItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
@@ -26,6 +26,11 @@ public class PACuriosCap implements ICurio {
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack) {
         this.getItem().curioOnEquip(slotContext.getWearer(), slotContext.getIndex(), prevStack);
+    }
+
+    @Override
+    public void onUnequip(SlotContext slotContext, ItemStack newStack) {
+        this.getItem().curioOnUnEquip(slotContext, newStack);
     }
 
     @Override

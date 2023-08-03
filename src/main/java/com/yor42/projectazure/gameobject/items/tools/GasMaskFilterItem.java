@@ -1,5 +1,6 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.tools;
 
+import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;

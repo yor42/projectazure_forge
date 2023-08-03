@@ -1,6 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
-import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
+import com.yor42.projectazure.gameobject.misc.ProjectAzureWorldSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;

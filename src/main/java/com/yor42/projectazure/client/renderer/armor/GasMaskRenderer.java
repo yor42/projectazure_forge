@@ -3,14 +3,22 @@ package com.yor42.projectazure.client.renderer.armor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.armor.GeoGasMaskModel;
-import com.yor42.projectazure.gameobject.items.GasMaskFilterItem;
-import com.yor42.projectazure.gameobject.items.GasMaskItem;
+import com.yor42.projectazure.gameobject.items.tools.GasMaskFilterItem;
+import com.yor42.projectazure.gameobject.items.tools.GasMaskItem;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class GasMaskRenderer extends GeoArmorRenderer<GasMaskItem> {
     public GasMaskRenderer() {
@@ -46,4 +54,5 @@ public class GasMaskRenderer extends GeoArmorRenderer<GasMaskItem> {
 
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
+
 }

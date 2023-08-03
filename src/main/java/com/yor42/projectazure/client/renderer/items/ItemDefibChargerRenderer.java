@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.items.ModelDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraftforge.client.RenderProperties;
@@ -46,7 +47,7 @@ public class ItemDefibChargerRenderer extends GeoItemRenderer<ItemDefibCharger> 
     private boolean shouldRender(GeoBone bone) {
         String name = bone.getName();
         float energy = this.currentItemStack.getCapability(CapabilityEnergy.ENERGY).map((e) -> (float)e.getEnergyStored() / (float)e.getMaxEnergyStored()).orElse(0F);
-        float charge = (float)(ItemDefibCharger.getChargeProgress(this.currentItemStack))/100f;
+        float charge = (float)(ItemStackUtils.getChargeProgress(this.currentItemStack))/100f;
         switch (name) {
             default:
                 return true;
@@ -69,11 +70,11 @@ public class ItemDefibChargerRenderer extends GeoItemRenderer<ItemDefibCharger> 
             case "emissive_charge5":
                 return charge == 1f;
             case "emissive_on":
-                return ItemDefibCharger.isOn(this.currentItemStack) && ItemDefibCharger.getChargeProgress(this.currentItemStack) == 0;
+                return ItemStackUtils.isOn(this.currentItemStack) && ItemStackUtils.getChargeProgress(this.currentItemStack) == 0;
             case "emissive_ready":
-                return ItemDefibCharger.isOn(this.currentItemStack) && ItemDefibCharger.getChargeProgress(this.currentItemStack) == 100;
+                return ItemStackUtils.isOn(this.currentItemStack) && ItemStackUtils.getChargeProgress(this.currentItemStack) == 100;
             case "emissive_charging":
-                return ItemDefibCharger.isOn(this.currentItemStack) && ItemDefibCharger.getChargeProgress(this.currentItemStack) <100 && ItemDefibCharger.isOn(this.currentItemStack) && ItemDefibCharger.getChargeProgress(this.currentItemStack) >0;
+                return ItemStackUtils.isOn(this.currentItemStack) && ItemStackUtils.getChargeProgress(this.currentItemStack) <100 && ItemStackUtils.isOn(this.currentItemStack) && ItemStackUtils.getChargeProgress(this.currentItemStack) >0;
 
         }
     }

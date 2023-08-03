@@ -1,6 +1,6 @@
 {
   "package": "com.yor42.projectazure.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "projectazure.refmap.json",
   "required": false,
   "minVersion": "0.8",
@@ -27,6 +27,11 @@
   ],
   "client": [
     "EntityRendererAccessors",
+    "GameRendererAccessor",
+    "KeyMappingAccessor",
+    "MixinGameRenderer",
+    "MixinItemRenderer",
+    "MixinPlayerClient",
     "MixinPlayerRenderer",
     "MixinSplashManager"
   ]

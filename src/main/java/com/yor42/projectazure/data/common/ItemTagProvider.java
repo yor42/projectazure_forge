@@ -192,7 +192,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ItemTags.MUSIC_DISCS).add(RegisterItems.DISC_CC5.get(), RegisterItems.DISC_DRAGONHEARTED.get(), RegisterItems.DISC_FRIDAYNIGHT.get(), RegisterItems.DISC_REVENGE.get(), RegisterItems.DISC_FALLEN_KINGDOM.get(), RegisterItems.DISC_TAKE_BACK_THE_NIGHT.get(), RegisterItems.DISC_FIND_THE_PIECES.get());
 
         this.tag(ModTags.Items.CURIOS_BACK).add(RegisterItems.DEFIB_CHARGER.get(), RegisterItems.EXCALIBUR_SHEATH.get());
-        this.tag(ModTags.Items.CURIOS_HEAD).add(RegisterItems.GASMASK.get());
+        this.tag(ModTags.Items.CURIOS_HEAD).add(RegisterItems.GASMASK.get(), RegisterItems.NIGHTVISION.get());
         this.tag(ModTags.Items.CURIOS_RING).add(RegisterItems.OATHRING.get());
     }
 

@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemDefibPaddleRenderer;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -86,7 +87,7 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
                 for (int i = 0; i < entity.getInventory().getContainerSize(); i++) {
                     ItemStack stack = entity.getInventory().getItem(i);
                     Item item = stack.getItem();
-                    if (item instanceof ItemDefibCharger && ItemDefibCharger.isOn(stack) && ItemDefibCharger.getChargeProgress(stack)<100) {
+                    if (item instanceof ItemDefibCharger && ItemStackUtils.isOn(stack) && ItemStackUtils.getChargeProgress(stack)<100) {
                         if (stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(100, true) == 100).orElse(false)) {
                             ChargerStack = stack;
                             break;
@@ -96,20 +97,20 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
                 if(ChargerStack.isEmpty() && isCurioLoaded()){
                     ChargerStack = getCurioItemStack(entity, (stack)->{
                         Item item = stack.getItem();
-                        if (item instanceof ItemDefibCharger&& ItemDefibCharger.getChargeProgress(stack)<100) {
+                        if (item instanceof ItemDefibCharger&& ItemStackUtils.getChargeProgress(stack)<100) {
                             return stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(100, true) == 100).orElse(false);
                         }
                         return false;
                     });
 
-                    if(!ItemDefibCharger.isOn(ChargerStack)){
-                        ItemDefibCharger.setOn(ChargerStack, true);
+                    if(!ItemStackUtils.isOn(ChargerStack)){
+                        ItemStackUtils.setOn(ChargerStack, true);
                     }
                 }
 
                 if(!ChargerStack.isEmpty()) {
-                    if (!ItemDefibCharger.ShouldCharging(ChargerStack)) {
-                        ItemDefibCharger.setCharging(ChargerStack, true);
+                    if (!ItemStackUtils.ShouldCharging(ChargerStack)) {
+                        ItemStackUtils.setCharging(ChargerStack, true);
                         entity.playSound(registerSounds.DEFIB_CHARGING, 1.0f, 1.0f);
                     }
                 }else{
