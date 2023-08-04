@@ -6,14 +6,18 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.items.ItemNightVisionHelmet;
 import com.yor42.projectazure.gameobject.items.tools.GasMaskItem;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
+import com.yor42.projectazure.interfaces.IShaderEquipment;
+import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.network.packets.SyncItemTagPacket;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerSounds;
@@ -204,7 +208,6 @@ public class ForgeBusEventHandler {
         Level world = event.getWorld();
         Player player = event.getPlayer();
         if (player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
-
             ((IMixinPlayerEntity) player).removeEntityOnBack().ifPresent((entity) -> {
                 if (!(entity instanceof AbstractEntityCompanion)) {
                     return;
@@ -223,6 +226,27 @@ public class ForgeBusEventHandler {
                 }
                 player.swing(MAIN_HAND);
             });
+        }
+    }
+
+    @SubscribeEvent
+    public static void OnplayerRightClicked(PlayerInteractEvent.RightClickEmpty event) {
+        Player player = event.getPlayer();
+        if (event.getHand() == MAIN_HAND && player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
+            ItemStack headStack = player.getItemBySlot(EquipmentSlot.HEAD);
+
+            if (headStack.getItem() instanceof ItemNightVisionHelmet){
+                ItemStack interactiontarget = player.getItemBySlot(EquipmentSlot.HEAD);
+                ItemStackUtils.TogglePower(interactiontarget);
+                Main.NETWORK.sendToServer(new SyncItemTagPacket("head", interactiontarget.getOrCreateTag()));
+                player.swing(MAIN_HAND);
+            }
+            else if(CompatibilityUtils.isCurioLoaded()){
+                ItemStack interactiontarget = CuriosCompat.getCurioItemStack(player, "head", (item)->item.getItem() instanceof ItemNightVisionHelmet);
+                ItemStackUtils.TogglePower(interactiontarget);
+                Main.NETWORK.sendToServer(new SyncItemTagPacket("curios:head", interactiontarget.getOrCreateTag()));
+                player.swing(MAIN_HAND);
+            }
         }
     }
 

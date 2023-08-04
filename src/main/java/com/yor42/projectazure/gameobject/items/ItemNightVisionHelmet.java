@@ -2,12 +2,14 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.interfaces.IActivatable;
 import com.yor42.projectazure.interfaces.ICurioItem;
+import com.yor42.projectazure.interfaces.IHelmetOverlay;
 import com.yor42.projectazure.interfaces.IShaderEquipment;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -46,27 +48,34 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
+import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.gameobject.items.materials.ModArmorMaterials.ArmorModMaterials.NIGHTVISION;
-public class ItemNightVisionHelmet extends GeoArmorItem implements IAnimatable, ISyncable, ICurioItem, IShaderEquipment {
+import static com.yor42.projectazure.libs.utils.ClientUtils.NVGOVERLAY;
+
+public class ItemNightVisionHelmet extends GeoArmorItem implements IAnimatable, ICurioItem, IShaderEquipment, IHelmetOverlay {
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-
-    private static final int ANIM_ON = 0;
-    private static final int ANIM_OFF = 1;
     private final int batterysize = 50000;
     public static final String controllerName = "nightvision_controller";
 
     public ItemNightVisionHelmet() {
-        super(NIGHTVISION, EquipmentSlot.HEAD, new Item.Properties().tab(PA_RESOURCES).stacksTo(1));
-        GeckoLibNetwork.registerSyncable(this);
+        super(NIGHTVISION, EquipmentSlot.HEAD, new Item.Properties().tab(PA_WEAPONS).stacksTo(1));
     }
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, controllerName, 1, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, controllerName, 10, this::predicate));
     }
 
     private PlayState predicate(AnimationEvent<ItemNightVisionHelmet> itemNightVisionAnimationEvent) {
+        ItemStack stack = itemNightVisionAnimationEvent.getExtraDataOfType(ItemStack.class).get(0);
+        AnimationController<ItemNightVisionHelmet> controller = itemNightVisionAnimationEvent.getController();
+        if (ItemStackUtils.isOn(stack)){
+            controller.setAnimation(new AnimationBuilder().addAnimation("on", ILoopType.EDefaultLoopTypes.LOOP));
+        }
+        else{
+            controller.setAnimation(new AnimationBuilder().addAnimation("off", ILoopType.EDefaultLoopTypes.LOOP));
+        }
         return PlayState.CONTINUE;
     }
 
@@ -92,49 +101,30 @@ public class ItemNightVisionHelmet extends GeoArmorItem implements IAnimatable, 
     }
 
     @Override
-    public void onAnimationSync(int id, int state) {
-        final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-        controller.markNeedsReload();
-        if (state == ANIM_ON){
-            controller.setAnimation(new AnimationBuilder().addAnimation("on_transition", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("on", ILoopType.EDefaultLoopTypes.LOOP));
-        }
-        else{
-            controller.setAnimation(new AnimationBuilder().addAnimation("off_transition", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("off", ILoopType.EDefaultLoopTypes.LOOP));
-        }
-    }
-
-    @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pHand) {
 
         ItemStack stack = pPlayer.getItemInHand(pHand);
         if(pPlayer.isCrouching()){
-            if(!pLevel.isClientSide()) {
-                final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> pPlayer);
-                final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) pLevel);
-                GeckoLibNetwork.syncAnimation(target, this, id, ItemStackUtils.isOn(stack) ? ANIM_OFF : ANIM_ON);
-            }
             ItemStackUtils.TogglePower(stack);
             return InteractionResultHolder.success(stack);
         }
 
-        return InteractionResultHolder.pass(stack);
+        return super.use(pLevel, pPlayer, pHand);
     }
 
     @Override
     public void inventoryTick(@NotNull ItemStack pStack, @NotNull Level pLevel, @NotNull Entity pEntity, int pSlotId, boolean pIsSelected) {
         super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
-        this.handleCharge(pStack, pEntity, pLevel);
+        this.handleCharge(pStack);
     }
 
-    public void handleCharge(ItemStack stack, Entity entity, Level world){
+    public void handleCharge(ItemStack stack){
         if(ItemStackUtils.isOn(stack)) {
             if (stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(1, true) < 1).orElse(true)) {
-                ItemStackUtils.setCharging(stack, false);
-                if(!world.isClientSide()){
-                    final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
-                    final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity);
-                    GeckoLibNetwork.syncAnimation(target, this, id, ANIM_OFF);
-                }
+                ItemStackUtils.setOn(stack, false);
+            }
+            else{
+                stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(1, false));
             }
         }
         /*
@@ -154,7 +144,7 @@ public class ItemNightVisionHelmet extends GeoArmorItem implements IAnimatable, 
 
     @Override
     public ResourceLocation shaderLocation(ItemStack stack) {
-        return ResourceUtils.ModResourceLocation("shaders/post/nightvision");
+        return ResourceUtils.ModResourceLocation("shaders/post/nightvision.json");
     }
 
     @Override
@@ -182,13 +172,20 @@ public class ItemNightVisionHelmet extends GeoArmorItem implements IAnimatable, 
         percentage*=100;
         tooltips.add(new TranslatableComponent("item.tooltip.energystored", new TextComponent(MathUtil.formatValueMatric(remainingBattery)+" FE / "+MathUtil.formatValueMatric(this.batterysize)+String.format(" FE (%.2f", percentage)+"%)").withStyle(color)));
 
-        if(ItemStackUtils.ShouldCharging(stack)){
-            int charge = (int) (((float) ItemStackUtils.getChargeProgress(stack)/100)*100);
-            tooltips.add(new TranslatableComponent("item.tooltip.energystored", charge+"%").withStyle(ChatFormatting.AQUA));
+        if(ItemStackUtils.isOn(stack)){
+            tooltips.add(new TranslatableComponent("item.tooltip.on").withStyle(ChatFormatting.AQUA));
         }
-        else if(ItemStackUtils.getChargeProgress(stack) == 100){
-            tooltips.add(new TranslatableComponent("item.tooltip.ready").withStyle(ChatFormatting.GREEN));
+        else{
+            tooltips.add(new TranslatableComponent("item.tooltip.off").withStyle(ChatFormatting.DARK_RED));
         }
         super.appendHoverText(stack, worldin, tooltips, tooltipadvanced);
+    }
+
+    @Override
+    public ResourceLocation getOverlayTexture(ItemStack stack, LocalPlayer player) {
+        if(ItemStackUtils.isOn(stack)) {
+            return NVGOVERLAY;
+        }
+        else return null;
     }
 }

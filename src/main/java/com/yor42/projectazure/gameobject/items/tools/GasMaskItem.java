@@ -8,6 +8,7 @@ import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -175,7 +176,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
     }
 
     @Override
-    public ResourceLocation getOverlayTexture() {
+    public ResourceLocation getOverlayTexture(ItemStack stack, LocalPlayer player) {
         return ClientUtils.GASMASKOVERLAY;
     }
 }

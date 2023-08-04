@@ -98,7 +98,7 @@ public class CuriosCompat {
                     ItemStack stack = helmetstack.getStackInSlot(i);
                     Item item = stack.getItem();
                     if(item instanceof IHelmetOverlay){
-                        ClientUtils.renderTextureOverlay(((IHelmetOverlay) item).getOverlayTexture(), 1.0F);
+                        ClientUtils.renderTextureOverlay(((IHelmetOverlay) item).getOverlayTexture(stack, player), 1.0F);
                         break;
                     }
                 }

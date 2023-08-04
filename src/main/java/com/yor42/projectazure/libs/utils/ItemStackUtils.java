@@ -358,7 +358,7 @@ public class ItemStackUtils {
     }
 
     public static void TogglePower(@Nonnull ItemStack stack){
-        setOn(stack, isOn(stack));
+        setOn(stack, !isOn(stack));
     }
 
     public static boolean isOn(@Nonnull ItemStack stack){

@@ -18,6 +18,6 @@ public class GeoNightvisionModel extends AnimatedGeoModel<ItemNightVisionHelmet>
 
     @Override
     public ResourceLocation getAnimationFileLocation(ItemNightVisionHelmet animatable) {
-        return ResourceUtils.AnimationLocation("block/armor/nightvision.animation.json");
+        return ResourceUtils.AnimationLocation("armor/nightvision.animation.json");
     }
 }

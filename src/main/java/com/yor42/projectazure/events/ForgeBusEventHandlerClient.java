@@ -52,7 +52,7 @@ public class ForgeBusEventHandlerClient {
             ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
             Item helmetItem = helmet.getItem();
             if(helmetItem instanceof IHelmetOverlay){
-                ClientUtils.renderTextureOverlay(((IHelmetOverlay) helmetItem).getOverlayTexture(), 1.0f);
+                ClientUtils.renderTextureOverlay(((IHelmetOverlay) helmetItem).getOverlayTexture(helmet, player), 1.0f);
             }
             else {
                 if (CompatibilityUtils.isCurioLoaded()) {
@@ -68,6 +68,7 @@ public class ForgeBusEventHandlerClient {
         Main.CRUSHING_REGISTRY.clearRecipes();
         TeamListCLIENT.clear();
     }
+
 
     @Nullable
     public static ResourceLocation activeShader = null;
@@ -97,23 +98,21 @@ public class ForgeBusEventHandlerClient {
             location = shaderEquipment.shaderLocation(shaderStack);
             isActive = shaderEquipment.shouldDisplayShader(shaderStack) && minecraft.options.getCameraType().isFirstPerson();
         }
-
-        if(location == null){
-            if(cachedshader != null){
-                restoreshader(renderer);
-            }
-            return;
+        else {
+            isActive = false;
         }
 
         if(isActive != isActiveOld){
-            if(isActive){
-                renderer.loadEffect(location);
+            if(isActive && location != null){
                 cachedshader = activeShader;
+                renderer.loadEffect(location);
             }
             else{
                 restoreshader(renderer);
             }
         }
+
+        isActiveOld = isActive;
     }
 
     private static void restoreshader(GameRenderer renderer){
@@ -130,7 +129,7 @@ public class ForgeBusEventHandlerClient {
     public static void onRenderFog(EntityViewRenderEvent.FogColors event) {
         LocalPlayer player = Minecraft.getInstance().player;
 
-        if(player == null){
+        if(player == null || !Minecraft.getInstance().options.getCameraType().isFirstPerson()){
             return;
         }
 

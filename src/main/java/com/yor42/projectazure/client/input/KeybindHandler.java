@@ -15,7 +15,7 @@ public class KeybindHandler {
             .keyCode(78).build();
 
 
-    public static void Register(){
+    public static void register(){
         for(KeyMapping key:KEYS){
             ClientRegistry.registerKeyBinding(key);
         }

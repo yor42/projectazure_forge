@@ -104,6 +104,12 @@ public class registerNetwork {
                 .encoder(PlaySoundPacket::encode)
                 .add();
 
+        channel.messageBuilder(SyncItemTagPacket.class, id++)
+                .consumer(SyncItemTagPacket::handle)
+                .decoder(SyncItemTagPacket::decode)
+                .encoder(SyncItemTagPacket::encode)
+                .add();
+
         return channel;
     }
 }

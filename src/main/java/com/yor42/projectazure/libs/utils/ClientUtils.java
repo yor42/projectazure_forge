@@ -20,6 +20,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 public class ClientUtils {
 
     public static final ResourceLocation GASMASKOVERLAY = ResourceUtils.ModResourceLocation("textures/misc/gasmaskblur.png");
+    public static final ResourceLocation NVGOVERLAY = ResourceUtils.ModResourceLocation("textures/misc/nvgblur.png");
 
     public static Level getClientWorld()
     {
@@ -32,6 +33,11 @@ public class ClientUtils {
     }
 
     public static void renderTextureOverlay(ResourceLocation p_168709_, float p_168710_) {
+
+        if(p_168709_ == null){
+            return;
+        }
+
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.defaultBlendFunc();
