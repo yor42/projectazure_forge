@@ -3,6 +3,7 @@ Project: Azure
 
 <br />
 Personal java study thingy.<br />
+it was my first project, so its a mess, and probably have license issue here and there.<br />
 
 License
 -
